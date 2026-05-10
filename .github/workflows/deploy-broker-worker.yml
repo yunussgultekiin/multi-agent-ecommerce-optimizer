@@ -6,6 +6,10 @@ on:
     paths: ['services/broker-worker/**']
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
