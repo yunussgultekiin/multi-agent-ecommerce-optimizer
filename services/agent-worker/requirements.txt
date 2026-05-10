@@ -1,0 +1,12 @@
+aiohttp
+langgraph
+langchain-core
+google-generativeai
+crawl4ai
+pytrends
+pandas
+chromadb
+scikit-learn
+numpy
+pydantic
+python-dotenv
