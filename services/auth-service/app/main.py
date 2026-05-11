@@ -5,7 +5,7 @@ from app.database import connect, disconnect
 from app.health import router as health_router
 from app.logging_config import configure_logging
 from app.router import router as auth_router
-from app.security import JWTAuthMiddleware
+from app.security import JWTAuthMiddleware, TokenService
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
@@ -15,6 +15,6 @@ async def lifespan(_app: FastAPI):
     await disconnect()
 
 app = FastAPI(title="Auth Service", version="1.0.0", lifespan=lifespan)
-app.add_middleware(JWTAuthMiddleware)
+app.add_middleware(JWTAuthMiddleware, token_service=TokenService())
 app.include_router(health_router)
 app.include_router(auth_router)
