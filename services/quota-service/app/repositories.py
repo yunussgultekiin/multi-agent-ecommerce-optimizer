@@ -1,17 +1,13 @@
 import logging
-
 import redis.asyncio as aioredis
-
 from app.config import settings
 
 logger = logging.getLogger(__name__)
 
 QUOTA_KEY_PREFIX = "quota"
 
-
 def _key(user_id: str) -> str:
     return f"{QUOTA_KEY_PREFIX}:{user_id}"
-
 
 class QuotaRepository:
     def __init__(self, redis: aioredis.Redis) -> None:

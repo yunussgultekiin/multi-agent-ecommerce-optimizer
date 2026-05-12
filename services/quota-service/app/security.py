@@ -15,7 +15,6 @@ _PUBLIC_PATHS = frozenset({
     "/redoc",
 })
 
-
 class TokenService:
     def __init__(self) -> None:
         self._secret = settings.jwt_secret_key
@@ -30,7 +29,6 @@ class TokenService:
             )
         except InvalidTokenError as exc:
             raise ValueError(str(exc)) from exc
-
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
     def __init__(self, app, token_service: TokenService, **kwargs) -> None:

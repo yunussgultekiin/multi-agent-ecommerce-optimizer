@@ -10,10 +10,8 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/quota", tags=["quota"])
 
-
 def _get_quota_service(redis: aioredis.Redis = Depends(get_redis)) -> QuotaService:
     return QuotaService(repo=QuotaRepository(redis))
-
 
 @router.get("/{user_id}", response_model=QuotaResponse)
 async def get_quota(
@@ -21,7 +19,6 @@ async def get_quota(
     service: QuotaService = Depends(_get_quota_service),
 ) -> QuotaResponse:
     return await service.get_quota(user_id)
-
 
 @router.post("/{user_id}/consume", response_model=ConsumeResponse)
 async def consume(
@@ -35,7 +32,6 @@ async def consume(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail="Quota exceeded",
         )
-
 
 @router.post("/{user_id}/reset", response_model=ResetResponse)
 async def reset(

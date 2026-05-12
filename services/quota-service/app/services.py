@@ -1,5 +1,3 @@
-# quota-service/app/services.py
-
 import logging
 from app.repositories import QuotaRepository
 from app.schemas import QuotaResponse, ConsumeResponse
@@ -7,10 +5,8 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 
-
 class QuotaExceededError(Exception):
     pass
-
 
 class QuotaService:
     def __init__(self, repo: QuotaRepository) -> None:
@@ -29,7 +25,6 @@ class QuotaService:
         )
 
     async def consume(self, user_id: str) -> ConsumeResponse:
-        """1 kredi düş. Kota doluysa QuotaExceededError fırlat."""
         used = await self._repo.get(user_id)
 
         if used >= settings.quota_limit:
@@ -55,6 +50,5 @@ class QuotaService:
         )
 
     async def reset(self, user_id: str) -> None:
-        """Kullanıcının sayacını sıfırla."""
         await self._repo.reset(user_id)
         logger.info("quota_reset", extra={"user_id": user_id})
