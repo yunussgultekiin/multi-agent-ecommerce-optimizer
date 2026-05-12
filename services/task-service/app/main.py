@@ -2,11 +2,10 @@ import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.health import router as health_router
-from app.routers import tasks
-from app.core.database import connect, disconnect
+from app.tasks_router import router as tasks_router
+from app.database import connect, disconnect
 
 logger = logging.getLogger(__name__)
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -17,7 +16,6 @@ async def lifespan(app: FastAPI):
     await disconnect()
     logger.info("task-service shutting down")
 
-
 app = FastAPI(title="Task Service", version="0.1.0", lifespan=lifespan)
 app.include_router(health_router)
-app.include_router(tasks.router, prefix="/tasks", tags=["tasks"])
+app.include_router(tasks_router, prefix="/tasks", tags=["tasks"])

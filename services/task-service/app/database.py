@@ -14,7 +14,6 @@ _DATABASE_URL: str = os.getenv("DATABASE_URL", "")
 engine: AsyncEngine | None = None
 async_session_maker: async_sessionmaker | None = None
 
-
 async def connect() -> None:
     global engine, async_session_maker
     if not _DATABASE_URL:
@@ -36,14 +35,12 @@ async def disconnect() -> None:
     if engine:
         await engine.dispose()
 
-
 @asynccontextmanager
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     if async_session_maker is None:
         raise RuntimeError("Database not initialised")
     async with async_session_maker() as session:
         yield session
-
 
 async def check_database_connectivity() -> str:
     if engine is None:

@@ -4,12 +4,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 import redis.asyncio as aioredis
-from app.api.deps import get_db, get_redis
-from app.services.task_service import TaskService
-from app.schemas.task_schemas import TaskCreate, TaskResponse, TaskResultResponse, TaskListResponse
+from app.deps import get_db, get_redis
+from app.task_service import TaskService
+from app.task_schemas import TaskCreate, TaskResponse, TaskResultResponse, TaskListResponse
 
 router = APIRouter()
-
 
 def get_service(
     session: AsyncSession = Depends(get_db),
@@ -66,9 +65,9 @@ async def get_result(
 ):
     result, task_found = await service.get_result(task_id)
     if not task_found:
-        raise HTTPException(status_code=404, detail="No task found.")
+        raise HTTPException(status_code=404, detail="Task bulunamadı")
     if result is None:
-        raise HTTPException(status_code=404, detail="The results is not out yet.")
+        raise HTTPException(status_code=404, detail="Sonuç henüz hazır değil")
     return result
 
 @router.delete("/{task_id}", status_code=204)
@@ -78,7 +77,7 @@ async def cancel_task(
 ):
     task = await service.cancel_task(task_id)
     if not task:
-        raise HTTPException(status_code=404, detail="No task found.")
+        raise HTTPException(status_code=404, detail="Task bulunamadı")
 
 @router.get("/{task_id}/status/stream")
 async def stream_status(

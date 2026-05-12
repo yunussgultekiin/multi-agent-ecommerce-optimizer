@@ -1,6 +1,6 @@
 from enum import Enum
 
-class TaskStatus(str,Enum):
+class TaskStatus(str, Enum):
     pending = "pending"
     running = "running"
     completed = "completed"
