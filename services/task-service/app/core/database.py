@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 from sqlalchemy import text
+from sqlalchemy.orm import DeclarativeBase
 
 _DATABASE_URL: str = os.getenv("DATABASE_URL", "")
 engine: AsyncEngine | None = None
@@ -27,6 +28,8 @@ async def connect() -> None:
     )
     async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
+class Base(DeclarativeBase):
+    pass
 
 async def disconnect() -> None:
     if engine:

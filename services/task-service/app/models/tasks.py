@@ -1,0 +1,64 @@
+from __future__ import annotations
+import uuid
+from datetime import datetime
+from sqlalchemy import String, DateTime, Enum as SAEnum, ForeignKey
+from sqlalchemy.dialects.postgresql import UUID, JSONB, ARRAY
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from app.models.enums import TaskStatus
+from app.core.database import Base
+
+class Task(Base):
+    __tablename__ = "tasks"
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key = True,
+        default = uuid.uuid4
+    )
+    user_id: Mapped[str] = mapped_column(String, nullable=False)
+    status: Mapped[TaskStatus] = mapped_column(
+        SAEnum(TaskStatus),
+        default = TaskStatus.pending,
+        nullable = False
+    )
+    input_url: Mapped[str] = mapped_column(String, nullable=False)
+    keyword: Mapped[str] = mapped_column(ARRAY(String))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default = datetime.utcnow,
+        nullable = False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default = datetime.utcnow, 
+        updated_at = datetime.utcnow,
+        nullable = False
+    )
+    result: Mapped[AnalysisResult] = relationship(
+        "AnalysisResult",
+        back_populates = "tasks",
+        cascade = "all, delete-orphan"
+    )
+
+class AnalysisResult(Base):
+    __tablename__ = "analysisresults"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key = True,
+        default = uuid.uuid4
+    )
+    task_id: Mapped[uuid.UUID] = mapped_column(
+        UUID,
+        ForeignKey("tasks.id",ondelete="CASCADE"),
+        nullable = False
+    )
+    result: Mapped[dict] = mapped_column(JSONB,nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default = datetime.utcnow,
+        nullable = False
+    )
+    tasks: Mapped[Task] = relationship(
+        "Task",
+        back_populates= "result"
+    )
