@@ -1,21 +1,27 @@
-import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from app.config import settings
+from app.redis import connect, disconnect
 from app.health import router as health_router
-from app.cache import connect, disconnect
-
-logger = logging.getLogger(__name__)
+from app.logging_config import configure_logging
+from app.router import router as quota_router
+from app.security import JWTAuthMiddleware, TokenService
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
-    logging.basicConfig(level=logging.INFO)
-    logger.info("quota-service starting up")
+async def lifespan(_app: FastAPI):
+    configure_logging(settings.log_level)
     await connect()
     yield
     await disconnect()
-    logger.info("quota-service shutting down")
 
 
-app = FastAPI(title="Quota Service", version="0.1.0", lifespan=lifespan)
+app = FastAPI(
+    title="Quota Service",
+    version="1.0.0",
+    lifespan=lifespan,
+)
+
+app.add_middleware(JWTAuthMiddleware, token_service=TokenService())
 app.include_router(health_router)
+app.include_router(quota_router)
