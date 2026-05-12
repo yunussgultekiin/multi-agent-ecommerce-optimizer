@@ -6,3 +6,10 @@ __pycache__/
 .next/
 .venv/
 venv/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
