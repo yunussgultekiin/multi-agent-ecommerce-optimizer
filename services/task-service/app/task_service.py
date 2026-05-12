@@ -75,7 +75,6 @@ class TaskService():
         return task
 
     async def get_result(self, task_id: UUID) -> tuple[AnalysisResult | None, bool]:
-        """Returns (result, task_found). result is None if task has no result yet."""
         task = await self.repo.get_by_id(task_id)
         if not task:
             return None, False

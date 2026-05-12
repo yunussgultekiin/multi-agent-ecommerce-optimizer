@@ -10,7 +10,6 @@ from app.task_schemas import TaskCreate, TaskResponse, TaskResultResponse, TaskL
 
 router = APIRouter()
 
-
 def get_service(
     session: AsyncSession = Depends(get_db),
     redis: aioredis.Redis = Depends(get_redis),
