@@ -1,0 +1,152 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - platform-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - platform-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - platform-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/api/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  api-gateway:
+    build: ./services/api-gateway
+    ports:
+      - "8000:8080"
+    env_file: .env
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:8080
+      TASK_SERVICE_URL: http://task-service:8080
+      QUOTA_SERVICE_URL: http://quota-service:8080
+      BROKER_WORKER_URL: http://broker-worker:8080
+      AGENT_WORKER_URL: http://agent-worker:8080
+    depends_on:
+      - auth-service
+      - task-service
+      - quota-service
+      - broker-worker
+      - agent-worker
+    networks:
+      - platform-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  auth-service:
+    build: ./services/auth-service
+    ports:
+      - "8001:8080"
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - platform-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  task-service:
+    build: ./services/task-service
+    ports:
+      - "8002:8080"
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - platform-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  quota-service:
+    build: ./services/quota-service
+    ports:
+      - "8003:8080"
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - platform-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  broker-worker:
+    build: ./services/broker-worker
+    ports:
+      - "8004:8080"
+    env_file: .env
+    environment:
+      AGENT_WORKER_URL: http://agent-worker:8080
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - platform-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  agent-worker:
+    build: ./services/agent-worker
+    ports:
+      - "8005:8080"
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - platform-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  postgres_data:
+
+networks:
+  platform-net:
+    driver: bridge

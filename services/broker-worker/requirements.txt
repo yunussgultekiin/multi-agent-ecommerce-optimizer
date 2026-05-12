@@ -1,0 +1,4 @@
+redis[asyncio]
+aiohttp
+httpx
+python-dotenv
