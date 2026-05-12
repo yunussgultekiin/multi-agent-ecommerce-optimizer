@@ -1,14 +1,13 @@
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     redis_url: str = Field(alias="REDIS_URL")
     task_queue_name: str = Field(default="task_queue", alias="TASK_QUEUE_NAME")
 
-    database_url: str = Field(alias="DATABASE_URL")
+    database_url: str = Field(alias="BROKER_DATABASE_URL")
 
     agent_worker_url: str = Field(alias="AGENT_WORKER_URL")
 
@@ -19,6 +18,5 @@ class Settings(BaseSettings):
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
 
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
-
 
 settings = Settings()

@@ -1,35 +1,79 @@
-import asyncio
 import json
 import logging
-import os
-
-import httpx
-import redis.asyncio as aioredis
+import threading
+import redis
+from app.agent_client import AgentClient, AgentClientError
+from app.config import settings
+from app.database import get_session
+from app.retry_handler import MaxRetryExceededError, RetryHandler
 
 logger = logging.getLogger(__name__)
 
+class QueueConsumer:
+    def __init__(self) -> None:
+        self._redis = redis.from_url(settings.redis_url, decode_responses=True)
+        self._agent_client = AgentClient()
+        self._stop_event = threading.Event()
+        self._thread: threading.Thread | None = None
 
-async def start_consumer() -> None:
-    redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/0")
-    agent_worker_url = os.getenv("AGENT_WORKER_URL", "http://agent-worker:8080")
+    def start(self) -> None:
+        self._thread = threading.Thread(target=self._run, daemon=True, name="queue-consumer")
+        self._thread.start()
+        logger.info("queue_consumer_started")
 
-    client = aioredis.from_url(redis_url)
-    logger.info("broker-worker consumer connected to Redis, polling 'tasks' queue")
+    def stop(self) -> None:
+        self._stop_event.set()
+        if self._thread:
+            self._thread.join(timeout=10)
+        self._redis.close()
+        logger.info("queue_consumer_stopped")
 
-    while True:
+    def _run(self) -> None:
+        logger.info("consumer_loop_started", extra={"queue": settings.task_queue_name})
+
+        while not self._stop_event.is_set():
+            try:
+                result = self._redis.blpop(settings.task_queue_name, timeout=2)
+
+                if result is None:
+                    continue
+
+                _, raw = result
+                task = json.loads(raw)
+                task_id = task["task_id"]
+                payload = task.get("payload", {})
+
+                logger.info("task_received", extra={"task_id": task_id})
+                self._process(task_id, payload)
+
+            except Exception as exc:
+                logger.error("consumer_loop_error", extra={"error": str(exc)})
+
+    def _process(self, task_id: str, payload: dict) -> None:
+        session = get_session()
+
         try:
-            result = await client.blpop("tasks", timeout=5)
-            if result is None:
-                continue
+            self._agent_client.run(task_id, payload)
 
-            _, raw = result
-            task: dict = json.loads(raw)
-            task_id = task.get("task_id", "unknown")
-            logger.info("Received task: task_id=%s", task_id)
+        except AgentClientError as exc:
+            retry_handler = RetryHandler(session=session)
+            try:
+                retry_handler.handle(
+                    task_id=task_id,
+                    error=str(exc),
+                    task_payload=payload,
+                    requeue_fn=self._requeue,
+                )
+            except MaxRetryExceededError:
+                self._notify_failed(task_id)
 
-            async with httpx.AsyncClient(timeout=5.0) as http:
-                await http.post(f"{agent_worker_url}/run", json=task)
+        finally:
+            session.close()
 
-        except Exception as exc:
-            logger.error("Consumer error: %s", exc)
-            await asyncio.sleep(1)
+    def _requeue(self, task_id: str, payload: dict) -> None:
+        task = json.dumps({"task_id": task_id, "payload": payload})
+        self._redis.rpush(settings.task_queue_name, task)
+        logger.info("task_requeued", extra={"task_id": task_id})
+
+    def _notify_failed(self, task_id: str) -> None:
+        logger.error("task_failed", extra={"task_id": task_id})
