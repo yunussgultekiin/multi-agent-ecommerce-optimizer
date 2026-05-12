@@ -1,21 +1,20 @@
 from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import UUID, JSONB, ARRAY
+from sqlalchemy.dialects.postgresql import UUID, JSONB, ARRAY, ENUM as PgEnum
 
 revision: str = "0001"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
-task_status_enum = sa.Enum(
-    "pending", "running", "completed", "failed", "cancelled",
-    name="taskstatus",
-)
-
-
 def upgrade() -> None:
-    task_status_enum.create(op.get_bind(), checkfirst=True)
+    op.execute(sa.text(
+        "DO $$ BEGIN "
+        "CREATE TYPE taskstatus AS ENUM ('pending', 'running', 'completed', 'failed', 'cancelled'); "
+        "EXCEPTION WHEN duplicate_object THEN null; "
+        "END $$;"
+    ))
 
     op.create_table(
         "tasks",
@@ -23,7 +22,7 @@ def upgrade() -> None:
         sa.Column("user_id", sa.String(), nullable=False),
         sa.Column(
             "status",
-            sa.Enum(
+            PgEnum(
                 "pending", "running", "completed", "failed", "cancelled",
                 name="taskstatus",
                 create_type=False,
@@ -71,7 +70,6 @@ def upgrade() -> None:
         "ix_analysis_results_task_id", "analysis_results", ["task_id"], unique=True
     )
 
-
 def downgrade() -> None:
     op.drop_index("ix_analysis_results_task_id", table_name="analysis_results")
     op.drop_table("analysis_results")
@@ -81,4 +79,4 @@ def downgrade() -> None:
     op.drop_index("ix_tasks_user_id", table_name="tasks")
     op.drop_table("tasks")
 
-    task_status_enum.drop(op.get_bind(), checkfirst=True)
+    op.execute(sa.text("DROP TYPE IF EXISTS taskstatus"))
