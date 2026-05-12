@@ -1,14 +1,14 @@
 from uuid import UUID
 from datetime import datetime
 from pydantic import BaseModel, HttpUrl
-from app.models.enums import TaskStatus
+from app.enums import TaskStatus
 
 class TaskCreate(BaseModel):
     input_url: HttpUrl
     keywords: list[str]
 
 class TaskResponse(BaseModel):
-    id:UUID
+    id: UUID
     user_id: str
     status: TaskStatus
     input_url: str
@@ -16,7 +16,7 @@ class TaskResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    model_config = {'from_attributes':True}
+    model_config = {'from_attributes': True}
 
 class TaskResultResponse(BaseModel):
     task_id: UUID

@@ -51,7 +51,7 @@ def upgrade() -> None:
     op.create_index("ix_tasks_created_at", "tasks", ["created_at"])
 
     op.create_table(
-        "analysisresults",
+        "analysis_results",
         sa.Column("id", UUID(as_uuid=True), primary_key=True),
         sa.Column(
             "task_id",
@@ -68,13 +68,13 @@ def upgrade() -> None:
         ),
     )
     op.create_index(
-        "ix_analysisresults_task_id", "analysisresults", ["task_id"], unique=True
+        "ix_analysis_results_task_id", "analysis_results", ["task_id"], unique=True
     )
 
 
 def downgrade() -> None:
-    op.drop_index("ix_analysisresults_task_id", table_name="analysisresults")
-    op.drop_table("analysisresults")
+    op.drop_index("ix_analysis_results_task_id", table_name="analysis_results")
+    op.drop_table("analysis_results")
 
     op.drop_index("ix_tasks_created_at", table_name="tasks")
     op.drop_index("ix_tasks_status", table_name="tasks")

@@ -4,8 +4,8 @@ from datetime import datetime
 from sqlalchemy import String, DateTime, Enum as SAEnum, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID, JSONB, ARRAY
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.models.enums import TaskStatus
-from app.core.database import Base
+from app.enums import TaskStatus
+from app.database import Base
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -35,12 +35,12 @@ class Task(Base):
     )
     result: Mapped[AnalysisResult] = relationship(
         "AnalysisResult",
-        back_populates = "tasks",
+        back_populates = "task",
         cascade = "all, delete-orphan"
     )
 
 class AnalysisResult(Base):
-    __tablename__ = "analysisresults"
+    __tablename__ = "analysis_results"
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -52,13 +52,13 @@ class AnalysisResult(Base):
         ForeignKey("tasks.id", ondelete="CASCADE"),
         nullable=False,
     )
-    result: Mapped[dict] = mapped_column(JSONB,nullable=False)
+    result: Mapped[dict] = mapped_column(JSONB, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         default = datetime.utcnow,
         nullable = False
     )
-    tasks: Mapped[Task] = relationship(
+    task: Mapped[Task] = relationship(
         "Task",
         back_populates= "result"
     )
