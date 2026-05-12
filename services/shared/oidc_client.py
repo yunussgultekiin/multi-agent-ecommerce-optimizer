@@ -37,7 +37,7 @@ class OidcTokenProvider:
             logger.debug("OIDC token fetch skipped (not running on GCP)")
             return None, 0.0
 
-    async def attach_to_headers(self, headers: dict) -> dict:
+    async def attach_oidc_header(self, headers: dict) -> dict:
         token = await self.get_token()
         if token is None:
             return headers
@@ -49,7 +49,7 @@ class OidcHttpClient:
         self._provider = OidcTokenProvider(audience=base_url)
 
     async def request(self, method: str, path: str, **kwargs) -> httpx.Response:
-        headers = await self._provider.attach_to_headers(kwargs.pop("headers", {}))
+        headers = await self._provider.attach_oidc_header(kwargs.pop("headers", {}))
         async with httpx.AsyncClient(base_url=self._base_url) as client:
             return await client.request(method, path, headers=headers, **kwargs)
 
