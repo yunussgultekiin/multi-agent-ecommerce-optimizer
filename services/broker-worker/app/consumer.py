@@ -6,6 +6,7 @@ from app.agent_client import AgentClient, AgentClientError
 from app.config import settings
 from app.database import get_session
 from app.retry_handler import MaxRetryExceededError, RetryHandler
+from app.task_service_client import TaskServiceClient
 
 logger = logging.getLogger(__name__)
 
@@ -13,6 +14,7 @@ class QueueConsumer:
     def __init__(self) -> None:
         self._redis = redis.from_url(settings.redis_url, decode_responses=True)
         self._agent_client = AgentClient()
+        self._task_service_client = TaskServiceClient()
         self._stop_event = threading.Event()
         self._thread: threading.Thread | None = None
 
@@ -54,6 +56,7 @@ class QueueConsumer:
 
         try:
             self._agent_client.run(task_id, payload)
+            self._notify_running(task_id)
 
         except AgentClientError as exc:
             retry_handler = RetryHandler(session=session)
@@ -75,5 +78,10 @@ class QueueConsumer:
         self._redis.rpush(settings.task_queue_name, task)
         logger.info("task_requeued", extra={"task_id": task_id})
 
+    def _notify_running(self, task_id: str) -> None:
+        self._task_service_client.update_status(task_id, "running")
+        logger.info("task_running_notified", extra={"task_id": task_id})
+
     def _notify_failed(self, task_id: str) -> None:
-        logger.error("task_failed", extra={"task_id": task_id})
+        self._task_service_client.update_status(task_id, "failed")
+        logger.error("task_failed_notified", extra={"task_id": task_id})

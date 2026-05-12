@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     database_url: str = Field(alias="BROKER_DATABASE_URL")
 
     agent_worker_url: str = Field(alias="AGENT_WORKER_URL")
+    task_service_url: str = Field(alias="TASK_SERVICE_URL")
 
     max_retry_count: int = Field(default=3, alias="MAX_RETRY_COUNT")
     retry_base_delay: float = Field(default=2.0, alias="RETRY_BASE_DELAY")

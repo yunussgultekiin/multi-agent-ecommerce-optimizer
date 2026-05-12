@@ -4,10 +4,7 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 from app.config import settings
 
 logger = logging.getLogger(__name__)
-
-class Base(DeclarativeBase):
-    pass
-
+class Base(DeclarativeBase): pass
 _engine = None
 _session_maker = None
 

@@ -6,9 +6,7 @@ from app.config import settings
 from app.models import TaskRetry
 
 logger = logging.getLogger(__name__)
-
-class MaxRetryExceededError(Exception):
-    pass
+class MaxRetryExceededError(Exception): pass
 
 class RetryHandler:
     def __init__(self, session: Session) -> None:
