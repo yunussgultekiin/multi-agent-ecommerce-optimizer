@@ -29,8 +29,8 @@ class Task(Base):
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default = datetime.utcnow, 
-        updated_at = datetime.utcnow,
+        default = datetime.utcnow,
+        onupdate = datetime.utcnow,
         nullable = False
     )
     result: Mapped[AnalysisResult] = relationship(
