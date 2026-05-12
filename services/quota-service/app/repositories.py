@@ -3,7 +3,6 @@ import redis.asyncio as aioredis
 from app.config import settings
 
 logger = logging.getLogger(__name__)
-
 QUOTA_KEY_PREFIX = "quota"
 
 def _key(user_id: str) -> str:
@@ -19,6 +18,9 @@ class QuotaRepository:
 
     async def increment(self, user_id: str) -> int:
         return await self._redis.incr(_key(user_id))
+
+    async def set_with_ttl(self, user_id: str, value: int, ttl_seconds: int) -> None:
+        await self._redis.set(_key(user_id), value, ex=ttl_seconds)
 
     async def set_ttl_if_new(self, user_id: str) -> None:
         key = _key(user_id)

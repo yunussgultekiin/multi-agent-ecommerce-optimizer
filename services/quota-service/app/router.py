@@ -7,7 +7,6 @@ from app.schemas import ConsumeResponse, QuotaResponse, ResetResponse
 from app.services import QuotaExceededError, QuotaService
 
 logger = logging.getLogger(__name__)
-
 router = APIRouter(prefix="/quota", tags=["quota"])
 
 def _get_quota_service(redis: aioredis.Redis = Depends(get_redis)) -> QuotaService:

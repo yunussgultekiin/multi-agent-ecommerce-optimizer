@@ -4,7 +4,6 @@ import redis.asyncio as aioredis
 from app.config import settings
 
 logger = logging.getLogger(__name__)
-
 _redis: aioredis.Redis | None = None
 
 async def connect() -> None:

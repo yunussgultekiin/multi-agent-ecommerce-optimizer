@@ -4,9 +4,7 @@ from app.schemas import QuotaResponse, ConsumeResponse
 from app.config import settings
 
 logger = logging.getLogger(__name__)
-
-class QuotaExceededError(Exception):
-    pass
+class QuotaExceededError(Exception): pass
 
 class QuotaService:
     def __init__(self, repo: QuotaRepository) -> None:
