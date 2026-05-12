@@ -4,7 +4,6 @@ from app.config import settings
 from app.oidc_sync import SyncOidcTokenProvider
 
 logger = logging.getLogger(__name__)
-
 class AgentClientError(Exception): pass
 
 class AgentClient:
