@@ -21,7 +21,7 @@ class Task(Base):
         nullable = False
     )
     input_url: Mapped[str] = mapped_column(String, nullable=False)
-    keyword: Mapped[str] = mapped_column(ARRAY(String))
+    keywords: Mapped[list] = mapped_column(ARRAY(String))
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         default = datetime.utcnow,
@@ -48,9 +48,9 @@ class AnalysisResult(Base):
         default = uuid.uuid4
     )
     task_id: Mapped[uuid.UUID] = mapped_column(
-        UUID,
-        ForeignKey("tasks.id",ondelete="CASCADE"),
-        nullable = False
+        UUID(as_uuid=True),
+        ForeignKey("tasks.id", ondelete="CASCADE"),
+        nullable=False,
     )
     result: Mapped[dict] = mapped_column(JSONB,nullable=False)
     created_at: Mapped[datetime] = mapped_column(

@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel, HttpUrl
 from app.models.enums import TaskStatus
 
-class Taskcreate(BaseModel):
+class TaskCreate(BaseModel):
     input_url: HttpUrl
     keywords: list[str]
 
@@ -19,8 +19,13 @@ class TaskResponse(BaseModel):
     model_config = {'from_attributes':True}
 
 class TaskResultResponse(BaseModel):
+    task_id: UUID
+    result: dict
+    created_at: datetime
+    model_config = {"from_attributes": True}
+
+class TaskListResponse(BaseModel):
     items: list[TaskResponse]
     total: int
     limit: int
     offset: int
-

@@ -1,6 +1,7 @@
 from uuid import UUID
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from app.models.tasks import Task, AnalysisResult
 from app.models.enums import TaskStatus
 
@@ -19,14 +20,22 @@ class TaskRepository:
         await self.session.refresh(task)
         return task
 
-    async def get_by_id(self, task_id:UUID) -> Task | None:
+    async def get_by_id(self, task_id: UUID) -> Task | None:
         result = await self.session.execute(
-            select(Task).where(Task.id == task_id)
+            select(Task)
+            .options(selectinload(Task.result))
+            .where(Task.id == task_id)
         )
-        return result.scalar_one_or_none
+        return result.scalar_one_or_none()
     
+    async def count_by_user(self, user_id: str) -> int:
+        result = await self.session.execute(
+            select(func.count()).where(Task.user_id == user_id)
+        )
+        return result.scalar_one()
+
     async def get_by_user(
-        self, user_id: str, limit = 10, offset: int = 0
+        self, user_id: str, limit: int = 10, offset: int = 0
     ) -> list[Task]:
         result = await self.session.execute(
             select(Task)
@@ -41,9 +50,9 @@ class TaskRepository:
         task = await self.get_by_id(task_id)
         if not task:
             return None
-        status = task.status
+        task.status = status
         await self.session.commit()
-        await self.session.refresh(status)
+        await self.session.refresh(task)
         return task
     
     async def save_result(self, task_id:UUID, result: dict) -> AnalysisResult:
