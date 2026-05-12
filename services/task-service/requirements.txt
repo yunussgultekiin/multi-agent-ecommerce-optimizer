@@ -3,3 +3,7 @@ uvicorn[standard]
 sqlalchemy[asyncio]
 asyncpg
 python-dotenv
+alembic
+redis
+pydantic
+pydantic-settings

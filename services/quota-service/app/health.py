@@ -10,6 +10,6 @@ async def health() -> dict:
     return {
         "status": "ok",
         "service": "quota-service",
-        "version": "0.1.0",
+        "version": "1.0.0",
         "dependencies": {"redis": redis_status},
     }
