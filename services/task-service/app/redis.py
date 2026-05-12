@@ -1,5 +1,5 @@
 import redis.asyncio as aioredis
-from app.configs import settings
+from app.config import settings
 
 redis_client: aioredis.Redis = aioredis.from_url(
     settings.REDIS_URL,

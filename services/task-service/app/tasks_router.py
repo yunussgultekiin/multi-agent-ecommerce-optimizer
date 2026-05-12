@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 import redis.asyncio as aioredis
-from app.deps import get_db, get_redis
+from app.dependencies import get_db, get_redis
 from app.task_service import TaskService
 from app.task_schemas import TaskCreate, TaskResponse, TaskResultResponse, TaskListResponse, TaskStatusUpdate
 
