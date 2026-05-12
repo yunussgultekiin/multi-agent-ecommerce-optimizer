@@ -17,7 +17,14 @@ async def connect() -> None:
     global engine, async_session_maker
     if not _DATABASE_URL:
         return
-    engine = create_async_engine(_DATABASE_URL, echo=False)
+    engine = create_async_engine(
+        _DATABASE_URL,
+        pool_pre_ping = True,
+        pool_size = 5,
+        max_overflow = 15,
+        pool_timeout = 15,
+        echo=False
+    )
     async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 
