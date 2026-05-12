@@ -22,8 +22,8 @@ async def connect() -> None:
         _DATABASE_URL,
         pool_pre_ping = True,
         pool_size = 5,
-        max_overflow = 15,
-        pool_timeout = 15,
+        max_overflow = 10,
+        pool_timeout = 30,
         echo=False
     )
     async_session_maker = async_sessionmaker(engine, expire_on_commit=False)

@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import redis.asyncio as aioredis
 from app.deps import get_db, get_redis
 from app.task_service import TaskService
-from app.task_schemas import TaskCreate, TaskResponse, TaskResultResponse, TaskListResponse
+from app.task_schemas import TaskCreate, TaskResponse, TaskResultResponse, TaskListResponse, TaskStatusUpdate
 
 router = APIRouter()
 
@@ -69,6 +69,20 @@ async def get_result(
     if result is None:
         raise HTTPException(status_code=404, detail="Sonuç henüz hazır değil")
     return result
+
+@router.patch("/{task_id}/status", response_model=TaskResponse)
+async def update_task_status(
+    task_id: UUID,
+    body: TaskStatusUpdate,
+    service: TaskService = Depends(get_service),
+):
+    try:
+        task = await service.update_status(task_id, body.status)
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    if not task:
+        raise HTTPException(status_code=404, detail="Task bulunamadı")
+    return task
 
 @router.delete("/{task_id}", status_code=204)
 async def cancel_task(
