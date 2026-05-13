@@ -1,17 +1,16 @@
-import os
 import httpx
 from fastapi import APIRouter
+from app.config import settings
 
 router = APIRouter()
 
 _DOWNSTREAM: dict[str, str] = {
-    "auth-service": os.getenv("AUTH_SERVICE_URL", "http://auth-service:8080"),
-    "task-service": os.getenv("TASK_SERVICE_URL", "http://task-service:8080"),
-    "quota-service": os.getenv("QUOTA_SERVICE_URL", "http://quota-service:8080"),
-    "broker-worker": os.getenv("BROKER_WORKER_URL", "http://broker-worker:8080"),
-    "agent-worker": os.getenv("AGENT_WORKER_URL", "http://agent-worker:8080"),
+    "auth-service": settings.auth_service_url,
+    "task-service": settings.task_service_url,
+    "quota-service": settings.quota_service_url,
+    "broker-worker": settings.broker_worker_url,
+    "agent-worker": settings.agent_worker_url,
 }
-
 
 @router.get("/health")
 async def health() -> dict:
@@ -27,6 +26,6 @@ async def health() -> dict:
     return {
         "status": "ok",
         "service": "api-gateway",
-        "version": "0.1.0",
+        "version": "1.0.0",
         "dependencies": dependencies,
     }
