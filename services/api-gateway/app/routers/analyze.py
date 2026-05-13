@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 import httpx
+from shared.oidc_client import OidcTokenProvider
 from app.clients.quota_client import QuotaClient, QuotaServiceError
 from app.clients.task_client import TaskClient, TaskServiceError
 from app.config import settings
@@ -12,6 +13,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/analyze", tags=["analyze"])
 _task_client = TaskClient()
 _quota_client = QuotaClient()
+_stream_oidc = OidcTokenProvider(audience=settings.task_service_url)
 
 class AnalyzeRequest(BaseModel):
     payload: dict
@@ -70,13 +72,14 @@ async def get_result(task_id: str):
 @router.get("/{task_id}/status/stream")
 async def stream_status(task_id: str, http_request: Request):
     task_service_url = f"{settings.task_service_url}/tasks/{task_id}/status/stream"
+    headers = await _stream_oidc.attach_oidc_header({"Accept": "text/event-stream"})
 
     async def event_generator():
         async with httpx.AsyncClient() as client:
             async with client.stream(
                 "GET",
                 task_service_url,
-                headers={"Accept": "text/event-stream"},
+                headers=headers,
                 timeout=None,
             ) as response:
                 async for chunk in response.aiter_text():

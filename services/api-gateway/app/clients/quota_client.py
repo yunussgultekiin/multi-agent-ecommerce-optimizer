@@ -1,5 +1,5 @@
 import logging
-import httpx
+from shared.oidc_client import OidcHttpClient
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -9,17 +9,16 @@ class QuotaServiceError(Exception):
 
 class QuotaClient:
     def __init__(self) -> None:
-        self._base_url = settings.quota_service_url
+        self._client = OidcHttpClient(base_url=settings.quota_service_url)
 
-    async def request(self, method: str, path: str, **kwargs) -> httpx.Response:
+    async def _request(self, method: str, path: str, **kwargs):
         try:
-            async with httpx.AsyncClient(base_url=self._base_url) as client:
-                return await client.request(method, path, **kwargs)
-        except httpx.RequestError as exc:
+            return await self._client.request(method, path, **kwargs)
+        except Exception as exc:
             raise QuotaServiceError(f"Connection error: {exc}") from exc
 
-    async def check(self, user_id: str) -> httpx.Response:
-        return await self.request("GET", f"/quota/{user_id}")
+    async def check(self, user_id: str):
+        return await self._request("GET", f"/quota/{user_id}")
 
-    async def consume(self, user_id: str) -> httpx.Response:
-        return await self.request("POST", f"/quota/{user_id}/consume")
+    async def consume(self, user_id: str):
+        return await self._request("POST", f"/quota/{user_id}/consume")
