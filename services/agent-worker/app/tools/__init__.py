@@ -1,22 +1,18 @@
-class ToolExecutionError(Exception):
-    pass
-
-
-from app.tools.market_gap_analyzer import MarketGapAnalyzer
-from app.tools.rag_context import RagContextTool
-from app.tools.seo_optimizer import SeoOptimizerTool
-from app.tools.smart_pricing import SmartPricingEngine
-from app.tools.trends import TrendsTool
-from app.tools.vision import VisionTool
-from app.tools.web_scraper import WebScraperTool
+from app.tools.Rival_Agent_tools.VisionSynthesis import ImageAnalysisResult, run_vision_synthesis_tool
+from app.tools.Rival_Agent_tools.CompetitorResearch import CompetitorResearchTool
+from app.tools.Rival_Agent_tools.MarketGapAnalyzer import MarketGapAnalyzer
+from app.tools.Rival_Agent_tools.SmartPricingEngine import SmartPricingEngine
+from app.tools.SEO_Agent_tools.RagContext import RagContextTool
+from app.tools.SEO_Agent_tools.SeoOptimizer import SeoOptimizerTool
+from app.tools.SEO_Agent_tools.ImageGeneration import ImageGenerationTool
 
 __all__ = [
-    "ToolExecutionError",
-    "WebScraperTool",
-    "TrendsTool",
+    "run_vision_synthesis_tool",
+    "ImageAnalysisResult",
+    "CompetitorResearchTool",
+    "MarketGapAnalyzer",
+    "SmartPricingEngine",
     "RagContextTool",
     "SeoOptimizerTool",
-    "MarketGapAnalyzer",
-    "VisionTool",
-    "SmartPricingEngine",
+    "ImageGenerationTool",
 ]

@@ -129,10 +129,14 @@ services:
       retries: 3
 
   agent-worker:
-    build: ./services/agent-worker
+    build:
+      context: ./services
+      dockerfile: agent-worker/Dockerfile
     ports:
       - "8005:8080"
     env_file: .env
+    environment:
+      TASK_SERVICE_URL: http://task-service:8080
     depends_on:
       redis:
         condition: service_healthy
