@@ -1,15 +1,26 @@
 from typing import TypedDict
 
-
-class WorkflowState(TypedDict):
+class BaseAgentState(TypedDict):
     task_id: str
-    product_data: dict
-    competitor_data: list[dict]
-    trend_data: dict
-    market_gaps: list[str]
-    vision_insights: dict
-    pricing_suggestion: float | None
+    status: str
+    error: str
+    cancelled: bool
+
+class RivalAgentState(BaseAgentState):
+    user_product: dict
+    competitor_names: list[str]
+    target_platform: str
+    competitor_research_results: list[dict]
+    vision_result: dict
+    gap_result: dict
+    pricing_result: dict
+    rival_json: dict
+
+class SeoAgentState(BaseAgentState):
+    rival_json: dict
+    target_platform: str
+    generation_prompt: str
     rag_context: list[str]
     seo_output: dict
-    errors: list[str]
-    status: str
+    generated_image_url: str | None
+    final_result: dict

@@ -1,11 +1,10 @@
 import asyncio
 import json
 import logging
-
 import httpx
 from pydantic import ValidationError
 import google.generativeai as genai
-
+from app.config import settings
 from .models_synthesis import ImageAnalysisResult
 from .prompts_synthesis import build_synthesis_prompt
 from .utils_synthesis import fetch_image_as_base64, clean_json_response
@@ -20,7 +19,7 @@ async def analyze_singe_image(
     image_data = await fetch_image_as_base64(url,client)
     label = "rivals products image" if is_competitor else "user product image"
 
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel(settings.gemini_model)
     loop = asyncio.get_running_loop()
 
     response = await loop.run_in_executor(
@@ -69,7 +68,7 @@ async def generate_structured_analysis(
     all_analyses: list[dict],
     max_retries: int = 2
 ) -> ImageAnalysisResult:
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel(settings.gemini_model)
     loop = asyncio.get_running_loop()
 
     user_analyses = [a for a in all_analyses if not a["is_competitor"]]

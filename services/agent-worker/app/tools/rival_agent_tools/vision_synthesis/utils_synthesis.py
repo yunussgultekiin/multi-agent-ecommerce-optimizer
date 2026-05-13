@@ -4,7 +4,6 @@ import httpx
 async def fetch_image_as_base64(url: str, client: httpx.AsyncClient) -> dict:
     response = await client.get(url, timeout = 30)
     response.raise_for_status()
-
     content_type = response.headers.get("content-type", "image/jpeg")
 
     return {
