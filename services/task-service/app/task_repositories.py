@@ -9,12 +9,8 @@ class TaskRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create(self, user_id: str, input_url: str, keywords: list[str]) -> Task:
-        task = Task(
-            user_id = user_id,
-            input_url = input_url,
-            keywords = keywords
-        )
+    async def create(self, user_id: str, payload: dict) -> Task:
+        task = Task(user_id=user_id, payload=payload)
         self.session.add(task)
         await self.session.commit()
         await self.session.refresh(task)
@@ -22,9 +18,7 @@ class TaskRepository:
 
     async def get_by_id(self, task_id: UUID) -> Task | None:
         result = await self.session.execute(
-            select(Task)
-            .options(selectinload(Task.result))
-            .where(Task.id == task_id)
+            select(Task).options(selectinload(Task.result)).where(Task.id == task_id)
         )
         return result.scalar_one_or_none()
 
@@ -34,9 +28,7 @@ class TaskRepository:
         )
         return result.scalar_one()
 
-    async def get_by_user(
-        self, user_id: str, limit: int = 10, offset: int = 0
-    ) -> list[Task]:
+    async def get_by_user(self, user_id: str, limit: int = 10, offset: int = 0) -> list[Task]:
         result = await self.session.execute(
             select(Task)
             .where(Task.user_id == user_id)
@@ -46,20 +38,19 @@ class TaskRepository:
         )
         return list(result.scalars().all())
 
-    async def update_status(self, task_id: UUID, status: TaskStatus) -> Task | None:
+    async def update_status(self, task_id: UUID, status: TaskStatus, error_message: str | None = None) -> Task | None:
         task = await self.get_by_id(task_id)
         if not task:
             return None
         task.status = status
+        if error_message is not None:
+            task.error_message = error_message
         await self.session.commit()
         await self.session.refresh(task)
         return task
 
     async def save_result(self, task_id: UUID, result: dict) -> AnalysisResult:
-        analysis_result = AnalysisResult(
-            task_id = task_id,
-            result = result
-        )
+        analysis_result = AnalysisResult(task_id=task_id, result=result)
         self.session.add(analysis_result)
         await self.session.commit()
         await self.session.refresh(analysis_result)
