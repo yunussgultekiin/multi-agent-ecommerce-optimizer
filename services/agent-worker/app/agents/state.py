@@ -8,13 +8,15 @@ class BaseAgentState(TypedDict):
 
 class RivalAgentState(BaseAgentState):
     user_product: dict
-    competitor_names: list[str]
+    competitor_names: list[dict]
     target_platform: str
     competitor_research_results: list[dict]
     vision_result: dict
     gap_result: dict
     pricing_result: dict
     rival_json: dict
+    brand: str
+    variants: list[dict]
 
 class SeoAgentState(BaseAgentState):
     rival_json: dict

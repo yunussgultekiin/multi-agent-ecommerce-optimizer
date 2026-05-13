@@ -8,6 +8,21 @@ class TaskServiceClient:
     def __init__(self) -> None:
         self._client = OidcHttpClient(base_url=settings.task_service_url)
 
+    async def save_result(self, task_id: str, result: dict) -> None:
+        try:
+            response = await self._client.post(
+                f"/tasks/{task_id}/result",
+                json={"result": result},
+            )
+            if response.status_code not in (200, 201):
+                logger.warning(
+                    "Unexpected save_result response: task_id=%s code=%d",
+                    task_id,
+                    response.status_code,
+                )
+        except Exception as exc:
+            logger.error("Failed to save result: task_id=%s error=%s", task_id, exc)
+
     async def update_status(self, task_id: str, status: str, error_message: str | None = None) -> None:
         body: dict = {"status": status}
         if error_message:

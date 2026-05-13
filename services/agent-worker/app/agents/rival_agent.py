@@ -1,39 +1,49 @@
-import asyncio
 import logging
 from app.agents.state import RivalAgentState
 from app.errors import WorkflowError
-from app.tools.Rival_Agent_tools.CompetitorResearch.competitor_research import CompetitorResearchInput, CompetitorResearchTool
-from app.tools.Rival_Agent_tools.MarketGapAnalyzer.market_gap_analyzer import MarketGapAnalyzer, MarketGapInput
-from app.tools.Rival_Agent_tools.SmartPricingEngine.smart_pricing_engine import PricingInput, SmartPricingEngine
-from app.tools.Rival_Agent_tools.VisionSynthesis.tools_synthesis import run_vision_synthesis_tool
+from app.tools.rival_agent_tools.competitor_discovery.tools_discovery import run_competitor_discovery_tool
+from app.tools.rival_agent_tools.competitor_research.tools_competitor import run_competitor_research_tool
+from app.tools.rival_agent_tools.market_gap_analyzer.market_gap_analyzer import MarketGapAnalyzer, MarketGapInput
+from app.tools.rival_agent_tools.smart_pricing_engine.smart_pricing_engine import PricingInput, SmartPricingEngine
+from app.tools.rival_agent_tools.vision_synthesis.tools_synthesis import run_vision_synthesis_tool
 
 logger = logging.getLogger(__name__)
-
-_competitor_research_tool = CompetitorResearchTool()
 _market_gap_analyzer = MarketGapAnalyzer()
 _smart_pricing_engine = SmartPricingEngine()
 
 class RivalAgent:
-    async def research_competitors(self, state: RivalAgentState) -> RivalAgentState:
+    async def discover_competitors(self, state: RivalAgentState) -> RivalAgentState:
         task_id = state["task_id"]
-        competitor_names = state["competitor_names"]
-        target_platform = state["target_platform"]
-
-        async def _research_one(name: str) -> dict:
-            result = await _competitor_research_tool.run(
-                CompetitorResearchInput(competitor_name=name, target_platform=target_platform)
-            )
-            if not result.success:
-                logger.warning("Competitor research failed for %s: %s", name, result.data)
-                return {}
-            return result.data
+        user_product = state["user_product"]
 
         try:
-            raw_results = await asyncio.gather(*[_research_one(name) for name in competitor_names])
+            result = await run_competitor_discovery_tool(
+                platform=state["target_platform"],
+                category=user_product.get("category", ""),
+                product_title=user_product.get("title", ""),
+                brand=state["brand"],
+            )
         except Exception as exc:
             raise WorkflowError(str(exc), task_id=task_id)
 
-        competitor_research_results = [r for r in raw_results if r]
+        if not result.success or not result.data:
+            logger.warning("Competitor discovery returned no results | task_id=%s, continuing with empty list", task_id)
+            return {**state, "competitor_names": []}
+
+        competitor_names = [c.model_dump() for c in result.data.competitors]
+        return {**state, "competitor_names": competitor_names}
+
+    async def research_competitors(self, state: RivalAgentState) -> RivalAgentState:
+        task_id = state["task_id"]
+        competitors = state["competitor_names"]
+        category = state["user_product"].get("category", "")
+
+        try:
+            results = await run_competitor_research_tool(competitors, category)
+        except Exception as exc:
+            raise WorkflowError(str(exc), task_id=task_id)
+
+        competitor_research_results = [r.data.model_dump() for r in results if r.success and r.data]
         return {**state, "competitor_research_results": competitor_research_results}
 
     async def vision_synthesis(self, state: RivalAgentState) -> RivalAgentState:
@@ -44,7 +54,11 @@ class RivalAgent:
             competitor_image_urls.extend(result.get("image_urls", []))
 
         try:
-            analysis = await run_vision_synthesis_tool(user_image_urls, competitor_image_urls)
+            analysis = await run_vision_synthesis_tool(
+                user_image_urls,
+                competitor_image_urls,
+                variants=state.get("variants") or [],
+            )
             vision_result = analysis.model_dump()
         except Exception as exc:
             raise WorkflowError(str(exc), task_id=task_id)

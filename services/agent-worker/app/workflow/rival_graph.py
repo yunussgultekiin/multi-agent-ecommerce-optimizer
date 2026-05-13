@@ -20,12 +20,14 @@ def _cancel_or(next_node: str):
 
 def _build_rival_graph():
     graph = StateGraph(RivalAgentState)
-    graph.add_node("research_competitors", NodeRunner("research_competitors", 20).wrap(_rival_agent.research_competitors))
-    graph.add_node("vision_synthesis", NodeRunner("vision_synthesis", 40).wrap(_rival_agent.vision_synthesis))
-    graph.add_node("market_gap", NodeRunner("market_gap", 60).wrap(_rival_agent.market_gap))
-    graph.add_node("pricing", NodeRunner("pricing", 80).wrap(_rival_agent.pricing))
+    graph.add_node("discover_competitors", NodeRunner("discover_competitors", 10).wrap(_rival_agent.discover_competitors))
+    graph.add_node("research_competitors", NodeRunner("research_competitors", 30).wrap(_rival_agent.research_competitors))
+    graph.add_node("vision_synthesis", NodeRunner("vision_synthesis", 50).wrap(_rival_agent.vision_synthesis))
+    graph.add_node("market_gap", NodeRunner("market_gap", 70).wrap(_rival_agent.market_gap))
+    graph.add_node("pricing", NodeRunner("pricing", 85).wrap(_rival_agent.pricing))
     graph.add_node("finalize", NodeRunner("finalize", 100).wrap(_rival_agent.finalize))
-    graph.add_edge(START, "research_competitors")
+    graph.add_edge(START, "discover_competitors")
+    graph.add_conditional_edges("discover_competitors", _cancel_or("research_competitors"))
     graph.add_conditional_edges("research_competitors", _cancel_or("vision_synthesis"))
     graph.add_conditional_edges("vision_synthesis", _cancel_or("market_gap"))
     graph.add_conditional_edges("market_gap", _cancel_or("pricing"))
@@ -36,11 +38,13 @@ def _build_rival_graph():
 _compiled_rival_graph = _build_rival_graph()
 
 def _build_rival_initial_state(payload: dict) -> RivalAgentState:
+    inner = payload.get("payload", payload)
+    user_product = inner.get("user_product", {})
     return RivalAgentState(
         task_id=payload.get("task_id", ""),
-        user_product=payload.get("user_product", {}),
-        competitor_names=payload.get("competitor_names", []),
-        target_platform=payload.get("target_platform", ""),
+        user_product=user_product,
+        competitor_names=[],
+        target_platform=inner.get("target_platform", ""),
         competitor_research_results=[],
         vision_result={},
         gap_result={},
@@ -49,6 +53,8 @@ def _build_rival_initial_state(payload: dict) -> RivalAgentState:
         error="",
         status="pending",
         cancelled=False,
+        brand=user_product.get("brand", ""),
+        variants=user_product.get("variants", []),
     )
 
 async def run_rival_workflow(payload: dict) -> None:
@@ -66,10 +72,10 @@ async def run_rival_workflow(payload: dict) -> None:
         seo_handler = WorkflowErrorHandler(compiled_seo_graph, _task_client)
         await seo_handler.run(seo_state)
     except WorkflowError as exc:
-        logger.error("WorkflowError in rival: task_id=%s error=%s", task_id, exc)
+        logger.error("WorkflowError in rival | task_id=%s error=%s", task_id, exc)
         await _task_client.update_status(task_id, "failed", error_message=str(exc))
         await report_progress(task_id, "rival_agent", "failed", 0)
     except Exception as exc:
-        logger.error("Unexpected error in rival: task_id=%s error=%s", task_id, exc)
+        logger.error("Unexpected error in rival | task_id=%s error=%s", task_id, exc)
         await _task_client.update_status(task_id, "failed", error_message=str(exc))
         await report_progress(task_id, "rival_agent", "failed", 0)

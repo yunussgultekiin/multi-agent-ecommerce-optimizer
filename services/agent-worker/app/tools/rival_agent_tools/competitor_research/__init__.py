@@ -1,3 +1,3 @@
-from .competitor_research import CompetitorResearchTool
+from .tools_competitor import run_competitor_research_tool
 
-__all__ = ["CompetitorResearchTool"]
+__all__ = ["run_competitor_research_tool"]
