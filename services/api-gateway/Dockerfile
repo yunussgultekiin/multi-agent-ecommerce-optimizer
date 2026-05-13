@@ -3,10 +3,11 @@ FROM python:3.12-slim
 RUN adduser --disabled-password --no-create-home appuser
 
 WORKDIR /app
-COPY requirements.txt .
+COPY api-gateway/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY app/ ./app/
+COPY shared/ ./shared/
+COPY api-gateway/app/ ./app/
 
 USER appuser
 EXPOSE 8080

@@ -38,7 +38,9 @@ services:
       retries: 3
 
   api-gateway:
-    build: ./services/api-gateway
+    build:
+      context: ./services
+      dockerfile: api-gateway/Dockerfile
     ports:
       - "8000:8080"
     env_file: .env
@@ -111,7 +113,9 @@ services:
       retries: 3
 
   broker-worker:
-    build: ./services/broker-worker
+    build:
+      context: ./services
+      dockerfile: broker-worker/Dockerfile
     ports:
       - "8004:8080"
     env_file: .env
