@@ -11,11 +11,11 @@ class RivalAgentState(BaseAgentState):
     competitor_names: list[dict]
     target_platform: str
     competitor_research_results: list[dict]
+    sentiment_result: dict
+    trend_result: dict
     gap_result: dict
     pricing_result: dict
     rival_json: dict
-    brand: str
-    variants: list[dict]
 
 class SeoAgentState(BaseAgentState):
     rival_json: dict

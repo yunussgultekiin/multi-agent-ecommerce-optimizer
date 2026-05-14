@@ -2,11 +2,15 @@ from typing import Optional
 from pydantic import BaseModel
 from app.core import ToolResult
 
+
 class PricingInput(BaseModel):
     competitor_research_results: list[dict]
     user_product: dict
     gap_result: Optional[dict] = None
+    sentiment_result: Optional[dict] = None
+    trend_result: Optional[dict] = None
     target_platform: str = ""
+
 
 class SmartPricingEngine:
     async def run(self, input: PricingInput) -> ToolResult:
@@ -25,5 +29,7 @@ class SmartPricingEngine:
             user_product=input.user_product,
             competitor_tool_results=tool_results,
             gap_result=input.gap_result,
+            sentiment_result=input.sentiment_result,
+            trend_result=input.trend_result,
             target_platform=input.target_platform,
         )

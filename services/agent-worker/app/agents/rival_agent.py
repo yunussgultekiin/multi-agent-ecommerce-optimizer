@@ -7,6 +7,8 @@ from app.workflow.seo_graph import build_seo_state_from_rival, compiled_seo_grap
 from app.tools.rival_agent_tools import (
     run_competitor_discovery_tool,
     run_competitor_research_tool,
+    IDEAL_RESEARCH_COUNT,
+    MIN_VALID_COMPETITORS,
     run_market_gap_analyzer,
     PricingInput,
     SmartPricingEngine,
@@ -14,6 +16,7 @@ from app.tools.rival_agent_tools import (
 
 logger = logging.getLogger(__name__)
 _smart_pricing_engine = SmartPricingEngine()
+
 
 class RivalAgent:
     async def discover_competitors(self, state: RivalAgentState) -> RivalAgentState:
@@ -25,7 +28,7 @@ class RivalAgent:
                 platform=state["target_platform"],
                 category=user_product.get("category", ""),
                 product_title=user_product.get("title", ""),
-                brand=state["brand"],
+                brand=state["user_product"].get("brand", ""),
             )
         except Exception as exc:
             raise WorkflowError(str(exc), task_id=task_id)
@@ -37,8 +40,7 @@ class RivalAgent:
             )
             return {**state, "competitor_names": []}
 
-        competitor_names = result.data["competitors"]
-        return {**state, "competitor_names": competitor_names}
+        return {**state, "competitor_names": result.data["competitors"]}
 
     async def research_competitors(self, state: RivalAgentState) -> RivalAgentState:
         task_id = state["task_id"]
@@ -50,15 +52,54 @@ class RivalAgent:
         except Exception as exc:
             raise WorkflowError(str(exc), task_id=task_id)
 
+        successful_count = sum(1 for r in results if r.success)
+
+        if successful_count < MIN_VALID_COMPETITORS:
+            raise WorkflowError(
+                f"Insufficient competitor data: only {successful_count} of {len(results)} researched successfully",
+                task_id=task_id,
+            )
+
+        if successful_count < IDEAL_RESEARCH_COUNT:
+            logger.warning(
+                "Partial competitor research | task_id=%s successful=%d/%d fallback_mode=True",
+                task_id,
+                successful_count,
+                len(results),
+            )
+
         competitor_research_results = [
             {"success": r.success, "data": r.data, "fallback_used": r.fallback_used}
             for r in results
         ]
 
-        return {
-            **state,
-            "competitor_research_results": competitor_research_results,
-        }
+        return {**state, "competitor_research_results": competitor_research_results}
+
+    async def analyze_sentiment(self, state: RivalAgentState) -> RivalAgentState:
+        # TODO: replace stub with real call when SentimentAnalyzerTool is implemented.
+        # Expected call:
+        #   from app.tools.rival_agent_tools import run_sentiment_analyzer
+        #   result = await run_sentiment_analyzer(
+        #       competitor_names=state["competitor_names"],
+        #       competitor_research_results=state["competitor_research_results"],
+        #       category=state["user_product"].get("category", ""),
+        #       target_platform=state["target_platform"],
+        #       user_product=state["user_product"],
+        #   )
+        #   return {**state, "sentiment_result": result.data}
+        return {**state, "sentiment_result": {}}
+
+    async def analyze_trends(self, state: RivalAgentState) -> RivalAgentState:
+        # TODO: replace stub with real call when TrendAnalyzerTool is implemented.
+        # Expected call:
+        #   from app.tools.rival_agent_tools import run_trend_analyzer
+        #   result = await run_trend_analyzer(
+        #       category=state["user_product"].get("category", ""),
+        #       target_platform=state["target_platform"],
+        #       user_product=state["user_product"],
+        #   )
+        #   return {**state, "trend_result": result.data}
+        return {**state, "trend_result": {}}
 
     async def market_gap(self, state: RivalAgentState) -> RivalAgentState:
         task_id = state["task_id"]
@@ -76,6 +117,8 @@ class RivalAgent:
             result = await run_market_gap_analyzer(
                 user_product=state["user_product"],
                 competitor_tool_results=competitor_tool_results,
+                sentiment_result=state.get("sentiment_result") or {},
+                trend_result=state.get("trend_result") or {},
             )
         except Exception as exc:
             raise WorkflowError(str(exc), task_id=task_id)
@@ -97,6 +140,8 @@ class RivalAgent:
                     competitor_research_results=state["competitor_research_results"],
                     user_product=state["user_product"],
                     gap_result=state.get("gap_result"),
+                    sentiment_result=state.get("sentiment_result") or {},
+                    trend_result=state.get("trend_result") or {},
                     target_platform=state.get("target_platform", ""),
                 )
             )
@@ -117,14 +162,13 @@ class RivalAgent:
             "target_platform": state["target_platform"],
             "competitors": state["competitor_names"],
             "competitor_research_results": state["competitor_research_results"],
+            "sentiment_result": state.get("sentiment_result") or {},
+            "trend_result": state.get("trend_result") or {},
             "gap_result": state["gap_result"],
             "pricing_result": state["pricing_result"],
         }
 
-        updated_state = {
-            **state,
-            "rival_json": rival_json,
-        }
+        updated_state = {**state, "rival_json": rival_json}
 
         seo_state = build_seo_state_from_rival(updated_state)
         seo_handler = WorkflowErrorHandler(compiled_seo_graph, TaskServiceClient())
@@ -139,7 +183,4 @@ class RivalAgent:
                 "cancelled": seo_final_state.get("cancelled", False),
             }
 
-        return {
-            **updated_state,
-            "status": "completed",
-        }
+        return {**updated_state, "status": "completed"}

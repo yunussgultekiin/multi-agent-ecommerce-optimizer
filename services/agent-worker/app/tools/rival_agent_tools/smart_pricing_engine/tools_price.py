@@ -36,9 +36,9 @@ _client = genai.Client(
     http_options=HttpOptions(api_version="v1"),
 )
 
+
 async def _call_gemini(prompt: str) -> str:
     loop = asyncio.get_running_loop()
-
     try:
         response = await loop.run_in_executor(
             None,
@@ -60,21 +60,23 @@ async def _call_gemini(prompt: str) -> str:
         ) from exc
     except google.api_core.exceptions.NotFound as exc:
         raise RuntimeError(
-            f"Model '{settings.gemini_research_model}' not found in region '{settings.google_cloud_location}'. "
-            "Check the model name and location."
+            f"Model '{settings.gemini_research_model}' not found in "
+            f"region '{settings.google_cloud_location}'."
         ) from exc
     except google.api_core.exceptions.PermissionDenied as exc:
         raise RuntimeError(
-            f"Permission denied. Ensure the account has the 'Vertex AI User' role "
-            f"in project '{settings.google_cloud_project}'."
+            f"Permission denied for project '{settings.google_cloud_project}'."
         ) from exc
 
     return response.text or ""
+
 
 async def run_fallback_analysis(
     user_product: dict,
     competitors: list[dict],
     gap_result: Optional[dict] = None,
+    sentiment_result: Optional[dict] = None,
+    trend_result: Optional[dict] = None,
     target_platform: str = "",
     max_retries: int = 2,
 ) -> ToolResult:
@@ -82,6 +84,8 @@ async def run_fallback_analysis(
         user_product=user_product,
         competitors=competitors,
         gap_result=gap_result,
+        sentiment_result=sentiment_result,
+        trend_result=trend_result,
         target_platform=target_platform,
     )
     last_error = None
@@ -111,7 +115,7 @@ async def run_fallback_analysis(
         except (ValidationError, json.JSONDecodeError) as exc:
             last_error = str(exc)
             logger.warning(
-                "SmartPricingEngine fallback attempt failed | attempt=%d error=%s",
+                "SmartPricingEngine fallback failed | attempt=%d error=%s",
                 attempt + 1,
                 last_error,
             )
@@ -123,14 +127,14 @@ async def run_fallback_analysis(
                     confidence_score=None,
                     fallback_used=True,
                 )
-
                 return ToolResult(
                     success=False,
                     fallback_used=True,
-                    data={"error": f"Maximum retry reached: {last_error}"},
+                    data={"error": f"Max retries reached: {last_error}"},
                 )
 
     return ToolResult(success=False, fallback_used=True, data={"error": "Unexpected error"})
+
 
 def run_deterministic_analysis(
     user_product: dict,
@@ -154,9 +158,7 @@ def run_deterministic_analysis(
     variant_pricing = calculate_variant_pricing(
         user_variants, stats["q1"], stats["q3"], stats["median"]
     )
-    competitor_variant_overlap = calculate_competitor_variant_overlap(
-        user_variants, competitors
-    )
+    competitor_variant_overlap = calculate_competitor_variant_overlap(user_variants, competitors)
 
     result = PricingResult(
         price_median=stats["median"],
@@ -183,10 +185,13 @@ def run_deterministic_analysis(
 
     return ToolResult(success=True, data=result.model_dump(), fallback_used=False)
 
+
 async def run_smart_pricing_engine(
     user_product: dict,
     competitor_tool_results: list,
     gap_result: Optional[dict] = None,
+    sentiment_result: Optional[dict] = None,
+    trend_result: Optional[dict] = None,
     target_platform: str = "",
 ) -> ToolResult:
     normalized_user_product = normalize_user_product(user_product)
@@ -194,17 +199,19 @@ async def run_smart_pricing_engine(
     valid_prices = extract_valid_prices(valid_competitors)
 
     logger.info(
-        "SmartPricingEngine initialized | valid_competitor_count=%d | valid_price_count=%d",
+        "SmartPricingEngine | valid_competitors=%d valid_prices=%d",
         len(valid_competitors),
         len(valid_prices),
     )
 
     if len(valid_prices) < 2:
-        logger.warning("Not enough pricing data, activating Gemini fallback.")
+        logger.warning("Insufficient price data, activating Gemini fallback.")
         return await run_fallback_analysis(
             user_product=normalized_user_product,
             competitors=valid_competitors,
             gap_result=gap_result,
+            sentiment_result=sentiment_result,
+            trend_result=trend_result,
             target_platform=target_platform,
         )
 
