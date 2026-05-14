@@ -1,5 +1,4 @@
 from pydantic import BaseModel, Field
-from typing import Optional
 
 class Cluster(BaseModel):
     label: str
@@ -21,9 +20,4 @@ class MarketGapResult(BaseModel):
     positioning_rationale: str = Field(..., min_length = 1)
     variant_gap_opportunities: list[str] = Field(default_factory = list)
 
-class ToolResult(BaseModel):
-    success: bool
-    data: Optional[MarketGapResult] = None
-    fallback_used: bool = False
-    error: Optional[str] = None
 

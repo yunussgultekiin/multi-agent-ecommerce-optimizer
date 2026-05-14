@@ -1,21 +1,19 @@
 import logging
 from app.agents.state import RivalAgentState
-from app.core import WorkflowError
+from app.core import ToolResult, WorkflowError
 from app.task_client import TaskServiceClient
 from app.workflow.error_handler import WorkflowErrorHandler
 from app.workflow.seo_graph import build_seo_state_from_rival, compiled_seo_graph
 from app.tools.rival_agent_tools import (
     run_competitor_discovery_tool,
     run_competitor_research_tool,
-    MarketGapAnalyzer,
-    MarketGapInput,
+    run_market_gap_analyzer,
     PricingInput,
     SmartPricingEngine,
     run_vision_synthesis_tool,
 )
 
 logger = logging.getLogger(__name__)
-_market_gap_analyzer = MarketGapAnalyzer()
 _smart_pricing_engine = SmartPricingEngine()
 
 class RivalAgent:
@@ -80,11 +78,18 @@ class RivalAgent:
         task_id = state["task_id"]
 
         try:
-            result = await _market_gap_analyzer.run(
-                MarketGapInput(
-                    competitor_research_results=state["competitor_research_results"],
-                    user_product=state["user_product"],
+            competitor_tool_results = [
+                ToolResult(
+                    success=r.get("success", False),
+                    data=r.get("data") or {},
+                    fallback_used=r.get("fallback_used", False),
                 )
+                for r in state["competitor_research_results"]
+            ]
+
+            result = await run_market_gap_analyzer(
+                user_product=state["user_product"],
+                competitor_tool_results=competitor_tool_results,
             )
         except Exception as exc:
             raise WorkflowError(str(exc), task_id=task_id)

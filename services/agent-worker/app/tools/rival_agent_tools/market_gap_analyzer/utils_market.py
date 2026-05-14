@@ -1,22 +1,23 @@
 import logging
+import re
 from typing import Optional
-from .models_market import ToolResult
+from app.core import ToolResult
 
 logger = logging.getLogger(__name__)
 
 def filter_valid_competitors(tool_results: list[ToolResult]) -> list[dict]:
     valid = []
     for result in tool_results:
-        if result.success and result.data is not None:
-            competitor = result.data
+        if result.success and result.data:
+            d = result.data
             valid.append({
-                "competitor_name": competitor.competitor_name,
-                "brand": competitor.brand,
-                "price": competitor.price,
-                "features": competitor.features,
-                "rating": competitor.rating,
-                "review_count": competitor.review_count,
-                "variants": competitor.variants,
+                "competitor_name": d.get("competitor_name"),
+                "brand": d.get("brand"),
+                "price": d.get("price"),
+                "features": d.get("features", []),
+                "rating": d.get("rating"),
+                "review_count": d.get("review_count"),
+                "variants": d.get("variants", []),
             })
 
     return valid
@@ -32,14 +33,19 @@ def normalize_user_product(user_product: dict) -> dict:
     }
 
 def clean_json_response(raw_text: str) -> str:
-    text = raw_text.strip()
-    if text.startswith("```"):
-        parts = text.split("```")
-        text = parts[1]
-        if text.lower().startswith("json"):
-            text = text[4:]
-    
-    return text.strip()
+    text = (raw_text or "").strip()
+
+    fenced = re.search(r"```(?:json)?\s*([\s\S]*?)```", text, re.IGNORECASE)
+    if fenced:
+        return fenced.group(1).strip()
+
+    first_brace = text.find("{")
+    last_brace = text.rfind("}")
+
+    if first_brace != -1 and last_brace != -1 and last_brace > first_brace:
+        return text[first_brace:last_brace + 1].strip()
+
+    return text
 
 def log_tool_call(
     valid_competitor_count: int,
