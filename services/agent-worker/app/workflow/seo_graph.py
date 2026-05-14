@@ -57,11 +57,12 @@ def _build_seo_graph():
 compiled_seo_graph = _build_seo_graph()
 
 def build_seo_state_from_rival(rival_state: RivalAgentState) -> SeoAgentState:
+    rival_json = rival_state.get("rival_json", {})
     return SeoAgentState(
         task_id=rival_state["task_id"],
-        rival_json=rival_state.get("rival_json", {}),
-        target_platform=rival_state.get("target_platform", ""),
-        generation_prompt=rival_state.get("vision_result", {}).get("generation_prompt", ""),
+        rival_json=rival_json,
+        user_product=rival_json.get("user_product", {}),
+        target_platform=rival_json.get("target_platform", "") or rival_state.get("target_platform", ""),
         rag_context=[],
         seo_output={},
         generated_image_url=None,
@@ -72,11 +73,12 @@ def build_seo_state_from_rival(rival_state: RivalAgentState) -> SeoAgentState:
     )
 
 def _build_seo_initial_state(payload: dict) -> SeoAgentState:
+    rival_json = payload.get("rival_json", {})
     return SeoAgentState(
         task_id=payload.get("task_id", ""),
-        rival_json=payload.get("rival_json", {}),
-        target_platform=payload.get("target_platform", ""),
-        generation_prompt=payload.get("generation_prompt", ""),
+        rival_json=rival_json,
+        user_product=rival_json.get("user_product", {}),
+        target_platform=payload.get("target_platform", "") or rival_json.get("target_platform", ""),
         rag_context=[],
         seo_output={},
         generated_image_url=None,

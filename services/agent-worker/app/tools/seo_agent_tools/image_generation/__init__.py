@@ -1,3 +1,3 @@
-from .image_generation import ImageGenerationTool
+from .image_generation import ImageGenerationInput, ImageGenerationTool
 
-__all__ = ["ImageGenerationTool"]
+__all__ = ["ImageGenerationInput", "ImageGenerationTool"]
