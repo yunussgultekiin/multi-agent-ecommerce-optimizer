@@ -13,7 +13,6 @@ WORKDIR /app
 
 COPY --from=builder /install /usr/local
 COPY app/ ./app/
-COPY shared/ ./shared/
 COPY migrations/ ./migrations/
 COPY alembic.ini .
 

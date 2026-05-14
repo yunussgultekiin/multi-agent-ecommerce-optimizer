@@ -12,11 +12,13 @@ target_metadata = Base.metadata
 def run_migrations_offline() -> None:
     from app.config import settings
 
+    version_table = config.get_main_option("version_table", "alembic_version")
     context.configure(
         url=settings.database_url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        version_table=version_table,
     )
     with context.begin_transaction():
         context.run_migrations()
@@ -28,7 +30,8 @@ async def run_migrations_online() -> None:
     await engine.dispose()
 
 def _run_sync_migrations(connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata)
+    version_table = config.get_main_option("version_table", "alembic_version")
+    context.configure(connection=connection, target_metadata=target_metadata, version_table=version_table)
     with context.begin_transaction():
         context.run_migrations()
 

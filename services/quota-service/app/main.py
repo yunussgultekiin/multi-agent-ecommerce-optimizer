@@ -1,8 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.config import settings
-from app.redis import connect, disconnect
-from app.health import router as health_router
+from app.redis import connect, disconnect, check_redis_connectivity
 from app.logging_config import configure_logging
 from app.router import router as quota_router
 from app.security import JWTAuthMiddleware, TokenService
@@ -14,12 +13,15 @@ async def lifespan(_app: FastAPI):
     yield
     await disconnect()
 
-app = FastAPI(
-    title="Quota Service",
-    version="1.0.0",
-    lifespan=lifespan,
-)
-
+app = FastAPI(title="Quota Service", version="1.0.0", lifespan=lifespan)
 app.add_middleware(JWTAuthMiddleware, token_service=TokenService())
-app.include_router(health_router)
 app.include_router(quota_router)
+
+@app.get("/health")
+async def health() -> dict:
+    return {
+        "status": "ok",
+        "service": "quota-service",
+        "version": "1.0.0",
+        "dependencies": {"redis": await check_redis_connectivity()},
+    }

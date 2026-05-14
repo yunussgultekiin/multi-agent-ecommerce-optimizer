@@ -1,11 +1,7 @@
-import logging
 from shared.oidc_client import OidcHttpClient
 from app.config import settings
 
-logger = logging.getLogger(__name__)
-
-class AuthServiceError(Exception):
-    pass
+class AuthServiceError(Exception): pass
 
 class AuthClient:
     def __init__(self) -> None:
@@ -19,24 +15,24 @@ class AuthClient:
 
     async def register(self, email: str, password: str):
         return await self._request(
-            "POST", "/auth/register",
+            "POST",
+            "/auth/register",
             json={"email": email, "password": password},
         )
 
     async def login(self, email: str, password: str):
         return await self._request(
-            "POST", "/auth/login",
+            "POST",
+            "/auth/login",
             json={"email": email, "password": password},
         )
 
     async def refresh(self, refresh_token: str):
         return await self._request(
-            "POST", "/auth/refresh",
+            "POST",
+            "/auth/refresh",
             json={"refresh_token": refresh_token},
         )
 
-    async def me(self, token: str):
-        return await self._request(
-            "GET", "/auth/me",
-            headers={"Authorization": f"Bearer {token}"},
-        )
+    async def me(self, user_id: str):
+        return await self._request("GET", f"/internal/users/{user_id}")

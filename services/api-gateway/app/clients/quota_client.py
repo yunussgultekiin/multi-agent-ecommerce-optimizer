@@ -1,15 +1,15 @@
-import logging
-from shared.oidc_client import OidcHttpClient
+from shared.oidc_client import InternalHttpClient
 from app.config import settings
 
-logger = logging.getLogger(__name__)
-
-class QuotaServiceError(Exception):
-    pass
+class QuotaServiceError(Exception): pass
 
 class QuotaClient:
     def __init__(self) -> None:
-        self._client = OidcHttpClient(base_url=settings.quota_service_url)
+        self._client = InternalHttpClient(
+            base_url=settings.quota_service_url,
+            secret=settings.jwt_secret_key,
+            algorithm=settings.jwt_algorithm,
+        )
 
     async def _request(self, method: str, path: str, **kwargs):
         try:

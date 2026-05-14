@@ -1,6 +1,7 @@
 import json
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query
+from typing import Optional
 from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 import redis.asyncio as aioredis
@@ -32,10 +33,16 @@ async def list_tasks(
     return TaskListResponse(items=tasks, total=total, limit=limit, offset=offset)
 
 @router.get("/{task_id}", response_model=TaskResponse)
-async def get_task(task_id: UUID, service: TaskService = Depends(get_service)):
+async def get_task(
+    task_id: UUID,
+    user_id: Optional[str] = Query(default=None),
+    service: TaskService = Depends(get_service),
+):
     task = await service.get_task(task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
+    if user_id is not None and task.user_id != user_id:
+        raise HTTPException(status_code=403, detail="Forbidden")
     return task
 
 @router.post("/{task_id}/result", status_code=201)
@@ -44,13 +51,19 @@ async def save_result(task_id: UUID, body: TaskResultCreate, service: TaskServic
     return {"task_id": str(task_id), "created_at": str(result.created_at)}
 
 @router.get("/{task_id}/result", response_model=TaskResultResponse)
-async def get_result(task_id: UUID, service: TaskService = Depends(get_service)):
-    result, task_found = await service.get_result(task_id)
-    if not task_found:
+async def get_result(
+    task_id: UUID,
+    user_id: Optional[str] = Query(default=None),
+    service: TaskService = Depends(get_service),
+):
+    task = await service.get_task(task_id)
+    if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-    if result is None:
+    if user_id is not None and task.user_id != user_id:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    if task.result is None:
         raise HTTPException(status_code=404, detail="Result not ready")
-    return result
+    return task.result
 
 @router.patch("/{task_id}/status", response_model=TaskResponse)
 async def update_task_status(task_id: UUID, body: TaskStatusUpdate, service: TaskService = Depends(get_service)):

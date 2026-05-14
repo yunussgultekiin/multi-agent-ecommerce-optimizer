@@ -2,8 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.config import settings
 from app.consumer import QueueConsumer
-from app.database import connect, disconnect
-from app.health import router as health_router
+from app.database import connect, disconnect, check_db_connectivity
 from app.logging_config import configure_logging
 
 _consumer = QueueConsumer()
@@ -17,10 +16,13 @@ async def lifespan(_app: FastAPI):
     _consumer.stop()
     disconnect()
 
-app = FastAPI(
-    title="Broker Worker",
-    version="1.0.0",
-    lifespan=lifespan,
-)
+app = FastAPI(title="Broker Worker", version="1.0.0", lifespan=lifespan)
 
-app.include_router(health_router)
+@app.get("/health")
+async def health() -> dict:
+    return {
+        "status": "ok",
+        "service": "broker-worker",
+        "version": "1.0.0",
+        "dependencies": {"postgres": check_db_connectivity()},
+    }

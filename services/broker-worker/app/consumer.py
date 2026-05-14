@@ -52,24 +52,29 @@ class QueueConsumer:
                 logger.error("consumer_loop_error", extra={"error": str(exc)})
 
     def _process(self, task_id: str, payload: dict) -> None:
-        session = get_session()
-
         try:
             self._agent_client.run(task_id, payload)
             self._notify_running(task_id)
-
         except AgentClientError as exc:
-            retry_handler = RetryHandler(session=session)
-            try:
-                retry_handler.handle(
-                    task_id=task_id,
-                    error=str(exc),
-                    task_payload=payload,
-                    requeue_fn=self._requeue,
-                )
-            except MaxRetryExceededError:
-                self._notify_failed(task_id)
+            threading.Thread(
+                target=self._handle_retry,
+                args=(task_id, str(exc), payload),
+                daemon=True,
+                name=f"retry-{task_id}",
+            ).start()
 
+    def _handle_retry(self, task_id: str, error: str, payload: dict) -> None:
+        session = get_session()
+        try:
+            retry_handler = RetryHandler(session=session)
+            retry_handler.handle(
+                task_id=task_id,
+                error=error,
+                task_payload=payload,
+                requeue_fn=self._requeue,
+            )
+        except MaxRetryExceededError:
+            self._notify_failed(task_id)
         finally:
             session.close()
 

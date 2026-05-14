@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 TokenType = Literal["access", "refresh"]
 _DUMMY_HASH = bcrypt.hashpw(b"dummy_timing_placeholder", bcrypt.gensalt(rounds=12)).decode()
 
-_PUBLIC_PATHS = frozenset({
+_JWT_SKIP_PATHS = frozenset({
     "/auth/register",
     "/auth/login",
     "/auth/refresh",
@@ -23,6 +23,8 @@ _PUBLIC_PATHS = frozenset({
     "/openapi.json",
     "/redoc",
 })
+
+_JWT_SKIP_PREFIXES = frozenset({"/internal/"})
 
 def hash_password(plain: str) -> str:
     return bcrypt.hashpw(plain.encode(), bcrypt.gensalt(rounds=12)).decode()
@@ -77,7 +79,8 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
         self._token_service = token_service
 
     async def dispatch(self, request: Request, call_next):
-        if request.url.path in _PUBLIC_PATHS:
+        path = request.url.path
+        if path in _JWT_SKIP_PATHS or any(path.startswith(p) for p in _JWT_SKIP_PREFIXES):
             return await call_next(request)
 
         authorization = request.headers.get("Authorization", "")

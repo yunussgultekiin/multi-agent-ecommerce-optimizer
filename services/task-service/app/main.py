@@ -1,9 +1,9 @@
 import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from app.health import router as health_router
 from app.tasks_router import router as tasks_router
-from app.database import connect, disconnect
+from app.database import connect, disconnect, check_database_connectivity
+from app.security import JWTAuthMiddleware, TokenService
 
 logger = logging.getLogger(__name__)
 
@@ -17,5 +17,14 @@ async def lifespan(app: FastAPI):
     logger.info("task-service shutting down")
 
 app = FastAPI(title="Task Service", version="0.1.0", lifespan=lifespan)
-app.include_router(health_router)
+app.add_middleware(JWTAuthMiddleware, token_service=TokenService())
 app.include_router(tasks_router, prefix="/tasks", tags=["tasks"])
+
+@app.get("/health")
+async def health() -> dict:
+    return {
+        "status": "ok",
+        "service": "task-service",
+        "version": "0.1.0",
+        "dependencies": {"postgres": await check_database_connectivity()},
+    }

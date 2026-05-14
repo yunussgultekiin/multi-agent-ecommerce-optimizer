@@ -10,6 +10,7 @@ def configure_logging(level: str = "INFO") -> None:
         rename_fields={"levelname": "severity"},
     )
     handler.setFormatter(formatter)
+
     root = logging.getLogger()
     root.handlers = [handler]
     root.setLevel(level.upper())
