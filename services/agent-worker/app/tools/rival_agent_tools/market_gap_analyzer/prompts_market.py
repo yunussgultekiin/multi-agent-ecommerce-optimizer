@@ -62,7 +62,6 @@ def build_market_gap_prompt(
     - gap_opportunities must contain at least 1 opportunity
     """
 
-
 def build_self_correction_prompt(original_prompt: str, last_error: str) -> str:
     return f"""
     THE PREVIOUS ATTEMPT FAILED. Pydantic validation error:
