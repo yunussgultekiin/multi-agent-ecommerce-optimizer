@@ -46,6 +46,7 @@ class SyncOidcTokenProvider:
             return headers
         return {**headers, "Authorization": f"Bearer {token}"}
 
+
 class OidcTokenProvider:
     def __init__(self, audience: str) -> None:
         self._audience = audience
@@ -78,6 +79,7 @@ class OidcTokenProvider:
         if token is None:
             return headers
         return {**headers, "Authorization": f"Bearer {token}"}
+
 
 class SyncInternalTokenProvider:
     """Sync HS256 service-to-service token provider for use in threads."""

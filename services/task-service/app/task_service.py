@@ -1,10 +1,12 @@
-from uuid import UUID
 import json
-from sqlalchemy.ext.asyncio import AsyncSession
+from uuid import UUID
+
 import redis.asyncio as aioredis
-from app.task_repositories import TaskRepository
-from app.tasks import Task, AnalysisResult
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.enums import TaskStatus
+from app.task_repositories import TaskRepository
+from app.tasks import AnalysisResult, Task
 
 VALID_TRANSITIONS = {
     TaskStatus.pending: [TaskStatus.running, TaskStatus.cancelled],

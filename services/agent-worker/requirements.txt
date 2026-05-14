@@ -1,9 +1,8 @@
 aiohttp
 langgraph
 langchain-core
-google-generativeai
+google-genai
 google-auth>=2.35.0
-google-cloud-aiplatform
 pydantic>=2.9.0
 pydantic-settings>=2.6.0
 python-dotenv

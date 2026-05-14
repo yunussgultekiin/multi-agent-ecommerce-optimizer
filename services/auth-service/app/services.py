@@ -7,8 +7,14 @@ from app.schemas import TokenResponse, UserResponse
 from app.security import TokenService, dummy_verify, hash_password, verify_password
 
 logger = logging.getLogger(__name__)
-class EmailAlreadyRegisteredError(Exception): pass
-class InvalidCredentialsError(Exception): pass
+
+
+class EmailAlreadyRegisteredError(Exception):
+    pass
+
+
+class InvalidCredentialsError(Exception):
+    pass
 
 class AuthService:
     def __init__(

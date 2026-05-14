@@ -2,8 +2,14 @@ import asyncio
 import json
 import logging
 from typing import Callable, TypeVar
+
+import google.api_core.exceptions
+import google.auth.exceptions
+from google import genai
+from google.genai import types
+from google.genai.types import HttpOptions
 from pydantic import BaseModel, ValidationError
-import google.generativeai as genai
+
 from app.config import settings
 from app.core import WorkflowError
 
@@ -11,9 +17,16 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T", bound=BaseModel)
 _MAX_RETRIES = 2
 
+_client = genai.Client(
+    vertexai=True,
+    project=settings.google_cloud_project,
+    location=settings.google_cloud_location,
+    http_options=HttpOptions(api_version="v1"),
+)
+
 class GeminiCorrectionLoop:
     def __init__(self, model_name: str = settings.gemini_model) -> None:
-        self._model = genai.GenerativeModel(model_name)
+        self._model_name = model_name
 
     async def generate_and_validate(
         self,
@@ -22,15 +35,41 @@ class GeminiCorrectionLoop:
         task_id: str = "",
         response_parser: Callable[[str], dict] | None = None,
     ) -> T:
+
         parser = response_parser or self._strip_and_parse_json
         loop = asyncio.get_running_loop()
         last_error = ""
         for attempt in range(_MAX_RETRIES + 1):
             current_prompt = self._build_retry_prompt(prompt, last_error, attempt)
-            response = await loop.run_in_executor(
-                None,
-                lambda p=current_prompt: self._model.generate_content(p),
-            )
+            try:
+                response = await loop.run_in_executor(
+                    None,
+                    lambda p=current_prompt: _client.models.generate_content(
+                        model=self._model_name,
+                        contents=p,
+                        config=types.GenerateContentConfig(
+                            thinking_config=types.ThinkingConfig(thinking_budget=0),
+                        ),
+                    ),
+                )
+            except google.auth.exceptions.DefaultCredentialsError as exc:
+                raise WorkflowError(
+                    "Google Cloud credentials not configured. "
+                    "Run: gcloud auth application-default login",
+                    task_id=task_id,
+                ) from exc
+            except google.api_core.exceptions.NotFound as exc:
+                raise WorkflowError(
+                    f"Model '{self._model_name}' not found in region '{settings.google_cloud_location}'. "
+                    "Check the model name and location.",
+                    task_id=task_id,
+                ) from exc
+            except google.api_core.exceptions.PermissionDenied as exc:
+                raise WorkflowError(
+                    f"Permission denied. Ensure the account has the 'Vertex AI User' role "
+                    f"in project '{settings.google_cloud_project}'.",
+                    task_id=task_id,
+                ) from exc
             try:
                 data = parser(response.text)
                 result = output_model(**data)

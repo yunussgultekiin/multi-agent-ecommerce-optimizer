@@ -26,14 +26,18 @@ _JWT_SKIP_PATHS = frozenset({
 
 _JWT_SKIP_PREFIXES = frozenset({"/internal/"})
 
+
 def hash_password(plain: str) -> str:
     return bcrypt.hashpw(plain.encode(), bcrypt.gensalt(rounds=12)).decode()
+
 
 def verify_password(plain: str, hashed: str) -> bool:
     return bcrypt.checkpw(plain.encode(), hashed.encode())
 
+
 def dummy_verify() -> None:
     bcrypt.checkpw(b"x", _DUMMY_HASH.encode())
+
 
 class TokenService:
     def __init__(self) -> None:
@@ -72,6 +76,7 @@ class TokenService:
             raise ValueError(f"Expected token type '{expected_type}', got '{payload.get('type')}'")
 
         return payload
+
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
     def __init__(self, app, token_service: TokenService, **kwargs) -> None:
