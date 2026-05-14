@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:16-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -14,33 +15,153 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   redis:
     image: redis:7-alpine
+    restart: unless-stopped
     networks:
       - platform-net
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
+  auth-service-migrate:
+    build: ./services/auth-service
+    command: alembic upgrade head
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - platform-net
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/api/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+
+  auth-service:
+    build: ./services/auth-service
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8080
+    ports:
+      - "8001:8080"
+    env_file: .env
+    depends_on:
+      auth-service-migrate:
+        condition: service_completed_successfully
+    networks:
+      - platform-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  quota-service:
+    build: ./services/quota-service
+    restart: unless-stopped
+    ports:
+      - "8003:8080"
+    env_file: .env
+    depends_on:
+      - redis
+    networks:
+      - platform-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  task-service-migrate:
+    build: ./services/task-service
+    command: alembic upgrade head
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - platform-net
+
+  task-service:
+    build: ./services/task-service
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8080
+    ports:
+      - "8002:8080"
+    env_file: .env
+    depends_on:
+      task-service-migrate:
+        condition: service_completed_successfully
+    networks:
+      - platform-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  broker-worker-migrate:
+    build:
+      context: ./services
+      dockerfile: broker-worker/Dockerfile
+    command: alembic upgrade head
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - platform-net
+
+  broker-worker:
+    build:
+      context: ./services
+      dockerfile: broker-worker/Dockerfile
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8080
+    ports:
+      - "8004:8080"
+    env_file: .env
+    environment:
+      AGENT_WORKER_URL: http://agent-worker:8080
+    depends_on:
+      broker-worker-migrate:
+        condition: service_completed_successfully
+    networks:
+      - platform-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  agent-worker:
+    profiles: [agent]
+    build:
+      context: ./services
+      dockerfile: agent-worker/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8005:8080"
+    env_file: .env
+    environment:
+      TASK_SERVICE_URL: http://task-service:8080
+    networks:
+      - platform-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
 
   api-gateway:
     build:
       context: ./services
       dockerfile: api-gateway/Dockerfile
+    restart: unless-stopped
     ports:
       - "8000:8080"
     env_file: .env
@@ -48,109 +169,31 @@ services:
       AUTH_SERVICE_URL: http://auth-service:8080
       TASK_SERVICE_URL: http://task-service:8080
       QUOTA_SERVICE_URL: http://quota-service:8080
-      BROKER_WORKER_URL: http://broker-worker:8080
-      AGENT_WORKER_URL: http://agent-worker:8080
     depends_on:
       - auth-service
       - task-service
       - quota-service
-      - broker-worker
-      - agent-worker
     networks:
       - platform-net
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
 
-  auth-service:
-    build: ./services/auth-service
+  frontend:
+    profiles: [frontend]
+    build: ./frontend
+    restart: unless-stopped
     ports:
-      - "8001:8080"
-    env_file: .env
-    depends_on:
-      postgres:
-        condition: service_healthy
+      - "3000:3000"
     networks:
       - platform-net
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  task-service:
-    build: ./services/task-service
-    ports:
-      - "8002:8080"
-    env_file: .env
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - platform-net
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  quota-service:
-    build: ./services/quota-service
-    ports:
-      - "8003:8080"
-    env_file: .env
-    depends_on:
-      redis:
-        condition: service_healthy
-    networks:
-      - platform-net
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  broker-worker:
-    build:
-      context: ./services
-      dockerfile: broker-worker/Dockerfile
-    ports:
-      - "8004:8080"
-    env_file: .env
-    environment:
-      AGENT_WORKER_URL: http://agent-worker:8080
-    depends_on:
-      redis:
-        condition: service_healthy
-    networks:
-      - platform-net
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  agent-worker:
-    build:
-      context: ./services
-      dockerfile: agent-worker/Dockerfile
-    ports:
-      - "8005:8080"
-    env_file: .env
-    environment:
-      TASK_SERVICE_URL: http://task-service:8080
-    depends_on:
-      redis:
-        condition: service_healthy
-    networks:
-      - platform-net
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   postgres_data:
