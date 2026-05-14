@@ -27,16 +27,12 @@ def _build_rival_graph():
         NodeRunner("research_competitors", 30).wrap(_rival_agent.research_competitors),
     )
     graph.add_node(
-        "vision_synthesis",
-        NodeRunner("vision_synthesis", 50).wrap(_rival_agent.vision_synthesis),
-    )
-    graph.add_node(
         "market_gap",
-        NodeRunner("market_gap", 70).wrap(_rival_agent.market_gap),
+        NodeRunner("market_gap", 55).wrap(_rival_agent.market_gap),
     )
     graph.add_node(
         "pricing",
-        NodeRunner("pricing", 85).wrap(_rival_agent.pricing),
+        NodeRunner("pricing", 80).wrap(_rival_agent.pricing),
     )
     graph.add_node(
         "finalize",
@@ -45,8 +41,7 @@ def _build_rival_graph():
 
     graph.add_edge(START, "discover_competitors")
     graph.add_conditional_edges("discover_competitors", _cancel_or("research_competitors"))
-    graph.add_conditional_edges("research_competitors", _cancel_or("vision_synthesis"))
-    graph.add_conditional_edges("vision_synthesis", _cancel_or("market_gap"))
+    graph.add_conditional_edges("research_competitors", _cancel_or("market_gap"))
     graph.add_conditional_edges("market_gap", _cancel_or("pricing"))
     graph.add_conditional_edges("pricing", _cancel_or("finalize"))
     graph.add_edge("finalize", END)
@@ -64,7 +59,6 @@ def _build_rival_initial_state(payload: dict) -> RivalAgentState:
         competitor_names=[],
         target_platform=inner.get("target_platform", ""),
         competitor_research_results=[],
-        vision_result={},
         gap_result={},
         pricing_result={},
         rival_json={},

@@ -9,18 +9,18 @@ def filter_valid_competitors(tool_results: list[ToolResult]) -> list[dict]:
     valid = []
     for result in tool_results:
         if result.success and result.data:
-            d = result.data
+            data = result.data
             valid.append({
-                "competitor_name": d.get("competitor_name"),
-                "brand": d.get("brand"),
-                "price": d.get("price"),
-                "features": d.get("features", []),
-                "rating": d.get("rating"),
-                "review_count": d.get("review_count"),
-                "variants": d.get("variants", []),
+                "competitor_name": data.get("competitor_name"),
+                "brand": data.get("brand"),
+                "price": data.get("price"),
+                "features": data.get("features", []),
+                "rating": data.get("rating"),
+                "review_count": data.get("review_count"),
+                "variants": data.get("variants", []),
             })
-
     return valid
+
 
 def normalize_user_product(user_product: dict) -> dict:
     return {
@@ -31,6 +31,7 @@ def normalize_user_product(user_product: dict) -> dict:
         "features": user_product.get("features", []),
         "variants": user_product.get("variants", []),
     }
+
 
 def clean_json_response(raw_text: str) -> str:
     text = (raw_text or "").strip()
@@ -46,6 +47,7 @@ def clean_json_response(raw_text: str) -> str:
         return text[first_brace:last_brace + 1].strip()
 
     return text
+
 
 def log_tool_call(
     valid_competitor_count: int,

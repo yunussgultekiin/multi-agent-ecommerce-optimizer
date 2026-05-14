@@ -1,3 +1,3 @@
-from .smart_pricing_engine import SmartPricingEngine
+from .smart_pricing_engine import PricingInput, SmartPricingEngine
 
-__all__ = ["SmartPricingEngine"]
+__all__ = ["PricingInput", "SmartPricingEngine"]

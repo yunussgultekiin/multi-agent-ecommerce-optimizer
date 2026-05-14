@@ -1,8 +1,13 @@
 import asyncio
 import json
 import logging
+from typing import Optional
 from pydantic import ValidationError
+import google.auth.exceptions
+import google.api_core.exceptions
 from google import genai
+from google.genai import types
+from google.genai.types import HttpOptions
 from app.config import settings
 from app.core import ToolResult
 from .models_price import PricingResult
@@ -24,28 +29,63 @@ from .utils_price import (
 
 logger = logging.getLogger(__name__)
 
-client = genai.Client(api_key=settings.gemini_api_key or None)
+_client = genai.Client(
+    vertexai=True,
+    project=settings.google_cloud_project,
+    location=settings.google_cloud_location,
+    http_options=HttpOptions(api_version="v1"),
+)
 
-async def call_gemini(prompt: str) -> str:
+async def _call_gemini(prompt: str) -> str:
     loop = asyncio.get_running_loop()
 
-    response = await loop.run_in_executor(
-        None,
-        lambda: client.models.generate_content(
-            model=settings.gemini_model,
-            contents=prompt,
-        ),
-    )
+    try:
+        response = await loop.run_in_executor(
+            None,
+            lambda: _client.models.generate_content(
+                model=settings.gemini_research_model,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    temperature=0.2,
+                    max_output_tokens=800,
+                    thinking_config=types.ThinkingConfig(thinking_budget=0),
+                ),
+            ),
+        )
+    except google.auth.exceptions.DefaultCredentialsError as exc:
+        raise RuntimeError(
+            "Google Cloud credentials not configured. "
+            "Run: gcloud auth application-default login"
+        ) from exc
+    except google.api_core.exceptions.NotFound as exc:
+        raise RuntimeError(
+            f"Model '{settings.gemini_research_model}' not found in region '{settings.google_cloud_location}'. "
+            "Check the model name and location."
+        ) from exc
+    except google.api_core.exceptions.PermissionDenied as exc:
+        raise RuntimeError(
+            f"Permission denied. Ensure the account has the 'Vertex AI User' role "
+            f"in project '{settings.google_cloud_project}'."
+        ) from exc
 
     return response.text or ""
 
 async def run_fallback_analysis(
     user_product: dict,
     competitors: list[dict],
-    max_retries: int = 2
+    gap_result: Optional[dict] = None,
+    target_platform: str = "",
+    max_retries: int = 2,
 ) -> ToolResult:
-    prompt = build_fallback_pricing_prompt(user_product, competitors)
+    prompt = build_fallback_pricing_prompt(
+        user_product=user_product,
+        competitors=competitors,
+        gap_result=gap_result,
+        target_platform=target_platform,
+    )
     last_error = None
+
     for attempt in range(max_retries + 1):
         current_prompt = (
             build_fallback_self_correction_prompt(prompt, last_error)
@@ -54,7 +94,7 @@ async def run_fallback_analysis(
         )
 
         try:
-            response_text = await call_gemini(current_prompt)
+            response_text = await _call_gemini(current_prompt)
             cleaned = clean_json_response(response_text)
             data = json.loads(cleaned)
             result = PricingResult(**data)
@@ -70,10 +110,11 @@ async def run_fallback_analysis(
 
         except (ValidationError, json.JSONDecodeError) as exc:
             last_error = str(exc)
-            logger.warning("Pricing Engine attempt failed | attempt=%d error=%s",
-                    attempt + 1,
-                    last_error
-                )
+            logger.warning(
+                "SmartPricingEngine fallback attempt failed | attempt=%d error=%s",
+                attempt + 1,
+                last_error,
+            )
 
             if attempt == max_retries:
                 log_tool_call(
@@ -86,7 +127,7 @@ async def run_fallback_analysis(
                 return ToolResult(
                     success=False,
                     fallback_used=True,
-                    data={"error": f"Maximum retry reached: {last_error}"}
+                    data={"error": f"Maximum retry reached: {last_error}"},
                 )
 
     return ToolResult(success=False, fallback_used=True, data={"error": "Unexpected error"})
@@ -145,6 +186,8 @@ def run_deterministic_analysis(
 async def run_smart_pricing_engine(
     user_product: dict,
     competitor_tool_results: list,
+    gap_result: Optional[dict] = None,
+    target_platform: str = "",
 ) -> ToolResult:
     normalized_user_product = normalize_user_product(user_product)
     valid_competitors = filter_valid_competitors(competitor_tool_results)
@@ -157,7 +200,12 @@ async def run_smart_pricing_engine(
     )
 
     if len(valid_prices) < 2:
-        logger.warning("Not enough pricing data available, Gemini fallback is being activated.")
-        return await run_fallback_analysis(normalized_user_product, valid_competitors)
+        logger.warning("Not enough pricing data, activating Gemini fallback.")
+        return await run_fallback_analysis(
+            user_product=normalized_user_product,
+            competitors=valid_competitors,
+            gap_result=gap_result,
+            target_platform=target_platform,
+        )
 
     return run_deterministic_analysis(normalized_user_product, valid_competitors, valid_prices)

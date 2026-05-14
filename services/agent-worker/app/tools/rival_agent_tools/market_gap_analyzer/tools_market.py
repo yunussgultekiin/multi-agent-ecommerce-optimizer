@@ -1,33 +1,58 @@
 import asyncio
 import json
 import logging
+import google.auth.exceptions
+import google.api_core.exceptions
 from pydantic import ValidationError
 from google import genai
 from google.genai import types
+from google.genai.types import HttpOptions
 from app.config import settings
 from app.core import ToolResult
 from .models_market import MarketGapResult
-from .prompts_market import build_market_gap_prompt, build_self_correction_prompt
+from .prompts_market import build_market_gap_prompt, build_user_product_only_prompt, build_self_correction_prompt
 from .utils_market import filter_valid_competitors, normalize_user_product, clean_json_response, log_tool_call
 
 logger = logging.getLogger(__name__)
 
-_client = genai.Client(api_key=settings.gemini_api_key or None)
+_client = genai.Client(
+    vertexai=True,
+    project=settings.google_cloud_project,
+    location=settings.google_cloud_location,
+    http_options=HttpOptions(api_version="v1"),
+)
 
-async def _call_gemini(prompt: str) -> str:
+async def _call_gemini(prompt: str, max_output_tokens: int = 1600) -> str:
     loop = asyncio.get_running_loop()
-
-    response = await loop.run_in_executor(
-        None,
-        lambda: _client.models.generate_content(
-            model=settings.gemini_model,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json",
-                temperature=0.2,
+    try:
+        response = await loop.run_in_executor(
+            None,
+            lambda: _client.models.generate_content(
+                model=settings.gemini_model,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    temperature=0.2,
+                    max_output_tokens=max_output_tokens,
+                    thinking_config=types.ThinkingConfig(thinking_budget=0),
+                ),
             ),
-        ),
-    )
+        )
+    except google.auth.exceptions.DefaultCredentialsError as exc:
+        raise RuntimeError(
+            "Google Cloud credentials not configured. "
+            "Run: gcloud auth application-default login"
+        ) from exc
+    except google.api_core.exceptions.NotFound as exc:
+        raise RuntimeError(
+            f"Model '{settings.gemini_model}' not found in region '{settings.google_cloud_location}'. "
+            "Check the model name and location."
+        ) from exc
+    except google.api_core.exceptions.PermissionDenied as exc:
+        raise RuntimeError(
+            f"Permission denied. Ensure the account has the 'Vertex AI User' role "
+            f"in project '{settings.google_cloud_project}'."
+        ) from exc
 
     return response.text or ""
 
@@ -37,9 +62,14 @@ async def analyze_market_gap(
     max_retries: int = 2,
 ) -> ToolResult:
     normalized_user_product = normalize_user_product(user_product)
-    prompt = build_market_gap_prompt(normalized_user_product, competitors)
+    no_competitors = len(competitors) == 0
+    prompt = (
+        build_user_product_only_prompt(normalized_user_product)
+        if no_competitors
+        else build_market_gap_prompt(normalized_user_product, competitors)
+    )
     last_error = None
-    fallback_used = False
+    fallback_used = no_competitors
 
     for attempt in range(max_retries + 1):
         if attempt > 0:
@@ -52,7 +82,10 @@ async def analyze_market_gap(
         )
 
         try:
-            response_text = await _call_gemini(current_prompt)
+            response_text = await _call_gemini(
+                current_prompt,
+                max_output_tokens=1000 if attempt > 0 else 1600,
+            )
             cleaned = clean_json_response(response_text)
             data = json.loads(cleaned)
             result = MarketGapResult(**data)
@@ -95,20 +128,6 @@ async def run_market_gap_analyzer(
     valid_competitors = filter_valid_competitors(competitor_tool_results)
 
     if not valid_competitors:
-        logger.warning("Not enough valid competitors found, performing fallback analysis.")
-
-        log_tool_call(
-            valid_competitor_count = 0,
-            fallback_used = True,
-            positioning_score = None
-        )
-
-        return ToolResult(
-            success=False,
-            fallback_used=True,
-            data={"error": "Not enough valid competitors found"},
-        )
-
-    logger.info(f"Analyzing {len(valid_competitors)} valid competitors")
+        logger.warning("No valid competitors found, falling back to user-product-only analysis.")
 
     return await analyze_market_gap(user_product, valid_competitors)

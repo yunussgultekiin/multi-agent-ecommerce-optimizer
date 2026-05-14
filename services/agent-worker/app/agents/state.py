@@ -11,7 +11,6 @@ class RivalAgentState(BaseAgentState):
     competitor_names: list[dict]
     target_platform: str
     competitor_research_results: list[dict]
-    vision_result: dict
     gap_result: dict
     pricing_result: dict
     rival_json: dict
@@ -20,8 +19,8 @@ class RivalAgentState(BaseAgentState):
 
 class SeoAgentState(BaseAgentState):
     rival_json: dict
+    user_product: dict
     target_platform: str
-    generation_prompt: str
     rag_context: list[str]
     seo_output: dict
     generated_image_url: str | None

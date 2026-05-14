@@ -1,10 +1,11 @@
+from typing import Optional
 from pydantic import BaseModel, Field
 
 class Cluster(BaseModel):
     label: str
     competitors: list[str]
-    price_range_min: float
-    price_range_max: float
+    price_range_min: Optional[float] = None
+    price_range_max: Optional[float] = None
 
 class BrandLandscape(BaseModel):
     premium_brands: list[str] = Field(default_factory = list)

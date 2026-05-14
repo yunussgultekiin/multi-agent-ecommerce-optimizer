@@ -10,7 +10,6 @@ from app.tools.rival_agent_tools import (
     run_market_gap_analyzer,
     PricingInput,
     SmartPricingEngine,
-    run_vision_synthesis_tool,
 )
 
 logger = logging.getLogger(__name__)
@@ -61,19 +60,6 @@ class RivalAgent:
             "competitor_research_results": competitor_research_results,
         }
 
-    async def vision_synthesis(self, state: RivalAgentState) -> RivalAgentState:
-        task_id = state["task_id"]
-
-        try:
-            result = await run_vision_synthesis_tool(
-                user_product=state["user_product"],
-                competitor_research_results=state["competitor_research_results"],
-            )
-        except Exception as exc:
-            raise WorkflowError(str(exc), task_id=task_id)
-
-        return {**state, "vision_result": result.data}
-
     async def market_gap(self, state: RivalAgentState) -> RivalAgentState:
         task_id = state["task_id"]
 
@@ -110,6 +96,8 @@ class RivalAgent:
                 PricingInput(
                     competitor_research_results=state["competitor_research_results"],
                     user_product=state["user_product"],
+                    gap_result=state.get("gap_result"),
+                    target_platform=state.get("target_platform", ""),
                 )
             )
         except Exception as exc:
@@ -127,8 +115,8 @@ class RivalAgent:
         rival_json = {
             "user_product": state["user_product"],
             "target_platform": state["target_platform"],
+            "competitors": state["competitor_names"],
             "competitor_research_results": state["competitor_research_results"],
-            "vision_result": state["vision_result"],
             "gap_result": state["gap_result"],
             "pricing_result": state["pricing_result"],
         }
