@@ -2,8 +2,7 @@ import asyncio
 import logging
 from aiohttp import web
 from app.config import settings
-from app.health import health_handler
-from app.redis_client import close_redis
+from app.redis import close_redis
 from app.workflow.rival_graph import run_rival_workflow
 from app.workflow.seo_graph import run_seo_workflow
 
@@ -24,6 +23,9 @@ async def run_handler(request: web.Request) -> web.Response:
     payload = await request.json()
     asyncio.create_task(_AGENT_RUNNERS[agent_type](payload))
     return web.json_response({"status": "accepted", "agent_type": agent_type}, status=202)
+
+async def health_handler(request: web.Request) -> web.Response:
+    return web.json_response({"status": "ok", "service": "agent-worker", "version": "0.1.0"})
 
 async def on_shutdown(app: web.Application) -> None:
     await close_redis()

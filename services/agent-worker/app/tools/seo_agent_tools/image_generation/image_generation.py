@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from app.tool_result import ToolResult
+from app.core import ToolResult
 
 class ImageGenerationInput(BaseModel):
     generation_prompt: str

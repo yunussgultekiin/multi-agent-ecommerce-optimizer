@@ -1,7 +1,6 @@
 import logging
 from typing import Any, Awaitable, Callable
-from app.progress import report_progress
-from app.redis_client import get_redis
+from app.redis import get_redis, report_progress
 
 logger = logging.getLogger(__name__)
 

@@ -5,7 +5,7 @@ from typing import Callable, TypeVar
 from pydantic import BaseModel, ValidationError
 import google.generativeai as genai
 from app.config import settings
-from app.errors import WorkflowError
+from app.core import WorkflowError
 
 logger = logging.getLogger(__name__)
 T = TypeVar("T", bound=BaseModel)

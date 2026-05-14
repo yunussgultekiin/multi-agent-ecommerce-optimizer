@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from app.tool_result import ToolResult
+from app.core import ToolResult
 
 class SeoOptimizerInput(BaseModel):
     rival_json: dict

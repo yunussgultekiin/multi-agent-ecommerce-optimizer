@@ -1,12 +1,17 @@
 import logging
-from shared.oidc_client import OidcHttpClient
+from shared.oidc_client import InternalHttpClient
 from app.config import settings
 
 logger = logging.getLogger(__name__)
 
+
 class TaskServiceClient:
     def __init__(self) -> None:
-        self._client = OidcHttpClient(base_url=settings.task_service_url)
+        self._client = InternalHttpClient(
+            base_url=settings.task_service_url,
+            secret=settings.jwt_secret_key,
+            algorithm=settings.jwt_algorithm,
+        )
 
     async def save_result(self, task_id: str, result: dict) -> None:
         try:
@@ -28,8 +33,7 @@ class TaskServiceClient:
         if error_message:
             body["error_message"] = error_message
         try:
-            response = await self._client.request(
-                "PATCH",
+            response = await self._client.patch(
                 f"/tasks/{task_id}/status",
                 json=body,
             )

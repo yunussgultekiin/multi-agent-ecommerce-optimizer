@@ -10,18 +10,48 @@ logger = logging.getLogger(__name__)
 _seo_agent = SeoAgent()
 _task_client = TaskServiceClient()
 
+def _cancel_or(*next_nodes: str):
+    def route(state: SeoAgentState) -> str | list[str]:
+        if state.get("cancelled"): return END
+        if len(next_nodes) == 1: return next_nodes[0]
+        return list(next_nodes)
+    return route
+
 def _build_seo_graph():
     graph = StateGraph(SeoAgentState)
-    graph.add_node("retrieve_context", NodeRunner("retrieve_context", 25).wrap(_seo_agent.retrieve_context))
-    graph.add_node("generate_seo", NodeRunner("generate_seo", 60).wrap(_seo_agent.generate_seo))
-    graph.add_node("generate_image", NodeRunner("generate_image", 85).wrap(_seo_agent.generate_image))
-    graph.add_node("finalize", NodeRunner("finalize", 100).wrap(_seo_agent.finalize))
+
+    graph.add_node(
+        "retrieve_context",
+        NodeRunner("retrieve_context", 25).wrap(_seo_agent.retrieve_context),
+    )
+    graph.add_node(
+        "generate_seo",
+        NodeRunner("generate_seo", 60).wrap(_seo_agent.generate_seo),
+    )
+    graph.add_node(
+        "generate_image",
+        NodeRunner("generate_image", 85).wrap(_seo_agent.generate_image),
+    )
+    graph.add_node(
+        "finalize",
+        NodeRunner("finalize", 100).wrap(_seo_agent.finalize),
+    )
+
     graph.add_edge(START, "retrieve_context")
-    graph.add_edge("retrieve_context", "generate_seo")
-    graph.add_edge("retrieve_context", "generate_image")
-    graph.add_edge("generate_seo", "finalize")
-    graph.add_edge("generate_image", "finalize")
+    graph.add_conditional_edges(
+        "retrieve_context",
+        _cancel_or("generate_seo", "generate_image"),
+    )
+    graph.add_conditional_edges(
+        "generate_seo",
+        _cancel_or("finalize"),
+    )
+    graph.add_conditional_edges(
+        "generate_image",
+        _cancel_or("finalize"),
+    )
     graph.add_edge("finalize", END)
+
     return graph.compile()
 
 compiled_seo_graph = _build_seo_graph()
@@ -55,7 +85,6 @@ def _build_seo_initial_state(payload: dict) -> SeoAgentState:
         status="pending",
         cancelled=False,
     )
-
 
 async def run_seo_workflow(payload: dict) -> None:
     state = _build_seo_initial_state(payload)

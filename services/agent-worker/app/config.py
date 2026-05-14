@@ -9,5 +9,7 @@ class Settings(BaseSettings):
     gemini_model: str = Field(default="gemini-3.0-flash", alias="GEMINI_MODEL")
     chroma_host: str = Field(default="localhost", alias="CHROMA_HOST")
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
+    jwt_secret_key: str = Field(alias="JWT_SECRET_KEY")
+    jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
 
 settings = Settings()
