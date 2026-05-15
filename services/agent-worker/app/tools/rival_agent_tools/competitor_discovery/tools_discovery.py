@@ -1,13 +1,9 @@
-import asyncio
 import logging
-import google.auth.exceptions
-import google.api_core.exceptions
-from google import genai
 from google.genai import types
-from google.genai.types import HttpOptions
 from pydantic import ValidationError
 from app.config import settings
 from app.core import ToolResult
+from app.gemini_client import call_gemini
 from .models_discovery import (
     DiscoveredCompetitor,
     DiscoveryResult,
@@ -22,15 +18,17 @@ from .utils_discovery import log_tool_call, parse_json_response
 
 logger = logging.getLogger(__name__)
 
-_client = genai.Client(
-    vertexai=True,
-    project=settings.google_cloud_project,
-    location=settings.google_cloud_location,
-    http_options=HttpOptions(api_version="v1"),
-)
-
 _GROUNDING_TOOL = types.Tool(google_search=types.GoogleSearch())
 SUPPORTED_PLATFORMS = set(PLATFORM_SITES.keys())
+
+
+def _build_discovery_gemini_config() -> types.GenerateContentConfig:
+    return types.GenerateContentConfig(
+        tools=[_GROUNDING_TOOL],
+        temperature=0.1,
+        max_output_tokens=2048,
+        thinking_config=types.ThinkingConfig(thinking_budget=0),
+    )
 
 
 def _validate_platform(platform: str) -> Platform:
@@ -40,51 +38,6 @@ def _validate_platform(platform: str) -> Platform:
             f"Unsupported platform: {platform!r}. Supported: {sorted(SUPPORTED_PLATFORMS)}"
         )
     return normalized
-
-
-async def _call_gemini(prompt: str) -> tuple[str, bool]:
-    loop = asyncio.get_running_loop()
-    try:
-        response = await loop.run_in_executor(
-            None,
-            lambda: _client.models.generate_content(
-                model=settings.gemini_research_model,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    tools=[_GROUNDING_TOOL],
-                    temperature=0.1,
-                    max_output_tokens=1200,
-                    thinking_config=types.ThinkingConfig(thinking_budget=0),
-                ),
-            ),
-        )
-    except google.auth.exceptions.DefaultCredentialsError as exc:
-        raise RuntimeError(
-            "Google Cloud credentials not configured. "
-            "Run: gcloud auth application-default login"
-        ) from exc
-    except google.api_core.exceptions.NotFound as exc:
-        raise RuntimeError(
-            f"Model '{settings.gemini_research_model}' not found in "
-            f"region '{settings.google_cloud_location}'."
-        ) from exc
-    except google.api_core.exceptions.PermissionDenied as exc:
-        raise RuntimeError(
-            f"Permission denied for project '{settings.google_cloud_project}'."
-        ) from exc
-
-    grounding_hit = bool(
-        getattr(
-            getattr(
-                (getattr(response, "candidates", None) or [{}])[0],
-                "grounding_metadata",
-                None,
-            ),
-            "grounding_chunks",
-            None,
-        )
-    )
-    return response.text or "", grounding_hit
 
 
 def _deduplicate(competitors: list[DiscoveredCompetitor]) -> list[DiscoveredCompetitor]:
@@ -145,7 +98,11 @@ async def run_competitor_discovery_tool(
         )
 
         try:
-            response_text, grounding_hit = await _call_gemini(prompt)
+            response_text, grounding_hit = await call_gemini(
+                model=settings.gemini_flash_model,
+                prompt=prompt,
+                config=_build_discovery_gemini_config(),
+            )
             data = parse_json_response(response_text)
             raw_result = RawDiscoveryResult(**data)
 

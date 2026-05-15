@@ -1,15 +1,11 @@
-import asyncio
 import json
 import logging
 from typing import Optional
-from pydantic import ValidationError
-import google.auth.exceptions
-import google.api_core.exceptions
-from google import genai
 from google.genai import types
-from google.genai.types import HttpOptions
+from pydantic import ValidationError
 from app.config import settings
 from app.core import ToolResult
+from app.gemini_client import call_gemini
 from .models_price import PricingResult
 from .prompts_price import build_fallback_pricing_prompt, build_fallback_self_correction_prompt
 from .utils_price import (
@@ -28,47 +24,6 @@ from .utils_price import (
 )
 
 logger = logging.getLogger(__name__)
-
-_client = genai.Client(
-    vertexai=True,
-    project=settings.google_cloud_project,
-    location=settings.google_cloud_location,
-    http_options=HttpOptions(api_version="v1"),
-)
-
-
-async def _call_gemini(prompt: str) -> str:
-    loop = asyncio.get_running_loop()
-    try:
-        response = await loop.run_in_executor(
-            None,
-            lambda: _client.models.generate_content(
-                model=settings.gemini_research_model,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    temperature=0.2,
-                    max_output_tokens=800,
-                    thinking_config=types.ThinkingConfig(thinking_budget=0),
-                ),
-            ),
-        )
-    except google.auth.exceptions.DefaultCredentialsError as exc:
-        raise RuntimeError(
-            "Google Cloud credentials not configured. "
-            "Run: gcloud auth application-default login"
-        ) from exc
-    except google.api_core.exceptions.NotFound as exc:
-        raise RuntimeError(
-            f"Model '{settings.gemini_research_model}' not found in "
-            f"region '{settings.google_cloud_location}'."
-        ) from exc
-    except google.api_core.exceptions.PermissionDenied as exc:
-        raise RuntimeError(
-            f"Permission denied for project '{settings.google_cloud_project}'."
-        ) from exc
-
-    return response.text or ""
 
 
 async def run_fallback_analysis(
@@ -98,7 +53,16 @@ async def run_fallback_analysis(
         )
 
         try:
-            response_text = await _call_gemini(current_prompt)
+            response_text, _ = await call_gemini(
+                model=settings.gemini_flash_model,
+                prompt=current_prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    temperature=0.2,
+                    max_output_tokens=2048,
+                    thinking_config=types.ThinkingConfig(thinking_budget=0),
+                ),
+            )
             cleaned = clean_json_response(response_text)
             data = json.loads(cleaned)
             result = PricingResult(**data)
@@ -133,6 +97,16 @@ async def run_fallback_analysis(
                     data={"error": f"Max retries reached: {last_error}"},
                 )
 
+        except Exception as exc:
+            logger.exception("Unexpected SmartPricingEngine error")
+            log_tool_call(
+                valid_price_count=0,
+                positioning=None,
+                confidence_score=None,
+                fallback_used=True,
+            )
+            return ToolResult(success=False, fallback_used=True, data={"error": str(exc)})
+
     return ToolResult(success=False, fallback_used=True, data={"error": "Unexpected error"})
 
 
@@ -142,6 +116,7 @@ def run_deterministic_analysis(
     valid_prices: list[float],
 ) -> ToolResult:
     stats = calculate_price_stats(valid_prices)
+    price_provided = bool(user_product.get("price"))
     user_price = user_product.get("price") or stats["median"]
     user_variants = user_product.get("variants", [])
 
@@ -180,10 +155,10 @@ def run_deterministic_analysis(
         valid_price_count=len(valid_prices),
         positioning=positioning.value,
         confidence_score=confidence_score,
-        fallback_used=False,
+        fallback_used=not price_provided,
     )
 
-    return ToolResult(success=True, data=result.model_dump(), fallback_used=False)
+    return ToolResult(success=True, data=result.model_dump(), fallback_used=not price_provided)
 
 
 async def run_smart_pricing_engine(
@@ -214,5 +189,25 @@ async def run_smart_pricing_engine(
             trend_result=trend_result,
             target_platform=target_platform,
         )
+
+    user_price = normalized_user_product.get("price")
+    if user_price:
+        lo, hi = user_price * 0.1, user_price * 4.0
+        sane_prices = [p for p in valid_prices if lo <= p <= hi]
+        if len(sane_prices) < 2:
+            logger.warning(
+                "Price outliers detected: user=%.2f competitors=%s — activating Gemini fallback.",
+                user_price,
+                valid_prices,
+            )
+            return await run_fallback_analysis(
+                user_product=normalized_user_product,
+                competitors=valid_competitors,
+                gap_result=gap_result,
+                sentiment_result=sentiment_result,
+                trend_result=trend_result,
+                target_platform=target_platform,
+            )
+        valid_prices = sane_prices
 
     return run_deterministic_analysis(normalized_user_product, valid_competitors, valid_prices)

@@ -10,12 +10,23 @@ from app.tools.rival_agent_tools import (
     IDEAL_RESEARCH_COUNT,
     MIN_VALID_COMPETITORS,
     run_market_gap_analyzer,
-    PricingInput,
-    SmartPricingEngine,
+    run_sentiment_analyzer,
+    run_smart_pricing_engine,
+    run_trend_analyzer,
 )
 
 logger = logging.getLogger(__name__)
-_smart_pricing_engine = SmartPricingEngine()
+
+
+def _to_tool_results(research_results: list[dict]) -> list[ToolResult]:
+    return [
+        ToolResult(
+            success=r.get("success", False),
+            data=r.get("data") or {},
+            fallback_used=r.get("fallback_used", False),
+        )
+        for r in research_results
+    ]
 
 
 class RivalAgent:
@@ -34,11 +45,10 @@ class RivalAgent:
             raise WorkflowError(str(exc), task_id=task_id)
 
         if not result.success or not result.data:
-            logger.warning(
-                "Competitor discovery returned no results | task_id=%s, continuing with empty list",
-                task_id,
+            raise WorkflowError(
+                "Competitor discovery returned no results. Cannot proceed without competitor data.",
+                task_id=task_id,
             )
-            return {**state, "competitor_names": []}
 
         return {**state, "competitor_names": result.data["competitors"]}
 
@@ -76,47 +86,58 @@ class RivalAgent:
         return {**state, "competitor_research_results": competitor_research_results}
 
     async def analyze_sentiment(self, state: RivalAgentState) -> RivalAgentState:
-        # TODO: replace stub with real call when SentimentAnalyzerTool is implemented.
-        # Expected call:
-        #   from app.tools.rival_agent_tools import run_sentiment_analyzer
-        #   result = await run_sentiment_analyzer(
-        #       competitor_names=state["competitor_names"],
-        #       competitor_research_results=state["competitor_research_results"],
-        #       category=state["user_product"].get("category", ""),
-        #       target_platform=state["target_platform"],
-        #       user_product=state["user_product"],
-        #   )
-        #   return {**state, "sentiment_result": result.data}
-        return {**state, "sentiment_result": {}}
+        task_id = state["task_id"]
+
+        try:
+            result = await run_sentiment_analyzer(
+                competitor_names=state["competitor_names"],
+                competitor_research_results=state["competitor_research_results"],
+                category=state["user_product"].get("category", ""),
+                target_platform=state["target_platform"],
+                user_product=state["user_product"],
+            )
+        except Exception as exc:
+            raise WorkflowError(str(exc), task_id=task_id)
+
+        if not result.success:
+            logger.warning(
+                "SentimentAnalyzerTool failed, continuing with empty sentiment | task_id=%s error=%s",
+                task_id,
+                result.data.get("error"),
+            )
+            return {**state, "sentiment_result": {}}
+
+        return {**state, "sentiment_result": result.data}
 
     async def analyze_trends(self, state: RivalAgentState) -> RivalAgentState:
-        # TODO: replace stub with real call when TrendAnalyzerTool is implemented.
-        # Expected call:
-        #   from app.tools.rival_agent_tools import run_trend_analyzer
-        #   result = await run_trend_analyzer(
-        #       category=state["user_product"].get("category", ""),
-        #       target_platform=state["target_platform"],
-        #       user_product=state["user_product"],
-        #   )
-        #   return {**state, "trend_result": result.data}
-        return {**state, "trend_result": {}}
+        task_id = state["task_id"]
+
+        try:
+            result = await run_trend_analyzer(
+                category=state["user_product"].get("category", ""),
+                target_platform=state["target_platform"],
+                user_product=state["user_product"],
+            )
+        except Exception as exc:
+            raise WorkflowError(str(exc), task_id=task_id)
+
+        if not result.success:
+            logger.warning(
+                "TrendAnalyzerTool failed, continuing with empty trend | task_id=%s error=%s",
+                task_id,
+                result.data.get("error"),
+            )
+            return {**state, "trend_result": {}}
+
+        return {**state, "trend_result": result.data}
 
     async def market_gap(self, state: RivalAgentState) -> RivalAgentState:
         task_id = state["task_id"]
 
         try:
-            competitor_tool_results = [
-                ToolResult(
-                    success=r.get("success", False),
-                    data=r.get("data") or {},
-                    fallback_used=r.get("fallback_used", False),
-                )
-                for r in state["competitor_research_results"]
-            ]
-
             result = await run_market_gap_analyzer(
                 user_product=state["user_product"],
-                competitor_tool_results=competitor_tool_results,
+                competitor_tool_results=_to_tool_results(state["competitor_research_results"]),
                 sentiment_result=state.get("sentiment_result") or {},
                 trend_result=state.get("trend_result") or {},
             )
@@ -135,15 +156,13 @@ class RivalAgent:
         task_id = state["task_id"]
 
         try:
-            result = await _smart_pricing_engine.run(
-                PricingInput(
-                    competitor_research_results=state["competitor_research_results"],
-                    user_product=state["user_product"],
-                    gap_result=state.get("gap_result"),
-                    sentiment_result=state.get("sentiment_result") or {},
-                    trend_result=state.get("trend_result") or {},
-                    target_platform=state.get("target_platform", ""),
-                )
+            result = await run_smart_pricing_engine(
+                user_product=state["user_product"],
+                competitor_tool_results=_to_tool_results(state["competitor_research_results"]),
+                gap_result=state.get("gap_result"),
+                sentiment_result=state.get("sentiment_result") or {},
+                trend_result=state.get("trend_result") or {},
+                target_platform=state.get("target_platform", ""),
             )
         except Exception as exc:
             raise WorkflowError(str(exc), task_id=task_id)
@@ -164,8 +183,8 @@ class RivalAgent:
             "competitor_research_results": state["competitor_research_results"],
             "sentiment_result": state.get("sentiment_result") or {},
             "trend_result": state.get("trend_result") or {},
-            "gap_result": state["gap_result"],
-            "pricing_result": state["pricing_result"],
+            "gap_result": state.get("gap_result") or {},
+            "pricing_result": state.get("pricing_result") or {},
         }
 
         updated_state = {**state, "rival_json": rival_json}

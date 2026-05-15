@@ -28,6 +28,7 @@ class NodeRunner:
             if await _is_cancelled(task_id):
                 logger.info("Node skipped due to cancellation: task_id=%s step=%s", task_id, step_name)
                 return {**state, "cancelled": True, "status": "cancelled"}
+            await report_progress(task_id, step_name, "running", completion_pct)
             updated_state = await node_fn(state)
             if not updated_state.get("cancelled"):
                 await report_progress(task_id, step_name, "completed", completion_pct)

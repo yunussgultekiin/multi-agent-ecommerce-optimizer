@@ -2,6 +2,15 @@ from pydantic import BaseModel, Field, model_validator
 from typing import Optional
 from enum import Enum
 
+
+class PricingInput(BaseModel):
+    competitor_research_results: list[dict]
+    user_product: dict
+    gap_result: Optional[dict] = None
+    sentiment_result: Optional[dict] = None
+    trend_result: Optional[dict] = None
+    target_platform: str = ""
+
 FALLBACK_MAX_CONFIDENCE = 0.4
 
 

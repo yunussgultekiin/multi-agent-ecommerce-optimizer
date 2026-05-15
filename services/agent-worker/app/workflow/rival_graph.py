@@ -11,9 +11,13 @@ _rival_agent = RivalAgent()
 _task_client = TaskServiceClient()
 
 
-def _cancel_or(next_node: str):
-    def route(state: RivalAgentState) -> str:
-        return END if state.get("cancelled") else next_node
+def _cancel_or(*next_nodes: str):
+    def route(state: RivalAgentState) -> str | list[str]:
+        if state.get("cancelled"):
+            return END
+        if len(next_nodes) == 1:
+            return next_nodes[0]
+        return list(next_nodes)
     return route
 
 
@@ -34,7 +38,7 @@ def _build_rival_graph():
     )
     graph.add_node(
         "analyze_trends",
-        NodeRunner("trend_analysis", 55).wrap(_rival_agent.analyze_trends),
+        NodeRunner("trend_analysis", 40).wrap(_rival_agent.analyze_trends),
     )
     graph.add_node(
         "market_gap",
@@ -51,8 +55,8 @@ def _build_rival_graph():
 
     graph.add_edge(START, "discover_competitors")
     graph.add_conditional_edges("discover_competitors", _cancel_or("research_competitors"))
-    graph.add_conditional_edges("research_competitors", _cancel_or("analyze_sentiment"))
-    graph.add_conditional_edges("analyze_sentiment", _cancel_or("analyze_trends"))
+    graph.add_conditional_edges("research_competitors", _cancel_or("analyze_sentiment", "analyze_trends"))
+    graph.add_conditional_edges("analyze_sentiment", _cancel_or("market_gap"))
     graph.add_conditional_edges("analyze_trends", _cancel_or("market_gap"))
     graph.add_conditional_edges("market_gap", _cancel_or("pricing"))
     graph.add_conditional_edges("pricing", _cancel_or("finalize"))

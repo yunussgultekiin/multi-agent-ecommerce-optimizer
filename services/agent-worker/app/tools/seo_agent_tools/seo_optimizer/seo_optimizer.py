@@ -138,7 +138,7 @@ async def _call_gemini(prompt: str) -> str:
         response = await loop.run_in_executor(
             None,
             lambda: _client.models.generate_content(
-                model=settings.gemini_model,
+                model=settings.gemini_flash_model,
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
@@ -151,7 +151,7 @@ async def _call_gemini(prompt: str) -> str:
     except google.auth.exceptions.DefaultCredentialsError as exc:
         raise RuntimeError("Google Cloud credentials not configured.") from exc
     except google.api_core.exceptions.NotFound as exc:
-        raise RuntimeError(f"Model '{settings.gemini_model}' not found.") from exc
+        raise RuntimeError(f"Model '{settings.gemini_flash_model}' not found.") from exc
     except google.api_core.exceptions.PermissionDenied as exc:
         raise RuntimeError("Permission denied. Check Vertex AI User role.") from exc
     return response.text or ""

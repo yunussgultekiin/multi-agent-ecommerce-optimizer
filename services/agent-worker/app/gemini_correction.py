@@ -25,7 +25,7 @@ _client = genai.Client(
 )
 
 class GeminiCorrectionLoop:
-    def __init__(self, model_name: str = settings.gemini_model) -> None:
+    def __init__(self, model_name: str = settings.gemini_flash_model) -> None:
         self._model_name = model_name
 
     async def generate_and_validate(

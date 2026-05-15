@@ -1,72 +1,17 @@
 import asyncio
 import logging
-import google.auth.exceptions
-import google.api_core.exceptions
-from google import genai
 from google.genai import types
-from google.genai.types import HttpOptions
 from pydantic import ValidationError
 from app.config import settings
 from app.core import ToolResult
+from app.gemini_client import call_gemini
 from .models_competitor import CompetitorResult, MIN_VALID_COMPETITORS, MAX_VALID_COMPETITORS
 from .prompts_competitor import build_competitor_prompt
 from .utils_competitor import log_research_summary, log_tool_call, parse_json_response
 
 logger = logging.getLogger(__name__)
 
-_client = genai.Client(
-    vertexai=True,
-    project=settings.google_cloud_project,
-    location=settings.google_cloud_location,
-    http_options=HttpOptions(api_version="v1"),
-)
-
 _SEARCH_TOOL = types.Tool(google_search=types.GoogleSearch())
-
-
-async def _call_gemini(prompt: str, max_output_tokens: int = 1200) -> tuple[str, bool]:
-    loop = asyncio.get_running_loop()
-    try:
-        response = await loop.run_in_executor(
-            None,
-            lambda: _client.models.generate_content(
-                model=settings.gemini_research_model,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    tools=[_SEARCH_TOOL],
-                    temperature=0.2,
-                    max_output_tokens=max_output_tokens,
-                    thinking_config=types.ThinkingConfig(thinking_budget=0),
-                ),
-            ),
-        )
-    except google.auth.exceptions.DefaultCredentialsError as exc:
-        raise RuntimeError(
-            "Google Cloud credentials not configured. "
-            "Run: gcloud auth application-default login"
-        ) from exc
-    except google.api_core.exceptions.NotFound as exc:
-        raise RuntimeError(
-            f"Model '{settings.gemini_research_model}' not found in "
-            f"region '{settings.google_cloud_location}'."
-        ) from exc
-    except google.api_core.exceptions.PermissionDenied as exc:
-        raise RuntimeError(
-            f"Permission denied for project '{settings.google_cloud_project}'."
-        ) from exc
-
-    grounding_hit = bool(
-        getattr(
-            getattr(
-                (getattr(response, "candidates", None) or [{}])[0],
-                "grounding_metadata",
-                None,
-            ),
-            "grounding_chunks",
-            None,
-        )
-    )
-    return response.text or "", grounding_hit
 
 
 async def _research_one(
@@ -93,9 +38,15 @@ async def _research_one(
                 platform=platform,
                 correction_context=correction_context,
             )
-            response_text, grounding_hit = await _call_gemini(
-                prompt,
-                max_output_tokens=800 if attempt > 0 else 1200,
+            response_text, grounding_hit = await call_gemini(
+                model=settings.gemini_flash_model,
+                prompt=prompt,
+                config=types.GenerateContentConfig(
+                    tools=[_SEARCH_TOOL],
+                    temperature=0.2,
+                    max_output_tokens=800 if attempt > 0 else 1200,
+                    thinking_config=types.ThinkingConfig(thinking_budget=0),
+                ),
             )
             data = parse_json_response(response_text)
             data["platform"] = platform
@@ -170,7 +121,7 @@ async def run_competitor_research_tool(
         "Researching %d competitors | category=%s | model=%s",
         input_count,
         category,
-        settings.gemini_research_model,
+        settings.gemini_flash_model,
     )
 
     raw_results = await asyncio.gather(

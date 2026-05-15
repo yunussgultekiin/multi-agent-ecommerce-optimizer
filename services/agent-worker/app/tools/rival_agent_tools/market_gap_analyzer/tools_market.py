@@ -1,14 +1,10 @@
-import asyncio
 import json
 import logging
-import google.auth.exceptions
-import google.api_core.exceptions
-from pydantic import ValidationError
-from google import genai
 from google.genai import types
-from google.genai.types import HttpOptions
+from pydantic import ValidationError
 from app.config import settings
 from app.core import ToolResult
+from app.gemini_client import call_gemini
 from .models_market import MarketGapResult
 from .prompts_market import (
     build_market_gap_prompt,
@@ -18,46 +14,6 @@ from .prompts_market import (
 from .utils_market import filter_valid_competitors, normalize_user_product, clean_json_response, log_tool_call
 
 logger = logging.getLogger(__name__)
-
-_client = genai.Client(
-    vertexai=True,
-    project=settings.google_cloud_project,
-    location=settings.google_cloud_location,
-    http_options=HttpOptions(api_version="v1"),
-)
-
-
-async def _call_gemini(prompt: str, max_output_tokens: int = 1600) -> str:
-    loop = asyncio.get_running_loop()
-    try:
-        response = await loop.run_in_executor(
-            None,
-            lambda: _client.models.generate_content(
-                model=settings.gemini_model,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    temperature=0.2,
-                    max_output_tokens=max_output_tokens,
-                    thinking_config=types.ThinkingConfig(thinking_budget=0),
-                ),
-            ),
-        )
-    except google.auth.exceptions.DefaultCredentialsError as exc:
-        raise RuntimeError(
-            "Google Cloud credentials not configured. "
-            "Run: gcloud auth application-default login"
-        ) from exc
-    except google.api_core.exceptions.NotFound as exc:
-        raise RuntimeError(
-            f"Model '{settings.gemini_model}' not found in region '{settings.google_cloud_location}'."
-        ) from exc
-    except google.api_core.exceptions.PermissionDenied as exc:
-        raise RuntimeError(
-            f"Permission denied for project '{settings.google_cloud_project}'."
-        ) from exc
-
-    return response.text or ""
 
 
 async def analyze_market_gap(
@@ -90,9 +46,15 @@ async def analyze_market_gap(
         )
 
         try:
-            response_text = await _call_gemini(
-                current_prompt,
-                max_output_tokens=1000 if attempt > 0 else 1600,
+            response_text, _ = await call_gemini(
+                model=settings.gemini_flash_model,
+                prompt=current_prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    temperature=0.2,
+                    max_output_tokens=2048 if attempt > 0 else 4096,
+                    thinking_config=types.ThinkingConfig(thinking_budget=0),
+                ),
             )
             cleaned = clean_json_response(response_text)
             data = json.loads(cleaned)
@@ -129,6 +91,20 @@ async def analyze_market_gap(
                     fallback_used=True,
                     data={"error": f"Max retries reached: {last_error}"},
                 )
+
+        except Exception as exc:
+            logger.exception(
+                "Unexpected MarketGapAnalyzer error | competitors=%d",
+                len(competitors),
+            )
+            log_tool_call(
+                valid_competitor_count=len(competitors),
+                pain_point_count=pain_point_count,
+                trend_count=trend_count,
+                fallback_used=True,
+                positioning_score=None,
+            )
+            return ToolResult(success=False, fallback_used=True, data={"error": str(exc)})
 
     return ToolResult(success=False, fallback_used=True, data={"error": "Unexpected error"})
 
