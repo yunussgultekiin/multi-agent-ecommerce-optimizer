@@ -1,3 +1,96 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+    --primary: 245 58% 61%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217 33% 14%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 14%;
+    --muted-foreground: 215 20% 55%;
+    --accent: 265 60% 60%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 245 58% 61%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400;
+  }
+
+  .gradient-bg {
+    @apply bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600;
+  }
+
+  .gradient-bg-hover {
+    @apply bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-500;
+  }
+
+  .glass {
+    @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.06];
+  }
+
+  .glass-card {
+    @apply bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-xl;
+  }
+
+  .dot-pattern {
+    background-image: radial-gradient(circle, hsl(217 33% 20%) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .glow {
+    box-shadow: 0 0 40px -12px hsl(245 58% 61% / 0.3);
+  }
+
+  .glow-sm {
+    box-shadow: 0 0 20px -8px hsl(245 58% 61% / 0.2);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(217 33% 20%);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(217 33% 30%);
+}
+
+/* Selection */
+::selection {
+  background: hsl(245 58% 61% / 0.3);
+  color: white;
+}

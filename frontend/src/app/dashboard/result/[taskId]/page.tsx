@@ -1,0 +1,544 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { format } from 'date-fns';
+import { tr } from 'date-fns/locale';
+import { 
+  Check, 
+  Copy, 
+  ExternalLink, 
+  Target, 
+  TrendingUp, 
+  Search, 
+  Image as ImageIcon,
+  DollarSign,
+  AlertTriangle,
+  Lightbulb,
+  Star,
+  ArrowLeft,
+  Download
+} from 'lucide-react';
+import { 
+  ResponsiveContainer, 
+  AreaChart, 
+  Area, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip,
+  ReferenceLine,
+  BarChart,
+  Bar
+} from 'recharts';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
+import api from '@/lib/api';
+import type { AnalysisResult } from '@/types';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+};
+
+export default function ResultPage({ params }: { params: { taskId: string } }) {
+  const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [copiedStates, setCopiedStates] = useState<Record<string, boolean>>({});
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchResult = async () => {
+      try {
+        const res = await api.get(`/analyze/${params.taskId}/result`);
+        setResult(res.data);
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Hata',
+          description: 'Analiz sonuçları yüklenemedi.',
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchResult();
+  }, [params.taskId, toast]);
+
+  const copyToClipboard = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedStates((prev) => ({ ...prev, [id]: true }));
+    toast({ title: 'Kopyalandı', description: 'Panoya başarıyla kopyalandı.' });
+    setTimeout(() => {
+      setCopiedStates((prev) => ({ ...prev, [id]: false }));
+    }, 2000);
+  };
+
+  const CopyButton = ({ text, id, size = 'icon' }: { text: string; id: string; size?: 'icon' | 'sm' }) => (
+    <Button 
+      variant="ghost" 
+      size={size}
+      onClick={(e) => { e.stopPropagation(); copyToClipboard(text, id); }}
+      className="shrink-0"
+    >
+      {copiedStates[id] 
+        ? <Check className="h-4 w-4 text-emerald-500" /> 
+        : <Copy className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+      }
+    </Button>
+  );
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-40 w-full rounded-xl" />
+        <Skeleton className="h-12 w-full max-w-md rounded-lg" />
+        <Skeleton className="h-[400px] w-full rounded-xl" />
+      </div>
+    );
+  }
+
+  if (!result) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-center">
+        <AlertTriangle className="w-12 h-12 text-amber-500 mb-4" />
+        <h2 className="text-xl font-semibold">Sonuç bulunamadı</h2>
+        <p className="text-muted-foreground mt-2 mb-6">Analiz sonuçları henüz hazır değil veya bulunamadı.</p>
+        <Link href="/dashboard">
+          <Button variant="outline" className="gap-2">
+            <ArrowLeft className="w-4 h-4" />
+            Dashboard&apos;a Dön
+          </Button>
+        </Link>
+      </div>
+    );
+  }
+
+  // Prepare chart data
+  const chartData = result.pricing.competitor_prices
+    .sort((a, b) => a.price - b.price)
+    .map(p => ({
+      name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name,
+      price: p.price
+    }));
+
+  return (
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-8"
+    >
+      {/* Back Button */}
+      <motion.div variants={itemVariants}>
+        <Link href="/dashboard/history">
+          <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground -ml-2">
+            <ArrowLeft className="w-4 h-4" />
+            Analizlere Dön
+          </Button>
+        </Link>
+      </motion.div>
+
+      {/* Overview Header */}
+      <motion.div variants={itemVariants}>
+        <Card className="glass-card overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-72 h-72 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-violet-500/10 rounded-full blur-[80px] pointer-events-none" />
+          <CardContent className="p-8 relative">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center gap-3">
+                  <Badge variant="outline" className="capitalize px-3 py-1">
+                    {result.platform}
+                  </Badge>
+                  <Badge variant="success" className="px-3 py-1">
+                    Analiz Tamamlandı
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    {format(new Date(result.analyzed_at), 'd MMM yyyy, HH:mm', { locale: tr })}
+                  </span>
+                </div>
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{result.product_title}</h1>
+              </div>
+              <div className="flex flex-col items-center gap-2 bg-white/5 p-5 rounded-2xl border border-white/10 min-w-[180px]">
+                <span className="text-xs text-muted-foreground uppercase tracking-wider font-medium">Optimal Fiyat</span>
+                <span className="text-4xl font-bold gradient-text">₺{result.pricing.optimal_price.toFixed(2)}</span>
+                <span className="text-xs text-muted-foreground">
+                  Güven: %{Math.round(result.pricing.confidence_score * 100)}
+                </span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Tabs */}
+      <motion.div variants={itemVariants}>
+        <Tabs defaultValue="competitors" className="w-full">
+          <TabsList className="mb-8 w-full justify-start overflow-x-auto bg-white/[0.03] border border-white/5 p-1">
+            <TabsTrigger value="competitors" className="gap-2"><Target className="w-4 h-4" /> Rakipler</TabsTrigger>
+            <TabsTrigger value="market" className="gap-2"><TrendingUp className="w-4 h-4" /> Pazar Boşluğu</TabsTrigger>
+            <TabsTrigger value="pricing" className="gap-2"><DollarSign className="w-4 h-4" /> Fiyatlandırma</TabsTrigger>
+            <TabsTrigger value="seo" className="gap-2"><Search className="w-4 h-4" /> SEO</TabsTrigger>
+            <TabsTrigger value="vision" className="gap-2"><ImageIcon className="w-4 h-4" /> Görsel</TabsTrigger>
+          </TabsList>
+
+          {/* Competitors Tab */}
+          <TabsContent value="competitors" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Bulunan Rakipler</CardTitle>
+                <CardDescription>Pazardaki ana rakiplerinizin güncel durumu ({result.competitors.length} rakip)</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm text-left">
+                    <thead className="text-xs text-muted-foreground uppercase bg-white/[0.03]">
+                      <tr>
+                        <th className="px-6 py-4 rounded-tl-lg">Rakip Adı</th>
+                        <th className="px-6 py-4">Marka</th>
+                        <th className="px-6 py-4">Fiyat</th>
+                        <th className="px-6 py-4">Değerlendirme</th>
+                        <th className="px-6 py-4 rounded-tr-lg text-right">Link</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {result.competitors.map((comp, i) => (
+                        <motion.tr
+                          key={i}
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.05 }}
+                          className="hover:bg-white/[0.02] transition-colors"
+                        >
+                          <td className="px-6 py-4 font-medium text-foreground max-w-xs truncate" title={comp.name}>
+                            {comp.name}
+                          </td>
+                          <td className="px-6 py-4 text-muted-foreground">{comp.brand}</td>
+                          <td className="px-6 py-4 font-semibold">₺{comp.price.toFixed(2)}</td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-1.5">
+                              <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                              <span className="font-medium">{comp.rating}</span>
+                              <span className="text-muted-foreground text-xs">({comp.review_count})</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            {comp.source_url && (
+                              <a href={comp.source_url} target="_blank" rel="noreferrer" className="text-primary hover:underline inline-flex items-center gap-1 text-xs font-medium">
+                                İncele <ExternalLink className="w-3 h-3" />
+                              </a>
+                            )}
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Market Gap Tab */}
+          <TabsContent value="market" className="space-y-6">
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card className="md:col-span-2">
+                <CardHeader>
+                  <CardTitle>Pazar Boşluğu Fırsatları</CardTitle>
+                  <CardDescription>Rakiplerin odaklanmadığı alanlar</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="p-5 rounded-xl bg-gradient-to-br from-primary/10 to-violet-500/10 border border-primary/20 leading-relaxed">
+                    <div className="flex items-start gap-3">
+                      <Lightbulb className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <p className="text-sm">{result.market_gap.positioning_rationale}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-xs text-muted-foreground uppercase tracking-wider">Fırsat Alanları</h4>
+                    {result.market_gap.gap_opportunities.map((gap, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.08 }}
+                        className="flex items-start gap-3 p-3 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
+                      >
+                        <Check className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                        <span className="text-sm">{gap}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="space-y-4">
+                {result.market_gap.clusters.map((cluster) => (
+                  <Card key={cluster.cluster_id} className="hover:bg-white/[0.04] transition-colors">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-primary" />
+                        Küme {cluster.cluster_id + 1}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-xs text-muted-foreground">Ort. Fiyat:</span>
+                        <span className="font-bold text-sm">₺{cluster.avg_price.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-xs text-muted-foreground">Doygunluk:</span>
+                        <span className="font-bold text-sm">%{Math.round(cluster.saturation * 100)}</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {cluster.keywords.map((kw, i) => (
+                          <Badge key={i} variant="secondary" className="text-[10px]">{kw}</Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Pricing Tab */}
+          <TabsContent value="pricing" className="space-y-6">
+            <div className="grid md:grid-cols-3 gap-4">
+              <Card className="relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm text-muted-foreground">Önerilen Fiyat Aralığı</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    ₺{result.pricing.suggested_min.toFixed(2)} - ₺{result.pricing.suggested_max.toFixed(2)}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm text-muted-foreground">Pazar Konumu</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-xl font-bold capitalize">{result.pricing.current_position.replace('_', ' ')}</div>
+                </CardContent>
+              </Card>
+              <Card className="relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-violet-500/10 rounded-full blur-2xl pointer-events-none" />
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm text-muted-foreground">AI Güven Skoru</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center gap-2">
+                    <div className="text-2xl font-bold">%{Math.round(result.pricing.confidence_score * 100)}</div>
+                    {result.pricing.confidence_score > 0.8 ? (
+                      <Badge variant="success">Yüksek</Badge>
+                    ) : result.pricing.confidence_score > 0.5 ? (
+                      <Badge variant="warning">Orta</Badge>
+                    ) : (
+                      <Badge variant="destructive">Düşük</Badge>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Rakip Fiyat Dağılımı</CardTitle>
+                <CardDescription>Pazardaki diğer ürünlerle fiyat karşılaştırmanız</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[400px] w-full mt-4">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="hsl(245, 58%, 61%)" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="hsl(245, 58%, 61%)" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+                      <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `₺${value}`} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: 'hsl(222, 47%, 8%)', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}
+                        itemStyle={{ color: 'hsl(210, 40%, 98%)' }}
+                        labelStyle={{ color: 'hsl(215, 20%, 55%)' }}
+                      />
+                      <ReferenceLine y={result.pricing.optimal_price} label={{ value: "Önerilen", fill: 'hsl(245, 58%, 61%)', fontSize: 12 }} stroke="hsl(245, 58%, 61%)" strokeDasharray="5 5" strokeWidth={2} />
+                      <Area type="monotone" dataKey="price" stroke="hsl(245, 58%, 61%)" strokeWidth={2} fillOpacity={1} fill="url(#colorPrice)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* SEO Tab */}
+          <TabsContent value="seo" className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between pb-3">
+                  <CardTitle className="text-base">SEO Başlık Önerisi</CardTitle>
+                  <CopyButton text={result.seo.title_suggestion} id="title" />
+                </CardHeader>
+                <CardContent>
+                  <p className="p-4 bg-white/5 rounded-xl border border-white/10 text-lg font-medium leading-relaxed">{result.seo.title_suggestion}</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between pb-3">
+                  <CardTitle className="text-base">Meta Açıklama</CardTitle>
+                  <CopyButton text={result.seo.meta_description} id="meta" />
+                </CardHeader>
+                <CardContent>
+                  <p className="p-4 bg-white/5 rounded-xl border border-white/10 text-sm leading-relaxed">{result.seo.meta_description}</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader><CardTitle className="text-sm">Anahtar Kelime Boşlukları</CardTitle></CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {result.seo.keyword_gaps.map((kw, i) => (
+                      <Badge key={i} variant="outline" className="text-xs">{kw}</Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader><CardTitle className="text-sm">İçerik Önerileri</CardTitle></CardHeader>
+                <CardContent>
+                  <ul className="space-y-2.5 text-sm">
+                    {result.seo.content_recommendations.map((rec, i) => (
+                      <li key={i} className="flex items-start gap-2.5">
+                        <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                        <span className="text-muted-foreground">{rec}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader><CardTitle className="text-sm">Platform İpuçları <Badge variant="outline" className="ml-2 text-[10px]">{result.platform}</Badge></CardTitle></CardHeader>
+                <CardContent>
+                  <ul className="space-y-2.5 text-sm">
+                    {result.seo.platform_tips.map((tip, i) => (
+                      <li key={i} className="flex items-start gap-2.5">
+                        <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-violet-500 shrink-0" />
+                        <span className="text-muted-foreground">{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Vision Tab */}
+          <TabsContent value="vision" className="space-y-6">
+            <div className="grid lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>AI Görsel Üretimi</CardTitle>
+                  <CardDescription>Verdiğiniz bilgilere göre optimize edilmiş ürün görseli</CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center justify-center min-h-[400px]">
+                  {result.generated_image_url ? (
+                    <div className="relative group w-full">
+                      <img 
+                        src={result.generated_image_url} 
+                        alt="AI Generated Product" 
+                        className="w-full h-auto rounded-xl object-cover shadow-2xl border border-white/10"
+                      />
+                      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <a href={result.generated_image_url} target="_blank" rel="noreferrer" download>
+                          <Button variant="secondary" size="sm" className="gap-2 shadow-lg">
+                            <Download className="w-4 h-4" />
+                            İndir
+                          </Button>
+                        </a>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center text-center p-8 border border-dashed border-white/20 rounded-xl bg-white/[0.02] w-full">
+                      <AlertTriangle className="w-12 h-12 text-amber-500 mb-4" />
+                      <h3 className="font-semibold text-lg mb-2">Görsel üretimi tamamlanamadı</h3>
+                      <p className="text-sm text-muted-foreground max-w-sm">API kaynaklı bir sorun oluştu veya girdi yetersizdi. Lütfen analiz geçmişinden tekrar deneyin.</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between pb-3">
+                    <CardTitle className="text-base">Görsel Üretim Prompt&apos;u</CardTitle>
+                    <CopyButton text={result.vision.generation_prompt} id="prompt" />
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm p-4 bg-black/40 rounded-xl border border-white/10 font-mono leading-relaxed">
+                      {result.vision.generation_prompt}
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Görsel İyileştirme Önerileri</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-3">
+                      {result.vision.improvement_suggestions.map((sug, i) => (
+                        <li key={i} className="flex items-start gap-3 text-sm">
+                          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                          <span className="text-muted-foreground">{sug}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Dominant Renkler</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2">
+                      {result.vision.dominant_colors.map((color, i) => (
+                        <div key={i} className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-xl border border-white/10 text-sm hover:bg-white/[0.08] transition-colors cursor-default">
+                          <div className="w-4 h-4 rounded-full border border-white/20 shadow-inner" style={{ backgroundColor: color }} />
+                          <span className="font-mono text-xs">{color}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </motion.div>
+    </motion.div>
+  );
+}
