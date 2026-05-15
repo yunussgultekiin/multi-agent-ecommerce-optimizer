@@ -1,21 +1,23 @@
-import logging
-from collections.abc import AsyncGenerator
-from typing import Any
-import httpx
-from fastapi import APIRouter, HTTPException, Request, status
-from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
-from shared.oidc_client import InternalTokenProvider
+from app import limiter
 from app.clients.quota_client import QuotaClient, QuotaServiceError
 from app.clients.task_client import TaskClient, TaskServiceError
 from app.config import settings
-from app import limiter
+from collections.abc import AsyncGenerator
+from fastapi import APIRouter, HTTPException, Request, status
+from fastapi.responses import StreamingResponse
+import httpx
+import logging
+from pydantic import BaseModel
+from shared.oidc_client import InternalTokenProvider
+from typing import Any
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/analyze", tags=["analyze"])
 _task_client = TaskClient()
 _quota_client = QuotaClient()
-_stream_auth = InternalTokenProvider(secret=settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
+_stream_auth = InternalTokenProvider(
+    secret=settings.jwt_secret_key, algorithm=settings.jwt_algorithm
+)
 
 class AnalyzeRequest(BaseModel):
     payload: dict[str, Any]
@@ -29,7 +31,9 @@ async def create_analysis(request: Request, body: AnalyzeRequest):
     try:
         quota_response = await _quota_client.consume(user_id)
     except QuotaServiceError as exc:
-        logger.error("quota_consume_failed", extra={"user_id": user_id, "error": str(exc)})
+        logger.error(
+            "quota_consume_failed", extra={"user_id": user_id, "error": str(exc)}
+        )
         raise HTTPException(status_code=503, detail="Quota service unavailable")
 
     if quota_response.status_code == 429:
@@ -42,7 +46,9 @@ async def create_analysis(request: Request, body: AnalyzeRequest):
         raise HTTPException(status_code=503, detail="Quota service error")
 
     try:
-        task_response = await _task_client.create_task(user_id, body.payload, seo_tone=body.seo_tone)
+        task_response = await _task_client.create_task(
+            user_id, body.payload, seo_tone=body.seo_tone
+        )
     except TaskServiceError:
         raise HTTPException(status_code=503, detail="Task service unavailable")
 
@@ -131,13 +137,18 @@ async def stream_status(request: Request, task_id: str):
     try:
         headers = await _stream_auth.attach_header({"Accept": "text/event-stream"})
     except Exception as exc:
-        logger.error("internal_token_failed", extra={"task_id": task_id, "user_id": user_id, "error": str(exc)})
+        logger.error(
+            "internal_token_failed",
+            extra={"task_id": task_id, "user_id": user_id, "error": str(exc)},
+        )
         raise HTTPException(status_code=503, detail="Internal token unavailable")
 
     async def event_generator() -> AsyncGenerator[str, None]:
         try:
             async with httpx.AsyncClient(timeout=None) as client:
-                async with client.stream("GET", task_service_url, headers=headers) as response:
+                async with client.stream(
+                    "GET", task_service_url, headers=headers
+                ) as response:
                     if response.status_code == 404:
                         yield "event: error\ndata: Task not found\n\n"
                         return

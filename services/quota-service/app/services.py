@@ -1,14 +1,12 @@
-import logging
-from app.repositories import QuotaRepository
-from app.schemas import QuotaResponse, ConsumeResponse
 from app.config import settings
+from app.repositories import QuotaRepository
+from app.schemas import ConsumeResponse, QuotaResponse
+import logging
 
 logger = logging.getLogger(__name__)
 
-
 class QuotaExceededError(Exception):
     pass
-
 
 class QuotaService:
     def __init__(self, repo: QuotaRepository) -> None:
@@ -41,7 +39,11 @@ class QuotaService:
 
         logger.info(
             "quota_consumed",
-            extra={"user_id": user_id, "used": new_value, "limit": settings.quota_limit},
+            extra={
+                "user_id": user_id,
+                "used": new_value,
+                "limit": settings.quota_limit,
+            },
         )
 
         return ConsumeResponse(

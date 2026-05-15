@@ -8,6 +8,6 @@ class TaskStatus(str, Enum):
     cancelled = "cancelled"
 
 class SeoTone(str, Enum):
-    samimi = "samimi"
-    profesyonel = "profesyonel"
+    casual = "casual"
+    professional = "professional"
     premium = "premium"

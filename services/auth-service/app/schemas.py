@@ -1,5 +1,5 @@
-import uuid
 from pydantic import BaseModel, EmailStr, Field
+import uuid
 
 class RegisterRequest(BaseModel):
     email: EmailStr

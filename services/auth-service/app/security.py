@@ -1,43 +1,43 @@
-import logging
-import uuid
-from datetime import datetime, timedelta, timezone
-from typing import Literal
+from app.config import settings
 import bcrypt
+from datetime import datetime, timedelta, timezone
 import jwt
 from jwt.exceptions import InvalidTokenError
+import logging
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-from app.config import settings
+from typing import Literal
+import uuid
 
 logger = logging.getLogger(__name__)
 TokenType = Literal["access", "refresh"]
-_DUMMY_HASH = bcrypt.hashpw(b"dummy_timing_placeholder", bcrypt.gensalt(rounds=12)).decode()
+_DUMMY_HASH = bcrypt.hashpw(
+    b"dummy_timing_placeholder", bcrypt.gensalt(rounds=12)
+).decode()
 
-_JWT_SKIP_PATHS = frozenset({
-    "/auth/register",
-    "/auth/login",
-    "/auth/refresh",
-    "/health",
-    "/docs",
-    "/openapi.json",
-    "/redoc",
-})
+_JWT_SKIP_PATHS = frozenset(
+    {
+        "/auth/register",
+        "/auth/login",
+        "/auth/refresh",
+        "/health",
+        "/docs",
+        "/openapi.json",
+        "/redoc",
+    }
+)
 
 _JWT_SKIP_PREFIXES = frozenset({"/internal/"})
-
 
 def hash_password(plain: str) -> str:
     return bcrypt.hashpw(plain.encode(), bcrypt.gensalt(rounds=12)).decode()
 
-
 def verify_password(plain: str, hashed: str) -> bool:
     return bcrypt.checkpw(plain.encode(), hashed.encode())
 
-
 def dummy_verify() -> None:
     bcrypt.checkpw(b"x", _DUMMY_HASH.encode())
-
 
 class TokenService:
     def __init__(self) -> None:
@@ -73,10 +73,11 @@ class TokenService:
             raise ValueError(str(exc)) from exc
 
         if expected_type is not None and payload.get("type") != expected_type:
-            raise ValueError(f"Expected token type '{expected_type}', got '{payload.get('type')}'")
+            raise ValueError(
+                f"Expected token type '{expected_type}', got '{payload.get('type')}'"
+            )
 
         return payload
-
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
     def __init__(self, app, token_service: TokenService, **kwargs) -> None:
@@ -85,16 +86,20 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):
         path = request.url.path
-        if path in _JWT_SKIP_PATHS or any(path.startswith(p) for p in _JWT_SKIP_PREFIXES):
+        if path in _JWT_SKIP_PATHS or any(
+            path.startswith(p) for p in _JWT_SKIP_PREFIXES
+        ):
             return await call_next(request)
 
         authorization = request.headers.get("Authorization", "")
         if not authorization.startswith("Bearer "):
-            return JSONResponse({"detail": "Missing or invalid authorization header"}, status_code=401)
+            return JSONResponse(
+                {"detail": "Missing or invalid authorization header"}, status_code=401
+            )
 
         try:
             payload = self._token_service.decode_token(
-                authorization[len("Bearer "):], expected_type="access"
+                authorization[len("Bearer ") :], expected_type="access"
             )
         except ValueError:
             return JSONResponse({"detail": "Invalid or expired token"}, status_code=401)

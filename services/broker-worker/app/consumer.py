@@ -1,12 +1,12 @@
-import json
-import logging
-import threading
-import redis
 from app.agent_client import AgentClient, AgentClientError
 from app.config import settings
 from app.database import get_session
 from app.retry_handler import MaxRetryExceededError, RetryHandler
 from app.task_service_client import TaskServiceClient
+import json
+import logging
+import redis
+import threading
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,9 @@ class QueueConsumer:
         self._thread: threading.Thread | None = None
 
     def start(self) -> None:
-        self._thread = threading.Thread(target=self._run, daemon=True, name="queue-consumer")
+        self._thread = threading.Thread(
+            target=self._run, daemon=True, name="queue-consumer"
+        )
         self._thread.start()
         logger.info("queue_consumer_started")
 

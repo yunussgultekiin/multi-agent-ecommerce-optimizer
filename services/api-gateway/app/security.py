@@ -1,6 +1,6 @@
+from app.config import settings
 import jwt
 from jwt.exceptions import InvalidTokenError
-from app.config import settings
 
 class TokenService:
     def __init__(self) -> None:

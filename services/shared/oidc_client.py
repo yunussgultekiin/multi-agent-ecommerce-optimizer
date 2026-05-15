@@ -1,17 +1,16 @@
 import asyncio
+import google.auth.transport.requests
+from google.oauth2 import id_token
+import httpx
+import jwt as pyjwt
 import logging
 import threading
 import time
 from typing import Optional
-import httpx
-import jwt as pyjwt
-import google.auth.transport.requests
-from google.oauth2 import id_token
 
 logger = logging.getLogger(__name__)
 _OIDC_REFRESH_BUFFER = 30
 _INTERNAL_TOKEN_TTL = 300
-
 
 class SyncOidcTokenProvider:
     def __init__(self, audience: str) -> None:
@@ -23,7 +22,10 @@ class SyncOidcTokenProvider:
     def get_token(self) -> Optional[str]:
         with self._lock:
             now = time.time()
-            if self._cached_token is not None and now < self._token_expiry - _OIDC_REFRESH_BUFFER:
+            if (
+                self._cached_token is not None
+                and now < self._token_expiry - _OIDC_REFRESH_BUFFER
+            ):
                 return self._cached_token
             token, exp = self._fetch_token()
             self._cached_token = token
@@ -46,7 +48,6 @@ class SyncOidcTokenProvider:
             return headers
         return {**headers, "Authorization": f"Bearer {token}"}
 
-
 class OidcTokenProvider:
     def __init__(self, audience: str) -> None:
         self._audience = audience
@@ -57,9 +58,14 @@ class OidcTokenProvider:
     async def get_token(self) -> Optional[str]:
         async with self._lock:
             now = time.time()
-            if self._cached_token is not None and now < self._token_expiry - _OIDC_REFRESH_BUFFER:
+            if (
+                self._cached_token is not None
+                and now < self._token_expiry - _OIDC_REFRESH_BUFFER
+            ):
                 return self._cached_token
-            token, exp = await asyncio.get_event_loop().run_in_executor(None, self._fetch_token_sync)
+            token, exp = await asyncio.get_event_loop().run_in_executor(
+                None, self._fetch_token_sync
+            )
             self._cached_token = token
             self._token_expiry = exp
             return token
@@ -80,10 +86,7 @@ class OidcTokenProvider:
             return headers
         return {**headers, "Authorization": f"Bearer {token}"}
 
-
 class SyncInternalTokenProvider:
-    """Sync HS256 service-to-service token provider for use in threads."""
-
     def __init__(self, secret: str, algorithm: str = "HS256") -> None:
         self._secret = secret
         self._algorithm = algorithm
@@ -108,10 +111,7 @@ class SyncInternalTokenProvider:
     def attach_to_headers(self, headers: dict) -> dict:
         return {**headers, "Authorization": f"Bearer {self.get_token()}"}
 
-
 class InternalTokenProvider:
-    """Async HS256 service-to-service token provider."""
-
     def __init__(self, secret: str, algorithm: str = "HS256") -> None:
         self._secret = secret
         self._algorithm = algorithm
@@ -137,10 +137,7 @@ class InternalTokenProvider:
         token = await self.get_token()
         return {**headers, "Authorization": f"Bearer {token}"}
 
-
 class InternalHttpClient:
-    """HTTP client for internal service-to-service calls using shared JWT secret."""
-
     def __init__(self, base_url: str, secret: str, algorithm: str = "HS256") -> None:
         self._base_url = base_url
         self._provider = InternalTokenProvider(secret, algorithm)
@@ -161,7 +158,6 @@ class InternalHttpClient:
 
     async def delete(self, path: str, **kwargs) -> httpx.Response:
         return await self.request("DELETE", path, **kwargs)
-
 
 class OidcHttpClient:
     def __init__(self, base_url: str) -> None:

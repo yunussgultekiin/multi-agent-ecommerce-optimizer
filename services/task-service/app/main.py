@@ -1,9 +1,9 @@
-import logging
+from app.database import check_database_connectivity, connect, disconnect
+from app.security import JWTAuthMiddleware, TokenService
+from app.tasks_router import router as tasks_router
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from app.tasks_router import router as tasks_router
-from app.database import connect, disconnect, check_database_connectivity
-from app.security import JWTAuthMiddleware, TokenService
+import logging
 
 logger = logging.getLogger(__name__)
 

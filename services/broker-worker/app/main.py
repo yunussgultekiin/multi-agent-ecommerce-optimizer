@@ -1,9 +1,9 @@
-from contextlib import asynccontextmanager
-from fastapi import FastAPI
 from app.config import settings
 from app.consumer import QueueConsumer
-from app.database import connect, disconnect, check_db_connectivity
+from app.database import check_db_connectivity, connect, disconnect
 from app.logging_config import configure_logging
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
 
 _consumer = QueueConsumer()
 

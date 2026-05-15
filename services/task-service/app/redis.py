@@ -1,10 +1,8 @@
-import redis.asyncio as aioredis
 from app.config import settings
+import redis.asyncio as aioredis
 
 redis_client: aioredis.Redis = aioredis.from_url(
-    settings.REDIS_URL,
-    encoding = "utf-8",
-    decode_responses = True
+    settings.REDIS_URL, encoding="utf-8", decode_responses=True
 )
 
 async def get_redis() -> aioredis.Redis:

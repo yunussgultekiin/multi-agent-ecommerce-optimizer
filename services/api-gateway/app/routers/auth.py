@@ -1,8 +1,8 @@
-from fastapi import APIRouter, HTTPException, Request, status
-from pydantic import BaseModel, EmailStr, Field
+from app import limiter
 from app.clients.auth_client import AuthClient, AuthServiceError
 from app.config import settings
-from app import limiter
+from fastapi import APIRouter, HTTPException, Request, status
+from pydantic import BaseModel, EmailStr, Field
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 _auth_client = AuthClient()

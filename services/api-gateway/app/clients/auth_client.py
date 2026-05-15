@@ -1,7 +1,8 @@
-from shared.oidc_client import OidcHttpClient
 from app.config import settings
+from shared.oidc_client import OidcHttpClient
 
-class AuthServiceError(Exception): pass
+class AuthServiceError(Exception):
+    pass
 
 class AuthClient:
     def __init__(self) -> None:

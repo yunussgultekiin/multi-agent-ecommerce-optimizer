@@ -1,7 +1,7 @@
-from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import UUID
+from typing import Sequence, Union
 
 revision: str = "0001"
 down_revision: Union[str, None] = None

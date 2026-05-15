@@ -1,7 +1,8 @@
-from shared.oidc_client import InternalHttpClient
 from app.config import settings
+from shared.oidc_client import InternalHttpClient
 
-class QuotaServiceError(Exception): pass
+class QuotaServiceError(Exception):
+    pass
 
 class QuotaClient:
     def __init__(self) -> None:

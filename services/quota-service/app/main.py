@@ -1,10 +1,10 @@
-from contextlib import asynccontextmanager
-from fastapi import FastAPI
 from app.config import settings
-from app.redis import connect, disconnect, check_redis_connectivity
 from app.logging_config import configure_logging
+from app.redis import check_redis_connectivity, connect, disconnect
 from app.router import router as quota_router
 from app.security import JWTAuthMiddleware, TokenService
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):

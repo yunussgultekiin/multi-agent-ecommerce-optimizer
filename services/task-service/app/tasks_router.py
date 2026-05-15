@@ -1,12 +1,3 @@
-import json
-from typing import Optional
-from uuid import UUID
-
-import redis.asyncio as aioredis
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from fastapi.responses import Response, StreamingResponse
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.dependencies import get_db, get_redis
 from app.task_schemas import (
     TaskCreate,
@@ -17,6 +8,13 @@ from app.task_schemas import (
     TaskStatusUpdate,
 )
 from app.task_service import TaskService
+from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import Response, StreamingResponse
+import json
+import redis.asyncio as aioredis
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Optional
+from uuid import UUID
 
 router = APIRouter()
 
@@ -28,7 +26,9 @@ def get_service(
 
 @router.post("", response_model=TaskResponse, status_code=201)
 async def create_task(body: TaskCreate, service: TaskService = Depends(get_service)):
-    task = await service.create_task(user_id=body.user_id, payload=body.payload, seo_tone=body.seo_tone)
+    task = await service.create_task(
+        user_id=body.user_id, payload=body.payload, seo_tone=body.seo_tone
+    )
     return task
 
 @router.get("", response_model=TaskListResponse)
@@ -63,7 +63,9 @@ async def get_task(
     return task
 
 @router.post("/{task_id}/result", status_code=201)
-async def save_result(task_id: UUID, body: TaskResultCreate, service: TaskService = Depends(get_service)):
+async def save_result(
+    task_id: UUID, body: TaskResultCreate, service: TaskService = Depends(get_service)
+):
     result = await service.save_result(task_id, body.result)
     return {"task_id": str(task_id), "created_at": str(result.created_at)}
 
@@ -83,9 +85,13 @@ async def get_result(
     return task.result
 
 @router.patch("/{task_id}/status", response_model=TaskResponse)
-async def update_task_status(task_id: UUID, body: TaskStatusUpdate, service: TaskService = Depends(get_service)):
+async def update_task_status(
+    task_id: UUID, body: TaskStatusUpdate, service: TaskService = Depends(get_service)
+):
     try:
-        task = await service.update_status(task_id, body.status, error_message=body.error_message)
+        task = await service.update_status(
+            task_id, body.status, error_message=body.error_message
+        )
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc))
     if not task:

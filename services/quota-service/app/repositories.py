@@ -1,6 +1,6 @@
+from app.config import settings
 import logging
 import redis.asyncio as aioredis
-from app.config import settings
 
 logger = logging.getLogger(__name__)
 QUOTA_KEY_PREFIX = "quota"

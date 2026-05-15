@@ -1,6 +1,6 @@
-import logging
-import httpx
 from app.config import settings
+import httpx
+import logging
 from shared.oidc_client import SyncInternalTokenProvider
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,11 @@ class TaskServiceClient:
             if response.status_code not in (200, 204):
                 logger.warning(
                     "task_status_update_unexpected_response",
-                    extra={"task_id": task_id, "status": status, "code": response.status_code},
+                    extra={
+                        "task_id": task_id,
+                        "status": status,
+                        "code": response.status_code,
+                    },
                 )
         except httpx.RequestError as exc:
             logger.error(

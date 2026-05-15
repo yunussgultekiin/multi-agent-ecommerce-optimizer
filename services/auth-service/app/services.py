@@ -1,17 +1,15 @@
-import logging
-import uuid
-from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User
 from app.repositories import UserRepository
 from app.schemas import TokenResponse, UserResponse
 from app.security import TokenService, dummy_verify, hash_password, verify_password
+import logging
+from sqlalchemy.ext.asyncio import AsyncSession
+import uuid
 
 logger = logging.getLogger(__name__)
 
-
 class EmailAlreadyRegisteredError(Exception):
     pass
-
 
 class InvalidCredentialsError(Exception):
     pass
@@ -55,7 +53,9 @@ class AuthService:
 
     async def refresh(self, refresh_token: str) -> TokenResponse:
         try:
-            payload = self._token_service.decode_token(refresh_token, expected_type="refresh")
+            payload = self._token_service.decode_token(
+                refresh_token, expected_type="refresh"
+            )
         except ValueError as exc:
             raise InvalidCredentialsError("Invalid or expired refresh token") from exc
 

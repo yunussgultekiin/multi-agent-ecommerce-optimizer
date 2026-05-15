@@ -1,11 +1,11 @@
-from contextlib import asynccontextmanager
-from fastapi import FastAPI
 from app.config import settings
-from app.database import connect, disconnect, check_database_connectivity
+from app.database import check_database_connectivity, connect, disconnect
 from app.internal_router import router as internal_router
 from app.logging_config import configure_logging
 from app.router import router as auth_router
 from app.security import JWTAuthMiddleware, TokenService
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):

@@ -1,7 +1,7 @@
-import logging
-from typing import AsyncGenerator
-import redis.asyncio as aioredis
 from app.config import settings
+import logging
+import redis.asyncio as aioredis
+from typing import AsyncGenerator
 
 logger = logging.getLogger(__name__)
 _redis: aioredis.Redis | None = None

@@ -1,6 +1,6 @@
 import logging
-import sys
 from pythonjsonlogger import jsonlogger
+import sys
 
 def configure_logging(level: str = "INFO") -> None:
     handler = logging.StreamHandler(sys.stdout)

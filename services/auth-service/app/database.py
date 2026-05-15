@@ -1,23 +1,27 @@
-from typing import AsyncGenerator
-from sqlalchemy import text
-from sqlalchemy.orm import DeclarativeBase
 from app.config import settings
 from google.cloud.sql.connector import Connector, IPTypes
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
+from sqlalchemy.orm import DeclarativeBase
+from typing import AsyncGenerator
 
-class Base(DeclarativeBase): pass
+class Base(DeclarativeBase):
+    pass
+
 _engine: AsyncEngine | None = None
 _session_maker: async_sessionmaker | None = None
 
 async def _build_engine() -> AsyncEngine:
     if settings.cloud_sql_instance:
         connector = Connector()
-        ip_type = IPTypes.PRIVATE if settings.db_ip_type == "PRIVATE" else IPTypes.PUBLIC
+        ip_type = (
+            IPTypes.PRIVATE if settings.db_ip_type == "PRIVATE" else IPTypes.PUBLIC
+        )
 
         async def _getconn():
             return await connector.connect_async(

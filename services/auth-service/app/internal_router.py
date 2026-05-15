@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.repositories import UserRepository
 from app.schemas import UserResponse
 from app.security import TokenService
 from app.services import AuthService, InvalidCredentialsError
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(prefix="/internal", tags=["internal"])
 _token_service = TokenService()
@@ -24,4 +24,6 @@ async def get_user(
     try:
         return await service.get_current_user(user_id)
     except InvalidCredentialsError:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )

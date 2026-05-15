@@ -1,15 +1,17 @@
-from uuid import UUID
-from sqlalchemy import delete, select, func
+from app.enums import SeoTone, TaskStatus
+from app.tasks import AnalysisResult, Task
+from sqlalchemy import delete, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from app.tasks import Task, AnalysisResult
-from app.enums import SeoTone, TaskStatus
+from uuid import UUID
 
 class TaskRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create(self, user_id: str, payload: dict, seo_tone: SeoTone | None = None) -> Task:
+    async def create(
+        self, user_id: str, payload: dict, seo_tone: SeoTone | None = None
+    ) -> Task:
         task = Task(user_id=user_id, payload=payload, seo_tone=seo_tone)
         self.session.add(task)
         await self.session.commit()
@@ -28,7 +30,9 @@ class TaskRepository:
         )
         return result.scalar_one()
 
-    async def get_by_user(self, user_id: str, limit: int = 10, offset: int = 0) -> list[Task]:
+    async def get_by_user(
+        self, user_id: str, limit: int = 10, offset: int = 0
+    ) -> list[Task]:
         result = await self.session.execute(
             select(Task)
             .where(Task.user_id == user_id)
@@ -38,7 +42,9 @@ class TaskRepository:
         )
         return list(result.scalars().all())
 
-    async def update_status(self, task_id: UUID, status: TaskStatus, error_message: str | None = None) -> Task | None:
+    async def update_status(
+        self, task_id: UUID, status: TaskStatus, error_message: str | None = None
+    ) -> Task | None:
         task = await self.get_by_id(task_id)
         if not task:
             return None
@@ -66,8 +72,6 @@ class TaskRepository:
             await self.session.execute(
                 delete(AnalysisResult).where(AnalysisResult.task_id.in_(task_ids))
             )
-            await self.session.execute(
-                delete(Task).where(Task.user_id == user_id)
-            )
+            await self.session.execute(delete(Task).where(Task.user_id == user_id))
 
         await self.session.commit()

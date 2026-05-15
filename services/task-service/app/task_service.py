@@ -1,12 +1,10 @@
-import json
-from uuid import UUID
-
-import redis.asyncio as aioredis
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.enums import SeoTone, TaskStatus
 from app.task_repositories import TaskRepository
 from app.tasks import AnalysisResult, Task
+import json
+import redis.asyncio as aioredis
+from sqlalchemy.ext.asyncio import AsyncSession
+from uuid import UUID
 
 VALID_TRANSITIONS = {
     TaskStatus.pending: [TaskStatus.running, TaskStatus.cancelled],
@@ -21,8 +19,12 @@ class TaskService:
         self.repo = TaskRepository(session)
         self.redis = redis
 
-    async def create_task(self, user_id: str, payload: dict, seo_tone: SeoTone | None = None) -> Task:
-        task = await self.repo.create(user_id=user_id, payload=payload, seo_tone=seo_tone)
+    async def create_task(
+        self, user_id: str, payload: dict, seo_tone: SeoTone | None = None
+    ) -> Task:
+        task = await self.repo.create(
+            user_id=user_id, payload=payload, seo_tone=seo_tone
+        )
         await self.redis.lpush(
             "task_queue",
             json.dumps({"task_id": str(task.id), "payload": payload}),
@@ -32,12 +34,16 @@ class TaskService:
     async def get_task(self, task_id: UUID) -> Task | None:
         return await self.repo.get_by_id(task_id)
 
-    async def list_tasks(self, user_id: str, limit: int = 10, offset: int = 0) -> tuple[list[Task], int]:
+    async def list_tasks(
+        self, user_id: str, limit: int = 10, offset: int = 0
+    ) -> tuple[list[Task], int]:
         tasks = await self.repo.get_by_user(user_id=user_id, limit=limit, offset=offset)
         total = await self.repo.count_by_user(user_id)
         return tasks, total
 
-    async def update_status(self, task_id: UUID, new_status: TaskStatus, error_message: str | None = None) -> Task | None:
+    async def update_status(
+        self, task_id: UUID, new_status: TaskStatus, error_message: str | None = None
+    ) -> Task | None:
         task = await self.repo.get_by_id(task_id)
         if not task:
             return None
@@ -46,7 +52,9 @@ class TaskService:
             raise ValueError(
                 f"Transition '{task.status}' -> '{new_status}' is not allowed. Allowed: {allowed}"
             )
-        return await self.repo.update_status(task_id, new_status, error_message=error_message)
+        return await self.repo.update_status(
+            task_id, new_status, error_message=error_message
+        )
 
     async def cancel_task(self, task_id: UUID) -> Task | None:
         task = await self.update_status(task_id, TaskStatus.cancelled)

@@ -1,16 +1,14 @@
-import logging
-import time
-from datetime import datetime, timedelta, timezone
-from sqlalchemy.orm import Session
 from app.config import settings
 from app.models import TaskRetry
+from datetime import datetime, timedelta, timezone
+import logging
+from sqlalchemy.orm import Session
+import time
 
 logger = logging.getLogger(__name__)
 
-
 class MaxRetryExceededError(Exception):
     pass
-
 
 class RetryHandler:
     def __init__(self, session: Session) -> None:
@@ -47,9 +45,7 @@ class RetryHandler:
 
     def _get_or_create(self, task_id: str) -> TaskRetry:
         record = (
-            self._session.query(TaskRetry)
-            .filter(TaskRetry.task_id == task_id)
-            .first()
+            self._session.query(TaskRetry).filter(TaskRetry.task_id == task_id).first()
         )
         if record is None:
             record = TaskRetry(task_id=task_id)
@@ -58,4 +54,4 @@ class RetryHandler:
         return record
 
     def _calc_delay(self, attempt: int) -> float:
-        return settings.retry_base_delay * (2 ** attempt)
+        return settings.retry_base_delay * (2**attempt)

@@ -1,7 +1,8 @@
-from shared.oidc_client import InternalHttpClient
 from app.config import settings
+from shared.oidc_client import InternalHttpClient
 
-class TaskServiceError(Exception): pass
+class TaskServiceError(Exception):
+    pass
 
 class TaskClient:
     def __init__(self) -> None:
@@ -17,7 +18,9 @@ class TaskClient:
         except Exception as exc:
             raise TaskServiceError(f"Connection error: {exc}") from exc
 
-    async def create_task(self, user_id: str, payload: dict, seo_tone: str | None = None):
+    async def create_task(
+        self, user_id: str, payload: dict, seo_tone: str | None = None
+    ):
         body: dict = {"user_id": user_id, "payload": payload}
         if seo_tone is not None:
             body["seo_tone"] = seo_tone

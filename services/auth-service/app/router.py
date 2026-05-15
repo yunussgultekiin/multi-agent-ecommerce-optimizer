@@ -1,10 +1,20 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, status
-from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.repositories import UserRepository
-from app.schemas import LoginRequest, RefreshRequest, RegisterRequest, TokenResponse, UserResponse
+from app.schemas import (
+    LoginRequest,
+    RefreshRequest,
+    RegisterRequest,
+    TokenResponse,
+    UserResponse,
+)
 from app.security import TokenService
-from app.services import AuthService, EmailAlreadyRegisteredError, InvalidCredentialsError
+from app.services import (
+    AuthService,
+    EmailAlreadyRegisteredError,
+    InvalidCredentialsError,
+)
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 _token_service = TokenService()
@@ -16,7 +26,9 @@ def _get_auth_service(session: AsyncSession = Depends(get_db)) -> AuthService:
         session=session,
     )
 
-@router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED
+)
 async def register(
     request: RegisterRequest,
     service: AuthService = Depends(_get_auth_service),
@@ -24,7 +36,9 @@ async def register(
     try:
         return await service.register(request.email, request.password)
     except EmailAlreadyRegisteredError:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail="Email already registered"
+        )
 
 @router.post("/login", response_model=TokenResponse)
 async def login(
@@ -53,7 +67,9 @@ async def me(
 ) -> UserResponse:
     user_id = getattr(http_request.state, "user_id", None)
     if user_id is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"
+        )
 
     try:
         return await service.get_current_user(user_id)

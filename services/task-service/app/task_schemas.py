@@ -1,7 +1,7 @@
-from uuid import UUID
+from app.enums import SeoTone, TaskStatus
 from datetime import datetime
 from pydantic import BaseModel
-from app.enums import SeoTone, TaskStatus
+from uuid import UUID
 
 class TaskCreate(BaseModel):
     user_id: str

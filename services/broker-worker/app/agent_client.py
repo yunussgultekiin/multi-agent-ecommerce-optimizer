@@ -1,10 +1,12 @@
-import logging
-import httpx
 from app.config import settings
+import httpx
+import logging
 from shared.oidc_client import SyncInternalTokenProvider
 
 logger = logging.getLogger(__name__)
-class AgentClientError(Exception): pass
+
+class AgentClientError(Exception):
+    pass
 
 class AgentClient:
     def __init__(self) -> None:
@@ -25,7 +27,11 @@ class AgentClient:
                     headers=headers,
                 )
             if response.status_code != 202:
-                raise AgentClientError(f"Unexpected status code: {response.status_code}")
-            logger.info("agent_notified", extra={"task_id": task_id, "agent_type": agent_type})
+                raise AgentClientError(
+                    f"Unexpected status code: {response.status_code}"
+                )
+            logger.info(
+                "agent_notified", extra={"task_id": task_id, "agent_type": agent_type}
+            )
         except httpx.RequestError as exc:
             raise AgentClientError(f"Connection error: {exc}") from exc

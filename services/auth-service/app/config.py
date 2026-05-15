@@ -11,7 +11,9 @@ class Settings(BaseSettings):
     db_ip_type: str = Field(default="PUBLIC", alias="DB_IP_TYPE")
     jwt_secret_key: str = Field(alias="JWT_SECRET_KEY")
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
-    access_token_expire_minutes: int = Field(default=30, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+    access_token_expire_minutes: int = Field(
+        default=30, alias="ACCESS_TOKEN_EXPIRE_MINUTES"
+    )
     refresh_token_expire_days: int = Field(default=7, alias="REFRESH_TOKEN_EXPIRE_DAYS")
     gcp_project_id: str = Field(default="", alias="GCP_PROJECT_ID")
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")

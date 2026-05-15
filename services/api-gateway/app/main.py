@@ -1,16 +1,16 @@
-import logging
-from contextlib import asynccontextmanager
-import httpx
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from slowapi import _rate_limit_exceeded_handler
-from slowapi.errors import RateLimitExceeded
+from app import limiter
 from app.config import settings
 from app.logging_config import configure_logging
 from app.middleware.auth import JWTAuthMiddleware
-from app import limiter
 from app.routers.analyze import router as analyze_router
 from app.routers.auth import router as auth_router
+from contextlib import asynccontextmanager
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+import httpx
+import logging
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +52,9 @@ async def health(request: Request) -> dict:
                 dependencies[name] = "unreachable"
                 continue
 
-            dependencies[name] = "reachable" if response.status_code == 200 else "unreachable"
+            dependencies[name] = (
+                "reachable" if response.status_code == 200 else "unreachable"
+            )
 
     return {
         "status": "ok",

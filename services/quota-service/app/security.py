@@ -1,19 +1,21 @@
-import logging
+from app.config import settings
 import jwt
 from jwt.exceptions import InvalidTokenError
+import logging
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-from app.config import settings
 
 logger = logging.getLogger(__name__)
 
-_PUBLIC_PATHS = frozenset({
-    "/health",
-    "/docs",
-    "/openapi.json",
-    "/redoc",
-})
+_PUBLIC_PATHS = frozenset(
+    {
+        "/health",
+        "/docs",
+        "/openapi.json",
+        "/redoc",
+    }
+)
 
 class TokenService:
     def __init__(self) -> None:
@@ -47,7 +49,7 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
             )
 
         try:
-            self._token_service.decode_token(authorization[len("Bearer "):])
+            self._token_service.decode_token(authorization[len("Bearer ") :])
         except ValueError:
             return JSONResponse(
                 {"detail": "Invalid or expired token"},

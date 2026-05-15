@@ -1,7 +1,8 @@
-from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import UUID, JSONB, ARRAY, ENUM as PgEnum
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID
+from sqlalchemy.dialects.postgresql import ENUM as PgEnum
+from typing import Sequence, Union
 
 revision: str = "0001"
 down_revision: Union[str, None] = None
@@ -9,12 +10,14 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
-    op.execute(sa.text(
-        "DO $$ BEGIN "
-        "CREATE TYPE taskstatus AS ENUM ('pending', 'running', 'completed', 'failed', 'cancelled'); "
-        "EXCEPTION WHEN duplicate_object THEN null; "
-        "END $$;"
-    ))
+    op.execute(
+        sa.text(
+            "DO $$ BEGIN "
+            "CREATE TYPE taskstatus AS ENUM ('pending', 'running', 'completed', 'failed', 'cancelled'); "
+            "EXCEPTION WHEN duplicate_object THEN null; "
+            "END $$;"
+        )
+    )
 
     op.create_table(
         "tasks",
@@ -23,7 +26,11 @@ def upgrade() -> None:
         sa.Column(
             "status",
             PgEnum(
-                "pending", "running", "completed", "failed", "cancelled",
+                "pending",
+                "running",
+                "completed",
+                "failed",
+                "cancelled",
                 name="taskstatus",
                 create_type=False,
             ),

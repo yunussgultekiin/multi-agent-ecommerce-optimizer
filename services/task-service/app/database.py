@@ -1,14 +1,14 @@
-import os
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
+import os
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
-from sqlalchemy import text
 from sqlalchemy.orm import DeclarativeBase
+from typing import AsyncGenerator
 
 _DATABASE_URL: str = os.getenv("DATABASE_URL", "")
 engine: AsyncEngine | None = None
@@ -20,11 +20,11 @@ async def connect() -> None:
         return
     engine = create_async_engine(
         _DATABASE_URL,
-        pool_pre_ping = True,
-        pool_size = 5,
-        max_overflow = 10,
-        pool_timeout = 30,
-        echo=False
+        pool_pre_ping=True,
+        pool_size=5,
+        max_overflow=10,
+        pool_timeout=30,
+        echo=False,
     )
     async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
