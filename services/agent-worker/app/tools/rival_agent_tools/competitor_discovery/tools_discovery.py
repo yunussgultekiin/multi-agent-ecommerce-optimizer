@@ -1,23 +1,25 @@
-import logging
-from google.genai import types
-from pydantic import ValidationError
-from app.config import settings
-from app.core import ToolResult
-from app.gemini_client import call_gemini
 from .models_discovery import (
+    MIN_COMPETITORS,
+    PLATFORM_SITES,
+    TARGET_COMPETITORS,
     DiscoveredCompetitor,
     DiscoveryResult,
     Platform,
     RawDiscoveryResult,
-    MIN_COMPETITORS,
-    TARGET_COMPETITORS,
-    PLATFORM_SITES,
 )
-from .prompts_discovery import build_discovery_prompt, build_discovery_correction_context
+from .prompts_discovery import (
+    build_discovery_correction_context,
+    build_discovery_prompt,
+)
 from .utils_discovery import log_tool_call, parse_json_response
+from app.config import settings
+from app.core import ToolResult
+from app.gemini_client import call_gemini
+from google.genai import types
+import logging
+from pydantic import ValidationError
 
 logger = logging.getLogger(__name__)
-
 _GROUNDING_TOOL = types.Tool(google_search=types.GoogleSearch())
 SUPPORTED_PLATFORMS = set(PLATFORM_SITES.keys())
 
@@ -54,10 +56,7 @@ def _filter_own_brand(
     if not brand:
         return competitors
     brand_lower = brand.strip().lower()
-    return [
-        c for c in competitors
-        if brand_lower not in c.competitor_name.lower()
-    ]
+    return [c for c in competitors if brand_lower not in c.competitor_name.lower()]
 
 async def run_competitor_discovery_tool(
     platform: str,
@@ -72,8 +71,16 @@ async def run_competitor_discovery_tool(
     except ValueError as exc:
         return ToolResult(success=False, fallback_used=True, data={"error": str(exc)})
 
-    category = category.strip() if isinstance(category, str) and category.strip() else "general"
-    product_title = product_title.strip() if isinstance(product_title, str) and product_title.strip() else "user product"
+    category = (
+        category.strip()
+        if isinstance(category, str) and category.strip()
+        else "general"
+    )
+    product_title = (
+        product_title.strip()
+        if isinstance(product_title, str) and product_title.strip()
+        else "user product"
+    )
     brand = brand.strip() if isinstance(brand, str) else ""
 
     last_error: str | None = None
@@ -81,7 +88,11 @@ async def run_competitor_discovery_tool(
     grounding_hit = False
 
     for attempt in range(max_retries + 1):
-        correction_context = build_discovery_correction_context(last_error) if attempt > 0 and last_error else None
+        correction_context = (
+            build_discovery_correction_context(last_error)
+            if attempt > 0 and last_error
+            else None
+        )
         if attempt > 0:
             fallback_used = True
 
@@ -173,6 +184,10 @@ async def run_competitor_discovery_tool(
                 grounding_hit=grounding_hit,
                 fallback_used=True,
             )
-            return ToolResult(success=False, fallback_used=True, data={"error": str(exc)})
+            return ToolResult(
+                success=False, fallback_used=True, data={"error": str(exc)}
+            )
 
-    return ToolResult(success=False, fallback_used=True, data={"error": "Unexpected error"})
+    return ToolResult(
+        success=False, fallback_used=True, data={"error": "Unexpected error"}
+    )

@@ -1,11 +1,12 @@
-import asyncio
-import logging
-import google.auth.exceptions
-import google.api_core.exceptions
-from google import genai
-from google.genai import types, errors as genai_errors
-from google.genai.types import HttpOptions
 from app.config import settings
+import asyncio
+from google import genai
+import google.api_core.exceptions
+import google.auth.exceptions
+from google.genai import errors as genai_errors
+from google.genai import types
+from google.genai.types import HttpOptions
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,6 @@ _client = genai.Client(
     location=settings.google_cloud_location,
     http_options=HttpOptions(api_version="v1"),
 )
-
 
 async def call_gemini(
     model: str,

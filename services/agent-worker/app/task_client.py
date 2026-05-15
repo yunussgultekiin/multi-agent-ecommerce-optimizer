@@ -1,9 +1,8 @@
+from app.config import settings
 import logging
 from shared.oidc_client import InternalHttpClient
-from app.config import settings
 
 logger = logging.getLogger(__name__)
-
 
 class TaskServiceClient:
     def __init__(self) -> None:
@@ -28,7 +27,9 @@ class TaskServiceClient:
         except Exception as exc:
             logger.error("Failed to save result: task_id=%s error=%s", task_id, exc)
 
-    async def update_status(self, task_id: str, status: str, error_message: str | None = None) -> None:
+    async def update_status(
+        self, task_id: str, status: str, error_message: str | None = None
+    ) -> None:
         body: dict = {"status": status}
         if error_message:
             body["error_message"] = error_message

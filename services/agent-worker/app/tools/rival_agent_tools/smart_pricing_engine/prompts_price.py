@@ -9,9 +9,21 @@ def build_fallback_pricing_prompt(
     trend_result: Optional[dict] = None,
     target_platform: str = "",
 ) -> str:
-    gap_block = f"\nMARKET GAP ANALYSIS:\n{json.dumps(gap_result, ensure_ascii=False)}\n" if gap_result else ""
-    sentiment_block = f"\nCUSTOMER SENTIMENT:\n{json.dumps(sentiment_result, ensure_ascii=False)}\n" if sentiment_result else ""
-    trend_block = f"\nMARKET TRENDS:\n{json.dumps(trend_result, ensure_ascii=False)}\n" if trend_result else ""
+    gap_block = (
+        f"\nMARKET GAP ANALYSIS:\n{json.dumps(gap_result, ensure_ascii=False)}\n"
+        if gap_result
+        else ""
+    )
+    sentiment_block = (
+        f"\nCUSTOMER SENTIMENT:\n{json.dumps(sentiment_result, ensure_ascii=False)}\n"
+        if sentiment_result
+        else ""
+    )
+    trend_block = (
+        f"\nMARKET TRENDS:\n{json.dumps(trend_result, ensure_ascii=False)}\n"
+        if trend_result
+        else ""
+    )
     platform_note = f"TARGET PLATFORM: {target_platform}\n" if target_platform else ""
 
     return f"""

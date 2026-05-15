@@ -4,7 +4,6 @@ import re
 
 logger = logging.getLogger(__name__)
 
-
 def extract_competitor_names(competitor_names: list[dict]) -> list[str]:
     names = []
     for c in competitor_names or []:
@@ -12,7 +11,6 @@ def extract_competitor_names(competitor_names: list[dict]) -> list[str]:
         if name:
             names.append(name)
     return names
-
 
 def extract_research_context(competitor_research_results: list[dict]) -> list[dict]:
     context = []
@@ -35,9 +33,7 @@ def extract_research_context(competitor_research_results: list[dict]) -> list[di
             context.append(entry)
     return context
 
-
 def _sanitize_control_chars(text: str) -> str:
-    """Escape bare control characters inside JSON string values."""
     result: list[str] = []
     in_string = False
     i = 0
@@ -72,7 +68,6 @@ def _sanitize_control_chars(text: str) -> str:
         i += 1
     return "".join(result)
 
-
 def parse_json_response(raw_text: str) -> dict:
     text = (raw_text or "").strip()
 
@@ -91,7 +86,6 @@ def parse_json_response(raw_text: str) -> dict:
     if not isinstance(parsed, dict):
         raise ValueError("Gemini response must be a JSON object")
     return parsed
-
 
 def log_tool_call(
     competitor_count: int,

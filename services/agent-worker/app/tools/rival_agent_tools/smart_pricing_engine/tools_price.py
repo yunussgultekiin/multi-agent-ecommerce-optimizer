@@ -1,30 +1,32 @@
-import json
-import logging
-from typing import Optional
-from google.genai import types
-from pydantic import ValidationError
+from .models_price import PricingResult
+from .prompts_price import (
+    build_fallback_pricing_prompt,
+    build_fallback_self_correction_prompt,
+)
+from .utils_price import (
+    calculate_competitor_variant_overlap,
+    calculate_confidence_score,
+    calculate_market_power_gap,
+    calculate_positioning_score,
+    calculate_price_stats,
+    calculate_variant_pricing,
+    clean_json_response,
+    determine_positioning,
+    extract_valid_prices,
+    filter_valid_competitors,
+    log_tool_call,
+    normalize_user_product,
+)
 from app.config import settings
 from app.core import ToolResult
 from app.gemini_client import call_gemini
-from .models_price import PricingResult
-from .prompts_price import build_fallback_pricing_prompt, build_fallback_self_correction_prompt
-from .utils_price import (
-    filter_valid_competitors,
-    extract_valid_prices,
-    calculate_price_stats,
-    determine_positioning,
-    calculate_positioning_score,
-    calculate_market_power_gap,
-    calculate_confidence_score,
-    calculate_variant_pricing,
-    calculate_competitor_variant_overlap,
-    normalize_user_product,
-    clean_json_response,
-    log_tool_call,
-)
+from google.genai import types
+import json
+import logging
+from pydantic import ValidationError
+from typing import Optional
 
 logger = logging.getLogger(__name__)
-
 
 async def run_fallback_analysis(
     user_product: dict,
@@ -74,7 +76,9 @@ async def run_fallback_analysis(
                 fallback_used=True,
             )
 
-            return ToolResult(success=True, data=result.model_dump(), fallback_used=True)
+            return ToolResult(
+                success=True, data=result.model_dump(), fallback_used=True
+            )
 
         except (ValidationError, json.JSONDecodeError) as exc:
             last_error = str(exc)
@@ -105,10 +109,13 @@ async def run_fallback_analysis(
                 confidence_score=None,
                 fallback_used=True,
             )
-            return ToolResult(success=False, fallback_used=True, data={"error": str(exc)})
+            return ToolResult(
+                success=False, fallback_used=True, data={"error": str(exc)}
+            )
 
-    return ToolResult(success=False, fallback_used=True, data={"error": "Unexpected error"})
-
+    return ToolResult(
+        success=False, fallback_used=True, data={"error": "Unexpected error"}
+    )
 
 def run_deterministic_analysis(
     user_product: dict,
@@ -133,7 +140,9 @@ def run_deterministic_analysis(
     variant_pricing = calculate_variant_pricing(
         user_variants, stats["q1"], stats["q3"], stats["median"]
     )
-    competitor_variant_overlap = calculate_competitor_variant_overlap(user_variants, competitors)
+    competitor_variant_overlap = calculate_competitor_variant_overlap(
+        user_variants, competitors
+    )
 
     result = PricingResult(
         price_median=stats["median"],
@@ -158,8 +167,9 @@ def run_deterministic_analysis(
         fallback_used=not price_provided,
     )
 
-    return ToolResult(success=True, data=result.model_dump(), fallback_used=not price_provided)
-
+    return ToolResult(
+        success=True, data=result.model_dump(), fallback_used=not price_provided
+    )
 
 async def run_smart_pricing_engine(
     user_product: dict,
@@ -210,4 +220,6 @@ async def run_smart_pricing_engine(
             )
         valid_prices = sane_prices
 
-    return run_deterministic_analysis(normalized_user_product, valid_competitors, valid_prices)
+    return run_deterministic_analysis(
+        normalized_user_product, valid_competitors, valid_prices
+    )

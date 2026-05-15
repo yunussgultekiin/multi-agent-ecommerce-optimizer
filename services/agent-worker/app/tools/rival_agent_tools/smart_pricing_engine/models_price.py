@@ -1,7 +1,6 @@
+from enum import Enum
 from pydantic import BaseModel, Field, model_validator
 from typing import Optional
-from enum import Enum
-
 
 class PricingInput(BaseModel):
     competitor_research_results: list[dict]
@@ -13,12 +12,10 @@ class PricingInput(BaseModel):
 
 FALLBACK_MAX_CONFIDENCE = 0.4
 
-
 class Positioning(str, Enum):
     underpriced = "underpriced"
     optimal = "optimal"
     overpriced = "overpriced"
-
 
 class VariantPricing(BaseModel):
     variant_name: str
@@ -27,11 +24,9 @@ class VariantPricing(BaseModel):
     suggested_price: float
     positioning: Positioning
 
-
 class CompetitorVariantOverlap(BaseModel):
     variant_name: str
     matching_competitors: list[str]
-
 
 class PricingResult(BaseModel):
     price_median: float
@@ -46,7 +41,9 @@ class PricingResult(BaseModel):
     confidence_score: float = Field(..., ge=0.0, le=1.0)
     fallback_used: bool = False
     variant_pricing: list[VariantPricing] = Field(default_factory=list)
-    competitor_variant_overlap: list[CompetitorVariantOverlap] = Field(default_factory=list)
+    competitor_variant_overlap: list[CompetitorVariantOverlap] = Field(
+        default_factory=list
+    )
 
     @model_validator(mode="after")
     def cap_fallback_confidence(self) -> "PricingResult":

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Rival Agent end-to-end test.
 
@@ -12,20 +11,25 @@ Usage:
 """
 
 import asyncio
+from datetime import datetime
+from dotenv import load_dotenv
 import json
 import os
+from pathlib import Path
 import sys
 import time
-from datetime import datetime
-from pathlib import Path
-from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).parent.parent.parent / ".env", override=True)
 
 os.environ.setdefault("JWT_SECRET_KEY", "local-test-key")
 
 print("── Env ──────────────────────────────────────────────────")
-for _k in ("GOOGLE_CLOUD_PROJECT", "GOOGLE_CLOUD_LOCATION", "GEMINI_FLASH_MODEL", "GEMINI_PRO_MODEL"):
+for _k in (
+    "GOOGLE_CLOUD_PROJECT",
+    "GOOGLE_CLOUD_LOCATION",
+    "GEMINI_FLASH_MODEL",
+    "GEMINI_PRO_MODEL",
+):
     print(f"  {_k}={os.environ.get(_k, '(not set)')}")
 print("─────────────────────────────────────────────────────────")
 os.environ.setdefault("REDIS_URL", "redis://localhost:6379/0")
@@ -37,10 +41,10 @@ from app.core import ToolResult
 from app.tools.rival_agent_tools import (
     run_competitor_discovery_tool,
     run_competitor_research_tool,
-    run_sentiment_analyzer,
-    run_trend_analyzer,
     run_market_gap_analyzer,
+    run_sentiment_analyzer,
     run_smart_pricing_engine,
+    run_trend_analyzer,
 )
 
 USER_PRODUCT = {
@@ -56,7 +60,11 @@ USER_PRODUCT = {
         "Mutfak Seti",
     ],
     "variants": [
-        {"name": "12 Kişilik Çelik Düz Çatal Kaşık Seti", "price": 600.00, "price_delta": 50.0},
+        {
+            "name": "12 Kişilik Çelik Düz Çatal Kaşık Seti",
+            "price": 600.00,
+            "price_delta": 50.0,
+        },
     ],
     "rating": None,
     "review_count": None,
@@ -64,11 +72,13 @@ USER_PRODUCT = {
 
 TARGET_PLATFORM = "trendyol"
 
+
 def _save(output_dir: Path, filename: str, data: object) -> None:
     path = output_dir / filename
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2, default=str)
     print(f"  saved → {path.name}")
+
 
 def _tool_result_to_dict(result: ToolResult) -> dict:
     return {
@@ -77,15 +87,16 @@ def _tool_result_to_dict(result: ToolResult) -> dict:
         "data": result.data,
     }
 
+
 async def main() -> None:
     run_id = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     output_dir = Path(__file__).parent / "test_outputs" / run_id
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Rival Agent Test  |  {run_id}")
     print(f"Output dir: {output_dir}")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     timing: dict[str, float] = {}
     flow_start = time.perf_counter()
@@ -99,7 +110,9 @@ async def main() -> None:
         brand=USER_PRODUCT["brand"],
     )
     timing["discovery"] = round(time.perf_counter() - t0, 2)
-    print(f"  success={discovery_result.success}  fallback={discovery_result.fallback_used}  elapsed={timing['discovery']}s")
+    print(
+        f"  success={discovery_result.success}  fallback={discovery_result.fallback_used}  elapsed={timing['discovery']}s"
+    )
     _save(output_dir, "01_discovery.json", _tool_result_to_dict(discovery_result))
 
     competitor_names: list[dict] = []
@@ -117,8 +130,14 @@ async def main() -> None:
     )
     timing["research"] = round(time.perf_counter() - t0, 2)
     successful = sum(1 for r in research_results if r.success)
-    print(f"  success={successful}/{len(research_results)}  elapsed={timing['research']}s")
-    _save(output_dir, "02_research.json", [_tool_result_to_dict(r) for r in research_results])
+    print(
+        f"  success={successful}/{len(research_results)}  elapsed={timing['research']}s"
+    )
+    _save(
+        output_dir,
+        "02_research.json",
+        [_tool_result_to_dict(r) for r in research_results],
+    )
 
     research_dicts = [
         {"success": r.success, "data": r.data, "fallback_used": r.fallback_used}
@@ -152,9 +171,15 @@ async def main() -> None:
         ),
     )
     timing["sentiment_and_trend_parallel"] = round(time.perf_counter() - t0, 2)
-    print(f"  sentiment: success={sentiment_result_obj.success}  fallback={sentiment_result_obj.fallback_used}")
-    print(f"  trend:     success={trend_result_obj.success}  fallback={trend_result_obj.fallback_used}")
-    print(f"  elapsed={timing['sentiment_and_trend_parallel']}s  (both ran concurrently)")
+    print(
+        f"  sentiment: success={sentiment_result_obj.success}  fallback={sentiment_result_obj.fallback_used}"
+    )
+    print(
+        f"  trend:     success={trend_result_obj.success}  fallback={trend_result_obj.fallback_used}"
+    )
+    print(
+        f"  elapsed={timing['sentiment_and_trend_parallel']}s  (both ran concurrently)"
+    )
     _save(output_dir, "03_sentiment.json", _tool_result_to_dict(sentiment_result_obj))
     _save(output_dir, "04_trend.json", _tool_result_to_dict(trend_result_obj))
 
@@ -170,7 +195,9 @@ async def main() -> None:
         trend_result=trend_data,
     )
     timing["market_gap"] = round(time.perf_counter() - t0, 2)
-    print(f"  success={gap_result.success}  fallback={gap_result.fallback_used}  elapsed={timing['market_gap']}s")
+    print(
+        f"  success={gap_result.success}  fallback={gap_result.fallback_used}  elapsed={timing['market_gap']}s"
+    )
     _save(output_dir, "05_market_gap.json", _tool_result_to_dict(gap_result))
 
     print("\n[6/6] SmartPricingEngine")
@@ -184,7 +211,9 @@ async def main() -> None:
         target_platform=TARGET_PLATFORM,
     )
     timing["pricing"] = round(time.perf_counter() - t0, 2)
-    print(f"  success={pricing_result.success}  fallback={pricing_result.fallback_used}  elapsed={timing['pricing']}s")
+    print(
+        f"  success={pricing_result.success}  fallback={pricing_result.fallback_used}  elapsed={timing['pricing']}s"
+    )
     _save(output_dir, "06_pricing.json", _tool_result_to_dict(pricing_result))
 
     timing["total_flow"] = round(time.perf_counter() - flow_start, 2)
@@ -204,15 +233,15 @@ async def main() -> None:
     _save(output_dir, "final_rival_json.json", rival_json)
     _save(output_dir, "timing_report.json", timing)
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("Timing Summary")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     for step, elapsed in timing.items():
         label = f"  {step:<30}"
         print(f"{label} {elapsed:>6.2f}s")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"  {'TOTAL':<30} {timing['total_flow']:>6.2f}s")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
     print(f"All outputs saved to: {output_dir}\n")
 
 

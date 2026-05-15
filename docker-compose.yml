@@ -149,6 +149,9 @@ services:
     env_file: .env
     environment:
       TASK_SERVICE_URL: http://task-service:8080
+    depends_on:
+      task-service-migrate:
+        condition: service_completed_successfully
     networks:
       - platform-net
     logging:

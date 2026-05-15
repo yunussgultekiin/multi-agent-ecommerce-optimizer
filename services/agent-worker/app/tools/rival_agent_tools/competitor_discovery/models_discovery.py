@@ -1,8 +1,7 @@
-from typing import Literal
 from pydantic import BaseModel, Field, field_validator
+from typing import Literal
 
 Platform = Literal["amazon", "trendyol", "hepsiburada"]
-
 MIN_COMPETITORS = 3
 TARGET_COMPETITORS = 10
 
@@ -11,7 +10,6 @@ PLATFORM_SITES = {
     "amazon": "site:amazon.com.tr",
     "hepsiburada": "site:hepsiburada.com",
 }
-
 
 class DiscoveredCompetitor(BaseModel):
     competitor_name: str = Field(..., min_length=2)
@@ -31,10 +29,8 @@ class DiscoveredCompetitor(BaseModel):
     def normalize_reason(cls, value: str) -> str:
         return value.strip() if isinstance(value, str) else ""
 
-
 class RawDiscoveryResult(BaseModel):
     competitors: list[DiscoveredCompetitor] = Field(..., min_length=1)
-
 
 class DiscoveryResult(BaseModel):
     competitors: list[DiscoveredCompetitor] = Field(..., min_length=MIN_COMPETITORS)

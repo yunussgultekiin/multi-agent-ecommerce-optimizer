@@ -1,14 +1,16 @@
-import logging
 from app.agents.state import SeoAgentState
 from app.task_client import TaskServiceClient
-from app.tools.seo_agent_tools.image_generation import ImageGenerationInput, ImageGenerationTool
+from app.tools.seo_agent_tools.image_generation import (
+    ImageGenerationInput,
+    ImageGenerationTool,
+)
 from app.tools.seo_agent_tools.seo_optimizer import SeoOptimizerInput, SeoOptimizerTool
+import logging
 
 logger = logging.getLogger(__name__)
 _task_client = TaskServiceClient()
 _seo_optimizer = SeoOptimizerTool()
 _image_tool = ImageGenerationTool()
-
 
 class SeoAgent:
     async def generate_seo(self, state: SeoAgentState) -> SeoAgentState:
@@ -23,7 +25,10 @@ class SeoAgent:
         if result.success:
             return {**state, "seo_output": result.data}
 
-        logger.warning("SeoOptimizerTool failed, using empty seo_output | error=%s", result.data.get("error"))
+        logger.warning(
+            "SeoOptimizerTool failed, using empty seo_output | error=%s",
+            result.data.get("error"),
+        )
         return {**state, "seo_output": result.data}
 
     async def generate_image(self, state: SeoAgentState) -> SeoAgentState:

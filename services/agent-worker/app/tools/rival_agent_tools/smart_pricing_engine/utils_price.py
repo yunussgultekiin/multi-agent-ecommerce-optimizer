@@ -1,29 +1,29 @@
+from .models_price import CompetitorVariantOverlap, Positioning, VariantPricing
 import logging
 import math
 import re
 import statistics
 from typing import Optional
-from .models_price import Positioning, VariantPricing, CompetitorVariantOverlap
 
 logger = logging.getLogger(__name__)
-
 
 def filter_valid_competitors(tool_results: list) -> list[dict]:
     valid = []
     for result in tool_results:
         if result.success and isinstance(result.data, dict) and result.data:
             data = result.data
-            valid.append({
-                "competitor_name": data.get("competitor_name", ""),
-                "estimated_price": data.get("estimated_price"),
-                "rating": data.get("rating"),
-                "review_count": data.get("review_count"),
-                "brand": data.get("brand"),
-                "features": data.get("features", []),
-                "variants": data.get("variants", []),
-            })
+            valid.append(
+                {
+                    "competitor_name": data.get("competitor_name", ""),
+                    "estimated_price": data.get("estimated_price"),
+                    "rating": data.get("rating"),
+                    "review_count": data.get("review_count"),
+                    "brand": data.get("brand"),
+                    "features": data.get("features", []),
+                    "variants": data.get("variants", []),
+                }
+            )
     return valid
-
 
 def extract_valid_prices(competitors: list[dict]) -> list[float]:
     return [
@@ -34,13 +34,14 @@ def extract_valid_prices(competitors: list[dict]) -> list[float]:
         and c["estimated_price"] > 0
     ]
 
-
 def calculate_price_stats(prices: list[float]) -> dict:
     sorted_prices = sorted(prices)
     median = statistics.median(sorted_prices)
     mid = len(sorted_prices) // 2
     lower_half = sorted_prices[:mid]
-    upper_half = sorted_prices[mid:] if len(sorted_prices) % 2 == 0 else sorted_prices[mid + 1:]
+    upper_half = (
+        sorted_prices[mid:] if len(sorted_prices) % 2 == 0 else sorted_prices[mid + 1 :]
+    )
     q1 = statistics.median(lower_half) if lower_half else median
     q3 = statistics.median(upper_half) if upper_half else median
     iqr = q3 - q1
@@ -54,7 +55,6 @@ def calculate_price_stats(prices: list[float]) -> dict:
         "price_range_max": q3 + 1.5 * iqr,
     }
 
-
 def determine_positioning(user_price: float, q1: float, q3: float) -> Positioning:
     if user_price < q1:
         return Positioning.underpriced
@@ -62,8 +62,9 @@ def determine_positioning(user_price: float, q1: float, q3: float) -> Positionin
         return Positioning.overpriced
     return Positioning.optimal
 
-
-def calculate_positioning_score(user_price: float, q1: float, q3: float, median: float) -> float:
+def calculate_positioning_score(
+    user_price: float, q1: float, q3: float, median: float
+) -> float:
     if q1 == q3:
         return 1.0 if user_price == median else 0.5
 
@@ -75,12 +76,12 @@ def calculate_positioning_score(user_price: float, q1: float, q3: float, median:
 
     return round(1.0 - min(distance / max_distance, 1.0), 3)
 
-
-def calculate_market_power_score(rating: Optional[float], review_count: Optional[int]) -> float:
+def calculate_market_power_score(
+    rating: Optional[float], review_count: Optional[int]
+) -> float:
     if rating is None or review_count is None:
         return 0.0
     return round(rating * math.log(review_count + 1), 3)
-
 
 def calculate_market_power_gap(
     user_rating: Optional[float],
@@ -105,7 +106,6 @@ def calculate_market_power_gap(
         return f"User product is weakly positioned vs competitors (gap: {gap:.2f})"
     return f"User product has similar market power to competitors (gap: {gap:.2f})"
 
-
 def calculate_confidence_score(valid_price_count: int) -> float:
     if valid_price_count >= 7:
         return 0.9
@@ -114,7 +114,6 @@ def calculate_confidence_score(valid_price_count: int) -> float:
     elif 2 <= valid_price_count <= 3:
         return 0.5
     return 0.0
-
 
 def calculate_variant_pricing(
     user_variants: list[dict],
@@ -130,16 +129,17 @@ def calculate_variant_pricing(
         base_price = variant.get("price", median)
         price_delta = base_price - median
         suggested_price = max(q1, min(base_price, q3))
-        result.append(VariantPricing(
-            variant_name=variant.get("name", ""),
-            base_price=base_price,
-            price_delta=round(price_delta, 2),
-            suggested_price=round(suggested_price, 2),
-            positioning=determine_positioning(base_price, q1, q3),
-        ))
+        result.append(
+            VariantPricing(
+                variant_name=variant.get("name", ""),
+                base_price=base_price,
+                price_delta=round(price_delta, 2),
+                suggested_price=round(suggested_price, 2),
+                positioning=determine_positioning(base_price, q1, q3),
+            )
+        )
 
     return result
-
 
 def calculate_competitor_variant_overlap(
     user_variants: list[dict],
@@ -160,17 +160,22 @@ def calculate_competitor_variant_overlap(
                     if isinstance(comp_variant, str)
                     else comp_variant.get("name", "").lower()
                 )
-                if user_name and comp_name and (user_name in comp_name or comp_name in user_name):
+                if (
+                    user_name
+                    and comp_name
+                    and (user_name in comp_name or comp_name in user_name)
+                ):
                     matching.append(competitor["competitor_name"])
                     break
 
-        overlap_results.append(CompetitorVariantOverlap(
-            variant_name=user_variant.get("name", ""),
-            matching_competitors=matching,
-        ))
+        overlap_results.append(
+            CompetitorVariantOverlap(
+                variant_name=user_variant.get("name", ""),
+                matching_competitors=matching,
+            )
+        )
 
     return overlap_results
-
 
 def normalize_user_product(user_product: dict) -> dict:
     return {
@@ -183,7 +188,6 @@ def normalize_user_product(user_product: dict) -> dict:
         "rating": user_product.get("rating"),
         "review_count": user_product.get("review_count"),
     }
-
 
 def clean_json_response(raw_text: str) -> str:
     text = (raw_text or "").strip()
@@ -199,7 +203,6 @@ def clean_json_response(raw_text: str) -> str:
         return text[first_brace : last_brace + 1].strip()
 
     return text
-
 
 def log_tool_call(
     valid_price_count: int,

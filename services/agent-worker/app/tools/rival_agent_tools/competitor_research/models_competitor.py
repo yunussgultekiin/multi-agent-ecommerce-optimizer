@@ -1,11 +1,10 @@
-from typing import Literal, Optional
 from pydantic import BaseModel, Field, field_validator, model_validator
+from typing import Literal, Optional
 
 Platform = Literal["amazon", "trendyol", "hepsiburada"]
 MIN_VALID_COMPETITORS = 3
 MAX_VALID_COMPETITORS = 10
 IDEAL_RESEARCH_COUNT = 7
-
 
 def _normalize_string_list(values: list[str]) -> list[str]:
     result: list[str] = []
@@ -13,7 +12,6 @@ def _normalize_string_list(values: list[str]) -> list[str]:
         if isinstance(v, str) and v.strip():
             result.append(v.strip())
     return list(dict.fromkeys(result))
-
 
 class Variant(BaseModel):
     name: str = Field(..., min_length=1)
@@ -26,7 +24,6 @@ class Variant(BaseModel):
         if not value:
             raise ValueError("variant name cannot be empty")
         return value
-
 
 class CompetitorResult(BaseModel):
     competitor_name: str = Field(..., min_length=1)

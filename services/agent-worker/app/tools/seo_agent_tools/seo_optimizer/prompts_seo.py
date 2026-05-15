@@ -9,12 +9,12 @@ PLATFORM_TITLE_RECOMMENDED: dict[str, int] = {
 }
 
 TONE_DIRECTIVES: dict[str, str] = {
-    "samimi": (
+    "casual": (
         "Warm, friendly, and relatable. Use 'sen' (second person singular in Turkish). "
         "Focus on lifestyle integration and emotional connection. Short sentences, active voice. "
         "Suitable for Z-gen and millennial audiences on Trendyol."
     ),
-    "profesyonel": (
+    "professional": (
         "Professional, authoritative, and data-driven. Avoid unverified superlatives. "
         "Use specific numbers and measurable claims ('3-year warranty', '10,000 mAh'). "
         "Suitable for informed, comparison-shopping buyers."
@@ -24,7 +24,6 @@ TONE_DIRECTIVES: dict[str, str] = {
         "and brand prestige. Position as the luxury or top-tier choice. Confident, polished tone."
     ),
 }
-
 
 def get_description_directive(platform: str) -> str:
     if platform == "trendyol":
@@ -50,7 +49,6 @@ def get_description_directive(platform: str) -> str:
         "meta_description: Keyword-rich, benefit-focused product description. "
         "First sentence states the main use case and key feature."
     )
-
 
 def build_seo_prompt(
     user_product: dict,
@@ -87,11 +85,17 @@ def build_seo_prompt(
         competitor_keywords.extend(data.get("trending_keywords", [])[:5])
 
     all_keywords = list(dict.fromkeys(competitor_keywords + trending_features))
-    strengthen_args = praised_features[:5] if praised_features else user_product.get("features", [])[:5]
+    strengthen_args = (
+        praised_features[:5]
+        if praised_features
+        else user_product.get("features", [])[:5]
+    )
 
     user_features: list = user_product.get("features", [])
     variants: list = user_product.get("variants", [])
-    variant_names = [v.get("name", "") for v in variants if isinstance(v, dict) and v.get("name")]
+    variant_names = [
+        v.get("name", "") for v in variants if isinstance(v, dict) and v.get("name")
+    ]
     brand: str = user_product.get("brand", "")
     category: str = user_product.get("category", "")
 
@@ -105,7 +109,7 @@ def build_seo_prompt(
         else "  (No platform-specific SEO rules loaded — apply general best practices)"
     )
 
-    tone_desc = TONE_DIRECTIVES.get(tone_key, TONE_DIRECTIVES["profesyonel"])
+    tone_desc = TONE_DIRECTIVES.get(tone_key, TONE_DIRECTIVES["professional"])
     tone_override_note = (
         "(USER-DEFINED TONE OVERRIDE — apply this tone exactly)"
         if user_product.get("seo_tone") in TONE_DIRECTIVES

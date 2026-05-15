@@ -4,7 +4,6 @@ import re
 
 logger = logging.getLogger(__name__)
 
-
 def parse_json_response(raw_text: str) -> dict:
     text = (raw_text or "").strip()
 
@@ -21,7 +20,6 @@ def parse_json_response(raw_text: str) -> dict:
     if not isinstance(parsed, dict):
         raise ValueError("Gemini response must be a JSON object")
     return parsed
-
 
 def log_tool_call(
     competitor_name: str,
@@ -42,7 +40,6 @@ def log_tool_call(
             "fallback_used": fallback_used,
         },
     )
-
 
 def log_research_summary(
     input_count: int,

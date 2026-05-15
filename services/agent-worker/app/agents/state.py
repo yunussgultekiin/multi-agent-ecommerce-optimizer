@@ -17,6 +17,7 @@ class RivalAgentState(BaseAgentState):
     pricing_result: dict
     rival_json: dict
 
+
 class SeoAgentState(BaseAgentState):
     rival_json: dict
     user_product: dict

@@ -37,7 +37,9 @@ def build_trend_prompt(
 ) -> str:
     correction_block = ""
     if correction_context:
-        correction_block = f"PREVIOUS ATTEMPT FAILED:\n{correction_context}\n\nFix the output.\n"
+        correction_block = (
+            f"PREVIOUS ATTEMPT FAILED:\n{correction_context}\n\nFix the output.\n"
+        )
 
     platform_source = _get_platform_source(target_platform)
 
@@ -78,7 +80,9 @@ def build_fallback_trend_prompt(
 ) -> str:
     correction_block = ""
     if correction_context:
-        correction_block = f"PREVIOUS ATTEMPT FAILED:\n{correction_context}\n\nFix the output.\n"
+        correction_block = (
+            f"PREVIOUS ATTEMPT FAILED:\n{correction_context}\n\nFix the output.\n"
+        )
 
     return f"""{correction_block}
 Real-time trend data is unavailable. Use your knowledge of the "{category}" category
@@ -100,7 +104,6 @@ RESPOND ONLY in this JSON format:
 {_JSON_SCHEMA}
 {_COMMON_RULES}
 """
-
 
 def build_self_correction_prompt(original_prompt: str, last_error: str) -> str:
     return f"""

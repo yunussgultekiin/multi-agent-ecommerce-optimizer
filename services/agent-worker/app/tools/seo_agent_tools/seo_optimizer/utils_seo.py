@@ -1,15 +1,14 @@
-import logging
-from app.config import settings
 from .prompts_seo import TONE_DIRECTIVES
+from app.config import settings
+import logging
 
 logger = logging.getLogger(__name__)
 
 PLATFORM_DEFAULT_TONE: dict[str, str] = {
-    "trendyol": "samimi",
-    "amazon": "profesyonel",
-    "hepsiburada": "profesyonel",
+    "trendyol": "casual",
+    "amazon": "professional",
+    "hepsiburada": "professional",
 }
-
 
 def query_chroma(target_platform: str, category: str) -> list[str]:
     try:
@@ -21,11 +20,18 @@ def query_chroma(target_platform: str, category: str) -> list[str]:
             logger.warning("SEO ChromaDB collection is empty, skipping RAG")
             return []
 
-        query = f"{target_platform} {category} SEO başlık açıklama keyword optimizasyonu"
+        query = (
+            f"{target_platform} {category} SEO başlık açıklama keyword optimizasyonu"
+        )
         top_k = min(settings.chroma_top_k, total_count)
 
         where_filter = (
-            {"$or": [{"platform": {"$eq": target_platform}}, {"platform": {"$eq": "general"}}]}
+            {
+                "$or": [
+                    {"platform": {"$eq": target_platform}},
+                    {"platform": {"$eq": "general"}},
+                ]
+            }
             if target_platform != "general"
             else {"platform": {"$eq": "general"}}
         )
@@ -42,7 +48,9 @@ def query_chroma(target_platform: str, category: str) -> list[str]:
         docs: list[str] = results.get("documents", [[]])[0]
         logger.info(
             "ChromaDB RAG query returned %d chunks | platform=%s category=%s",
-            len(docs), target_platform, category,
+            len(docs),
+            target_platform,
+            category,
         )
         return docs
 
@@ -58,8 +66,7 @@ def resolve_tone(user_product: dict, target_platform: str) -> str:
     seo_tone = user_product.get("seo_tone", "")
     if seo_tone in TONE_DIRECTIVES:
         return seo_tone
-    return PLATFORM_DEFAULT_TONE.get(target_platform, "profesyonel")
-
+    return PLATFORM_DEFAULT_TONE.get(target_platform, "professional")
 
 def log_seo_tool_call(
     target_platform: str,

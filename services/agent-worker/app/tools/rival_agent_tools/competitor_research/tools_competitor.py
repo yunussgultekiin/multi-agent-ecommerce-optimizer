@@ -1,16 +1,18 @@
-import asyncio
-import logging
-from google.genai import types
-from pydantic import ValidationError
+from .models_competitor import (
+    MAX_VALID_COMPETITORS,
+    CompetitorResult,
+)
+from .prompts_competitor import build_competitor_prompt
+from .utils_competitor import log_research_summary, log_tool_call, parse_json_response
 from app.config import settings
 from app.core import ToolResult
 from app.gemini_client import call_gemini
-from .models_competitor import CompetitorResult, MIN_VALID_COMPETITORS, MAX_VALID_COMPETITORS
-from .prompts_competitor import build_competitor_prompt
-from .utils_competitor import log_research_summary, log_tool_call, parse_json_response
+import asyncio
+from google.genai import types
+import logging
+from pydantic import ValidationError
 
 logger = logging.getLogger(__name__)
-
 _SEARCH_TOOL = types.Tool(google_search=types.GoogleSearch())
 
 async def _research_one(
@@ -118,6 +120,7 @@ async def _fetch_replacement_competitors(
         from app.tools.rival_agent_tools.competitor_discovery.tools_discovery import (
             run_competitor_discovery_tool,
         )
+
         result = await run_competitor_discovery_tool(
             platform=platform,
             category=category,
@@ -129,7 +132,8 @@ async def _fetch_replacement_competitors(
             return []
         exclude_set = {name.lower().strip() for name in exclude_names}
         candidates = [
-            c for c in result.data.get("competitors", [])
+            c
+            for c in result.data.get("competitors", [])
             if c.get("competitor_name", "").lower().strip() not in exclude_set
         ]
         return candidates[:n]
@@ -146,7 +150,11 @@ async def run_competitor_research_tool(
     if not isinstance(competitors, list):
         raise ValueError("competitors must be a list")
 
-    category = category.strip() if isinstance(category, str) and category.strip() else "general"
+    category = (
+        category.strip()
+        if isinstance(category, str) and category.strip()
+        else "general"
+    )
     competitors = competitors[:MAX_VALID_COMPETITORS]
     input_count = len(competitors)
 
@@ -180,7 +188,9 @@ async def run_competitor_research_tool(
                 competitor.get("competitor_name", "unknown"),
             )
             tool_results.append(
-                ToolResult(success=False, fallback_used=True, data={"error": str(result)})
+                ToolResult(
+                    success=False, fallback_used=True, data={"error": str(result)}
+                )
             )
         elif (
             isinstance(result, ToolResult)
@@ -189,22 +199,22 @@ async def run_competitor_research_tool(
             and result.data.get("estimated_price") is None
         ):
             logger.warning(
-                "Competitor has no price data, marking for replacement | competitor=%s",
+                "Competitor has no price data, queuing for one-time replacement | competitor=%s",
                 competitor.get("competitor_name", "unknown"),
             )
-            tool_results.append(
-                ToolResult(success=False, fallback_used=True, data={"error": "No price data found"})
-            )
+            tool_results.append(result)
             priceless_indices.append(i)
         else:
             tool_results.append(result)
 
     if priceless_indices:
         all_known_names = [c.get("competitor_name", "") for c in competitors]
-        platform = competitors[0].get("platform", "trendyol") if competitors else "trendyol"
+        platform = (
+            competitors[0].get("platform", "trendyol") if competitors else "trendyol"
+        )
 
         logger.info(
-            "Fetching %d replacement competitors | platform=%s",
+            "Fetching %d replacement competitors (single pass) | platform=%s",
             len(priceless_indices),
             platform,
         )
@@ -232,11 +242,20 @@ async def run_competitor_research_tool(
             )
 
             for idx, rep_result in zip(priceless_indices, replacement_raw):
-                if not isinstance(rep_result, Exception):
+                if isinstance(rep_result, Exception):
+                    continue
+                if (
+                    isinstance(rep_result, ToolResult)
+                    and rep_result.success
+                    and rep_result.data.get("estimated_price") is not None
+                ):
                     tool_results[idx] = rep_result
                     logger.info(
-                        "Replaced null-price competitor at slot %d with new result",
-                        idx,
+                        "Replaced null-price competitor at slot %d with priced result", idx
+                    )
+                else:
+                    logger.info(
+                        "Replacement at slot %d also has no price — keeping null, moving on", idx
                     )
 
     successful_count = sum(1 for r in tool_results if r.success)

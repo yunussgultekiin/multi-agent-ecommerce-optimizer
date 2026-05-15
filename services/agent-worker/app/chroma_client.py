@@ -1,8 +1,8 @@
+from app.config import settings
+import chromadb
 import json
 import logging
 from pathlib import Path
-import chromadb
-from app.config import settings
 
 logger = logging.getLogger(__name__)
 _DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "seo_chunks.json"
@@ -15,7 +15,6 @@ def get_chroma_client() -> chromadb.ClientAPI:
         _chroma_client = chromadb.EphemeralClient()
     return _chroma_client
 
-
 def get_seo_collection():
     global _seo_collection
     if _seo_collection is None:
@@ -26,11 +25,12 @@ def get_seo_collection():
         )
     return _seo_collection
 
-
 def seed_seo_chunks() -> None:
     try:
         if not _DATA_PATH.exists():
-            logger.warning("seo_chunks.json not found at %s — skipping seed", _DATA_PATH)
+            logger.warning(
+                "seo_chunks.json not found at %s — skipping seed", _DATA_PATH
+            )
             return
 
         with open(_DATA_PATH, "r", encoding="utf-8") as f:

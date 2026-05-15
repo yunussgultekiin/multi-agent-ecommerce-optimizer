@@ -1,17 +1,22 @@
-import json
-import logging
-from google.genai import types
-from pydantic import ValidationError
+from .models_market import MarketGapResult
+from .prompts_market import (
+    build_fallback_prompt,
+    build_market_gap_prompt,
+    build_self_correction_prompt,
+)
+from .utils_market import (
+    clean_json_response,
+    filter_valid_competitors,
+    log_tool_call,
+    normalize_user_product,
+)
 from app.config import settings
 from app.core import ToolResult
 from app.gemini_client import call_gemini
-from .models_market import MarketGapResult
-from .prompts_market import (
-    build_market_gap_prompt,
-    build_fallback_prompt,
-    build_self_correction_prompt,
-)
-from .utils_market import filter_valid_competitors, normalize_user_product, clean_json_response, log_tool_call
+from google.genai import types
+import json
+import logging
+from pydantic import ValidationError
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +31,9 @@ async def analyze_market_gap(
     prompt = (
         build_fallback_prompt(user_product, sentiment_result, trend_result)
         if no_competitors
-        else build_market_gap_prompt(user_product, competitors, sentiment_result, trend_result)
+        else build_market_gap_prompt(
+            user_product, competitors, sentiment_result, trend_result
+        )
     )
 
     last_error = None
@@ -39,9 +46,7 @@ async def analyze_market_gap(
             fallback_used = True
 
         current_prompt = (
-            build_self_correction_prompt(prompt, last_error)
-            if attempt > 0
-            else prompt
+            build_self_correction_prompt(prompt, last_error) if attempt > 0 else prompt
         )
 
         try:
@@ -67,7 +72,9 @@ async def analyze_market_gap(
                 positioning_score=result.positioning_score,
             )
 
-            return ToolResult(success=True, data=result.model_dump(), fallback_used=fallback_used)
+            return ToolResult(
+                success=True, data=result.model_dump(), fallback_used=fallback_used
+            )
 
         except (ValidationError, json.JSONDecodeError) as exc:
             last_error = str(exc)
@@ -103,9 +110,13 @@ async def analyze_market_gap(
                 fallback_used=True,
                 positioning_score=None,
             )
-            return ToolResult(success=False, fallback_used=True, data={"error": str(exc)})
+            return ToolResult(
+                success=False, fallback_used=True, data={"error": str(exc)}
+            )
 
-    return ToolResult(success=False, fallback_used=True, data={"error": "Unexpected error"})
+    return ToolResult(
+        success=False, fallback_used=True, data={"error": "Unexpected error"}
+    )
 
 async def run_market_gap_analyzer(
     user_product: dict,

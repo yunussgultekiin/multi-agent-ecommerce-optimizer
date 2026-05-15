@@ -1,12 +1,12 @@
-import logging
-from app.core import ToolResult, WorkflowError
-from app.gemini_correction import GeminiCorrectionLoop
 from .models_seo import SeoOptimizerInput, SeoOutput
 from .prompts_seo import PLATFORM_TITLE_LIMITS, build_seo_prompt
 from .utils_seo import log_seo_tool_call, query_chroma, resolve_tone
+from app.core import ToolResult, WorkflowError
+from app.gemini_correction import GeminiCorrectionLoop
+import asyncio
+import logging
 
 logger = logging.getLogger(__name__)
-
 
 class SeoOptimizerTool:
     def __init__(self) -> None:
@@ -18,7 +18,8 @@ class SeoOptimizerTool:
         category = user_product.get("category", "")
         seo_tone_raw = user_product.get("seo_tone", "")
 
-        rag_chunks = query_chroma(target_platform, category)
+        loop = asyncio.get_running_loop()
+        rag_chunks = await loop.run_in_executor(None, query_chroma, target_platform, category)
         tone_key = resolve_tone(user_product, target_platform)
 
         prompt = build_seo_prompt(
@@ -37,15 +38,21 @@ class SeoOptimizerTool:
         except WorkflowError as exc:
             logger.error(
                 "SeoOptimizerTool self-correction exhausted | platform=%s error=%s",
-                target_platform, exc,
+                target_platform,
+                exc,
             )
-            return ToolResult(success=False, fallback_used=True, data={"error": str(exc)})
+            return ToolResult(
+                success=False, fallback_used=True, data={"error": str(exc)}
+            )
         except Exception as exc:
             logger.error(
                 "SeoOptimizerTool unexpected error | platform=%s error=%s",
-                target_platform, exc,
+                target_platform,
+                exc,
             )
-            return ToolResult(success=False, fallback_used=True, data={"error": str(exc)})
+            return ToolResult(
+                success=False, fallback_used=True, data={"error": str(exc)}
+            )
 
         title_limit = PLATFORM_TITLE_LIMITS.get(target_platform, 200)
         title_char_count = len(result.title_suggestion)

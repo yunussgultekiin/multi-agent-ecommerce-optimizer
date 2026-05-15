@@ -39,6 +39,7 @@ Rules:
 - Do not include markdown, comments, or trailing commas.
 """
 
+
 def build_market_gap_prompt(
     user_product: dict,
     competitors: list[dict],
@@ -86,7 +87,9 @@ RESPOND ONLY in this JSON format:
 {_COMMON_RULES}
 """
 
-def build_fallback_prompt(user_product: dict, sentiment_result: dict, trend_result: dict) -> str:
+def build_fallback_prompt(
+    user_product: dict, sentiment_result: dict, trend_result: dict
+) -> str:
     sentiment_block = ""
     if sentiment_result:
         sentiment_block = f"""

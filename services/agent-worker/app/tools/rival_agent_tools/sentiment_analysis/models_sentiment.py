@@ -1,11 +1,9 @@
 from pydantic import BaseModel, Field, field_validator
 
-
 class CompetitorSentiment(BaseModel):
     competitor_name: str
     positive: list[str] = Field(default_factory=list)
     negative: list[str] = Field(default_factory=list)
-
 
 class SentimentResult(BaseModel):
     pain_points: list[str] = Field(..., min_length=1)
@@ -14,7 +12,9 @@ class SentimentResult(BaseModel):
     marketing_angles: list[str] = Field(default_factory=list)
     risk_warnings: list[str] = Field(default_factory=list)
 
-    @field_validator("pain_points", "praised_features", "marketing_angles", "risk_warnings")
+    @field_validator(
+        "pain_points", "praised_features", "marketing_angles", "risk_warnings"
+    )
     @classmethod
     def normalize_list(cls, values: list[str]) -> list[str]:
         result = []

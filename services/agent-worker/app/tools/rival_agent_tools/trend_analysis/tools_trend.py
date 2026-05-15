@@ -1,21 +1,20 @@
-import logging
-from google.genai import types
-from pydantic import ValidationError
+from .models_trend import TrendResult
+from .prompts_trend import (
+    build_fallback_trend_prompt,
+    build_self_correction_prompt,
+    build_trend_prompt,
+)
+from .utils_trend import log_tool_call, parse_json_response
 from app.config import settings
 from app.core import ToolResult
 from app.gemini_client import call_gemini
-from .models_trend import TrendResult
-from .prompts_trend import (
-    build_trend_prompt,
-    build_fallback_trend_prompt,
-    build_self_correction_prompt,
-)
-from .utils_trend import parse_json_response, log_tool_call
+from google.genai import types
+import logging
+from pydantic import ValidationError
 
 logger = logging.getLogger(__name__)
 
 _GROUNDING_TOOL = types.Tool(google_search=types.GoogleSearch())
-
 
 async def run_trend_analyzer(
     category: str,
@@ -23,7 +22,11 @@ async def run_trend_analyzer(
     user_product: dict,
     max_retries: int = 2,
 ) -> ToolResult:
-    category = category.strip() if isinstance(category, str) and category.strip() else "general"
+    category = (
+        category.strip()
+        if isinstance(category, str) and category.strip()
+        else "general"
+    )
     product_title = user_product.get("title", "").strip()
     brand = user_product.get("brand", "").strip()
 
@@ -101,7 +104,9 @@ async def run_trend_analyzer(
                 grounding_hit=grounding_hit,
                 fallback_used=True,
             )
-            return ToolResult(success=False, fallback_used=True, data={"error": str(exc)})
+            return ToolResult(
+                success=False, fallback_used=True, data={"error": str(exc)}
+            )
 
     fallback_prompt = build_fallback_trend_prompt(
         category=category,
@@ -139,7 +144,9 @@ async def run_trend_analyzer(
                 fallback_used=True,
             )
 
-            return ToolResult(success=True, fallback_used=True, data=result.model_dump())
+            return ToolResult(
+                success=True, fallback_used=True, data=result.model_dump()
+            )
 
         except (ValidationError, ValueError) as exc:
             last_error = str(exc)

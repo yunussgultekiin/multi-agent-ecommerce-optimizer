@@ -1,4 +1,4 @@
-from .models_discovery import PLATFORM_SITES, TARGET_COMPETITORS, MIN_COMPETITORS
+from .models_discovery import MIN_COMPETITORS, PLATFORM_SITES, TARGET_COMPETITORS
 
 def build_discovery_prompt(
     platform: str,
@@ -17,7 +17,9 @@ def build_discovery_prompt(
 
     correction_block = ""
     if correction_context:
-        correction_block = f"PREVIOUS ATTEMPT FAILED:\n{correction_context}\n\nFix the output.\n"
+        correction_block = (
+            f"PREVIOUS ATTEMPT FAILED:\n{correction_context}\n\nFix the output.\n"
+        )
 
     exclude_block = ""
     if exclude_names:
@@ -31,7 +33,7 @@ Context:
 - Platform: {platform} — use search filter: {site_filter}
 - Category: "{category}"
 - User product: "{product_title}"
-- User brand: "{brand or 'unknown'}"
+- User brand: "{brand or "unknown"}"
 
 Goal:
 Find products that directly compete with the user's product on {platform}.
@@ -62,6 +64,7 @@ Rules:
 - Avoid duplicate or nearly identical competitor_name values.
 - Do not include markdown, comments, or trailing commas.
 """
+
 
 def build_discovery_correction_context(last_error: str) -> str:
     return (

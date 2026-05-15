@@ -1,6 +1,6 @@
+from app.redis import get_redis, report_progress
 import logging
 from typing import Any, Awaitable, Callable
-from app.redis import get_redis, report_progress
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,11 @@ class NodeRunner:
         async def execute(state: dict) -> dict:
             task_id = state["task_id"]
             if await _is_cancelled(task_id):
-                logger.info("Node skipped due to cancellation: task_id=%s step=%s", task_id, step_name)
+                logger.info(
+                    "Node skipped due to cancellation: task_id=%s step=%s",
+                    task_id,
+                    step_name,
+                )
                 return {**state, "cancelled": True, "status": "cancelled"}
             await report_progress(task_id, step_name, "running", completion_pct)
             updated_state = await node_fn(state)

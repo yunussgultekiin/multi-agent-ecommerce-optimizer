@@ -1,22 +1,21 @@
-import logging
 from app.agents.state import RivalAgentState
 from app.core import ToolResult, WorkflowError
 from app.task_client import TaskServiceClient
-from app.workflow.error_handler import WorkflowErrorHandler
-from app.workflow.seo_graph import build_seo_state_from_rival, compiled_seo_graph
 from app.tools.rival_agent_tools import (
-    run_competitor_discovery_tool,
-    run_competitor_research_tool,
     IDEAL_RESEARCH_COUNT,
     MIN_VALID_COMPETITORS,
+    run_competitor_discovery_tool,
+    run_competitor_research_tool,
     run_market_gap_analyzer,
     run_sentiment_analyzer,
     run_smart_pricing_engine,
     run_trend_analyzer,
 )
+from app.workflow.error_handler import WorkflowErrorHandler
+from app.workflow.seo_graph import build_seo_state_from_rival, compiled_seo_graph
+import logging
 
 logger = logging.getLogger(__name__)
-
 
 def _to_tool_results(research_results: list[dict]) -> list[ToolResult]:
     return [
@@ -27,7 +26,6 @@ def _to_tool_results(research_results: list[dict]) -> list[ToolResult]:
         )
         for r in research_results
     ]
-
 
 class RivalAgent:
     async def discover_competitors(self, state: RivalAgentState) -> RivalAgentState:
@@ -137,18 +135,27 @@ class RivalAgent:
         try:
             result = await run_market_gap_analyzer(
                 user_product=state["user_product"],
-                competitor_tool_results=_to_tool_results(state["competitor_research_results"]),
+                competitor_tool_results=_to_tool_results(
+                    state["competitor_research_results"]
+                ),
                 sentiment_result=state.get("sentiment_result") or {},
                 trend_result=state.get("trend_result") or {},
             )
         except Exception as exc:
-            raise WorkflowError(str(exc), task_id=task_id)
+            logger.warning(
+                "MarketGapAnalyzer raised exception, continuing with empty gap | task_id=%s error=%s",
+                task_id,
+                exc,
+            )
+            return {**state, "gap_result": {}}
 
         if not result.success:
-            raise WorkflowError(
-                f"Market gap analysis failed: {result.data}",
-                task_id=task_id,
+            logger.warning(
+                "MarketGapAnalyzer failed, continuing with empty gap | task_id=%s error=%s",
+                task_id,
+                result.data.get("error"),
             )
+            return {**state, "gap_result": {}}
 
         return {**state, "gap_result": result.data}
 
@@ -158,7 +165,9 @@ class RivalAgent:
         try:
             result = await run_smart_pricing_engine(
                 user_product=state["user_product"],
-                competitor_tool_results=_to_tool_results(state["competitor_research_results"]),
+                competitor_tool_results=_to_tool_results(
+                    state["competitor_research_results"]
+                ),
                 gap_result=state.get("gap_result"),
                 sentiment_result=state.get("sentiment_result") or {},
                 trend_result=state.get("trend_result") or {},

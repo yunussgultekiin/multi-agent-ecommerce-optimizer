@@ -1,21 +1,20 @@
-import asyncio
-import json
-import logging
-from typing import Callable, TypeVar
-
-import google.api_core.exceptions
-import google.auth.exceptions
-from google import genai
-from google.genai import types
-from google.genai.types import HttpOptions
-from pydantic import BaseModel, ValidationError
-
 from app.config import settings
 from app.core import WorkflowError
+import asyncio
+from google import genai
+import google.api_core.exceptions
+import google.auth.exceptions
+from google.genai import types
+from google.genai.types import HttpOptions
+import json
+import logging
+from pydantic import BaseModel, ValidationError
+from typing import Callable, TypeVar
 
 logger = logging.getLogger(__name__)
 T = TypeVar("T", bound=BaseModel)
 _MAX_RETRIES = 2
+_CALL_TIMEOUT_SECONDS = 30
 
 _client = genai.Client(
     vertexai=True,
@@ -42,16 +41,26 @@ class GeminiCorrectionLoop:
         for attempt in range(_MAX_RETRIES + 1):
             current_prompt = self._build_retry_prompt(prompt, last_error, attempt)
             try:
-                response = await loop.run_in_executor(
-                    None,
-                    lambda p=current_prompt: _client.models.generate_content(
-                        model=self._model_name,
-                        contents=p,
-                        config=types.GenerateContentConfig(
-                            thinking_config=types.ThinkingConfig(thinking_budget=0),
+                response = await asyncio.wait_for(
+                    loop.run_in_executor(
+                        None,
+                        lambda p=current_prompt: _client.models.generate_content(
+                            model=self._model_name,
+                            contents=p,
+                            config=types.GenerateContentConfig(
+                                thinking_config=types.ThinkingConfig(thinking_budget=0),
+                            ),
                         ),
                     ),
+                    timeout=_CALL_TIMEOUT_SECONDS,
                 )
+            except asyncio.TimeoutError:
+                last_error = f"timed out after {_CALL_TIMEOUT_SECONDS}s"
+                logger.warning(
+                    "Gemini call timed out | attempt=%d/%d model=%s",
+                    attempt + 1, _MAX_RETRIES + 1, self._model_name,
+                )
+                continue
             except google.auth.exceptions.DefaultCredentialsError as exc:
                 raise WorkflowError(
                     "Google Cloud credentials not configured. "
@@ -77,7 +86,12 @@ class GeminiCorrectionLoop:
                 return result
             except (ValidationError, json.JSONDecodeError, ValueError) as exc:
                 last_error = str(exc)
-                logger.warning("Gemini attempt %d/%d failed: %s", attempt + 1, _MAX_RETRIES + 1, last_error)
+                logger.warning(
+                    "Gemini attempt %d/%d failed: %s",
+                    attempt + 1,
+                    _MAX_RETRIES + 1,
+                    last_error,
+                )
         raise WorkflowError(
             f"Gemini self-correction exhausted after {_MAX_RETRIES + 1} attempts. Last error: {last_error}",
             task_id=task_id,

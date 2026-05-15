@@ -1,6 +1,4 @@
-from typing import Optional
 from pydantic import BaseModel, Field, field_validator
-
 
 class Cluster(BaseModel):
     label: str
@@ -8,12 +6,10 @@ class Cluster(BaseModel):
     price_range_min: float = 0.0
     price_range_max: float = 0.0
 
-
 class BrandLandscape(BaseModel):
     premium_brands: list[str] = Field(default_factory=list)
     budget_brands: list[str] = Field(default_factory=list)
     user_brand_position: str
-
 
 class MarketGapResult(BaseModel):
     clusters: list[Cluster] = Field(..., min_length=1)

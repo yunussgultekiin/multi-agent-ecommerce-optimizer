@@ -1,6 +1,5 @@
 from pydantic import BaseModel, Field, field_validator
 
-
 class TrendResult(BaseModel):
     trending_features: list[str] = Field(..., min_length=1)
     demand_signals: list[str] = Field(default_factory=list)

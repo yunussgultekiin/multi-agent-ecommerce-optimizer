@@ -70,7 +70,9 @@ def build_sentiment_prompt(
 ) -> str:
     correction_block = ""
     if correction_context:
-        correction_block = f"PREVIOUS ATTEMPT FAILED:\n{correction_context}\n\nFix the output.\n"
+        correction_block = (
+            f"PREVIOUS ATTEMPT FAILED:\n{correction_context}\n\nFix the output.\n"
+        )
 
     competitors_block = "\n".join(f"- {name}" for name in competitor_names)
 
@@ -132,7 +134,9 @@ def build_fallback_sentiment_prompt(
 ) -> str:
     correction_block = ""
     if correction_context:
-        correction_block = f"PREVIOUS ATTEMPT FAILED:\n{correction_context}\n\nFix the output.\n"
+        correction_block = (
+            f"PREVIOUS ATTEMPT FAILED:\n{correction_context}\n\nFix the output.\n"
+        )
 
     return f"""{correction_block}
 No specific competitor names are available. Search sikayetvar.com and eksisozluk.com

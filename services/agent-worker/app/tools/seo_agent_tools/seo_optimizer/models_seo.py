@@ -1,11 +1,9 @@
 from pydantic import BaseModel, Field
 
-
 class VariantSeo(BaseModel):
     variant_name: str
     title_suggestion: str
     keyword_additions: list[str] = Field(default_factory=list)
-
 
 class SeoOutput(BaseModel):
     title_suggestion: str = Field(..., min_length=1)
@@ -16,7 +14,6 @@ class SeoOutput(BaseModel):
     platform_specific_tips: list[str] = Field(default_factory=list)
     variant_seo: list[VariantSeo] = Field(default_factory=list)
     product_development_ideas: list[str] = Field(default_factory=list)
-
 
 class SeoOptimizerInput(BaseModel):
     rival_json: dict
