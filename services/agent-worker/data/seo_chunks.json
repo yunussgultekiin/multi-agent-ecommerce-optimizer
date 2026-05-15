@@ -1,0 +1,242 @@
+[
+  {
+    "id": "tr-title-1",
+    "platform": "trendyol",
+    "topic": "title_structure",
+    "text": "KOBİ için Trendyol başlık yapısı: Küçük ve orta ölçekli satıcılar marka adını başa koymamalı; büyük markalar kadar bilinirliği olmayan bir KOBİ için başlığın ilk kelimeleri ürün tipi ve ana özellik olmalıdır. Doğru format: [Ürün Tipi] + [Ana Özellik] + [Marka] + [Varyant]. Örnek: 'Deri Cüzdan İnce Tasarım Kartlıklı - BrandX'. Maksimum 100 karakter. İlk 40 karakter, arama sonuçlarında görünen tek kısımdır; bu bölüm en yüksek hacimli keyword'i içermelidir."
+  },
+  {
+    "id": "tr-title-2",
+    "platform": "trendyol",
+    "topic": "title_structure",
+    "text": "KOBİ'nin büyük markalarla başlık rekabeti: Genel ve jenerik keyword'lerde (örn. 'koşu ayakkabısı', 'kadın çanta') büyük markalar baskın olduğundan KOBİ'ler bu alanlarda üst sıraları almakta zorlanır. Çözüm: Büyük markaların atladığı niche kombinasyonları (örn. 'hafif taban koşu ayakkabısı', 'vegan deri kadın omuz çantası') başlığa taşımak. Bu kombinasyonlar daha az rekabetçidir ve satın alma niyeti daha güçlüdür."
+  },
+  {
+    "id": "tr-title-3",
+    "platform": "trendyol",
+    "topic": "title_structure",
+    "text": "KOBİ'nin yerel üretim ve el yapımı avantajı başlıkta: 'El Yapımı', 'Yerli Üretim', 'Türk Malı', 'Küçük Seri', 'Sipariş Üzerine' gibi ifadeler Trendyol'da büyük markalar tarafından kullanılmayan güçlü ayrıştırıcılardır. Bu tanımlayıcılar hem SEO sinyali hem de güven unsuru taşır. Örnek: 'El Yapımı Seramik Kupa Kişiye Özel İsim Yazılı'. Kalite veya özgünlük odaklı KOBİ'ler bu kelimelerle niche trafik çekebilir."
+  },
+  {
+    "id": "tr-longtail-1",
+    "platform": "trendyol",
+    "topic": "longtail_strategy",
+    "text": "KOBİ için Trendyol longtail önceliği: Büyük markaların bütçesiyle rekabet edilemeyen geniş keyword'ler yerine, arama hacmi daha düşük ama dönüşümü yüksek niche longtail kombinasyonlarına odaklanılmalıdır. KOBİ için altın kural: ne kadar spesifik olursa rakip o kadar az, alıcı o kadar kararlıdır. Örnek: 'koşu ayakkabısı' yerine 'düz taban koşu ayakkabısı pronasyon' veya 'hafif trailrunning ayakkabı erkek' tercih edilmelidir."
+  },
+  {
+    "id": "tr-longtail-2",
+    "platform": "trendyol",
+    "topic": "longtail_strategy",
+    "text": "KOBİ'de demografik segment, materyal ve renk bazlı longtail: '[cinsiyet] [ürün]' (örn. 'erkek mont', 'kadın çanta') ve '[yaş grubu] [ürün]' (örn. 'çocuk ayakkabısı', 'bebek kıyafeti') kombinasyonları Trendyol filtresiyle doğrudan örtüşür. '[materyal] [ürün]' ('deri cüzdan', 'pamuk tişört') ve '[renk] [ürün]' ('siyah sneaker', 'beyaz bluz') varyasyonları renk ve materyal filtresi kullanan alıcıları yakalar. KOBİ'ler büyük markaların yoğun baskı uyguladığı genel hedefleme yerine bu spesifik segmentlerde rekabetçi olmaya çalışmalıdır."
+  },
+  {
+    "id": "tr-longtail-3",
+    "platform": "trendyol",
+    "topic": "longtail_strategy",
+    "text": "KOBİ için sezonsal ve hediye bazlı longtail fırsatları: Büyük markaların yıl boyu reklam bütçesiyle kapattığı genel aramalar yerine, KOBİ'ler sezonsal açıkları hedeflemelidir. 'Anneler günü hediyesi [ürün]', 'bayram hediyesi', 'mezuniyet hediyesi', 'doğum günü için [ürün]' kombinasyonları büyük markaların sezonda geç hazırlandığı niche alanlardır. 'Yaz [ürün]', 'kış [ürün]', 'okul sezonu [ürün]' dönemsel kombinasyonları kampanya dönemlerinde organik sıralamada hızla yükselir ve reklam harcaması gerekmeden görünürlük sağlar."
+  },
+  {
+    "id": "tr-description-1",
+    "platform": "trendyol",
+    "topic": "description_structure",
+    "text": "KOBİ için Trendyol açıklama yapısı: Büyük markaların kısa ve marka bağımlı açıklamalarından farklı olarak, KOBİ'ler bilgi yoğun ve detaylı açıklamalarla güven inşa etmelidir. Açıklama 150-500 kelime arasında olmalı; ilk 2 cümle ana keyword ve ürün faydasını içermelidir. KOBİ için önerilen yapı: 'Bu ürünü kim yapıyor / nerede üretiyor' (kısa güven paragrafı) → Özellikler listesi (madde madde) → Kullanım senaryosu → Malzeme ve üretim detayı → Bakım/garanti bilgisi."
+  },
+  {
+    "id": "tr-description-2",
+    "platform": "trendyol",
+    "topic": "description_structure",
+    "text": "KOBİ'nin Trendyol açıklamasında güven inşası: Küçük satıcı olmanın en büyük SEO dezavantajı düşük satış sayısı ve yorum eksikliğidir. Bunu telafi etmek için açıklamada: üretim süreci, kullanılan malzeme kalitesi, kalite kontrol adımları, teslimat süreci ve iade garantisi detaylı yazılmalıdır. Bu içerik hem keyword derinliği hem de müşteri güveni sağlar. '•' veya '-' işaretleriyle madde madde özellik listesi yapılmalı; her madde 10-15 kelimeyi aşmamalıdır."
+  },
+  {
+    "id": "tr-description-3",
+    "platform": "trendyol",
+    "topic": "description_structure",
+    "text": "KOBİ için Trendyol açıklamasında hikaye anlatımı ve dönüşüm: Büyük markalar sadece ürünü anlatır; KOBİ'ler ürünün arkasındaki hikayeyi anlatabilir. 'Atölyemizde elle üretilen', 'Aile işletmemizde 15 yıldır', 'Her ürün tek tek kontrol edilir' gibi ifadeler müşteri bağlılığı ve güven oluşturur. Ürünün günlük hayata katkısı somut bir örnekle belirtilmelidir. Hızlı kargo, kolay iade gibi Trendyol avantajlarına organik biçimde değinilebilir."
+  },
+  {
+    "id": "tr-tone-1",
+    "platform": "trendyol",
+    "topic": "tone_and_format",
+    "text": "KOBİ için Trendyol yazım tonu — SAMİMİ VE ÖZGÜN: KOBİ'nin en büyük avantajı büyük markaların veremediği özgünlük ve samimiliktir. Trendyol'da 'sen' dili kullanılmalı; ürün, alıcının yaşam tarzına entegre edilmelidir. Kurumsal veya soğuk bir dil KOBİ için dezavantaj yaratır. Örnek: 'Sabah kahveni içerken okuyabileceğin, hafta sonu çantana sığan bir kitap kapağı tasarladık.' Kısa, sıcak ve direkt cümleler tercih edilmelidir."
+  },
+  {
+    "id": "tr-tone-2",
+    "platform": "trendyol",
+    "topic": "tone_and_format",
+    "text": "KOBİ için Trendyol format direktifi — MADDE MADDE ÖZELLİK: KOBİ'lerin özelliklerini madde madde listelemesi, büyük markalara karşı bilgi şeffaflığı sağlar. Her özellik kısa ve özlü biçimde ayrı bir maddede yazılmalıdır (max 10-15 kelime). Özelliği fayda diliyle ifade et: 'Su geçirmez materyal' yerine 'Yağmurlu havalarda da içini kuru tutar'. Emojiler tutumlu kullanılabilir (•, ✓); fazla emoji KOBİ'ye çocuksu bir izlenim verir."
+  },
+  {
+    "id": "tr-tone-3",
+    "platform": "trendyol",
+    "topic": "tone_and_format",
+    "text": "KOBİ'nin Trendyol'da ton avantajı — MÜŞTERİYE YAKIN DİL: KOBİ, büyük markaların ulaşamadığı kişisel iletişim tonunu kullanabilir. Müşteri yorumlarında sık geçen kelimeler ve şikayetler açıklamaya yansıtılabilir: 'Müşterilerimizin en çok sorduğu soru...' ya da 'Önceki alıcılarımızın en beğendiği özellik...'. Z kuşağı ve millennial kitlesi için güncel, özgüvenli ve özgün bir dil tercih edilmeli; 'en iyi', 'dünyanın en kalitelisi' gibi süperlativlerden kaçınılmalıdır."
+  },
+  {
+    "id": "az-title-1",
+    "platform": "amazon",
+    "topic": "title_structure",
+    "text": "KOBİ için Amazon başlık yapısı: Küçük satıcılar Amazon'da büyük markaların hâkimiyetine karşı başlıkta niche konumlanmalıdır. KOBİ için doğru format: [Ürün Tipi] + [Ana Teknik Özellik] + [Marka] + [Kullanım Amacı] + [Varyant]. Her kelimenin ilk harfi büyük (Title Case). Önerilen uzunluk 80 karakterin altı, maksimum 200 karakter. A9 algoritması başlığın ilk 5 kelimesini en yüksek ağırlıkla değerlendirir; KOBİ için bu bölümde marka yerine spesifik ürün özelliği olması avantaj sağlar."
+  },
+  {
+    "id": "az-title-2",
+    "platform": "amazon",
+    "topic": "title_structure",
+    "text": "KOBİ'nin Amazon başlığında niche özellik vurgusu: Büyük markalar geniş keyword'leri kapatır; KOBİ'ler Amazon başlığında rakiplerin atladığı teknik niche özellikleri öne çıkarmalıdır. Sayısal teknik değerler (500W, 64GB, 3000mAh, 1.5kg) başlıkta güven ve bilgi değeri katar ve büyük markaların genel tanımlamalarından ayrışmayı sağlar. Büyük/küçük harf kuralı: Bağlaçlar (ve, ile, için) küçük; sayısal değerler rakamla ('2 Adet', '500ml')."
+  },
+  {
+    "id": "az-title-3",
+    "platform": "amazon",
+    "topic": "title_structure",
+    "text": "KOBİ için Amazon A9 başlık optimizasyonu: Backend search terms ile örtüşen keyword'ler başlıktan çıkarılabilir; her keyword'ün bir kez kullanılması yeterlidir. KOBİ için kritik: marka bilinirliği düşük olduğundan marka adını başlığın sonuna bırakın ve ilk üçte birlik kısma kategori + ana özellik + en yüksek hacimli keyword'i yerleştirin. TAMAMI BÜYÜK HARF kullanımı A9 tarafından spam sinyali olarak algılanır."
+  },
+  {
+    "id": "az-longtail-1",
+    "platform": "amazon",
+    "topic": "longtail_strategy",
+    "text": "KOBİ için Amazon longtail stratejisi — niche satın alma niyeti: Büyük markaların kısa ve rekabetçi keyword'lerine girmek yerine, KOBİ'ler '[spesifik özellik] [ürün] [kullanım amacı]' kombinasyonlarına yatırım yapmalıdır. Örnek: 'kablosuz kulaklık koşu için ter geçirmez', 'paslanmaz çelik termos 500ml sızdırmaz'. A9 algoritması dönüşüm oranını sıralama sinyali olarak kullanır; niche longtail'ler hem daha az rekabetçidir hem de daha yüksek dönüşüm getirir."
+  },
+  {
+    "id": "az-longtail-2",
+    "platform": "amazon",
+    "topic": "longtail_strategy",
+    "text": "KOBİ'de Amazon arama terimi varyasyonları: Teknoloji ve teknik ürünlerde İngilizce ve Türkçe varyasyonlar hedeflenmeli ('wireless' + 'kablosuz', 'smartwatch' + 'akıllı saat'). Model numaraları ve seri adları backend search terms'e eklenmeli. KOBİ'lerin sıkça atladığı nokta: kısaltmalar ve tam adlar ayrı ayrı backend'e girilmeli; başlıkta tekrar edilmemeli. Bu KOBİ için ücretsiz organik kapsam artışı sağlar."
+  },
+  {
+    "id": "az-longtail-3",
+    "platform": "amazon",
+    "topic": "longtail_strategy",
+    "text": "KOBİ için Amazon müşteri segmenti longtail'i: 'erkekler için [ürün]', 'çocuklar için [ürün]', 'hediye [ürün]' formatları büyük markaların da hedeflediği alanlardır; ancak 'küçük işletme için [ürün]', 'ev atölyesi için [ürün]', 'seyahat dostu [ürün]' gibi mikro-segment kombinasyonları KOBİ'nin öne çıkabileceği rekabetsiz alanlardır. Sezonsal hediye kombinasyonları (Kasım-Aralık) KOBİ için en yüksek organik dönüşüm dönemini oluşturur."
+  },
+  {
+    "id": "az-description-1",
+    "platform": "amazon",
+    "topic": "description_structure",
+    "text": "KOBİ için Amazon açıklama yapısı: Maksimum 2000 karakter. İlk paragraf en önemli 3 faydayı içermeli. Bullet points (5 adet, her biri max 255 karakter) açıklamanın üstünde yer alır ve en fazla görüntülenen bölümdür. KOBİ için kritik fark: Büyük markalar marka otoritesine güvenir; KOBİ'ler her bullet'ta somut veri ve özellik belirtmek zorundadır. Veri içermeyen genel ifadeler KOBİ'lerin en sık yaptığı hatadır."
+  },
+  {
+    "id": "az-description-2",
+    "platform": "amazon",
+    "topic": "description_structure",
+    "text": "KOBİ için Amazon bullet point yapısı: Her bullet [ÖZELLİK BAŞLIĞI]: [Somut fayda açıklaması] formatında. Beş bullet sıralaması KOBİ için: 1) En güçlü teknik farklılaştırıcı, 2) Kalite ve dayanıklılık kanıtı, 3) Kullanım kolaylığı, 4) Garanti ve satış sonrası destek (KOBİ'lerin büyük markalardan farkı: kişisel destek vurgusu), 5) Uyumluluk ve paket içeriği. Her bullet nokta işaretiyle bitmemeli."
+  },
+  {
+    "id": "az-description-3",
+    "platform": "amazon",
+    "topic": "description_structure",
+    "text": "KOBİ'nin Amazon açıklamasında güven inşası: Küçük satıcı olmanın en büyük dezavantajı düşük yorum sayısıdır. Bunu telafi etmek için açıklamaya: üretim süreci, kullanılan malzeme sertifikasyonu (CE, RoHS, ISO), garanti süresi ve kişisel müşteri destek taahhüdü eklenmelidir. 'Sorularınız için 24 saat içinde yanıt veriyoruz' gibi ifadeler KOBİ'ye büyük markaların veremediği kişisel destek avantajı sağlar. Keyword yoğunluğu: ana keyword 2-3 kereden fazla tekrar edilmemeli."
+  },
+  {
+    "id": "az-tone-1",
+    "platform": "amazon",
+    "topic": "tone_and_format",
+    "text": "KOBİ için Amazon yazım tonu — PROFESYONEL VE GÜVENİLİR: Küçük satıcılar için güvenilirlik, büyük marka otoritesinin yerini tutacak tek unsurdur. 'Mükemmel', 'İnanılmaz', 'Eşsiz' gibi kanıtsız ifadelerden kaçınılmalıdır. KOBİ için etkili ton: veriye dayalı ve dürüst. '3 yıl garanti', 'CE sertifikalı', '500 mutlu müşteri', '4.8 yıldız ortalama' gibi somut bilgiler marka bilinirliği olmayan bir KOBİ için en güçlü güven sinyalidir."
+  },
+  {
+    "id": "az-tone-2",
+    "platform": "amazon",
+    "topic": "tone_and_format",
+    "text": "KOBİ için Amazon bullet point format direktifi: Her bullet büyük harfle başlar ve özellik adını öne çıkarır. KOBİ'nin avantajı: büyük markaların standart bullet yapısının dışına çıkarak kişisel destek, özelleştirme seçeneği veya el yapımı kalitesini bullet'a taşıyabilmek. Teknik değerler (boyut mm cinsinden, ağırlık gram cinsinden, materyal tipi) somut ve ölçülebilir olmalıdır. KOBİ'nin en sık hatası: genel ifadeler yazmak. Amazon alıcısı spesifik veri arar."
+  },
+  {
+    "id": "az-tone-3",
+    "platform": "amazon",
+    "topic": "tone_and_format",
+    "text": "KOBİ'nin Amazon'da marka pozisyonu dışı ton stratejisi: Büyük markaların 'premium' ve 'global standart' tonuna karşı KOBİ'ler için farklılaştırıcı ton: uzmanlaşma ve kişiselleştirme. 'Yalnızca [kategori]'ye odaklanan bir atölye olarak...', 'Her ürünü sipariş aldıktan sonra üretiyoruz', 'Müşteri geri bildirimlerine göre geliştirdiğimiz versiyon' gibi ifadeler büyük markaların kullanamadığı özgün güven mesajlarıdır."
+  },
+  {
+    "id": "hb-title-1",
+    "platform": "hepsiburada",
+    "topic": "title_structure",
+    "text": "KOBİ için Hepsiburada başlık yapısı: Hepsiburada alıcısı teknik araştırma yapar ve model bazlı arama sıklığı yüksektir. KOBİ için doğru format: [Ürün Tipi] + [Teknik Özellik/Kapasite] + [Marka] + [Model/Seri]. Maksimum 120 karakter. Büyük markaların yaygın ürünleriyle aynı genel kategoride yer almak yerine, KOBİ'ler teknik niche özellikleri (watt, GB, mm, litre, kapasitesi) başlıkta belirterek kendi filtreleme alanını oluşturmalıdır."
+  },
+  {
+    "id": "hb-title-2",
+    "platform": "hepsiburada",
+    "topic": "title_structure",
+    "text": "KOBİ'nin Hepsiburada'da teknik farklılaşma başlığı: Hepsiburada'da küçük satıcılar büyük markalarla aynı jenerik kategori başlıklarında rekabet etmemelidir. KOBİ'nin avantajı: rakip büyük markaların girmediği teknik alt kategoriler ve model numaraları. Kategori terimi başlığın ilk yarısında yer almalı; marka adı sona gelebilir. 'Harika', 'Süper', 'Mükemmel' gibi anlamsız dolgu kelimelerin yerine ölçülebilir teknik değerler tercih edilmelidir."
+  },
+  {
+    "id": "hb-title-3",
+    "platform": "hepsiburada",
+    "topic": "title_structure",
+    "text": "KOBİ için Hepsiburada başlıkta paket ve içerik vurgusu: Büyük markalar çoğunlukla standart paket satar; KOBİ'ler paket avantajını (aksesuar dahil, 2'li set, yedek parça hediye) başlıkta belirterek değer algısını artırabilir. Örnek: 'Bluetooth Kulaklık 30 Saat Pil + Kılıf Dahil - BrandX'. Paket içeriği başlıkta belirtilmeli ('2'li Set', '+ Kılıf Hediye', 'Aksesuar Paketi'). Bu strateji KOBİ'ye fiyat rekabeti yapmadan algı avantajı kazandırır."
+  },
+  {
+    "id": "hb-longtail-1",
+    "platform": "hepsiburada",
+    "topic": "longtail_strategy",
+    "text": "KOBİ için Hepsiburada longtail stratejisi — teknik niche: Hepsiburada alıcısı teknik araştırma yapan ve karşılaştırmalı alışveriş yapan bir profildedir; bu KOBİ için avantajdır. Büyük markaların geniş kategorilere hâkim olduğu alanda KOBİ'ler '[spesifik teknik özellik] [ürün tipi]' (örn. '2-in-1 soğuk sıkım blender 1200W', 'hava filtreli HEPA elektrikli süpürge') ile daha az rekabetçi alt kategorilerde görünür olmalıdır. Ne kadar teknik ve spesifik olursa rakip o kadar azdır."
+  },
+  {
+    "id": "hb-longtail-2",
+    "platform": "hepsiburada",
+    "topic": "longtail_strategy",
+    "text": "KOBİ'nin Hepsiburada'da model bazlı longtail fırsatı: Model numaraları ve seri isimleri Hepsiburada'da en yüksek dönüşümlü longtail segmentini oluşturur; büyük markaların modelleri bu aramalara hâkimdir. KOBİ'ler kendi ürün serilerini tutarlı biçimde isimlendirerek model bazlı organik arama oluşturabilir. Alternatif strateji: büyük markaların bıraktığı model açıklarını (eski model, discontinue edilmiş serilerin alternatifleri) hedeflemek."
+  },
+  {
+    "id": "hb-longtail-3",
+    "platform": "hepsiburada",
+    "topic": "longtail_strategy",
+    "text": "KOBİ için Hepsiburada'da kullanım segmenti longtail'i: 'ofis için [ürün]', 'ev kullanımı [ürün]', 'küçük işletme için [ürün]', 'klinik için [ürün]' kombinasyonları büyük markaların atladığı B2B niche'lerdir. KOBİ'ler bu segmentleri hedefleyerek tekrarlayan sipariş ve toplu alım müşterisi elde edebilir. Aynı zamanda 'küçük alan için', 'dar mutfak için', 'stüdyo dairesi için' gibi mekan bazlı kombinasyonlar da rekabetsiz longtail fırsatları sunar."
+  },
+  {
+    "id": "hb-description-1",
+    "platform": "hepsiburada",
+    "topic": "description_structure",
+    "text": "KOBİ için Hepsiburada açıklama yapısı: Minimum 200 kelime. Hepsiburada alıcısı satın almadan önce teknik detayları okur; bu KOBİ'nin güven inşa etmesi için en büyük fırsattır. Önerilen yapı: Teknik özet paragrafı (ürün ne işe yarar, hangi problemi çözer) → Öne çıkan özellikler listesi → Kullanım senaryosu → Teknik özellikler tablosu → Garanti, servis ve yasal bilgiler. Büyük markalar çoğunlukla kısa ve jenerik açıklama yapar; KOBİ bu boşluğu bilgi zenginliğiyle doldurabilir."
+  },
+  {
+    "id": "hb-description-2",
+    "platform": "hepsiburada",
+    "topic": "description_structure",
+    "text": "KOBİ'nin Hepsiburada açıklamasında teknik şeffaflık: Hepsiburada'da küçük satıcılar için en güçlü güven unsuru teknik doğruluğu kanıtlayan şeffaflıktır. Malzeme bileşenleri, üretim standardı, enerji sınıfı, sertifikasyon (CE, TSE, RoHS) ve EAN/GTIN bilgisi açıklamada yer almalıdır. KOBİ'nin sıkça atladığı bilgi: ithalatçı/üretici bilgisi ve ürün kodu — bunlar Hepsiburada'da arama algoritmalarında ek sinyaller oluşturur."
+  },
+  {
+    "id": "hb-description-3",
+    "platform": "hepsiburada",
+    "topic": "description_structure",
+    "text": "KOBİ için Hepsiburada açıklamasında karşılaştırmalı konumlanma: Büyük markalarla doğrudan fiyat rekabeti yapamayan KOBİ'ler, açıklamada değer odaklı karşılaştırma yapabilir: 'Bu üründe büyük markalarda bulamayacağınız X özelliği bulunur.' Rakip marka adı geçirilmemeli; ancak kategori avantajı vurgulanabilir. Garanti, servis ağı ve kişisel müşteri desteği KOBİ'nin büyük markaya karşı öne çıkabileceği alanlardır — bunlar açıklamada net biçimde belirtilmelidir."
+  },
+  {
+    "id": "hb-tone-1",
+    "platform": "hepsiburada",
+    "topic": "tone_and_format",
+    "text": "KOBİ için Hepsiburada yazım tonu — NÖTR VE UZMAN: Hepsiburada'da küçük satıcının büyük markaya karşı en güçlü tonu uzmanlık ve teknik otoritedir. Veriye dayalı ifadeler ('A+++ enerji sınıfı', '2 yıl resmi garanti', 'IP67 su geçirmezlik sertifikası') subjektif övgüden çok daha etkilidir. KOBİ'nin hatası: sattığı ürünü büyük marka gibi tanımlamaya çalışmak. Bunun yerine uzmanlık alanında otoriter ve dürüst bir dil kullanılmalıdır."
+  },
+  {
+    "id": "hb-tone-2",
+    "platform": "hepsiburada",
+    "topic": "tone_and_format",
+    "text": "KOBİ için Hepsiburada format direktifi — TEKNİK SPEC ÖNCE: Hepsiburada alıcısı teknik araştırma yapan, fiyat-değer dengesi hesaplayan bir profildedir. Teknik spesifikasyonlar listesi ilk sıraya konulmalı; ardından bu özelliklerin kullanıcı faydasına dönüşümü açıklanmalıdır. Tablolar ve madde listeleri kullanılabilir. KOBİ'lerin kullandığı hatalı teknik terimler güven zedeler: doğru Türkçe teknik karşılıklar kullanılmalıdır (processor → işlemci, display → ekran, RAM → bellek)."
+  },
+  {
+    "id": "hb-tone-3",
+    "platform": "hepsiburada",
+    "topic": "tone_and_format",
+    "text": "KOBİ'nin Hepsiburada'da uzmanlaşma tonu avantajı: Büyük markalar her kategoride satış yapar; KOBİ'nin en güçlü tonu belirli bir kategoride uzman olduğunu göstermektir. 'Yalnızca [kategori] üzerine çalışıyoruz ve bu ürünü 5 yıldır geliştiriyoruz' gibi uzmanlaşma ifadeleri büyük markaların veremediği otoriteyi oluşturur. Güven artırıcı unsurlar (sertifika, standart, bağımsız test sonuçları) KOBİ'nin açıklamasında mutlaka yer almalıdır."
+  },
+  {
+    "id": "gen-title-1",
+    "platform": "general",
+    "topic": "title_structure",
+    "text": "KOBİ için genel başlık SEO stratejisi: Büyük markaların baskın olduğu geniş keyword'ler yerine, KOBİ'ler Ürün Tipi + Spesifik Özellik + Niche Kullanım Amacı formatını benimsemelidir. Marka bilinirliği düşük olduğundan marka adı başa değil, sona yerleştirilmelidir. Her platform karakter limitini aşmamak ve ilk 40-50 karakterde en değerli keyword'i kullanmak KOBİ'lerin en hızlı organik kazanım yöntemidir."
+  },
+  {
+    "id": "gen-longtail-1",
+    "platform": "general",
+    "topic": "longtail_strategy",
+    "text": "KOBİ için genel longtail stratejisi: Büyük markaların kapattığı kısa ve yüksek hacimli keyword'ler yerine, KOBİ'ler 2-4 kelimeli niche kombinasyonlara yatırım yapmalıdır. Kural: ne kadar spesifik, o kadar az rakip ve o kadar yüksek dönüşüm. Satın alma niyeti taşıyan sorgular (ürün + özellik + kullanım amacı), demografik segment bazlı kombinasyonlar ve sezonsal longtail'ler KOBİ'nin reklam harcaması yapmadan organik görünürlük kazanabileceği alanlardır."
+  },
+  {
+    "id": "gen-description-1",
+    "platform": "general",
+    "topic": "description_structure",
+    "text": "KOBİ için genel açıklama SEO yapısı: Büyük markalar kısa açıklamayla marka otoritesine güvenir; KOBİ'ler bilgi yoğunluğuyla bu boşluğu doldurmalıdır. Minimum 150 kelime içerik derinliği sinyali verir. Temel yapı: fayda odaklı giriş → özellik listesi → kullanım senaryosu → teknik detay → güven unsurları (garanti, sertifika, üretici bilgisi). İlk 160 karakter arama snippet önizlemesi için kritiktir; ana keyword ve en önemli fayda bu bölümde yer almalıdır."
+  },
+  {
+    "id": "gen-tone-1",
+    "platform": "general",
+    "topic": "tone_and_format",
+    "text": "KOBİ için genel ton ve format kuralları: KOBİ'nin en büyük ton avantajı büyük markaların veremediği özgünlük, uzmanlaşma ve kişisel güven iletişimidir. Aşırı pazarlama dilinden ('Kaçırma!', 'Son Şans!', 'Piyasanın En İyisi!') kesinlikle kaçınılmalıdır; bu ifadeler hem algoritma cezası hem de müşteri güvensizliği yaratır. Gerçek ürün özellikleri, dürüst garanti bilgisi ve spesifik teknik veri, KOBİ'nin büyük markayla rekabetinde en güçlü silahıdır."
+  }
+]

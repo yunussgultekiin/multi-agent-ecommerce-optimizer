@@ -5,6 +5,7 @@ from app.config import settings
 from app.redis import close_redis
 from app.workflow.rival_graph import run_rival_workflow
 from app.workflow.seo_graph import run_seo_workflow
+from app.chroma_client import seed_seo_chunks
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +36,10 @@ async def main() -> None:
         level=getattr(logging, settings.log_level.upper(), logging.INFO),
         format="%(asctime)s %(levelname)s %(name)s %(message)s",
     )
+
+    loop = asyncio.get_running_loop()
+    await loop.run_in_executor(None, seed_seo_chunks)
+
     app = web.Application()
     app.router.add_post("/run/{agent_type}", run_handler)
     app.router.add_get("/health", health_handler)
