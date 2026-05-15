@@ -3,8 +3,8 @@ from typing import Optional
 from uuid import UUID
 
 import redis.asyncio as aioredis
-from fastapi import APIRouter, Depends, HTTPException, Query
-from fastapi.responses import StreamingResponse
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi.responses import Response, StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dependencies import get_db, get_redis
@@ -28,7 +28,7 @@ def get_service(
 
 @router.post("", response_model=TaskResponse, status_code=201)
 async def create_task(body: TaskCreate, service: TaskService = Depends(get_service)):
-    task = await service.create_task(user_id=body.user_id, payload=body.payload)
+    task = await service.create_task(user_id=body.user_id, payload=body.payload, seo_tone=body.seo_tone)
     return task
 
 @router.get("", response_model=TaskListResponse)
@@ -40,6 +40,14 @@ async def list_tasks(
 ):
     tasks, total = await service.list_tasks(user_id=user_id, limit=limit, offset=offset)
     return TaskListResponse(items=tasks, total=total, limit=limit, offset=offset)
+
+@router.delete("", status_code=204)
+async def delete_all_tasks(
+    user_id: str = Query(...),
+    service: TaskService = Depends(get_service),
+):
+    await service.delete_all_tasks(user_id=user_id)
+    return Response(status_code=204)
 
 @router.get("/{task_id}", response_model=TaskResponse)
 async def get_task(

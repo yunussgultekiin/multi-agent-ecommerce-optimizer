@@ -6,3 +6,8 @@ class TaskStatus(str, Enum):
     completed = "completed"
     failed = "failed"
     cancelled = "cancelled"
+
+class SeoTone(str, Enum):
+    samimi = "samimi"
+    profesyonel = "profesyonel"
+    premium = "premium"

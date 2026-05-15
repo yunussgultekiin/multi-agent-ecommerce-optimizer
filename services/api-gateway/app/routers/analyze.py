@@ -19,6 +19,7 @@ _stream_auth = InternalTokenProvider(secret=settings.jwt_secret_key, algorithm=s
 
 class AnalyzeRequest(BaseModel):
     payload: dict[str, Any]
+    seo_tone: str | None = None
 
 @router.post("", status_code=status.HTTP_202_ACCEPTED)
 @limiter.limit(settings.rate_limit)
@@ -41,7 +42,7 @@ async def create_analysis(request: Request, body: AnalyzeRequest):
         raise HTTPException(status_code=503, detail="Quota service error")
 
     try:
-        task_response = await _task_client.create_task(user_id, body.payload)
+        task_response = await _task_client.create_task(user_id, body.payload, seo_tone=body.seo_tone)
     except TaskServiceError:
         raise HTTPException(status_code=503, detail="Task service unavailable")
 
@@ -96,6 +97,18 @@ async def get_result(request: Request, task_id: str):
     if response.status_code != 200:
         raise HTTPException(status_code=502, detail="Task service error")
     return response.json()
+
+@router.delete("", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit(settings.rate_limit)
+async def delete_history(request: Request):
+    user_id = request.state.user_id
+    try:
+        response = await _task_client.delete_all_tasks(user_id)
+    except TaskServiceError:
+        raise HTTPException(status_code=503, detail="Task service unavailable")
+
+    if response.status_code not in {200, 204}:
+        raise HTTPException(status_code=502, detail="Task service error")
 
 @router.get("/{task_id}/status/stream")
 @limiter.limit(settings.rate_limit)

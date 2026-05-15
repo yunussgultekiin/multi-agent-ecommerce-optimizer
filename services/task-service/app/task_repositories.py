@@ -1,16 +1,16 @@
 from uuid import UUID
-from sqlalchemy import select, func
+from sqlalchemy import delete, select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from app.tasks import Task, AnalysisResult
-from app.enums import TaskStatus
+from app.enums import SeoTone, TaskStatus
 
 class TaskRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create(self, user_id: str, payload: dict) -> Task:
-        task = Task(user_id=user_id, payload=payload)
+    async def create(self, user_id: str, payload: dict, seo_tone: SeoTone | None = None) -> Task:
+        task = Task(user_id=user_id, payload=payload, seo_tone=seo_tone)
         self.session.add(task)
         await self.session.commit()
         await self.session.refresh(task)
@@ -55,3 +55,19 @@ class TaskRepository:
         await self.session.commit()
         await self.session.refresh(analysis_result)
         return analysis_result
+
+    async def delete_all_by_user(self, user_id: str) -> None:
+        task_ids_result = await self.session.execute(
+            select(Task.id).where(Task.user_id == user_id)
+        )
+        task_ids = list(task_ids_result.scalars().all())
+
+        if task_ids:
+            await self.session.execute(
+                delete(AnalysisResult).where(AnalysisResult.task_id.in_(task_ids))
+            )
+            await self.session.execute(
+                delete(Task).where(Task.user_id == user_id)
+            )
+
+        await self.session.commit()

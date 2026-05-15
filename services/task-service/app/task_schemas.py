@@ -1,11 +1,12 @@
 from uuid import UUID
 from datetime import datetime
 from pydantic import BaseModel
-from app.enums import TaskStatus
+from app.enums import SeoTone, TaskStatus
 
 class TaskCreate(BaseModel):
     user_id: str
     payload: dict
+    seo_tone: SeoTone | None = None
 
 class TaskResultCreate(BaseModel):
     result: dict
@@ -15,6 +16,7 @@ class TaskResponse(BaseModel):
     user_id: str
     status: TaskStatus
     payload: dict
+    seo_tone: SeoTone | None = None
     error_message: str | None = None
     created_at: datetime
     updated_at: datetime

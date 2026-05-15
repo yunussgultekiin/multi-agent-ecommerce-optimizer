@@ -4,7 +4,7 @@ from uuid import UUID
 import redis.asyncio as aioredis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.enums import TaskStatus
+from app.enums import SeoTone, TaskStatus
 from app.task_repositories import TaskRepository
 from app.tasks import AnalysisResult, Task
 
@@ -21,8 +21,8 @@ class TaskService:
         self.repo = TaskRepository(session)
         self.redis = redis
 
-    async def create_task(self, user_id: str, payload: dict) -> Task:
-        task = await self.repo.create(user_id=user_id, payload=payload)
+    async def create_task(self, user_id: str, payload: dict, seo_tone: SeoTone | None = None) -> Task:
+        task = await self.repo.create(user_id=user_id, payload=payload, seo_tone=seo_tone)
         await self.redis.lpush(
             "task_queue",
             json.dumps({"task_id": str(task.id), "payload": payload}),
@@ -63,3 +63,6 @@ class TaskService:
         if not task:
             return None, False
         return task.result, True
+
+    async def delete_all_tasks(self, user_id: str) -> None:
+        await self.repo.delete_all_by_user(user_id)

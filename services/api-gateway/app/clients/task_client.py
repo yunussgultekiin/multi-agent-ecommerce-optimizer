@@ -17,12 +17,11 @@ class TaskClient:
         except Exception as exc:
             raise TaskServiceError(f"Connection error: {exc}") from exc
 
-    async def create_task(self, user_id: str, payload: dict):
-        return await self._request(
-            "POST",
-            "/tasks",
-            json={"user_id": user_id, "payload": payload},
-        )
+    async def create_task(self, user_id: str, payload: dict, seo_tone: str | None = None):
+        body: dict = {"user_id": user_id, "payload": payload}
+        if seo_tone is not None:
+            body["seo_tone"] = seo_tone
+        return await self._request("POST", "/tasks", json=body)
 
     async def get_task(self, task_id: str, user_id: str):
         return await self._request(
@@ -40,3 +39,6 @@ class TaskClient:
 
     async def get_history(self, user_id: str):
         return await self._request("GET", "/tasks", params={"user_id": user_id})
+
+    async def delete_all_tasks(self, user_id: str):
+        return await self._request("DELETE", "/tasks", params={"user_id": user_id})

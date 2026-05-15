@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy import String, DateTime, Enum as SAEnum, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.enums import TaskStatus
+from app.enums import SeoTone, TaskStatus
 from app.database import Base
 
 class Task(Base):
@@ -14,6 +14,7 @@ class Task(Base):
     user_id: Mapped[str] = mapped_column(String, nullable=False)
     status: Mapped[TaskStatus] = mapped_column(SAEnum(TaskStatus), default=TaskStatus.pending, nullable=False)
     payload: Mapped[dict] = mapped_column(JSONB, nullable=False)
+    seo_tone: Mapped[SeoTone | None] = mapped_column(SAEnum(SeoTone, name="seotone"), nullable=True)
     error_message: Mapped[str | None] = mapped_column(String, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
