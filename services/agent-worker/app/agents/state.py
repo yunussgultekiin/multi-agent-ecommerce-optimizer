@@ -21,7 +21,6 @@ class SeoAgentState(BaseAgentState):
     rival_json: dict
     user_product: dict
     target_platform: str
-    rag_context: list[str]
     seo_output: dict
     generated_image_url: str | None
     final_result: dict

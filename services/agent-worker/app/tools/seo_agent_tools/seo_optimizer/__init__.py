@@ -1,3 +1,4 @@
-from .seo_optimizer import SeoOptimizerInput, SeoOptimizerTool
+from .models_seo import SeoOptimizerInput, SeoOutput
+from .tools_seo import SeoOptimizerTool
 
-__all__ = ["SeoOptimizerInput", "SeoOptimizerTool"]
+__all__ = ["SeoOptimizerInput", "SeoOptimizerTool", "SeoOutput"]

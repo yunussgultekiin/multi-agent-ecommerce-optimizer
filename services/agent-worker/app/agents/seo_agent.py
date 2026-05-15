@@ -11,31 +11,12 @@ _image_tool = ImageGenerationTool()
 
 
 class SeoAgent:
-    async def retrieve_context(self, state: SeoAgentState) -> SeoAgentState:
-        user_product = state.get("user_product", {})
-        platform = state.get("target_platform", "")
-        category = user_product.get("category", "")
-        brand = user_product.get("brand", "")
-        variants = [v.get("name", "") for v in user_product.get("variants", []) if isinstance(v, dict)]
-
-        rag_context = [
-            f"Platform: {platform}",
-            f"Category: {category}" if category else "Category: general",
-            f"Brand: {brand}" if brand else "",
-            f"Variants: {', '.join(variants)}" if variants else "",
-            "Optimize for product discoverability and conversion rate.",
-            "Use platform-specific best practices for title length and keyword density.",
-        ]
-        rag_context = [line for line in rag_context if line]
-
-        return {**state, "rag_context": rag_context}
-
     async def generate_seo(self, state: SeoAgentState) -> SeoAgentState:
         result = await _seo_optimizer.run(
             SeoOptimizerInput(
                 rival_json=state.get("rival_json", {}),
-                rag_context=state.get("rag_context", []),
                 target_platform=state.get("target_platform", ""),
+                user_product=state.get("user_product", {}),
             )
         )
 

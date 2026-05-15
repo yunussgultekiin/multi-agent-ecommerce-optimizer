@@ -21,35 +21,21 @@ def _build_seo_graph():
     graph = StateGraph(SeoAgentState)
 
     graph.add_node(
-        "retrieve_context",
-        NodeRunner("retrieve_context", 25).wrap(_seo_agent.retrieve_context),
-    )
-    graph.add_node(
         "generate_seo",
         NodeRunner("generate_seo", 60).wrap(_seo_agent.generate_seo),
     )
     graph.add_node(
         "generate_image",
-        NodeRunner("generate_image", 85).wrap(_seo_agent.generate_image),
+        NodeRunner("generate_image", 75).wrap(_seo_agent.generate_image),
     )
     graph.add_node(
         "finalize",
         NodeRunner("finalize", 100).wrap(_seo_agent.finalize),
     )
 
-    graph.add_edge(START, "retrieve_context")
-    graph.add_conditional_edges(
-        "retrieve_context",
-        _cancel_or("generate_seo", "generate_image"),
-    )
-    graph.add_conditional_edges(
-        "generate_seo",
-        _cancel_or("finalize"),
-    )
-    graph.add_conditional_edges(
-        "generate_image",
-        _cancel_or("finalize"),
-    )
+    graph.add_conditional_edges(START, _cancel_or("generate_seo", "generate_image"))
+    graph.add_conditional_edges("generate_seo", _cancel_or("finalize"))
+    graph.add_conditional_edges("generate_image", _cancel_or("finalize"))
     graph.add_edge("finalize", END)
 
     return graph.compile()
@@ -63,7 +49,6 @@ def build_seo_state_from_rival(rival_state: RivalAgentState) -> SeoAgentState:
         rival_json=rival_json,
         user_product=rival_json.get("user_product", {}),
         target_platform=rival_json.get("target_platform", "") or rival_state.get("target_platform", ""),
-        rag_context=[],
         seo_output={},
         generated_image_url=None,
         final_result={},
@@ -79,7 +64,6 @@ def _build_seo_initial_state(payload: dict) -> SeoAgentState:
         rival_json=rival_json,
         user_product=rival_json.get("user_product", {}),
         target_platform=payload.get("target_platform", "") or rival_json.get("target_platform", ""),
-        rag_context=[],
         seo_output={},
         generated_image_url=None,
         final_result={},
