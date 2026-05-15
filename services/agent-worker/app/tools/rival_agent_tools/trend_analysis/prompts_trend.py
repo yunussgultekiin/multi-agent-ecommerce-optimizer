@@ -12,6 +12,7 @@ Rules:
 - platform_trends: platform-specific listing or search behavior patterns on the target platform (e.g. bestseller badge patterns, bundle trends); [] if none found.
 - category_trend_summary: required, 2-3 sentences summarizing the current trend direction.
 - All strings must be non-empty.
+- Keep JSON keys in English, but write all natural-language values in Turkish.
 - Do not include markdown, comments, or trailing commas.
 """
 
@@ -21,13 +22,11 @@ _PLATFORM_BESTSELLER_PAGES = {
     "amazon": "amazon.com.tr/bestsellers for the relevant category",
 }
 
-
 def _get_platform_source(target_platform: str) -> str:
     return _PLATFORM_BESTSELLER_PAGES.get(
         target_platform.lower(),
         f"{target_platform} bestseller and trending pages",
     )
-
 
 def build_trend_prompt(
     category: str,
@@ -69,7 +68,6 @@ RESPOND ONLY in this JSON format:
 {_JSON_SCHEMA}
 {_COMMON_RULES}
 """
-
 
 def build_fallback_trend_prompt(
     category: str,
@@ -114,6 +112,7 @@ Key rules:
 - trending_features must have at least 1 item.
 - category_trend_summary must be a non-empty string.
 - demand_signals and platform_trends may be empty lists but must be present.
+- Keep JSON keys in English, but write all value texts in Turkish.
 
 ORIGINAL TASK:
 {original_prompt}

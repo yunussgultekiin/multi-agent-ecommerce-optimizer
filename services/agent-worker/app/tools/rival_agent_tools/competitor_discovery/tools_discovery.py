@@ -21,7 +21,6 @@ logger = logging.getLogger(__name__)
 _GROUNDING_TOOL = types.Tool(google_search=types.GoogleSearch())
 SUPPORTED_PLATFORMS = set(PLATFORM_SITES.keys())
 
-
 def _build_discovery_gemini_config() -> types.GenerateContentConfig:
     return types.GenerateContentConfig(
         tools=[_GROUNDING_TOOL],
@@ -30,7 +29,6 @@ def _build_discovery_gemini_config() -> types.GenerateContentConfig:
         thinking_config=types.ThinkingConfig(thinking_budget=0),
     )
 
-
 def _validate_platform(platform: str) -> Platform:
     normalized = platform.strip().lower() if isinstance(platform, str) else ""
     if normalized not in SUPPORTED_PLATFORMS:
@@ -38,7 +36,6 @@ def _validate_platform(platform: str) -> Platform:
             f"Unsupported platform: {platform!r}. Supported: {sorted(SUPPORTED_PLATFORMS)}"
         )
     return normalized
-
 
 def _deduplicate(competitors: list[DiscoveredCompetitor]) -> list[DiscoveredCompetitor]:
     seen: set[str] = set()
@@ -49,7 +46,6 @@ def _deduplicate(competitors: list[DiscoveredCompetitor]) -> list[DiscoveredComp
             seen.add(key)
             result.append(c)
     return result
-
 
 def _filter_own_brand(
     competitors: list[DiscoveredCompetitor],
@@ -63,13 +59,13 @@ def _filter_own_brand(
         if brand_lower not in c.competitor_name.lower()
     ]
 
-
 async def run_competitor_discovery_tool(
     platform: str,
     category: str,
     product_title: str,
     brand: str,
     max_retries: int = 2,
+    exclude_names: list[str] | None = None,
 ) -> ToolResult:
     try:
         platform = _validate_platform(platform)
@@ -95,6 +91,7 @@ async def run_competitor_discovery_tool(
             product_title=product_title,
             brand=brand,
             correction_context=correction_context,
+            exclude_names=exclude_names,
         )
 
         try:

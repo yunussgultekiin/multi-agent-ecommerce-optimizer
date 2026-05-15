@@ -44,21 +44,19 @@ from app.tools.rival_agent_tools import (
 )
 
 USER_PRODUCT = {
-    "title": "Vakumlu Cam Saklama Kabı Seti 4'lü",
-    "brand": "GlassHome",
-    "category": "mutfak gereçleri",
-    "price": 299.90,
-    "description": "Borosilikat cam, vakumlu kapak, bulaşık makinesinde yıkanabilir",
+    "title": "60 Parça 12 Kişilik Çelik Düz Çatal Kaşık Seti Takımı",
+    "brand": "Zagori",
+    "category": "mutfak",
+    "price": 600.00,
+    "description": "12 kişilik geniş kapasiteye sahip, her türlü sofranız için ideal bir seçim olan Zagori çatal-kaşık seti, aile yemeklerinden özel davetlere kadar her ortamda şıklığı ve kullanışlılığı bir arada sunar",
     "features": [
-        "borosilikat cam",
-        "vakum kapak",
-        "4 farklı boyut",
-        "bulaşık makinesinde yıkanabilir",
-        "mikrodalga uyumlu",
+        "Mutfak",
+        "Kaşık",
+        "Çatal",
+        "Mutfak Seti",
     ],
     "variants": [
-        {"name": "4'lü Set", "price": 299.90},
-        {"name": "6'lı Set", "price": 449.90},
+        {"name": "12 Kişilik Çelik Düz Çatal Kaşık Seti", "price": 600.00, "price_delta": 50.0},
     ],
     "rating": None,
     "review_count": None,
@@ -66,13 +64,11 @@ USER_PRODUCT = {
 
 TARGET_PLATFORM = "trendyol"
 
-
 def _save(output_dir: Path, filename: str, data: object) -> None:
     path = output_dir / filename
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2, default=str)
     print(f"  saved → {path.name}")
-
 
 def _tool_result_to_dict(result: ToolResult) -> dict:
     return {
@@ -80,7 +76,6 @@ def _tool_result_to_dict(result: ToolResult) -> dict:
         "fallback_used": result.fallback_used,
         "data": result.data,
     }
-
 
 async def main() -> None:
     run_id = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")

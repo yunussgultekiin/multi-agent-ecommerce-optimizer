@@ -30,14 +30,14 @@ Rules:
 - positioning_rationale: required, 1-2 sentences explaining the score.
 - clusters: at least 1 segment (budget / value_for_money / premium).
 - price_range_min and price_range_max: always a float, use 0.0 if unknown, never null.
-- gap_opportunities: at least 1 actionable opportunity.
+- gap_opportunities: what the market currently lacks — unmet needs, missing features, underserved segments, or positioning white space that no competitor currently owns. At least 1 item. Do NOT describe what the seller should do here.
+- strategic_actions: what the seller should concretely do to exploit the gaps identified above — pricing moves, listing changes, feature emphasis, bundle strategies. At least 1 item. Do NOT repeat gap descriptions here.
 - sentiment_based_opportunities: opportunities directly derived from customer pain_points; [] if no sentiment data.
 - trend_based_opportunities: opportunities derived from trending features; [] if no trend data.
-- strategic_actions: concrete next steps the seller can act on; [] if none.
 - variant_gap_opportunities: [] if user product has no variants.
+- Keep JSON keys and enum labels in English, but write all natural-language values in Turkish.
 - Do not include markdown, comments, or trailing commas.
 """
-
 
 def build_market_gap_prompt(
     user_product: dict,
@@ -72,6 +72,9 @@ TASK:
 1. Segment competitors by price and perceived value: budget, value_for_money, premium.
 2. Determine which segment the user product fits.
 3. Identify market gaps the user product can fill based on competitor weaknesses.
+   IMPORTANT — gap_opportunities must describe what the MARKET lacks (unmet needs, absent features, underserved segments).
+   strategic_actions must describe what the SELLER should DO about those gaps.
+   Keep these two fields strictly separate — never repeat the same point in both.
 4. If sentiment data is provided: derive opportunities from customer pain_points (what competitors fail at) AND praised_features (what competitors do well that the user product should match or exceed).
 5. If trend data is provided: derive opportunities from trending_features that the user product could emphasize.
 6. Generate at least 2 strategic actions the seller can concretely take.
@@ -82,7 +85,6 @@ RESPOND ONLY in this JSON format:
 {_JSON_SCHEMA}
 {_COMMON_RULES}
 """
-
 
 def build_fallback_prompt(user_product: dict, sentiment_result: dict, trend_result: dict) -> str:
     sentiment_block = ""
@@ -111,6 +113,9 @@ TASK:
 2. Estimate realistic price ranges; use 0.0 if truly unknown.
 3. Determine the best-fit segment for the user product.
 4. Identify positioning opportunities the user product could exploit.
+   IMPORTANT — gap_opportunities must describe what the MARKET lacks.
+   strategic_actions must describe what the SELLER should DO about those gaps.
+   Keep these two fields strictly separate — never repeat the same point in both.
 5. If sentiment data is provided: derive sentiment_based_opportunities from pain_points and praised_features.
 6. If trend data is provided: derive trend_based_opportunities from trending_features.
 7. Generate at least 1 strategic action.
@@ -120,7 +125,6 @@ RESPOND ONLY in this JSON format:
 {_JSON_SCHEMA}
 {_COMMON_RULES}
 """
-
 
 def build_self_correction_prompt(original_prompt: str, last_error: str) -> str:
     return f"""
@@ -133,9 +137,11 @@ Key rules:
 - clusters must have at least 1 item.
 - positioning_rationale cannot be empty.
 - price_range_min and price_range_max must be floats, never null.
-- gap_opportunities must have at least 1 item.
+- gap_opportunities must have at least 1 item and must describe what the MARKET lacks — not what the seller should do.
+- strategic_actions must describe what the SELLER should DO — not repeat gap descriptions.
 - sentiment_based_opportunities, trend_based_opportunities, strategic_actions,
   variant_gap_opportunities may be empty lists but must be present.
+- Keep JSON keys in English, but write all value texts in Turkish.
 
 ORIGINAL TASK:
 {original_prompt}

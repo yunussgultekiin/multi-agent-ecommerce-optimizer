@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 _SEARCH_TOOL = types.Tool(google_search=types.GoogleSearch())
 
-
 async def _research_one(
     competitor_name: str,
     category: str,
@@ -105,10 +104,44 @@ async def _research_one(
         data={"error": f"Research failed: {last_error or 'unknown error'}"},
     )
 
+async def _fetch_replacement_competitors(
+    n: int,
+    exclude_names: list[str],
+    category: str,
+    platform: str,
+    product_title: str,
+    brand: str,
+) -> list[dict]:
+    if n <= 0:
+        return []
+    try:
+        from app.tools.rival_agent_tools.competitor_discovery.tools_discovery import (
+            run_competitor_discovery_tool,
+        )
+        result = await run_competitor_discovery_tool(
+            platform=platform,
+            category=category,
+            product_title=product_title or category,
+            brand=brand,
+            exclude_names=exclude_names,
+        )
+        if not result.success or not result.data:
+            return []
+        exclude_set = {name.lower().strip() for name in exclude_names}
+        candidates = [
+            c for c in result.data.get("competitors", [])
+            if c.get("competitor_name", "").lower().strip() not in exclude_set
+        ]
+        return candidates[:n]
+    except Exception as exc:
+        logger.warning("Replacement competitor discovery failed | error=%s", exc)
+        return []
 
 async def run_competitor_research_tool(
     competitors: list[dict],
     category: str,
+    product_title: str = "",
+    brand: str = "",
 ) -> list[ToolResult]:
     if not isinstance(competitors, list):
         raise ValueError("competitors must be a list")
@@ -138,7 +171,9 @@ async def run_competitor_research_tool(
     )
 
     tool_results: list[ToolResult] = []
-    for competitor, result in zip(competitors, raw_results):
+    priceless_indices: list[int] = []
+
+    for i, (competitor, result) in enumerate(zip(competitors, raw_results)):
         if isinstance(result, Exception):
             logger.exception(
                 "Unexpected research error | competitor=%s",
@@ -147,8 +182,62 @@ async def run_competitor_research_tool(
             tool_results.append(
                 ToolResult(success=False, fallback_used=True, data={"error": str(result)})
             )
+        elif (
+            isinstance(result, ToolResult)
+            and result.success
+            and isinstance(result.data, dict)
+            and result.data.get("estimated_price") is None
+        ):
+            logger.warning(
+                "Competitor has no price data, marking for replacement | competitor=%s",
+                competitor.get("competitor_name", "unknown"),
+            )
+            tool_results.append(
+                ToolResult(success=False, fallback_used=True, data={"error": "No price data found"})
+            )
+            priceless_indices.append(i)
         else:
             tool_results.append(result)
+
+    if priceless_indices:
+        all_known_names = [c.get("competitor_name", "") for c in competitors]
+        platform = competitors[0].get("platform", "trendyol") if competitors else "trendyol"
+
+        logger.info(
+            "Fetching %d replacement competitors | platform=%s",
+            len(priceless_indices),
+            platform,
+        )
+
+        replacement_candidates = await _fetch_replacement_competitors(
+            n=len(priceless_indices),
+            exclude_names=all_known_names,
+            category=category,
+            platform=platform,
+            product_title=product_title,
+            brand=brand,
+        )
+
+        if replacement_candidates:
+            replacement_raw = await asyncio.gather(
+                *[
+                    _research_one(
+                        competitor_name=c.get("competitor_name", ""),
+                        category=category,
+                        platform=c.get("platform", platform),
+                    )
+                    for c in replacement_candidates
+                ],
+                return_exceptions=True,
+            )
+
+            for idx, rep_result in zip(priceless_indices, replacement_raw):
+                if not isinstance(rep_result, Exception):
+                    tool_results[idx] = rep_result
+                    logger.info(
+                        "Replaced null-price competitor at slot %d with new result",
+                        idx,
+                    )
 
     successful_count = sum(1 for r in tool_results if r.success)
     fallback_used = successful_count < input_count

@@ -15,7 +15,6 @@ from .utils_market import filter_valid_competitors, normalize_user_product, clea
 
 logger = logging.getLogger(__name__)
 
-
 async def analyze_market_gap(
     user_product: dict,
     competitors: list[dict],
@@ -107,7 +106,6 @@ async def analyze_market_gap(
             return ToolResult(success=False, fallback_used=True, data={"error": str(exc)})
 
     return ToolResult(success=False, fallback_used=True, data={"error": "Unexpected error"})
-
 
 async def run_market_gap_analyzer(
     user_product: dict,
