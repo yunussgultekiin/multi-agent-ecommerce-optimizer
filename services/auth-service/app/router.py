@@ -1,3 +1,4 @@
+from app.config import settings
 from app.database import get_db
 from app.repositories import UserRepository
 from app.schemas import (
@@ -33,6 +34,10 @@ async def register(
     request: RegisterRequest,
     service: AuthService = Depends(_get_auth_service),
 ) -> TokenResponse:
+    if not settings.registration_enabled:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Registration is disabled"
+        )
     try:
         return await service.register(request.email, request.password)
     except EmailAlreadyRegisteredError:

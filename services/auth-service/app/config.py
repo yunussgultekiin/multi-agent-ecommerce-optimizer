@@ -17,5 +17,6 @@ class Settings(BaseSettings):
     refresh_token_expire_days: int = Field(default=7, alias="REFRESH_TOKEN_EXPIRE_DAYS")
     gcp_project_id: str = Field(default="", alias="GCP_PROJECT_ID")
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
+    registration_enabled: bool = Field(default=True, alias="REGISTRATION_ENABLED")
 
 settings = Settings()
