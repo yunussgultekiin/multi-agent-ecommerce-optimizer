@@ -70,8 +70,82 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
   useEffect(() => {
     const fetchResult = async () => {
       try {
-        const res = await api.get(`/analyze/${params.taskId}/result`);
-        setResult(res.data);
+        const [resultRes, taskRes] = await Promise.all([
+          api.get(`/analyze/${params.taskId}/result`),
+          api.get(`/analyze/${params.taskId}`),
+        ]);
+
+        const { task_id, result: raw, created_at } = resultRes.data;
+        const task = taskRes.data;
+        const { rival_json, seo_output, generated_image_url } = raw || {};
+        const {
+          user_product,
+          target_platform,
+          competitor_research_results,
+          gap_result,
+          pricing_result,
+        } = rival_json || {};
+
+        const competitors = (competitor_research_results || []).map((cr: any) => ({
+          name: cr.competitor_name || '',
+          price: cr.estimated_price || 0,
+          rating: cr.rating || 0,
+          review_count: cr.review_count || 0,
+          brand: cr.brand || cr.competitor_name || '',
+          source_url: '',
+        }));
+
+        const market_gap = {
+          clusters: (gap_result?.clusters || []).map((c: any, idx: number) => ({
+            cluster_id: idx,
+            keywords: [c.label, ...(c.competitors || [])].filter(Boolean),
+            avg_price: ((c.price_range_min || 0) + (c.price_range_max || 0)) / 2,
+            saturation: 0.5,
+          })),
+          gap_opportunities: gap_result?.gap_opportunities || [],
+          positioning_rationale: gap_result?.positioning_rationale || '',
+        };
+
+        const pricing = {
+          current_position: pricing_result?.positioning || 'optimal',
+          suggested_min: pricing_result?.price_range_min || 0,
+          suggested_max: pricing_result?.price_range_max || 0,
+          optimal_price: pricing_result?.predicted_price || 0,
+          confidence_score: pricing_result?.confidence_score || 0,
+          competitor_prices: (competitor_research_results || [])
+            .filter((cr: any) => cr.estimated_price != null)
+            .map((cr: any) => ({ name: cr.competitor_name, price: cr.estimated_price })),
+        };
+
+        const seo = {
+          title_suggestion: seo_output?.title_suggestion || '',
+          meta_description: seo_output?.meta_description || '',
+          keyword_gaps: seo_output?.keyword_gaps || [],
+          content_recommendations: seo_output?.content_recommendations || [],
+          platform_tips: seo_output?.platform_specific_tips || [],
+          product_development_ideas: seo_output?.product_development_ideas || [],
+        };
+
+        const vision = {
+          generation_prompt: seo_output?.competitor_comparison_summary || '',
+          dominant_colors: [],
+          improvement_suggestions: seo_output?.content_recommendations?.slice(0, 3) || [],
+        };
+
+        setResult({
+          task_id,
+          product_title: user_product?.title || '',
+          platform: target_platform || 'trendyol',
+          analyzed_at: created_at,
+          status: 'completed',
+          seo_tone: task?.seo_tone ?? undefined,
+          competitors,
+          market_gap,
+          pricing,
+          seo,
+          vision,
+          generated_image_url: generated_image_url || null,
+        });
       } catch {
         toast({
           variant: 'destructive',

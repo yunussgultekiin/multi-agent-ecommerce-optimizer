@@ -84,24 +84,42 @@ export default function AnalyzePage() {
   const onSubmit = async (data: AnalyzeFormData) => {
     try {
       setIsLoading(true);
+      const seoKeywords = data.seo_keywords
+        ? data.seo_keywords.split(',').map((k) => k.trim()).filter(Boolean)
+        : [];
+      const imageUrls = data.image_urls
+        ? data.image_urls.split(',').map((u) => u.trim()).filter(Boolean)
+        : [];
+
+      const userProduct = {
+        title: data.title,
+        description: data.description,
+        brand: data.brand,
+        price: data.price,
+        category: data.category,
+        stock: data.stock,
+        ...(data.weight !== undefined && { weight: data.weight }),
+        ...(data.dimensions && { dimensions: data.dimensions }),
+        seo_keywords: seoKeywords,
+        image_urls: imageUrls,
+        variants: data.variants || [],
+      };
+
       const payload = {
-        ...data,
-        seo_keywords: data.seo_keywords
-          ? data.seo_keywords.split(',').map((k) => k.trim()).filter(Boolean)
-          : [],
-        image_urls: data.image_urls
-          ? data.image_urls.split(',').map((u) => u.trim()).filter(Boolean)
-          : [],
+        ...userProduct,
+        platform: data.platform,
+        user_product: userProduct,
+        target_platform: data.platform,
       };
 
       const res = await api.post('/analyze', {
         payload,
-        user_product: { seo_tone: data.seo_tone },
+        seo_tone: data.seo_tone,
       });
-      const { task_id } = res.data;
 
+      const taskId = res.data.id;
       toast({ title: 'Analiz Başlatıldı', description: 'Ürününüz AI tarafından inceleniyor...' });
-      router.push(`/dashboard/analyze/${task_id}/progress`);
+      router.push(`/dashboard/analyze/${taskId}/progress`);
     } catch (error: any) {
       toast({
         variant: 'destructive',

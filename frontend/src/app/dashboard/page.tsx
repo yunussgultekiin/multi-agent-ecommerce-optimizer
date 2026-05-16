@@ -47,9 +47,9 @@ const statusMap = {
 } as const;
 
 function getTaskLink(task: AnalysisTask): string {
-  if (task.status === 'completed') return `/dashboard/result/${task.task_id}`;
+  if (task.status === 'completed') return `/dashboard/result/${task.id}`;
   if (task.status === 'running' || task.status === 'pending')
-    return `/dashboard/analyze/${task.task_id}/progress`;
+    return `/dashboard/analyze/${task.id}/progress`;
   return '#';
 }
 
@@ -101,8 +101,9 @@ export default function DashboardPage() {
     const fetchRecent = async () => {
       try {
         const res = await api.get('/analyze');
-        setAllTasks(res.data);
-        setRecentTasks(res.data.slice(0, 5));
+        const tasks: AnalysisTask[] = res.data?.items ?? [];
+        setAllTasks(tasks);
+        setRecentTasks(tasks.slice(0, 5));
       } catch {
         toast({ variant: 'destructive', title: 'Hata', description: 'Analizler yüklenemedi.' });
       } finally {
@@ -347,7 +348,7 @@ export default function DashboardPage() {
           <div className="space-y-2">
             {recentTasks.map((task, index) => (
               <motion.div
-                key={task.task_id}
+                key={task.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.055 }}

@@ -1,5 +1,3 @@
-/* ── Analysis Types ─────────────────────────────────────── */
-
 export type Platform = 'trendyol' | 'amazon' | 'hepsiburada';
 
 export type SeoTone = 'casual' | 'professional' | 'premium';
@@ -24,21 +22,20 @@ export interface AnalyzePayload {
   seo_keywords?: string[];
   image_urls?: string[];
   platform: Platform;
-  seo_tone?: SeoTone;
   variants?: Variant[];
 }
 
 export interface AnalysisTask {
-  task_id: string;
+  id: string;
   user_id: string;
   status: AnalysisStatus;
   payload: AnalyzePayload;
+  seo_tone?: SeoTone | null;
+  error_message?: string | null;
   created_at: string;
   updated_at: string;
   generated_image_url?: string | null;
 }
-
-/* ── SSE Progress ──────────────────────────────────────── */
 
 export type StepName =
   | 'competitor_discovery'
@@ -65,8 +62,6 @@ export interface SSEProgressEvent {
   steps: Record<StepName, StepStatus>;
   message?: string;
 }
-
-/* ── Result Types ──────────────────────────────────────── */
 
 export interface Competitor {
   name: string;
@@ -128,8 +123,6 @@ export interface AnalysisResult {
   vision: VisionResult;
   generated_image_url: string | null;
 }
-
-/* ── Auth Types ────────────────────────────────────────── */
 
 export interface User {
   id: string;

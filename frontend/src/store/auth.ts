@@ -63,8 +63,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   fetchQuota: async () => {
     try {
       const res = await api.get('/analyze');
-      const tasks: { status: string }[] = res.data;
-      const used = tasks.filter((t) => t.status === 'completed').length;
+      const items: { status: string }[] = res.data?.items ?? [];
+      const used = items.length;
       const remaining = Math.max(0, QUOTA_LIMIT - used);
       set({ quota: { used, limit: QUOTA_LIMIT, remaining } });
     } catch {

@@ -73,45 +73,70 @@ export default function ProgressPage({ params }: { params: { taskId: string } })
   useEffect(() => {
     const token = Cookies.get('access_token');
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    const url = `${baseUrl}/analyze/${params.taskId}/status/stream${token ? `?token=${token}` : ''}`;
+    const url = `${baseUrl}/analyze/${params.taskId}/status/stream`;
+    const abortController = new AbortController();
 
-    const eventSource = new EventSource(url);
-    eventSourceRef.current = eventSource;
-
-    eventSource.onmessage = (event) => {
+    const fetchStream = async () => {
       try {
-        const data: SSEProgressEvent = JSON.parse(event.data);
-        setProgress(data.pct);
-        setSteps(data.steps);
-        setTaskStatus(data.status as typeof taskStatus);
-        setConnectionLost(false);
-
-        if (data.status === 'completed') {
-          eventSource.close();
-          toast({ title: 'Analiz Tamamlandı!', description: 'Sonuçlarınız hazır.', variant: 'success' });
-          setTimeout(() => {
-            router.push(`/dashboard/result/${params.taskId}`);
-          }, 1500);
-        } else if (data.status === 'failed') {
-          eventSource.close();
-          setErrorMessage(data.message || 'Analiz sırasında beklenmeyen bir hata oluştu.');
+        const response = await fetch(url, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          signal: abortController.signal
+        });
+        if (!response.ok) throw new Error('Network error');
+        const reader = response.body?.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        if (!reader) return;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const dataStr = line.replace('data: ', '').trim();
+              if (!dataStr) continue;
+              if (['Task not found', 'Forbidden', 'Task service error', 'Task service unavailable'].includes(dataStr)) {
+                setErrorMessage(dataStr);
+                setTaskStatus('failed');
+                return;
+              }
+              try {
+                const data: SSEProgressEvent = JSON.parse(dataStr);
+                setProgress(data.pct);
+                setSteps(data.steps);
+                setTaskStatus(data.status as typeof taskStatus);
+                setConnectionLost(false);
+                if (data.status === 'completed') {
+                  toast({ title: 'Analiz Tamamlandı!', description: 'Sonuçlarınız hazır.', variant: 'success' });
+                  setTimeout(() => {
+                    router.push(`/dashboard/result/${params.taskId}`);
+                  }, 1500);
+                  return;
+                } else if (data.status === 'failed') {
+                  setErrorMessage(data.message || 'Analiz sırasında beklenmeyen bir hata oluştu.');
+                  return;
+                }
+              } catch (e) {
+              }
+            }
+          }
         }
-      } catch {
+      } catch (error: any) {
+        if (error.name !== 'AbortError') {
+          setConnectionLost(true);
+          toast({
+            variant: 'destructive',
+            title: 'Bağlantı Koptu',
+            description: 'Canlı akış bağlantısı kesildi. Sayfayı yenileyerek tekrar bağlanabilirsiniz.',
+          });
+        }
       }
     };
-
-    eventSource.onerror = () => {
-      eventSource.close();
-      setConnectionLost(true);
-      toast({
-        variant: 'destructive',
-        title: 'Bağlantı Koptu',
-        description: 'Canlı akış bağlantısı kesildi. Sayfayı yenileyerek tekrar bağlanabilirsiniz.',
-      });
-    };
-
+    fetchStream();
     return () => {
-      eventSource.close();
+      abortController.abort();
     };
   }, [params.taskId, router, toast]);
 

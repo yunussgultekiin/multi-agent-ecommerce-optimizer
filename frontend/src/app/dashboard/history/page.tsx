@@ -112,9 +112,9 @@ const FILTER_LABELS: Record<Filter, string> = {
 };
 
 function getTaskLink(task: AnalysisTask): string {
-  if (task.status === 'completed') return `/dashboard/result/${task.task_id}`;
+  if (task.status === 'completed') return `/dashboard/result/${task.id}`;
   if (task.status === 'running' || task.status === 'pending')
-    return `/dashboard/analyze/${task.task_id}/progress`;
+    return `/dashboard/analyze/${task.id}/progress`;
   return '#';
 }
 
@@ -146,7 +146,7 @@ export default function HistoryPage() {
     const fetch = async () => {
       try {
         const res = await api.get('/analyze');
-        setTasks(res.data);
+        setTasks(res.data?.items ?? []);
       } catch {
         toast({ variant: 'destructive', title: 'Hata', description: 'Geçmiş analizler yüklenemedi.' });
       } finally {
@@ -334,7 +334,7 @@ export default function HistoryPage() {
           <AnimatePresence mode="popLayout">
             {filteredTasks.map((task) => (
               <motion.div
-                key={task.task_id}
+                key={task.id}
                 variants={cardItem}
                 layout
                 exit="exit"
@@ -373,9 +373,9 @@ export default function HistoryPage() {
                           <span className="capitalize">{task.payload.platform}</span>
                         </span>
 
-                        {task.payload.seo_tone && (
+                        {task.seo_tone && (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md border border-violet-500/20 bg-violet-500/8 text-violet-400 text-[10px]">
-                            {SEO_TONE_LABELS[task.payload.seo_tone]}
+                            {SEO_TONE_LABELS[task.seo_tone]}
                           </span>
                         )}
 
