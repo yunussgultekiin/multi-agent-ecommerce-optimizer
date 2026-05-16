@@ -15,50 +15,24 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
   redis:
     image: redis:7-alpine
     restart: unless-stopped
     networks:
       - platform-net
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
-  auth-service-migrate:
+  auth-service:
     build: ./services/auth-service
-    command: alembic upgrade head
+    restart: unless-stopped
+    ports:
+      - "8001:8080"
     env_file: .env
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - platform-net
-
-  auth-service:
-    build: ./services/auth-service
-    restart: unless-stopped
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8080
-    ports:
-      - "8001:8080"
-    env_file: .env
-    depends_on:
-      auth-service-migrate:
-        condition: service_completed_successfully
-    networks:
-      - platform-net
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "20m"
-        max-file: "5"
 
   quota-service:
     build: ./services/quota-service
@@ -70,45 +44,12 @@ services:
       - redis
     networks:
       - platform-net
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "20m"
-        max-file: "5"
-
-  task-service-migrate:
-    build: ./services/task-service
-    command: alembic upgrade head
-    env_file: .env
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - platform-net
 
   task-service:
     build: ./services/task-service
     restart: unless-stopped
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8080
     ports:
       - "8002:8080"
-    env_file: .env
-    depends_on:
-      task-service-migrate:
-        condition: service_completed_successfully
-    networks:
-      - platform-net
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "20m"
-        max-file: "5"
-
-  broker-worker-migrate:
-    build:
-      context: ./services
-      dockerfile: broker-worker/Dockerfile
-    command: alembic upgrade head
     env_file: .env
     depends_on:
       postgres:
@@ -121,25 +62,18 @@ services:
       context: ./services
       dockerfile: broker-worker/Dockerfile
     restart: unless-stopped
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8080
     ports:
       - "8004:8080"
     env_file: .env
     environment:
       AGENT_WORKER_URL: http://agent-worker:8080
     depends_on:
-      broker-worker-migrate:
-        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
     networks:
       - platform-net
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "20m"
-        max-file: "5"
 
   agent-worker:
-    profiles: [agent]
     build:
       context: ./services
       dockerfile: agent-worker/Dockerfile
@@ -150,15 +84,10 @@ services:
     environment:
       TASK_SERVICE_URL: http://task-service:8080
     depends_on:
-      task-service-migrate:
-        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
     networks:
       - platform-net
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
-        max-file: "5"
 
   api-gateway:
     build:
@@ -178,25 +107,15 @@ services:
       - quota-service
     networks:
       - platform-net
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "20m"
-        max-file: "5"
 
   frontend:
-    profiles: [frontend]
     build: ./frontend
     restart: unless-stopped
     ports:
       - "3000:3000"
+    env_file: .env
     networks:
       - platform-net
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
 volumes:
   postgres_data:
