@@ -25,17 +25,16 @@ class QuotaService:
         )
 
     async def consume(self, user_id: str) -> ConsumeResponse:
-        used = await self._repo.get(user_id)
-
-        if used >= settings.quota_limit:
-            logger.warning(
-                "quota_exceeded",
-                extra={"user_id": user_id, "used": used, "limit": settings.quota_limit},
-            )
-            raise QuotaExceededError(f"Quota exceeded for user {user_id}")
-
         new_value = await self._repo.increment(user_id)
         await self._repo.set_ttl_if_new(user_id)
+
+        if new_value > settings.quota_limit:
+            await self._repo.decrement(user_id)
+            logger.warning(
+                "quota_exceeded",
+                extra={"user_id": user_id, "used": new_value - 1, "limit": settings.quota_limit},
+            )
+            raise QuotaExceededError(f"Quota exceeded for user {user_id}")
 
         logger.info(
             "quota_consumed",

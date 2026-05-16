@@ -19,6 +19,9 @@ class QuotaRepository:
     async def increment(self, user_id: str) -> int:
         return await self._redis.incr(_key(user_id))
 
+    async def decrement(self, user_id: str) -> int:
+        return await self._redis.decr(_key(user_id))
+
     async def set_with_ttl(self, user_id: str, value: int, ttl_seconds: int) -> None:
         await self._redis.set(_key(user_id), value, ex=ttl_seconds)
 
