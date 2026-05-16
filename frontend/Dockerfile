@@ -1,3 +1,13 @@
+FROM node:20-alpine AS dev
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm ci
+EXPOSE 3000
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+ENV NEXT_TELEMETRY_DISABLED=1
+CMD ["npm", "run", "dev"]
+
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json* ./

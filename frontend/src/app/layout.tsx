@@ -6,8 +6,8 @@ import { Toaster } from '@/components/ui/toaster';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'SellerPulse AI',
-  description: 'AI-driven autonomous e-commerce intelligence',
+  title: 'MarketPilot',
+  description: 'E-ticaret ürünlerinizi rakipler, fiyat, SEO ve görsel kalite açısından analiz edin.',
 };
 
 export default function RootLayout({
@@ -16,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} min-h-screen dot-pattern text-foreground antialiased selection:bg-primary/30`}>
+    <html lang="tr" className="dark">
+      <body className={`${inter.className} min-h-screen text-foreground antialiased selection:bg-primary/30`}>
         {children}
         <Toaster />
       </body>

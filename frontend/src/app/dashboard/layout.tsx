@@ -37,7 +37,7 @@ function SidebarContent({
           <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
             <ShoppingBag className="w-5 h-5 text-white" />
           </div>
-          <span className="font-bold tracking-tight">SellerPulse</span>
+          <span className="font-bold tracking-tight">MarketPilot</span>
         </Link>
       </div>
 
@@ -69,13 +69,13 @@ function SidebarContent({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Zap className="w-4 h-4 text-primary" />
-                <span className="text-xs font-medium text-muted-foreground">Analiz Kotası</span>
+                <span className="text-xs font-medium text-muted-foreground">Günlük Limit</span>
               </div>
               <span className="text-xs font-bold text-primary">{quota.remaining} kalan</span>
             </div>
             <Progress value={quotaPercentage} className="h-1.5" />
             <p className="text-[10px] text-muted-foreground">
-              {quota.used} / {quota.limit} kullanıldı
+              {quota.used} / {quota.limit} kullanıldı · 24 saat içinde yenilenir
             </p>
           </div>
         </div>
@@ -188,7 +188,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <div className="w-7 h-7 rounded-lg gradient-bg flex items-center justify-center">
                 <ShoppingBag className="w-4 h-4 text-white" />
               </div>
-              <span className="font-semibold text-sm">SellerPulse</span>
+              <span className="font-semibold text-sm">MarketPilot</span>
             </div>
           </div>
           {quota && (
@@ -202,12 +202,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         <header className="hidden md:flex h-14 items-center justify-end px-8 border-b border-white/5 bg-background/50 backdrop-blur-xl sticky top-0 z-10">
           {quota && (
-            <div className="flex items-center gap-3 glass px-4 py-1.5 rounded-full text-sm">
-              <Zap className="w-4 h-4 text-primary" />
-              <span className="text-muted-foreground">Kalan Kota:</span>
-              <span className="font-semibold text-primary">{quota.remaining}</span>
-              <span className="text-muted-foreground">/ {quota.limit}</span>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-col items-end gap-0.5 glass px-4 py-2 rounded-xl text-sm"
+            >
+              <div className="flex items-center gap-2">
+                <Zap className="w-3.5 h-3.5 text-primary" />
+                <span className="text-muted-foreground text-xs">Günlük Limit:</span>
+                <span className="font-semibold text-primary">{quota.used}</span>
+                <span className="text-muted-foreground text-xs">/ {quota.limit}</span>
+              </div>
+              <p className="text-[10px] text-muted-foreground/60 text-right">24 saat içinde yenilenir</p>
+            </motion.div>
           )}
         </header>
 

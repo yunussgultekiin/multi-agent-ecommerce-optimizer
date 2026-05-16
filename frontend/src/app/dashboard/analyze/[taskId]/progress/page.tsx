@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, CircleDashed, Loader2, XCircle, AlertTriangle, ArrowLeft, RotateCcw } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
@@ -33,16 +33,31 @@ const STEP_ORDER: StepName[] = [
 ];
 
 function StepIcon({ status }: { status: StepStatus }) {
-  switch (status) {
-    case 'completed':
-      return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
-    case 'running':
-      return <Loader2 className="w-5 h-5 text-primary animate-spin" />;
-    case 'failed':
-      return <XCircle className="w-5 h-5 text-destructive" />;
-    default:
-      return <CircleDashed className="w-5 h-5 text-muted-foreground/40" />;
+  if (status === 'completed') {
+    return (
+      <motion.div
+        initial={{ scale: 0.5, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+      >
+        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+      </motion.div>
+    );
   }
+  if (status === 'running') {
+    return (
+      <motion.div
+        animate={{ scale: [1, 1.12, 1] }}
+        transition={{ repeat: Infinity, duration: 1.2, ease: 'easeInOut' }}
+      >
+        <Loader2 className="w-5 h-5 text-primary animate-spin" />
+      </motion.div>
+    );
+  }
+  if (status === 'failed') {
+    return <XCircle className="w-5 h-5 text-destructive" />;
+  }
+  return <CircleDashed className="w-5 h-5 text-muted-foreground/40" />;
 }
 
 export default function ProgressPage({ params }: { params: { taskId: string } }) {
@@ -179,9 +194,9 @@ export default function ProgressPage({ params }: { params: { taskId: string } })
           </div>
           <div className="absolute -inset-4 rounded-3xl bg-primary/10 blur-xl -z-10 animate-pulse-glow" />
         </div>
-        <h1 className="text-4xl font-bold tracking-tight">AI Analizi Sürüyor</h1>
+        <h1 className="text-4xl font-bold tracking-tight">Analiz Sürüyor</h1>
         <p className="text-muted-foreground text-lg max-w-md mx-auto">
-          Ürününüz yapay zeka ajanları tarafından detaylıca inceleniyor...
+          Ürününüz ajan sistemi tarafından detaylıca inceleniyor...
         </p>
       </motion.div>
 
@@ -190,47 +205,54 @@ export default function ProgressPage({ params }: { params: { taskId: string } })
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.15 }}
       >
-        <Card className="glass-card p-8 border-white/10 bg-white/[0.02]">
+        <Card className="p-8 border-white/[0.08] bg-white/[0.02]">
           <div className="space-y-4">
             <div className="flex justify-between items-end mb-2">
               <span className="text-sm font-medium text-muted-foreground">Genel İlerleme</span>
-              <motion.span
-                key={Math.round(progress)}
-                initial={{ scale: 1.2, opacity: 0.7 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="text-3xl font-bold text-primary tabular-nums"
-              >
-                {Math.round(progress)}%
-              </motion.span>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={Math.round(progress)}
+                  initial={{ scale: 1.2, opacity: 0.7 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-3xl font-bold text-primary tabular-nums"
+                >
+                  {Math.round(progress)}%
+                </motion.span>
+              </AnimatePresence>
             </div>
             <Progress value={progress} className="h-3" />
           </div>
         </Card>
       </motion.div>
 
-      {connectionLost && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-200 text-sm flex items-center gap-3"
-        >
-          <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />
-          <div>
-            <p className="font-medium">Bağlantı koptu</p>
-            <p className="text-amber-300/70">
-              Sayfa yenilendiğinde otomatik olarak yeniden bağlanacaktır.
-            </p>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="ml-auto shrink-0 border-amber-500/30 text-amber-200 hover:bg-amber-500/10"
-            onClick={() => window.location.reload()}
+      <AnimatePresence>
+        {connectionLost && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-200 text-sm flex items-center gap-3"
           >
-            Yenile
-          </Button>
-        </motion.div>
-      )}
+            <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />
+            <div>
+              <p className="font-medium">Bağlantı koptu</p>
+              <p className="text-amber-300/70">
+                Sayfa yenilendiğinde otomatik olarak yeniden bağlanacaktır.
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="ml-auto shrink-0 border-amber-500/30 text-amber-200 hover:bg-amber-500/10"
+              onClick={() => window.location.reload()}
+            >
+              Yenile
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="grid gap-3 max-w-2xl mx-auto relative">
         <div className="absolute left-[19px] top-6 bottom-6 w-0.5 bg-white/5 z-0" />
@@ -269,24 +291,32 @@ export default function ProgressPage({ params }: { params: { taskId: string } })
                   {STEP_LABELS[stepKey]}
                 </span>
               </div>
-              {stepStatus === 'running' && (
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-xs text-primary/70 font-medium"
-                >
-                  İşleniyor...
-                </motion.span>
-              )}
-              {stepStatus === 'completed' && (
-                <motion.span
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-xs text-emerald-500/70 font-medium"
-                >
-                  Tamam
-                </motion.span>
-              )}
+              <AnimatePresence mode="wait">
+                {stepStatus === 'running' && (
+                  <motion.span
+                    key="running"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-xs text-primary/70 font-medium"
+                  >
+                    İşleniyor...
+                  </motion.span>
+                )}
+                {stepStatus === 'completed' && (
+                  <motion.span
+                    key="completed"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="text-xs text-emerald-500/70 font-medium"
+                  >
+                    Tamam
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </motion.div>
           );
         })}

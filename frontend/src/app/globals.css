@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer base {
   :root {
     --background: 222 47% 6%;
@@ -54,9 +58,19 @@
     @apply bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-xl;
   }
 
-  .dot-pattern {
-    background-image: radial-gradient(circle, hsl(217 33% 20%) 1px, transparent 1px);
-    background-size: 24px 24px;
+  /* Grid line patterns — replaces dot-pattern */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .bg-grid-sm {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
   }
 
   .glow {
