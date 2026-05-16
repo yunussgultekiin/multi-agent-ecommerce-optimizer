@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Progress } from '@/components/ui/progress';
+import { useToast } from '@/hooks/use-toast';
 import api from '@/lib/api';
 import { useAuthStore } from '@/store/auth';
 import type { AnalysisTask } from '@/types';
@@ -41,6 +43,7 @@ function getTaskLink(task: AnalysisTask): string {
 
 export default function DashboardPage() {
   const { user, quota } = useAuthStore();
+  const { toast } = useToast();
   const [recentTasks, setRecentTasks] = useState<AnalysisTask[]>([]);
   const [allTasks, setAllTasks] = useState<AnalysisTask[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -51,14 +54,14 @@ export default function DashboardPage() {
         const res = await api.get('/analyze');
         setAllTasks(res.data);
         setRecentTasks(res.data.slice(0, 5));
-      } catch (error) {
-        console.error('Failed to fetch history:', error);
+      } catch {
+        toast({ variant: 'destructive', title: 'Hata', description: 'Analizler yüklenemedi.' });
       } finally {
         setIsLoading(false);
       }
     };
     fetchRecent();
-  }, []);
+  }, [toast]);
 
   const completedCount = allTasks.filter((t) => t.status === 'completed').length;
   const runningCount = allTasks.filter((t) => t.status === 'running').length;
@@ -137,13 +140,21 @@ export default function DashboardPage() {
             <CardTitle className="text-sm font-medium text-muted-foreground">Kalan Kota</CardTitle>
             <Zap className="h-4 w-4 text-violet-500" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-2">
             <div className="flex items-baseline gap-1">
               <span className="text-3xl font-bold text-violet-500">
                 {quota ? quota.remaining : <Skeleton className="h-9 w-12 inline-block" />}
               </span>
               {quota && <span className="text-sm text-muted-foreground">/ {quota.limit}</span>}
             </div>
+            {quota ? (
+              <>
+                <Progress value={(quota.used / quota.limit) * 100} className="h-1.5" />
+                <p className="text-[10px] text-muted-foreground">Her ay yenilenir</p>
+              </>
+            ) : (
+              <Skeleton className="h-1.5 w-full rounded-full" />
+            )}
           </CardContent>
         </Card>
       </motion.div>

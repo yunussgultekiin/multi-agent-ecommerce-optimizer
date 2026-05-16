@@ -40,6 +40,7 @@ export const analyzeSchema = z.object({
   seo_keywords: z.string().optional(),
   image_urls: z.string().optional(),
   platform: z.enum(['trendyol', 'amazon', 'hepsiburada']),
+  seo_tone: z.enum(['casual', 'professional', 'premium']),
   variants: z
     .array(
       z.object({

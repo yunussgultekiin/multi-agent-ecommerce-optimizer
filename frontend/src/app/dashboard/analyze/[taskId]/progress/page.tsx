@@ -16,7 +16,7 @@ const STEP_LABELS: Record<StepName, string> = {
   competitor_discovery: 'Rakip Keşfi',
   competitor_research: 'Rakip Araştırması',
   vision_synthesis: 'Görsel Sentezi',
-  market_gap: 'Pazar Boşluğu Analizi',
+  market_gap: 'Pazar Boşluğu',
   pricing_analysis: 'Fiyat Analizi',
   seo_context: 'SEO Bağlamı',
   seo_optimization: 'SEO Optimizasyonu',
@@ -26,10 +26,8 @@ const STEP_LABELS: Record<StepName, string> = {
 const STEP_ORDER: StepName[] = [
   'competitor_discovery',
   'competitor_research',
-  'vision_synthesis',
   'market_gap',
   'pricing_analysis',
-  'seo_context',
   'seo_optimization',
   'image_generation',
 ];
@@ -75,7 +73,7 @@ export default function ProgressPage({ params }: { params: { taskId: string } })
 
         if (data.status === 'completed') {
           eventSource.close();
-          toast({ title: 'Analiz Tamamlandı!', description: 'Sonuçlarınız hazır.', variant: 'success' as any });
+          toast({ title: 'Analiz Tamamlandı!', description: 'Sonuçlarınız hazır.', variant: 'success' });
           setTimeout(() => {
             router.push(`/dashboard/result/${params.taskId}`);
           }, 1500);
@@ -83,8 +81,7 @@ export default function ProgressPage({ params }: { params: { taskId: string } })
           eventSource.close();
           setErrorMessage(data.message || 'Analiz sırasında beklenmeyen bir hata oluştu.');
         }
-      } catch (err) {
-        console.error('Failed to parse SSE event', err);
+      } catch {
       }
     };
 

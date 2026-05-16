@@ -14,6 +14,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { analyzeSchema, type AnalyzeFormInput, type AnalyzeFormData } from '@/lib/validations';
+import type { Platform, SeoTone } from '@/types';
 import api from '@/lib/api';
 
 const STEPS = [
@@ -26,6 +27,18 @@ const slideVariants = {
   enter: (direction: number) => ({ x: direction > 0 ? 80 : -80, opacity: 0 }),
   center: { x: 0, opacity: 1 },
   exit: (direction: number) => ({ x: direction > 0 ? -80 : 80, opacity: 0 }),
+};
+
+const SEO_TONE_DEFAULTS: Record<Platform, SeoTone> = {
+  trendyol: 'casual',
+  amazon: 'professional',
+  hepsiburada: 'professional',
+};
+
+const SEO_TONE_LABELS: Record<SeoTone, string> = {
+  casual: 'Samimi & Genç',
+  professional: 'Profesyonel',
+  premium: 'Premium & Minimal',
 };
 
 export default function AnalyzePage() {
@@ -46,12 +59,14 @@ export default function AnalyzePage() {
     resolver: zodResolver(analyzeSchema),
     defaultValues: {
       platform: 'trendyol',
+      seo_tone: 'casual',
       variants: [],
     },
   });
 
   const { fields, append, remove } = useFieldArray({ control, name: 'variants' });
   const platformValue = watch('platform');
+  const seoToneValue = watch('seo_tone');
 
   const nextStep = async () => {
     const fieldsToValidate: (keyof AnalyzeFormInput)[] =
@@ -72,14 +87,17 @@ export default function AnalyzePage() {
       const payload = {
         ...data,
         seo_keywords: data.seo_keywords
-          ? data.seo_keywords.split(',').map((k) => k.trim())
+          ? data.seo_keywords.split(',').map((k) => k.trim()).filter(Boolean)
           : [],
         image_urls: data.image_urls
-          ? data.image_urls.split(',').map((u) => u.trim())
+          ? data.image_urls.split(',').map((u) => u.trim()).filter(Boolean)
           : [],
       };
 
-      const res = await api.post('/analyze', { payload });
+      const res = await api.post('/analyze', {
+        payload,
+        user_product: { seo_tone: data.seo_tone },
+      });
       const { task_id } = res.data;
 
       toast({ title: 'Analiz Başlatıldı', description: 'Ürününüz AI tarafından inceleniyor...' });
@@ -226,7 +244,10 @@ export default function AnalyzePage() {
                       <Label>Hedef Platform *</Label>
                       <Select
                         value={platformValue}
-                        onValueChange={(v: any) => setValue('platform', v)}
+                        onValueChange={(v: Platform) => {
+                          setValue('platform', v);
+                          setValue('seo_tone', SEO_TONE_DEFAULTS[v]);
+                        }}
                       >
                         <SelectTrigger className={errors.platform ? 'border-destructive' : ''}>
                           <SelectValue placeholder="Platform seçin" />
@@ -348,6 +369,26 @@ export default function AnalyzePage() {
                   <CardDescription>Daha iyi analiz için opsiyonel detayları ekleyin</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-5">
+                  <div className="space-y-2">
+                    <Label>SEO Tonu</Label>
+                    <Select
+                      value={seoToneValue}
+                      onValueChange={(v: SeoTone) => setValue('seo_tone', v)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Ton seçin" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {(Object.entries(SEO_TONE_LABELS) as [SeoTone, string][]).map(([value, label]) => (
+                          <SelectItem key={value} value={value}>{label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground">
+                      Platform değiştiğinde otomatik güncellenir
+                    </p>
+                  </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="seo_keywords">SEO Anahtar Kelimeler</Label>
                     <Input

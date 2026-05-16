@@ -1,36 +1,33 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
-import { 
-  Check, 
-  Copy, 
-  ExternalLink, 
-  Target, 
-  TrendingUp, 
-  Search, 
+import {
+  Check,
+  Copy,
+  ExternalLink,
+  Target,
+  TrendingUp,
+  Search,
   Image as ImageIcon,
   DollarSign,
   AlertTriangle,
   Lightbulb,
   Star,
   ArrowLeft,
-  Download
+  Download,
 } from 'lucide-react';
-import { 
-  ResponsiveContainer, 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Tooltip,
   ReferenceLine,
-  BarChart,
-  Bar
 } from 'recharts';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -40,7 +37,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import api from '@/lib/api';
-import type { AnalysisResult } from '@/types';
+import type { AnalysisResult, SeoTone } from '@/types';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -50,6 +47,12 @@ const containerVariants = {
 const itemVariants = {
   hidden: { opacity: 0, y: 12 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+};
+
+const SEO_TONE_LABELS: Record<SeoTone, string> = {
+  casual: 'Samimi & Genç',
+  professional: 'Profesyonel',
+  premium: 'Premium & Minimal',
 };
 
 export default function ResultPage({ params }: { params: { taskId: string } }) {
@@ -63,7 +66,7 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
       try {
         const res = await api.get(`/analyze/${params.taskId}/result`);
         setResult(res.data);
-      } catch (error) {
+      } catch {
         toast({
           variant: 'destructive',
           title: 'Hata',
@@ -85,15 +88,15 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
     }, 2000);
   };
 
-  const CopyButton = ({ text, id, size = 'icon' }: { text: string; id: string; size?: 'icon' | 'sm' }) => (
-    <Button 
-      variant="ghost" 
-      size={size}
+  const CopyButton = ({ text, id }: { text: string; id: string }) => (
+    <Button
+      variant="ghost"
+      size="icon"
       onClick={(e) => { e.stopPropagation(); copyToClipboard(text, id); }}
       className="shrink-0"
     >
-      {copiedStates[id] 
-        ? <Check className="h-4 w-4 text-emerald-500" /> 
+      {copiedStates[id]
+        ? <Check className="h-4 w-4 text-emerald-500" />
         : <Copy className="h-4 w-4 text-muted-foreground hover:text-foreground" />
       }
     </Button>
@@ -114,7 +117,9 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
       <div className="flex flex-col items-center justify-center py-24 text-center">
         <AlertTriangle className="w-12 h-12 text-amber-500 mb-4" />
         <h2 className="text-xl font-semibold">Sonuç bulunamadı</h2>
-        <p className="text-muted-foreground mt-2 mb-6">Analiz sonuçları henüz hazır değil veya bulunamadı.</p>
+        <p className="text-muted-foreground mt-2 mb-6">
+          Analiz sonuçları henüz hazır değil veya bulunamadı.
+        </p>
         <Link href="/dashboard">
           <Button variant="outline" className="gap-2">
             <ArrowLeft className="w-4 h-4" />
@@ -125,12 +130,11 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
     );
   }
 
-  // Prepare chart data
   const chartData = result.pricing.competitor_prices
     .sort((a, b) => a.price - b.price)
-    .map(p => ({
+    .map((p) => ({
       name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name,
-      price: p.price
+      price: p.price,
     }));
 
   return (
@@ -140,7 +144,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
       animate="visible"
       className="space-y-8"
     >
-      {/* Back Button */}
       <motion.div variants={itemVariants}>
         <Link href="/dashboard/history">
           <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground -ml-2">
@@ -150,7 +153,7 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
         </Link>
       </motion.div>
 
-      {/* Overview Header */}
+      {/* Üst özet */}
       <motion.div variants={itemVariants}>
         <Card className="glass-card overflow-hidden relative">
           <div className="absolute top-0 right-0 w-72 h-72 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
@@ -158,22 +161,33 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
           <CardContent className="p-8 relative">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
               <div className="space-y-3">
-                <div className="flex flex-wrap items-center gap-3">
+                <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="outline" className="capitalize px-3 py-1">
                     {result.platform}
                   </Badge>
                   <Badge variant="success" className="px-3 py-1">
                     Analiz Tamamlandı
                   </Badge>
+                  {result.seo_tone && (
+                    <Badge variant="outline" className="px-3 py-1 text-violet-400 border-violet-400/30 bg-violet-400/10">
+                      {SEO_TONE_LABELS[result.seo_tone]}
+                    </Badge>
+                  )}
                   <span className="text-sm text-muted-foreground">
                     {format(new Date(result.analyzed_at), 'd MMM yyyy, HH:mm', { locale: tr })}
                   </span>
                 </div>
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{result.product_title}</h1>
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+                  {result.product_title}
+                </h1>
               </div>
               <div className="flex flex-col items-center gap-2 bg-white/5 p-5 rounded-2xl border border-white/10 min-w-[180px]">
-                <span className="text-xs text-muted-foreground uppercase tracking-wider font-medium">Optimal Fiyat</span>
-                <span className="text-4xl font-bold gradient-text">₺{result.pricing.optimal_price.toFixed(2)}</span>
+                <span className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
+                  Optimal Fiyat
+                </span>
+                <span className="text-4xl font-bold gradient-text">
+                  ₺{result.pricing.optimal_price.toFixed(2)}
+                </span>
                 <span className="text-xs text-muted-foreground">
                   Güven: %{Math.round(result.pricing.confidence_score * 100)}
                 </span>
@@ -183,23 +197,35 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
         </Card>
       </motion.div>
 
-      {/* Tabs */}
-      <motion.div variants={itemVariants}>
+      {/* Pazar Raporu */}
+      <motion.div variants={itemVariants} className="space-y-4">
+        <div>
+          <h2 className="text-xl font-bold tracking-tight">Pazar Raporu</h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            Rakip analizi, pazar boşlukları ve fiyatlandırma önerileri
+          </p>
+        </div>
+
         <Tabs defaultValue="competitors" className="w-full">
-          <TabsList className="mb-8 w-full justify-start overflow-x-auto bg-white/[0.03] border border-white/5 p-1">
-            <TabsTrigger value="competitors" className="gap-2"><Target className="w-4 h-4" /> Rakipler</TabsTrigger>
-            <TabsTrigger value="market" className="gap-2"><TrendingUp className="w-4 h-4" /> Pazar Boşluğu</TabsTrigger>
-            <TabsTrigger value="pricing" className="gap-2"><DollarSign className="w-4 h-4" /> Fiyatlandırma</TabsTrigger>
-            <TabsTrigger value="seo" className="gap-2"><Search className="w-4 h-4" /> SEO</TabsTrigger>
-            <TabsTrigger value="vision" className="gap-2"><ImageIcon className="w-4 h-4" /> Görsel</TabsTrigger>
+          <TabsList className="w-full justify-start overflow-x-auto bg-white/[0.03] border border-white/5 p-1">
+            <TabsTrigger value="competitors" className="gap-2">
+              <Target className="w-4 h-4" /> Rakipler
+            </TabsTrigger>
+            <TabsTrigger value="market" className="gap-2">
+              <TrendingUp className="w-4 h-4" /> Pazar Boşluğu
+            </TabsTrigger>
+            <TabsTrigger value="pricing" className="gap-2">
+              <DollarSign className="w-4 h-4" /> Fiyat
+            </TabsTrigger>
           </TabsList>
 
-          {/* Competitors Tab */}
-          <TabsContent value="competitors" className="space-y-4">
+          <TabsContent value="competitors" className="space-y-4 mt-6">
             <Card>
               <CardHeader>
                 <CardTitle>Bulunan Rakipler</CardTitle>
-                <CardDescription>Pazardaki ana rakiplerinizin güncel durumu ({result.competitors.length} rakip)</CardDescription>
+                <CardDescription>
+                  Pazardaki ana rakiplerinizin güncel durumu ({result.competitors.length} rakip)
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
@@ -236,7 +262,12 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                           </td>
                           <td className="px-6 py-4 text-right">
                             {comp.source_url && (
-                              <a href={comp.source_url} target="_blank" rel="noreferrer" className="text-primary hover:underline inline-flex items-center gap-1 text-xs font-medium">
+                              <a
+                                href={comp.source_url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-primary hover:underline inline-flex items-center gap-1 text-xs font-medium"
+                              >
                                 İncele <ExternalLink className="w-3 h-3" />
                               </a>
                             )}
@@ -250,8 +281,7 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
             </Card>
           </TabsContent>
 
-          {/* Market Gap Tab */}
-          <TabsContent value="market" className="space-y-6">
+          <TabsContent value="market" className="space-y-6 mt-6">
             <div className="grid md:grid-cols-3 gap-6">
               <Card className="md:col-span-2">
                 <CardHeader>
@@ -265,9 +295,11 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                       <p className="text-sm">{result.market_gap.positioning_rationale}</p>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-3">
-                    <h4 className="font-semibold text-xs text-muted-foreground uppercase tracking-wider">Fırsat Alanları</h4>
+                    <h4 className="font-semibold text-xs text-muted-foreground uppercase tracking-wider">
+                      Fırsat Alanları
+                    </h4>
                     {result.market_gap.gap_opportunities.map((gap, i) => (
                       <motion.div
                         key={i}
@@ -314,8 +346,7 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
             </div>
           </TabsContent>
 
-          {/* Pricing Tab */}
-          <TabsContent value="pricing" className="space-y-6">
+          <TabsContent value="pricing" className="space-y-6 mt-6">
             <div className="grid md:grid-cols-3 gap-4">
               <Card className="relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
@@ -324,7 +355,7 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    ₺{result.pricing.suggested_min.toFixed(2)} - ₺{result.pricing.suggested_max.toFixed(2)}
+                    ₺{result.pricing.suggested_min.toFixed(2)} – ₺{result.pricing.suggested_max.toFixed(2)}
                   </div>
                 </CardContent>
               </Card>
@@ -334,7 +365,9 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                   <CardTitle className="text-sm text-muted-foreground">Pazar Konumu</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-xl font-bold capitalize">{result.pricing.current_position.replace('_', ' ')}</div>
+                  <div className="text-xl font-bold capitalize">
+                    {result.pricing.current_position.replace('_', ' ')}
+                  </div>
                 </CardContent>
               </Card>
               <Card className="relative overflow-hidden">
@@ -344,7 +377,9 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-2">
-                    <div className="text-2xl font-bold">%{Math.round(result.pricing.confidence_score * 100)}</div>
+                    <div className="text-2xl font-bold">
+                      %{Math.round(result.pricing.confidence_score * 100)}
+                    </div>
                     {result.pricing.confidence_score > 0.8 ? (
                       <Badge variant="success">Yüksek</Badge>
                     ) : result.pricing.confidence_score > 0.5 ? (
@@ -368,29 +403,82 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                     <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="hsl(245, 58%, 61%)" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="hsl(245, 58%, 61%)" stopOpacity={0}/>
+                          <stop offset="5%" stopColor="hsl(245, 58%, 61%)" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="hsl(245, 58%, 61%)" stopOpacity={0} />
                         </linearGradient>
                       </defs>
                       <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                      <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `₺${value}`} />
+                      <YAxis
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                        tickFormatter={(v) => `₺${v}`}
+                      />
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
-                      <Tooltip 
-                        contentStyle={{ backgroundColor: 'hsl(222, 47%, 8%)', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: 'hsl(222, 47%, 8%)',
+                          borderColor: 'rgba(255,255,255,0.1)',
+                          borderRadius: '12px',
+                          boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                        }}
                         itemStyle={{ color: 'hsl(210, 40%, 98%)' }}
                         labelStyle={{ color: 'hsl(215, 20%, 55%)' }}
                       />
-                      <ReferenceLine y={result.pricing.optimal_price} label={{ value: "Önerilen", fill: 'hsl(245, 58%, 61%)', fontSize: 12 }} stroke="hsl(245, 58%, 61%)" strokeDasharray="5 5" strokeWidth={2} />
-                      <Area type="monotone" dataKey="price" stroke="hsl(245, 58%, 61%)" strokeWidth={2} fillOpacity={1} fill="url(#colorPrice)" />
+                      <ReferenceLine
+                        y={result.pricing.optimal_price}
+                        label={{ value: 'Önerilen', fill: 'hsl(245, 58%, 61%)', fontSize: 12 }}
+                        stroke="hsl(245, 58%, 61%)"
+                        strokeDasharray="5 5"
+                        strokeWidth={2}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="price"
+                        stroke="hsl(245, 58%, 61%)"
+                        strokeWidth={2}
+                        fillOpacity={1}
+                        fill="url(#colorPrice)"
+                      />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
+        </Tabs>
+      </motion.div>
 
-          {/* SEO Tab */}
-          <TabsContent value="seo" className="space-y-6">
+      {/* Aksiyon Planı */}
+      <motion.div variants={itemVariants} className="space-y-4">
+        <div>
+          <h2 className="text-xl font-bold tracking-tight">Aksiyon Planı</h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            SEO optimizasyonu ve görsel iyileştirme önerileri
+          </p>
+        </div>
+
+        <Tabs defaultValue="seo" className="w-full">
+          <TabsList className="w-full justify-start overflow-x-auto bg-white/[0.03] border border-white/5 p-1">
+            <TabsTrigger value="seo" className="gap-2">
+              <Search className="w-4 h-4" /> SEO
+            </TabsTrigger>
+            <TabsTrigger value="vision" className="gap-2">
+              <ImageIcon className="w-4 h-4" /> Görsel
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="seo" className="space-y-6 mt-6">
+            {result.seo_tone && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span>Seçili SEO Tonu:</span>
+                <Badge variant="outline" className="text-violet-400 border-violet-400/30 bg-violet-400/10">
+                  {SEO_TONE_LABELS[result.seo_tone]}
+                </Badge>
+              </div>
+            )}
+
             <div className="grid md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-3">
@@ -398,7 +486,9 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                   <CopyButton text={result.seo.title_suggestion} id="title" />
                 </CardHeader>
                 <CardContent>
-                  <p className="p-4 bg-white/5 rounded-xl border border-white/10 text-lg font-medium leading-relaxed">{result.seo.title_suggestion}</p>
+                  <p className="p-4 bg-white/5 rounded-xl border border-white/10 text-lg font-medium leading-relaxed">
+                    {result.seo.title_suggestion}
+                  </p>
                 </CardContent>
               </Card>
 
@@ -408,14 +498,18 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                   <CopyButton text={result.seo.meta_description} id="meta" />
                 </CardHeader>
                 <CardContent>
-                  <p className="p-4 bg-white/5 rounded-xl border border-white/10 text-sm leading-relaxed">{result.seo.meta_description}</p>
+                  <p className="p-4 bg-white/5 rounded-xl border border-white/10 text-sm leading-relaxed">
+                    {result.seo.meta_description}
+                  </p>
                 </CardContent>
               </Card>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
               <Card>
-                <CardHeader><CardTitle className="text-sm">Anahtar Kelime Boşlukları</CardTitle></CardHeader>
+                <CardHeader>
+                  <CardTitle className="text-sm">Anahtar Kelime Boşlukları</CardTitle>
+                </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {result.seo.keyword_gaps.map((kw, i) => (
@@ -426,7 +520,9 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
               </Card>
 
               <Card>
-                <CardHeader><CardTitle className="text-sm">İçerik Önerileri</CardTitle></CardHeader>
+                <CardHeader>
+                  <CardTitle className="text-sm">İçerik Önerileri</CardTitle>
+                </CardHeader>
                 <CardContent>
                   <ul className="space-y-2.5 text-sm">
                     {result.seo.content_recommendations.map((rec, i) => (
@@ -440,7 +536,12 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
               </Card>
 
               <Card>
-                <CardHeader><CardTitle className="text-sm">Platform İpuçları <Badge variant="outline" className="ml-2 text-[10px]">{result.platform}</Badge></CardTitle></CardHeader>
+                <CardHeader>
+                  <CardTitle className="text-sm">
+                    Platform İpuçları{' '}
+                    <Badge variant="outline" className="ml-2 text-[10px]">{result.platform}</Badge>
+                  </CardTitle>
+                </CardHeader>
                 <CardContent>
                   <ul className="space-y-2.5 text-sm">
                     {result.seo.platform_tips.map((tip, i) => (
@@ -453,10 +554,34 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                 </CardContent>
               </Card>
             </div>
+
+            {result.seo.product_development_ideas && result.seo.product_development_ideas.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Lightbulb className="w-4 h-4 text-amber-500" />
+                    Ürün Geliştirme Fırsatları
+                  </CardTitle>
+                  <CardDescription>Pazarda aranan ancak ürününüzde bulunmayan özellikler</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {result.seo.product_development_ideas.map((idea, i) => (
+                      <div key={i} className="flex items-start gap-3 p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
+                        <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                        <p className="text-sm text-muted-foreground">
+                          <span className="font-medium text-foreground">Pazarda şu özellik aranıyor ancak ürününüzde yok: </span>
+                          {idea}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
-          {/* Vision Tab */}
-          <TabsContent value="vision" className="space-y-6">
+          <TabsContent value="vision" className="space-y-6 mt-6">
             <div className="grid lg:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
@@ -466,9 +591,9 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                 <CardContent className="flex flex-col items-center justify-center min-h-[400px]">
                   {result.generated_image_url ? (
                     <div className="relative group w-full">
-                      <img 
-                        src={result.generated_image_url} 
-                        alt="AI Generated Product" 
+                      <img
+                        src={result.generated_image_url}
+                        alt="AI Generated Product"
                         className="w-full h-auto rounded-xl object-cover shadow-2xl border border-white/10"
                       />
                       <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -484,7 +609,9 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                     <div className="flex flex-col items-center text-center p-8 border border-dashed border-white/20 rounded-xl bg-white/[0.02] w-full">
                       <AlertTriangle className="w-12 h-12 text-amber-500 mb-4" />
                       <h3 className="font-semibold text-lg mb-2">Görsel üretimi tamamlanamadı</h3>
-                      <p className="text-sm text-muted-foreground max-w-sm">API kaynaklı bir sorun oluştu veya girdi yetersizdi. Lütfen analiz geçmişinden tekrar deneyin.</p>
+                      <p className="text-sm text-muted-foreground max-w-sm">
+                        API kaynaklı bir sorun oluştu veya girdi yetersizdi.
+                      </p>
                     </div>
                   )}
                 </CardContent>
@@ -526,8 +653,14 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                   <CardContent>
                     <div className="flex flex-wrap gap-2">
                       {result.vision.dominant_colors.map((color, i) => (
-                        <div key={i} className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-xl border border-white/10 text-sm hover:bg-white/[0.08] transition-colors cursor-default">
-                          <div className="w-4 h-4 rounded-full border border-white/20 shadow-inner" style={{ backgroundColor: color }} />
+                        <div
+                          key={i}
+                          className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-xl border border-white/10 text-sm hover:bg-white/[0.08] transition-colors cursor-default"
+                        >
+                          <div
+                            className="w-4 h-4 rounded-full border border-white/20 shadow-inner"
+                            style={{ backgroundColor: color }}
+                          />
                           <span className="font-mono text-xs">{color}</span>
                         </div>
                       ))}

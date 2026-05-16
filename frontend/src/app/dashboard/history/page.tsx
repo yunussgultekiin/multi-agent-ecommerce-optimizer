@@ -5,15 +5,29 @@ import Link from 'next/link';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { motion } from 'framer-motion';
-import { Calendar, Tag, ArrowRight, Activity, Plus, Search } from 'lucide-react';
+import { Calendar, Tag, ArrowRight, Activity, Plus, Search, Trash2, ImageOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import api from '@/lib/api';
-import type { AnalysisTask, AnalysisStatus } from '@/types';
+import type { AnalysisTask, AnalysisStatus, SeoTone } from '@/types';
+
+const SEO_TONE_LABELS: Record<SeoTone, string> = {
+  casual: 'Samimi & Genç',
+  professional: 'Profesyonel',
+  premium: 'Premium & Minimal',
+};
 
 const statusMap = {
   pending: { label: 'Bekliyor', variant: 'pending' },
@@ -55,6 +69,8 @@ export default function HistoryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<AnalysisStatus | 'all'>('all');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -70,6 +86,20 @@ export default function HistoryPage() {
     };
     fetchHistory();
   }, [toast]);
+
+  const handleDeleteAll = async () => {
+    setIsDeleting(true);
+    try {
+      await api.delete('/analyze');
+      setTasks([]);
+      setDeleteDialogOpen(false);
+      toast({ title: 'Geçmiş Silindi', description: 'Tüm analizler başarıyla silindi.' });
+    } catch {
+      toast({ variant: 'destructive', title: 'Hata', description: 'Geçmiş silinemedi. Lütfen tekrar deneyin.' });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch =
@@ -102,12 +132,24 @@ export default function HistoryPage() {
           <h1 className="text-3xl font-bold tracking-tight">Geçmiş Analizler</h1>
           <p className="text-muted-foreground mt-1">Daha önce yaptığınız tüm analizlerin listesi.</p>
         </div>
-        <Link href="/dashboard/analyze">
-          <Button className="w-full md:w-auto gap-2">
-            <Plus className="w-4 h-4" />
-            Yeni Analiz
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          {tasks.length > 0 && (
+            <Button
+              variant="outline"
+              className="gap-2 text-destructive border-destructive/30 hover:bg-destructive/10 hover:text-destructive"
+              onClick={() => setDeleteDialogOpen(true)}
+            >
+              <Trash2 className="w-4 h-4" />
+              Tüm Geçmişi Sil
+            </Button>
+          )}
+          <Link href="/dashboard/analyze">
+            <Button className="w-full md:w-auto gap-2">
+              <Plus className="w-4 h-4" />
+              Yeni Analiz
+            </Button>
+          </Link>
+        </div>
       </motion.div>
 
       {!isLoading && tasks.length > 0 && (
@@ -157,9 +199,9 @@ export default function HistoryPage() {
             </div>
             <div className="absolute -inset-3 rounded-3xl bg-primary/5 blur-xl -z-10" />
           </div>
-          <h2 className="text-2xl font-bold">Henüz analiz bulunmuyor</h2>
+          <h2 className="text-2xl font-bold">Henüz analiz yok</h2>
           <p className="text-muted-foreground mt-2 max-w-sm mb-8">
-            İlk ürün analizini başlatarak pazar boşluklarını ve optimal fiyatlandırmayı hemen keşfedin.
+            İlk analizini başlat ve ürününün pazar konumunu keşfet.
           </p>
           <Link href="/dashboard/analyze">
             <Button size="lg" className="h-12 px-8 gap-2 shadow-lg shadow-indigo-500/10">
@@ -180,34 +222,49 @@ export default function HistoryPage() {
             <motion.div key={task.task_id} variants={itemVariants}>
               <Link href={getTaskLink(task)}>
                 <Card className="hover:bg-white/[0.06] transition-all duration-200 cursor-pointer group border-white/5 hover:border-white/10">
-                  <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="space-y-2 min-w-0">
-                      <div className="flex items-center gap-3 flex-wrap">
-                        <Badge variant={statusMap[task.status].variant as any}>
-                          {statusMap[task.status].label}
-                        </Badge>
-                        <h3 className="font-semibold text-base group-hover:text-primary transition-colors truncate">
-                          {task.payload.title}
-                        </h3>
-                      </div>
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1.5">
-                          <Tag className="w-3.5 h-3.5" />
-                          <span className="capitalize">{task.payload.platform}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5" />
-                          <span>
-                            {format(new Date(task.updated_at), 'd MMM yyyy, HH:mm', { locale: tr })}
-                          </span>
-                        </div>
-                        {task.payload.brand && (
-                          <span className="text-xs px-2 py-0.5 bg-white/5 rounded">
-                            {task.payload.brand}
-                          </span>
+                  <CardContent className="p-5 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4 min-w-0 flex-1">
+                      <div className="shrink-0 w-14 h-14 rounded-xl overflow-hidden border border-white/10 bg-white/5 flex items-center justify-center">
+                        {task.generated_image_url ? (
+                          <img
+                            src={task.generated_image_url}
+                            alt={task.payload.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <ImageOff className="w-5 h-5 text-muted-foreground/30" />
                         )}
                       </div>
+
+                      <div className="space-y-2 min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <Badge variant={statusMap[task.status].variant as any}>
+                            {statusMap[task.status].label}
+                          </Badge>
+                          <h3 className="font-semibold text-base group-hover:text-primary transition-colors truncate">
+                            {task.payload.title}
+                          </h3>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1.5">
+                            <Tag className="w-3.5 h-3.5" />
+                            <span className="capitalize">{task.payload.platform}</span>
+                          </div>
+                          {task.payload.seo_tone && (
+                            <Badge variant="outline" className="text-[10px] text-violet-400 border-violet-400/30 bg-violet-400/10 py-0">
+                              {SEO_TONE_LABELS[task.payload.seo_tone]}
+                            </Badge>
+                          )}
+                          <div className="flex items-center gap-1.5">
+                            <Calendar className="w-3.5 h-3.5" />
+                            <span>
+                              {format(new Date(task.updated_at), 'd MMM yyyy, HH:mm', { locale: tr })}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+
                     <div className="flex items-center gap-2 text-primary font-medium opacity-0 group-hover:opacity-100 transition-all duration-200 translate-x-[-8px] group-hover:translate-x-0 shrink-0">
                       <span className="text-sm">Detaylar</span>
                       <ArrowRight className="w-4 h-4" />
@@ -219,6 +276,35 @@ export default function HistoryPage() {
           ))}
         </motion.div>
       )}
+
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Tüm Geçmişi Sil</DialogTitle>
+            <DialogDescription>
+              Tüm analizleriniz kalıcı olarak silinecek. Bu işlem geri alınamaz.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 mt-2">
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+              disabled={isDeleting}
+            >
+              Vazgeç
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteAll}
+              disabled={isDeleting}
+              className="gap-2"
+            >
+              <Trash2 className="w-4 h-4" />
+              {isDeleting ? 'Siliniyor...' : 'Evet, Sil'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }

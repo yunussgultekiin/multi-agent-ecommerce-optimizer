@@ -2,6 +2,8 @@
 
 export type Platform = 'trendyol' | 'amazon' | 'hepsiburada';
 
+export type SeoTone = 'casual' | 'professional' | 'premium';
+
 export type AnalysisStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
 
 export interface Variant {
@@ -22,6 +24,7 @@ export interface AnalyzePayload {
   seo_keywords?: string[];
   image_urls?: string[];
   platform: Platform;
+  seo_tone?: SeoTone;
   variants?: Variant[];
 }
 
@@ -32,6 +35,7 @@ export interface AnalysisTask {
   payload: AnalyzePayload;
   created_at: string;
   updated_at: string;
+  generated_image_url?: string | null;
 }
 
 /* ── SSE Progress ──────────────────────────────────────── */
@@ -101,6 +105,7 @@ export interface SeoResult {
   keyword_gaps: string[];
   content_recommendations: string[];
   platform_tips: string[];
+  product_development_ideas?: string[];
 }
 
 export interface VisionResult {
@@ -115,6 +120,7 @@ export interface AnalysisResult {
   platform: Platform;
   analyzed_at: string;
   status: AnalysisStatus;
+  seo_tone?: SeoTone;
   competitors: Competitor[];
   market_gap: MarketGapResult;
   pricing: PricingResult;

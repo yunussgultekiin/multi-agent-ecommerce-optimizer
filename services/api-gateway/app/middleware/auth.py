@@ -19,6 +19,9 @@ _token_service = TokenService()
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
+        if request.method == "OPTIONS":
+            return await call_next(request)
+
         if request.url.path.rstrip("/") in _PUBLIC_PATHS:
             return await call_next(request)
 

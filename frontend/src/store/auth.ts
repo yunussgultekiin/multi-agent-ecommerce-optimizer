@@ -68,7 +68,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const remaining = Math.max(0, QUOTA_LIMIT - used);
       set({ quota: { used, limit: QUOTA_LIMIT, remaining } });
     } catch {
-      // silent — quota bilgisi gösterilmez
     }
   },
 }));
