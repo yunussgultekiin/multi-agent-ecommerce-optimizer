@@ -1,3 +1,4 @@
+import asyncio
 from app import limiter
 from app.clients.quota_client import QuotaClient, QuotaServiceError
 from app.clients.task_client import TaskClient, TaskServiceError
@@ -144,6 +145,16 @@ async def stream_status(request: Request, task_id: str):
         raise HTTPException(status_code=503, detail="Internal token unavailable")
 
     async def event_generator() -> AsyncGenerator[str, None]:
+        disconnected = asyncio.Event()
+
+        async def _watch_disconnect() -> None:
+            while not disconnected.is_set():
+                if await request.is_disconnected():
+                    disconnected.set()
+                    return
+                await asyncio.sleep(1.0)
+
+        watcher = asyncio.create_task(_watch_disconnect())
         try:
             async with httpx.AsyncClient(timeout=None) as client:
                 async with client.stream(
@@ -160,11 +171,18 @@ async def stream_status(request: Request, task_id: str):
                         return
 
                     async for chunk in response.aiter_text():
-                        if await request.is_disconnected():
+                        if disconnected.is_set():
                             break
                         yield chunk
         except httpx.HTTPError:
             yield "event: error\ndata: Task service unavailable\n\n"
+        finally:
+            disconnected.set()
+            watcher.cancel()
+            try:
+                await watcher
+            except asyncio.CancelledError:
+                pass
 
     return StreamingResponse(
         event_generator(),
