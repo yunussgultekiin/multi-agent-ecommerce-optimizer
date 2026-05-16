@@ -34,21 +34,25 @@ async def _edit_with_imagen(source_url: str, prompt: str) -> bytes | None:
         response = await asyncio.wait_for(
             loop.run_in_executor(
                 None,
-                lambda: _client.models.generate_images(
+                lambda: _client.models.edit_image(
                     model=settings.imagen_model,
                     prompt=prompt,
-                    config=types.GenerateImagesConfig(
-                        number_of_images=1,
-                        aspect_ratio="1:1",
-                        safety_filter_level="BLOCK_SOME_THRESHOLD",
-                        edit_mode="EDIT_MODE_BGSWAP",
-                    ),
                     reference_images=[
                         types.RawReferenceImage(
                             reference_image=types.Image(image_bytes=image_bytes),
                             reference_id=1,
-                        )
+                        ),
+                        types.MaskReferenceImage(
+                            reference_id=2,
+                            config=types.MaskReferenceConfig(
+                                mask_mode="MASK_MODE_BACKGROUND",
+                            ),
+                        ),
                     ],
+                    config=types.EditImageConfig(
+                        edit_mode="EDIT_MODE_BGSWAP",
+                        number_of_images=1,
+                    ),
                 ),
             ),
             timeout=_IMAGEN_TIMEOUT_SECONDS,
