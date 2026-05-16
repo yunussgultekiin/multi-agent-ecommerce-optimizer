@@ -1,4 +1,3 @@
-import argparse
 import asyncio
 from datetime import datetime
 from dotenv import load_dotenv
@@ -23,7 +22,6 @@ logging.basicConfig(
 )
 
 from app.chroma_client import seed_seo_chunks
-from app.config import settings
 from app.core import ToolResult
 from app.tools.rival_agent_tools import (
     run_competitor_discovery_tool,
@@ -33,12 +31,8 @@ from app.tools.rival_agent_tools import (
     run_smart_pricing_engine,
     run_trend_analyzer,
 )
-from app.tools.seo_agent_tools.image_generation.prompts_image import build_image_prompt
-from app.tools.seo_agent_tools.image_generation.utils_image import select_variant
 from app.tools.seo_agent_tools.seo_optimizer.tools_seo import SeoOptimizerTool
 from app.tools.seo_agent_tools.seo_optimizer.models_seo import SeoOptimizerInput
-
-LOCAL_IMAGE_PATH: Path | None = Path(__file__).parent / "test_picture.png"
 
 USER_PRODUCT: dict = {
     "title": "Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi",
@@ -66,7 +60,7 @@ USER_PRODUCT: dict = {
     "review_count": None,
 }
 
-TARGET_PLATFORM = "trendyol"
+TARGET_PLATFORM = "amazon"
 
 def _save_json(output_dir: Path, filename: str, data: object) -> None:
     path = output_dir / filename
@@ -91,58 +85,7 @@ def _to_tool_results(dicts: list[dict]) -> list[ToolResult]:
         for d in dicts
     ]
 
-async def _run_imagen_local(image_path: Path, prompt: str) -> bytes | None:
-    from google import genai
-    from google.genai import types
-    from google.genai.types import HttpOptions
-
-    client = genai.Client(
-        vertexai=True,
-        project=settings.google_cloud_project,
-        location=settings.google_cloud_location,
-        http_options=HttpOptions(api_version="v1"),
-    )
-    image_bytes = image_path.read_bytes()
-    loop = asyncio.get_running_loop()
-    try:
-        response = await asyncio.wait_for(
-            loop.run_in_executor(
-                None,
-                lambda: client.models.edit_image(
-                    model=settings.imagen_model,
-                    prompt=prompt,
-                    reference_images=[
-                        types.RawReferenceImage(
-                            reference_image=types.Image(image_bytes=image_bytes),
-                            reference_id=1,
-                        ),
-                        types.MaskReferenceImage(
-                            reference_id=2,
-                            config=types.MaskReferenceConfig(
-                                mask_mode="MASK_MODE_BACKGROUND",
-                            ),
-                        ),
-                    ],
-                    config=types.EditImageConfig(
-                        edit_mode="EDIT_MODE_BGSWAP",
-                        number_of_images=1,
-                    ),
-                ),
-            ),
-            timeout=90,
-        )
-        if response.generated_images:
-            return response.generated_images[0].image.image_bytes
-        print("  Imagen returned no images")
-        return None
-    except asyncio.TimeoutError:
-        print("  Imagen timed out")
-        return None
-    except Exception as exc:
-        print(f"  Imagen failed: {exc}")
-        return None
-
-async def main(image_path: Path | None) -> None:
+async def main() -> None:
     seed_seo_chunks()
 
     run_id = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -154,7 +97,7 @@ async def main(image_path: Path | None) -> None:
     print(f"  E2E Test  |  {run_id}")
     print(f"  Platform  : {TARGET_PLATFORM}")
     print(f"  Product   : {USER_PRODUCT['title']}")
-    print(f"  Image     : {image_path or 'not provided — image step will be skipped'}")
+    print("  Image     : disabled (image step is skipped)")
     print(f"  Output    : {output_dir}")
     print(f"{sep}\n")
 
@@ -269,7 +212,7 @@ async def main(image_path: Path | None) -> None:
         "pricing_result": pricing.data if pricing.success else {},
     }
 
-    print("\n[7+8/8] seo_optimizer + image_generation  (parallel)")
+    print("\n[7+8/8] seo_optimizer + image_generation  (image disabled)")
     t0 = time.perf_counter()
 
     async def _run_seo() -> ToolResult:
@@ -283,41 +226,16 @@ async def main(image_path: Path | None) -> None:
         )
 
     async def _run_image() -> tuple[ToolResult, bytes | None]:
-        if image_path is None:
-            return (
-                ToolResult(
-                    success=False,
-                    fallback_used=True,
-                    data={"generated_image_url": None, "error": "no image provided"},
-                ),
-                None,
-            )
-        chosen_variant = select_variant(USER_PRODUCT, rival_json.get("pricing_result", {}))
-        prompt = build_image_prompt(
-            user_product=USER_PRODUCT,
-            selected_variant=chosen_variant,
-            gap_result=rival_json.get("gap_result", {}),
-            target_platform=TARGET_PLATFORM,
-        )
-        img_bytes = await _run_imagen_local(image_path, prompt)
-        if img_bytes is None:
-            return (
-                ToolResult(
-                    success=False,
-                    fallback_used=True,
-                    data={"generated_image_url": None, "error": "Imagen returned no output"},
-                ),
-                None,
-            )
-        local_png = output_dir / "generated_image.png"
-        local_png.write_bytes(img_bytes)
         return (
             ToolResult(
-                success=True,
-                fallback_used=False,
-                data={"generated_image_url": str(local_png), "selected_variant": chosen_variant},
+                success=False,
+                fallback_used=True,
+                data={
+                    "generated_image_url": None,
+                    "error": "image generation disabled in run_e2e_test",
+                },
             ),
-            img_bytes,
+            None,
         )
 
     (seo_result, (image_result, _)) = await asyncio.gather(_run_seo(), _run_image())
@@ -328,9 +246,6 @@ async def main(image_path: Path | None) -> None:
     print(f"  elapsed={timing['07_08_seo_image_parallel']}s  (concurrent)")
     _save_json(output_dir, "07_seo_output.json", _tr(seo_result))
     _save_json(output_dir, "08_image_output.json", _tr(image_result))
-    if image_result.success:
-        print(f"  image  saved → generated_image.png")
-
     timing["TOTAL"] = round(time.perf_counter() - total_start, 2)
 
     total = {
@@ -370,19 +285,4 @@ async def main(image_path: Path | None) -> None:
     print(f"\n  All outputs → {output_dir}\n")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="E2E test for Rival + SEO pipeline")
-    parser.add_argument(
-        "--image",
-        type=Path,
-        default=None,
-        help="Local product image path for Imagen (PNG/JPG). Skipped if not provided.",
-    )
-    args = parser.parse_args()
-
-    image = args.image or LOCAL_IMAGE_PATH
-
-    if image and not image.exists():
-        print(f"ERROR: image file not found: {image}")
-        sys.exit(1)
-
-    asyncio.run(main(image))
+    asyncio.run(main())

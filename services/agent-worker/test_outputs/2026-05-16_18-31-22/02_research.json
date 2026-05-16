@@ -1,0 +1,191 @@
+[
+  {
+    "success": true,
+    "fallback_used": true,
+    "data": {
+      "competitor_name": "Argeus Camp Katlanır Kamp Sandalyesi",
+      "platform": "hepsiburada",
+      "estimated_price": 1260.5,
+      "currency": "TRY",
+      "features": [
+        "Dayanıklı çelik iskelet ve yüksek kaliteli Oxford kumaş",
+        "120 kg'a kadar taşıma kapasitesi",
+        "Bardak tutucu",
+        "Taşıma çantası ile kolay taşınabilirlik",
+        "Kompakt katlanabilir yapı",
+        "Ergonomik tasarım ile uzun süreli oturumlarda konfor",
+        "Hafif yapı",
+        "Suya ve aşınmaya dayanıklı kumaş"
+      ],
+      "rating": null,
+      "review_count": null,
+      "brand": "Argeus",
+      "variants": [],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "katlanır sandalye",
+        "outdoor sandalye",
+        "plaj sandalyesi",
+        "piknik sandalyesi"
+      ],
+      "category_trends": "Kamp ve outdoor mobilyalarında hafif, taşınabilir ve dayanıklı ürünler öne çıkmaktadır. Katlanabilir kamp sandalyeleri, özellikle kolay kurulumu ve taşıma çantası ile birlikte gelmesi sayesinde popülerliğini korumaktadır."
+    }
+  },
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+      "platform": "hepsiburada",
+      "estimated_price": 2599.0,
+      "currency": "TRY",
+      "features": [
+        "Konforlu oturum alanı ve estetik ahşap kol tasarımı",
+        "Katlanabilir yapısı sayesinde kolay taşınır ve pratik kullanım sağlar",
+        "Dayanıklı çelik iskelet ile uzun ömürlü kullanım",
+        "600D Oxford kumaş sayesinde sağlam ve yırtılmaya karşı dirençli yapı",
+        "Maksimum 130 kg taşıma kapasitesi",
+        "Kamp, piknik, plaj, bahçe ve balkon gibi birçok alanda kullanım için uygun",
+        "Ergonomik ahşap kol yapısı",
+        "Ürün boyutları: 62 cm x 55 cm x 78 cm"
+      ],
+      "rating": null,
+      "review_count": null,
+      "brand": "North Pacific",
+      "variants": [],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "katlanır sandalye",
+        "ahşap kollu kamp sandalyesi",
+        "piknik sandalyesi",
+        "outdoor sandalye"
+      ],
+      "category_trends": "Kamp sandalyelerinde konfor ve dayanıklılık ön plandadır. Katlanabilir, hafif ve kolay taşınabilir modeller, bardaklık gibi ek özelliklere sahip olanlar popülerdir."
+    }
+  },
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "Bofigo Ahşap Kollu Kamp Sandalyesi",
+      "platform": "hepsiburada",
+      "estimated_price": 489.0,
+      "currency": "TRY",
+      "features": [
+        "Dayanıklı polyester kumaştan yapılmıştır.",
+        "Sağlam metal gövdeye sahiptir.",
+        "Katlanabilir ve portatif yapısı sayesinde kolayca taşınır.",
+        "Bardaklık özelliği bulunur.",
+        "Ahşap kolları konforlu bir kullanım sunar.",
+        "Tek elle kolayca açılıp kapanabilir.",
+        "Taşıma çantası ile birlikte gelir.",
+        "110 kg'a kadar taşıma kapasitesine sahiptir."
+      ],
+      "rating": null,
+      "review_count": null,
+      "brand": "Bofigo",
+      "variants": [],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "ahşap kollu kamp sandalyesi",
+        "katlanır sandalye",
+        "piknik sandalyesi",
+        "outdoor sandalye"
+      ],
+      "category_trends": "Kamp ve outdoor mobilyaları arasında katlanabilir, hafif ve dayanıklı sandalyeler öne çıkmaktadır. Kullanıcılar, taşıma kolaylığı ve ek özellikler (bardaklık gibi) sunan ürünleri tercih etmektedir."
+    }
+  },
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "Windcamp Katlanır Kamp Sandalyesi",
+      "platform": "hepsiburada",
+      "estimated_price": 2499.0,
+      "currency": "TRY",
+      "features": [
+        "Sağlam ve konforlu çelik iskeletli",
+        "150 kg taşıma kapasiteli",
+        "Çamurda ve kumda batmayan geniş tabanlı ayaklar",
+        "Çıkarılabilir ve yıkanabilir kolluk kumaşları",
+        "Bardak tutucu ve dergi/telefon cebi",
+        "Kolay katlanabilir ve taşıma çantası ile taşınabilir",
+        "Sırt kısmı ayarlanabilir (bazı modellerde 150 derece yatış)",
+        "Oxford kumaş veya çift kat elyaf dolgulu kumaş seçenekleri"
+      ],
+      "rating": 5.0,
+      "review_count": 3,
+      "brand": "Windcamp",
+      "variants": [
+        {
+          "name": "Lux Blue",
+          "price_delta": null
+        },
+        {
+          "name": "Bel Korunaklı - Siyah",
+          "price_delta": null
+        },
+        {
+          "name": "Bel Korunaklı - Yeşil",
+          "price_delta": null
+        },
+        {
+          "name": "Premium - Sırt Ayarlanabilir - Siyah",
+          "price_delta": null
+        },
+        {
+          "name": "Premium - Sırt Ayarlanabilir - Bej",
+          "price_delta": null
+        },
+        {
+          "name": "Lux - Mavi",
+          "price_delta": null
+        },
+        {
+          "name": "Lux - Yeşil",
+          "price_delta": null
+        }
+      ],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "katlanır sandalye",
+        "outdoor sandalye",
+        "portatif sandalye",
+        "piknik sandalyesi"
+      ],
+      "category_trends": "Kamp ve outdoor mobilyaları arasında hafif, dayanıklı ve kolay taşınabilir katlanır sandalyeler öne çıkmaktadır. Kullanıcılar, konforu ve ek özelliklere sahip (bardaklık, ayarlanabilir sırt gibi) modelleri tercih etmektedir."
+    }
+  },
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "Free Camp Katlanır Kamp Sandalyesi",
+      "platform": "hepsiburada",
+      "estimated_price": 2990.0,
+      "currency": "TRY",
+      "features": [
+        "Dayanıklı metal iskelet yapısı",
+        "Su itici ve yırtılmaz kumaş",
+        "Saniyeler içinde açılıp kapanabilen pratik mekanizma",
+        "Omuz askılı taşıma çantası dahildir",
+        "Ergonomik tasarım ile uzun süreli oturmalarda bile yorgunluk hissettirmez",
+        "Bardaklık özelliği (bazı modellerde)",
+        "120 kg taşıma kapasitesi",
+        "Hafif ve taşınabilir tasarım"
+      ],
+      "rating": 4.4,
+      "review_count": 2,
+      "brand": "FreeCamp",
+      "variants": [],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "katlanır sandalye",
+        "piknik sandalyesi",
+        "outdoor sandalye",
+        "taşınabilir sandalye"
+      ],
+      "category_trends": "Kamp mobilyaları, özellikle katlanır kamp sandalyeleri, konforlu ve pratik outdoor deneyimleri için popülerliğini artırmaktadır. Hafiflik, dayanıklılık ve kolay taşınabilirlik gibi özellikler ön plana çıkmaktadır."
+    }
+  }
+]

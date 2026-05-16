@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Bu sandalye, kullanıcı ürününün ahşap kollu ve katlanır kamp sandalyesi özelliklerini doğrudan karşılamaktadır ve orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "SECENART Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanır kamp sandalyesi olmasıyla kullanıcı ürününe rakip olan bu model, orta segmentte konumlanmaktadır."
+      },
+      {
+        "competitor_name": "KUBİLAY ASKERİ MALZEME Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanır kamp sandalyesi olması, bu ürünü kullanıcı ürünüyle doğrudan rekabetçi kılmaktadır ve orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "Motzi Beşiktaş Çizgili Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Çizgili deseni ve katlanır kamp sandalyesi olmasıyla benzerlik gösteren bu ürün, orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "GCI Outdoor Low-Ride Recliner Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Katlanır kamp sandalyesi olması ve konforlu yapısıyla öne çıkan bu ürün, orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "Outwell Kenai Ultra Konforlu Doğa Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Konforlu yapısı ve kamp sandalyesi olmasıyla benzerlik gösteren bu ürün, premium segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "Platan Chair Ones-Lp Hafif Katlanır Kamp Piknik Sandalyesi",
+        "platform": "amazon",
+        "reason": "Hafif ve katlanır kamp sandalyesi olmasıyla kullanıcı ürününe rakip olan bu model, bütçe segmentinde yer almaktadır."
+      }
+    ]
+  }
+}

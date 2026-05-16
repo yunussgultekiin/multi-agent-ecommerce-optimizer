@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "kamp sandalyesi",
+      "kamp masa & sandalye seti",
+      "outdoor çanta & aksesuar",
+      "kamp mutfağı",
+      "outdoor ayakkabı"
+    ],
+    "demand_signals": [
+      "taşınabilir ve hafif kamp ekipmanlarına artan ilgi",
+      "çok fonksiyonlu kamp ürünlerine yönelim",
+      "mevsimsel kamp ürünlerinde erken talep artışı"
+    ],
+    "platform_trends": [
+      "bestseller rozetli ürünlerde satış hacmi artışı",
+      "kamp setleri ve bundle ürünlerin popülaritesi",
+      "uygun fiyatlı ve performans odaklı ürünlerin yükselişi"
+    ],
+    "category_trend_summary": "Kamp & Outdoor kategorisinde taşınabilir ve çok fonksiyonlu ekipmanlara olan talep artıyor. Özellikle kamp sandalyesi, masa setleri ve mutfak ekipmanları gibi ürünler öne çıkarken, bestseller rozetli ve set halindeki ürünler Amazon'da daha fazla ilgi görüyor."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "Outwell Cromer 5 Kademeli Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Bu ürün, ahşap kollu, katlanır ve çizgili kamp sandalyesine benzer şekilde katlanabilir ve ayarlanabilir özellikler sunarak doğrudan rekabet etmektedir. (premium)"
+      },
+      {
+        "competitor_name": "Outwell Seaford 4 Pozisyonlu & Konforlu Katlanır Plaj Sandalyesi",
+        "platform": "amazon",
+        "reason": "Bu katlanır plaj sandalyesi, ahşap kollu kamp sandalyesinin sunduğu konfor ve taşınabilirlik özellikleriyle benzer bir kullanım alanı sunar. (premium)"
+      },
+      {
+        "competitor_name": "Mira Kollu Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Bu ürün, ahşap kollu katlanır kamp sandalyesine benzer şekilde kollu ve katlanabilir yapısıyla doğrudan rekabet eden, dayanıklı bir seçenektir. (mid-range)"
+      },
+      {
+        "competitor_name": "Camp4 Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Bu katlanır kamp sandalyesi, ahşap kollu kamp sandalyesinin temel özelliklerini taşıyan, kompakt ve taşınabilir bir alternatiftir. (mid-range)"
+      },
+      {
+        "competitor_name": "Büyük Boy Katlanır Kamp Plaj Piknik Ve Balıkçı Sandalyesi TN1",
+        "platform": "amazon",
+        "reason": "Bu büyük boy katlanır sandalye, ahşap kollu kamp sandalyesinin sunduğu rahatlık ve dayanıklılık özellikleriyle benzer bir deneyim sunar. (budget)"
+      },
+      {
+        "competitor_name": "ARGEUS Katlanabilir Piknik ve Kamp Sandalyesi – Bardaklıklı – Rock",
+        "platform": "amazon",
+        "reason": "Bu katlanabilir kamp sandalyesi, bardaklıklı olması ve yüksek taşıma kapasitesiyle ahşap kollu kamp sandalyesine fonksiyonel bir alternatif sunar. (mid-range)"
+      },
+      {
+        "competitor_name": "GRAY WOLF Kamp Sandalyesi Quatro Kollu Petli Siyah",
+        "platform": "amazon",
+        "reason": "Bu kollu kamp sandalyesi, ahşap kollu kamp sandalyesine benzer bir konfor ve kullanım kolaylığı sunarak doğrudan rekabet etmektedir. (mid-range)"
+      },
+      {
+        "competitor_name": "DFT Kollu Katlanır Kamp Sandalyesi Rejisör - Yeşil",
+        "platform": "amazon",
+        "reason": "Bu kollu katlanır rejisör sandalye, ahşap kollu kamp sandalyesinin sunduğu taşınabilirlik ve rahatlık özellikleriyle benzer bir nişi hedefler. (budget)"
+      },
+      {
+        "competitor_name": "Madfox SitCommand G92 Katlanır Kamp Koltuğu Yellow Graphite",
+        "platform": "amazon",
+        "reason": "Bu katlanır kamp koltuğu, ahşap kollu kamp sandalyesine alternatif olarak daha modern bir tasarıma ve yüksek konfora sahip bir seçenektir. (premium)"
+      },
+      {
+        "competitor_name": "FreeCamp Foster Plus Lacivert Buzluklu Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Bu katlanır kamp sandalyesi, entegre buzluk özelliğiyle ahşap kollu kamp sandalyesine ek fonksiyonellik sunarak rekabetçi bir alternatif oluşturur. (mid-range)"
+      }
+    ]
+  }
+}

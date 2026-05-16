@@ -1,0 +1,48 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "SECENART Ahşap Kollu Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Bu sandalye, ahşap kollu ve katlanabilir kamp sandalyesi olmasıyla doğrudan rakip konumundadır ve muhtemelen (mid-range) fiyat segmentindedir."
+      },
+      {
+        "competitor_name": "Mocca Style Neone Kırmızı Katlanır Ahşap Kollu Kamp Piknik Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu ve katlanabilir yapısıyla kullanıcıların aradığı temel özelliklere sahiptir ve (mid-range) fiyat segmentinde yer alır."
+      },
+      {
+        "competitor_name": "KUBİLAY ASKERİ MALZEME Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "trendyol",
+        "reason": "Askeri malzeme markası altında sunulan bu katlanır ahşap kollu kamp sandalyesi, dayanıklılığı ve işlevselliği ile öne çıkarak (mid-range) segmentte rekabet eder."
+      },
+      {
+        "competitor_name": "moniev Natura 2 Adet Kamp Sandalyesi Katlanır Piknik Sandalye",
+        "platform": "trendyol",
+        "reason": "İki adet satılması ve katlanabilir piknik sandalyesi olması, aileler veya gruplar için cazip bir seçenek sunar ve (budget) fiyat segmentine hitap edebilir."
+      },
+      {
+        "competitor_name": "Decathlon Quechua Katlanır Kamp Sandalye",
+        "platform": "trendyol",
+        "reason": "Decathlon'un Quechua markası, outdoor ürünlerdeki bilinirliği ile dikkat çeker ve bu katlanır kamp sandalyesi (mid-range) segmentinde güçlü bir alternatiftir."
+      },
+      {
+        "competitor_name": "Metallica Concept Konfor Kamp Sandalyesi Katlanır Bardaklıklı",
+        "platform": "trendyol",
+        "reason": "Bardaklıklı ve konfor odaklı tasarımıyla bu kamp sandalyesi, kullanıcıların ek özellikler arayışına hitap eder ve (mid-range) fiyat aralığında bulunur."
+      },
+      {
+        "competitor_name": "Outdoart Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Lüks ve ahşap kollu olarak belirtilen bu model, daha üstün malzeme kalitesi ve konfor arayanları hedefler, bu da onu (premium) segmentine yaklaştırır."
+      },
+      {
+        "competitor_name": "Rox Camping 0318 Fonksiyonel Sehpalı Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Fonksiyonel sehpalı olması, kullanıcılara ek bir kolaylık sağlar ve bu özellik onu (mid-range) segmentinde rekabetçi kılar."
+      }
+    ]
+  }
+}

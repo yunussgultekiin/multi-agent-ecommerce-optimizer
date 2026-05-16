@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "Simple Living Ahşap Kollu Geniş Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Bu sandalye, ahşap kolları ve katlanabilir yapısıyla kullanıcıya konfor ve taşınabilirlik sunarak doğrudan rakip konumundadır (orta segment)."
+      },
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "North Pacific markasının ahşap kollu kamp sandalyesi, benzer özelliklere sahip olması ve Hepsiburada'da bulunması nedeniyle rekabetçi bir üründür (orta segment)."
+      },
+      {
+        "competitor_name": "Mocca Style Neone Kırmızı Katlanır Ahşap Kollu Kamp Piknik Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, Mocca Style ürününü doğrudan bir rakip yapmaktadır (orta segment)."
+      },
+      {
+        "competitor_name": "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Joyfull Turtle markasının ahşap kollu katlanır kamp sandalyesi, benzer işlevselliği ve malzeme kalitesiyle rekabetçi bir alternatiftir (orta segment)."
+      },
+      {
+        "competitor_name": "SECENART Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Secenart markasının ahşap kollu katlanır kamp sandalyesi, temel özellikler açısından kullanıcıların tercih edebileceği bir rakip üründür (orta segment)."
+      },
+      {
+        "competitor_name": "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "hepsiburada",
+        "reason": "Tekno Trust'un ahşap kollu katlanır kamp sandalyesi, benzer kullanım amacına hizmet etmesi ve çiftli paket seçeneğiyle rekabetçi bir üründür (orta segment)."
+      },
+      {
+        "competitor_name": "Bofigo Kamp Sandalyesi Yeşil Ahşap Kollu Katlanır Sandalye",
+        "platform": "hepsiburada",
+        "reason": "Bofigo'nun ahşap kollu katlanır kamp sandalyesi, özellikle set halinde sunulmasıyla dikkat çeken ve benzer özelliklere sahip bir rakip üründür (orta segment)."
+      }
+    ]
+  }
+}

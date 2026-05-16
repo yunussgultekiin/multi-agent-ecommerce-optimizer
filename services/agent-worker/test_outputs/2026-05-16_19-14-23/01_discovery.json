@@ -1,0 +1,28 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "Kampseti 2 Adet Mavi Katlanır Kamp Sandalyesi - Plaj Piknik Sandalyesi Bardaklıklı M1",
+        "platform": "amazon",
+        "reason": "Bu ürün, kullanıcının ahşap kollu katlanır kamp sandalyesine benzer şekilde katlanabilir yapıda ve kamp/piknik kullanımı için tasarlanmış olup, bardaklıklı olması ek bir özellik sunar (mid-range)."
+      },
+      {
+        "competitor_name": "Walke Katlanır Kamp Sandalyesi Çift Taraf Bardaklı Piknik Sandalyesi Siyah",
+        "platform": "amazon",
+        "reason": "Bu katlanır kamp sandalyesi, kullanıcının ürünüyle doğrudan rekabet eden bir piknik ve kamp sandalyesi olup, çift taraflı bardaklık özelliği sunar (mid-range)."
+      },
+      {
+        "competitor_name": "Freecamp Huxley Pro Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Freecamp markasının bu katlanır kamp sandalyesi, kullanıcının ürünüyle aynı kategoride yer alarak kamp ve outdoor aktiviteleri için tasarlanmıştır (premium)."
+      },
+      {
+        "competitor_name": "Katlanabilir Ahşap Kollu Kamp Sandalyesi Taşınabilir",
+        "platform": "amazon",
+        "reason": "Bu ürün, kullanıcının ürünüyle birebir aynı özelliklere sahip, ahşap kollu ve katlanabilir bir kamp sandalyesidir (mid-range)."
+      }
+    ]
+  }
+}

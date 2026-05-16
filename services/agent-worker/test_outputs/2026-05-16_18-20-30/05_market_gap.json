@@ -1,0 +1,73 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "Bofigo Ahşap Kollu Kamp Sandalyesi",
+          "Hastunç Ahşap Kolçaklı Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 489.0,
+        "price_range_max": 679.99
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "Best Choice Kamp Sandalyesi",
+          "Mocca Style Kamp Sandalyesi Katlanır Ahşap Kollu",
+          "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu"
+        ],
+        "price_range_min": 0.0,
+        "price_range_max": 1033.07
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "NURGAZ CAMPOUT GALA XL KAMP SANDALYESİ NGC055",
+          "Freecamp Huxley Katlanır Kamp Sandalyesi",
+          "Funky Chairs Freedom Katlanır Kamp Sandalyesi",
+          "Nurgaz NG-C135 Çift Kişilik Kamp Sandalyesi",
+          "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 1920.0,
+        "price_range_max": 5950.0
+      }
+    ],
+    "user_product_cluster": "value_for_money",
+    "gap_opportunities": [
+      "Bardak tutucu veya küçük eşya cebi gibi ek fonksiyonel özelliklere sahip, ahşap kollu, orta fiyat segmentinde bir ürün eksikliği.",
+      "Kişiselleştirilmiş tasarım seçenekleri (örneğin isim yazılı) sunan, ahşap kollu kamp sandalyesi segmentinde boşluk.",
+      "Sırt askısı veya taşıma çantası gibi kolay taşıma çözümleri sunan, ahşap kollu ve şık tasarımlı bir ürünün eksikliği."
+    ],
+    "sentiment_based_opportunities": [],
+    "trend_based_opportunities": [
+      "Kişiye özel isim yazılı ürünler gibi kişiselleştirilmiş seçenekler sunarak ürünün cazibesini artırmak.",
+      "Dayanıklılık ve çok amaçlı kullanım vurgusu yaparak ürünün pazar trendleriyle uyumunu güçlendirmek."
+    ],
+    "strategic_actions": [
+      "Ürüne entegre bir bardak tutucu veya küçük bir yan cep ekleyerek fonksiyonelliğini artırın ve bunu ürün açıklamasında ve görsellerinde vurgulayın.",
+      "Ürünün taşıma kolaylığını (hafiflik, katlanabilirlik) vurgulayan görseller ve açıklamalar ekleyin, gerekirse bir taşıma çantası opsiyonu sunun.",
+      "Ürünün ahşap kolçaklarının gerçek ahşap olduğunu ve estetik değerini vurgulayan pazarlama materyalleri oluşturun, rakiplerin plastik kolçaklı ürünlerinden ayrışın."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "NURGAZ",
+        "Freecamp",
+        "Funky Chairs",
+        "Joyfull Turtle"
+      ],
+      "budget_brands": [
+        "Bofigo",
+        "Hastunç"
+      ],
+      "user_brand_position": "CampRoute, ahşap kollu ve şık tasarımlı ürünleriyle orta segmentte, kalite ve estetiği uygun fiyatla birleştiren bir marka olarak konumlanmıştır."
+    },
+    "positioning_score": 0.7,
+    "positioning_rationale": "CampRoute, ahşap kolçak gibi premium bir özelliği orta fiyat segmentinde sunarak iyi bir değer önerisi sunmaktadır. Ancak, fonksiyonel ek özellikler ve kişiselleştirme gibi trendlere daha fazla odaklanarak konumunu güçlendirebilir.",
+    "variant_gap_opportunities": [
+      "Mevcut yeşil-beyaz ve mavi-beyaz çizgili seçeneklere ek olarak, trend olan toprak tonları veya daha modern desenlerde renk varyantları sunarak pazar çeşitliliğini artırmak."
+    ]
+  }
+}

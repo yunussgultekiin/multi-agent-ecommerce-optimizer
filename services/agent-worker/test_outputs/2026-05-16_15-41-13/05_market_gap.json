@@ -1,0 +1,74 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "Simple Living Ahşap Kollu Geniş Katlanır Kamp, Plaj ve Piknik Sandalyesi"
+        ],
+        "price_range_min": 0.0,
+        "price_range_max": 500.0
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "Bofigo Kamp Sandalyesi",
+          "Argeus Camp Katlanır Kamp Sandalyesi",
+          "Outdoart Ahşap Kollu Lüks Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 500.0,
+        "price_range_max": 1700.0
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "North Pacific Ahşap Kollu Kamp Sandalyesi",
+          "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+          "Naturehike Kamp Sandalyesi",
+          "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 1700.0,
+        "price_range_max": 6000.0
+      }
+    ],
+    "user_product_cluster": "value_for_money",
+    "gap_opportunities": [
+      "Bardak tutucu, eşya saklama gözü gibi ek konfor ve pratiklik sağlayan özelliklere sahip ahşap kollu, uygun fiyatlı bir ürün eksikliği.",
+      "Ergonomik tasarım ve bel desteği gibi uzun süreli kullanıma yönelik konfor özelliklerini uygun fiyatlı ahşap kollu sandalyelerde vurgulayan bir boşluk.",
+      "Su geçirmez kılıf veya taşıma çantası gibi ürünün taşınabilirliğini ve korunmasını artıran aksesuarların uygun fiyatlı ahşap kollu modellerde standart olarak sunulmaması."
+    ],
+    "sentiment_based_opportunities": [
+      "Müşterilerin dayanıklılık ve konfor beklentilerini karşılayacak, özellikle uzun süreli kullanımlarda bel ağrısını önleyici ergonomik tasarımlara odaklanmak.",
+      "Ürünlerin hafifliği ve kolay taşınabilirliği konusunda net bir iletişim stratejisi geliştirmek, taşıma çantası gibi aksesuarları vurgulamak."
+    ],
+    "trend_based_opportunities": [
+      "Hafif, dayanıklı ve kolay taşınabilir özelliklerin yanı sıra, bardaklık ve eşya saklama gözü gibi ek fonksiyonellikleri uygun fiyatlı ahşap kollu sandalyelerde sunmak.",
+      "Ergonomik tasarım ve konforu ön plana çıkaran, uzun süreli kullanıma uygun ahşap kollu modeller geliştirmek."
+    ],
+    "strategic_actions": [
+      "Ürüne bardak tutucu ve küçük bir eşya saklama gözü gibi ek özellikler ekleyerek 'Ahşap Kollu, Konforlu ve Fonksiyonel Kamp Sandalyesi' olarak yeniden konumlandırmak.",
+      "Ürünün taşıma kapasitesini (110 kg) ve su itici kumaş özelliğini vurgulayarak dayanıklılık ve pratiklik algısını güçlendirmek, SEO anahtar kelimelerine 'dayanıklı kamp sandalyesi' ve 'su itici kamp sandalyesi' eklemek.",
+      "Ürünün ergonomik tasarımını ve uzun süreli kullanımdaki konforunu vurgulayan pazarlama materyalleri oluşturmak, gerekirse küçük bir bel desteği aksesuarı sunmak."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "Naturehike",
+        "Joyfull Turtle",
+        "Tekno Trust",
+        "North Pacific"
+      ],
+      "budget_brands": [
+        "Simple Living"
+      ],
+      "user_brand_position": "CampRoute, ahşap kollu kamp sandalyesi pazarında orta segmentte, uygun fiyatlı ancak kaliteli ahşap kolçak ve sağlam yapı sunarak 'değer odaklı' bir konumda yer almaktadır."
+    },
+    "positioning_score": 0.6,
+    "positioning_rationale": "CampRoute, ahşap kolçak gibi premium bir özelliği rekabetçi bir fiyatla sunarak iyi bir değer teklifi sunmaktadır. Ancak, ek konfor ve pratiklik özelliklerinde rakiplerinin gerisinde kalmaktadır.",
+    "variant_gap_opportunities": [
+      "Mevcut renk varyantlarına ek olarak, daha geniş bir renk yelpazesi sunarak farklı zevklere hitap etmek.",
+      "Farklı boyutlarda (örneğin daha geniş oturma alanı veya daha yüksek sırt desteği) varyantlar sunarak farklı kullanıcı ihtiyaçlarını karşılamak."
+    ]
+  }
+}

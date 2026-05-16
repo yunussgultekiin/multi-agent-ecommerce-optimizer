@@ -1,0 +1,60 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "pain_points": [
+      "Sipariş sonrası iletişimsizlik ve geçersiz kargo numarası mağduriyeti yaşanması.",
+      "Ürünlerin kalitesiz çıkması ve iade taleplerinin reddedilmesi.",
+      "Kısa sürede ürün yırtılması veya hasar görmesi.",
+      "Kargo ücreti konusunda yanıltıcı bilgiler verilmesi ve sepette ek ücret çıkması."
+    ],
+    "praised_features": [
+      "Farklı pozisyonlarda ayarlanabilen sırt desteği sayesinde kişisel konfor sağlaması.",
+      "Kolayca katlanabilir ve taşınabilir yapısıyla az yer kaplaması.",
+      "Yüksek taşıma kapasitesi sunması.",
+      "Bardaklık gibi ek özelliklerin bulunması."
+    ],
+    "competitor_sentiments": [
+      {
+        "competitor_name": "Mira Kollu Katlanır Kamp Sandalyesi",
+        "positive": [],
+        "negative": [
+          "Sipariş sonrası iletişimsizlik yaşanması.",
+          "Geçersiz kargo numarası verilmesi.",
+          "Ürünlerin kalitesiz çıkması.",
+          "İade taleplerinin reddedilmesi."
+        ]
+      },
+      {
+        "competitor_name": "Madfox SitCommand G92 Katlanır Kamp Koltuğu Yellow Graphite",
+        "positive": [],
+        "negative": [
+          "Ürünün kısa sürede yırtılması."
+        ]
+      },
+      {
+        "competitor_name": "ARGEUS Katlanabilir Piknik ve Kamp Sandalyesi – Bardaklıklı – Rock",
+        "positive": [],
+        "negative": [
+          "Kargo ücreti konusunda yanıltıcı bilgi verilmesi ve sepette ek ücret çıkması.",
+          "Ürünlerin rahatsız edici olması."
+        ]
+      }
+    ],
+    "marketing_angles": [
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi ile siparişlerinizde şeffaf iletişim ve geçerli kargo takibi sayesinde mağduriyet yaşamazsınız.",
+      "Rakiplerin aksine, CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi yüksek kaliteli malzemelerle üretilmiştir ve uzun ömürlü kullanım sunar.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, rakiplerin ürünlerinin kısa sürede yırtılması sorununa karşı dayanıklı yapısıyla öne çıkar.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, farklı pozisyonlarda ayarlanabilen sırt desteği ile kişisel konforunuzu en üst düzeye çıkarır.",
+      "Kolayca katlanabilir ve taşınabilir CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi ile her yere rahatlıkla götürebilirsiniz.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, yüksek taşıma kapasitesi sayesinde güvenli ve konforlu bir oturma deneyimi sunar.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi'nin entegre bardaklığı ile içecekleriniz her zaman elinizin altında."
+    ],
+    "risk_warnings": [
+      "Müşteri iletişiminde şeffaf olunmalı ve kargo bilgileri doğru ve güncel olarak sağlanmalıdır.",
+      "Ürün kalitesinden ödün verilmemeli ve dayanıklı malzemeler kullanılmalıdır.",
+      "Ürün açıklamaları ve fiyatlandırma konusunda yanıltıcı bilgilerden kaçınılmalıdır.",
+      "İade ve değişim süreçleri müşteri odaklı ve sorunsuz bir şekilde yönetilmelidir."
+    ]
+  }
+}

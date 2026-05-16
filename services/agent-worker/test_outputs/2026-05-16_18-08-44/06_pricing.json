@@ -1,0 +1,47 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "price_median": 1069.955,
+    "price_q1": 594.4549999999999,
+    "price_q3": 1574.5,
+    "predicted_price": 1069.955,
+    "price_range_min": 0.0,
+    "price_range_max": 3044.5675,
+    "positioning": "underpriced",
+    "positioning_score": 0.0,
+    "market_power_gap": "User product is weakly positioned vs competitors (gap: -10.53)",
+    "confidence_score": 0.7,
+    "fallback_used": false,
+    "variant_pricing": [
+      {
+        "variant_name": "Yeşil - Beyaz Çizgili",
+        "base_price": 549.9,
+        "price_delta": -520.055,
+        "suggested_price": 594.455,
+        "positioning": "underpriced"
+      },
+      {
+        "variant_name": "Mavi - Beyaz Çizgili",
+        "base_price": 549.9,
+        "price_delta": -520.055,
+        "suggested_price": 594.455,
+        "positioning": "underpriced"
+      }
+    ],
+    "competitor_variant_overlap": [
+      {
+        "variant_name": "Yeşil - Beyaz Çizgili",
+        "matching_competitors": [
+          "Simple Living Ahşap Kollu Geniş Katlanır Kamp Sandalyesi"
+        ]
+      },
+      {
+        "variant_name": "Mavi - Beyaz Çizgili",
+        "matching_competitors": [
+          "Simple Living Ahşap Kollu Geniş Katlanır Kamp Sandalyesi"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "Mocca Style Neone Kırmızı Katlanır Ahşap Kollu Kamp Piknik Sandalyesi",
+          "EksikSepeti BestChoice Desenli Katlanır Kamp Piknik Sandalyesi Rejisör Koltuğu"
+        ],
+        "price_range_min": 512.1,
+        "price_range_max": 539.0
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "SECENART Ahşap Kollu Katlanır Kamp Sandalyesi",
+          "And Outdoor Katlanır Çocuk Sandalyesi Turuncu - Kaplan Desen",
+          "KOÇTAŞ Deluks Kamp Sandalyesi Ekru"
+        ],
+        "price_range_min": 549.9,
+        "price_range_max": 849.9
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "KUBİLAY ASKERİ MALZEME Kamp Sandalyesi Katlanır Ahşap Kollu",
+          "Metallica Concept Konfor Kamp Sandalyesi Katlanır Bardaklıklı",
+          "DECATHLON Quechua Katlanır Kamp Sandalyesi",
+          "GRAY WOLF Katlanır Kamp Sandalyesi 160 Kg Taşıma Kapasitesi"
+        ],
+        "price_range_min": 1071.46,
+        "price_range_max": 1900.0
+      }
+    ],
+    "user_product_cluster": "value_for_money",
+    "gap_opportunities": [
+      "Çocuklara özel tasarlanmış, temalı kamp sandalyeleri nişi (And Outdoor'un çocuk sandalyesi bu alanda tek).",
+      "Ekstra konfor sağlayan entegre boyun yastığı veya ergonomik tasarım gibi özelliklere sahip ahşap kollu sandalye eksikliği.",
+      "Bardaklık veya yan sehpa gibi ek fonksiyonellik sunan ahşap kollu kamp sandalyesi seçeneği azlığı.",
+      "Çok yüksek taşıma kapasitesine (140 kg ve üzeri) sahip ahşap kollu kamp sandalyesi segmentinde boşluk.",
+      "Farklı renk ve desen seçenekleri sunan ahşap kollu kamp sandalyelerinde çeşitlilik eksikliği."
+    ],
+    "sentiment_based_opportunities": [],
+    "trend_based_opportunities": [
+      "Kullanıcı ürününün 'kamp sandalyesi' ve 'katlanır sandalye' gibi anahtar kelimelerde daha fazla vurgulanması, trend olan bu özelliklere olan talebi karşılayabilir.",
+      "Ürünün 'ahşap kollu' özelliğinin, trend olan ahşap detaylı ürünler kategorisinde öne çıkarılması.",
+      "Ürünün taşınabilirlik ve dayanıklılık özelliklerinin, kullanıcıların pratiklik ve uzun ömürlü kullanım beklentilerini karşılayacak şekilde vurgulanması."
+    ],
+    "strategic_actions": [
+      "Ürün başlığına ve açıklamasına 'bardaklıklı' veya 'yan sehpası olan' gibi ek özellikler ekleyerek ürünün fonksiyonelliğini artırın ve premium segmentteki rakiplerle rekabet edin.",
+      "Ürünün taşıma kapasitesini artırarak (örneğin 120 kg üzerine çıkararak) veya mevcut 110 kg kapasitesini daha belirgin vurgulayarak, dayanıklılık arayan müşteri kitlesine hitap edin.",
+      "Ürünün SEO anahtar kelimelerine 'piknik sandalyesi', 'plaj sandalyesi' gibi kullanım alanlarını ekleyerek ve 'ahşap kollu' özelliğini daha fazla vurgulayarak görünürlüğünü artırın.",
+      "Ürünün mevcut renk varyantlarına ek olarak, trend olan farklı renk ve desen seçenekleri sunarak pazar çeşitliliğini artırın."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "KUBİLAY ASKERİ MALZEME",
+        "Metallica Concept",
+        "Decathlon Quechua",
+        "Gray Wolf"
+      ],
+      "budget_brands": [
+        "Mocca Home",
+        "BestChoice"
+      ],
+      "user_brand_position": "CampRoute, ahşap kollu katlanır kamp sandalyesi segmentinde orta fiyatlı ve temel özelliklere sahip bir marka olarak konumlanmıştır. Ürün, dayanıklılık ve estetiği bir araya getirme potansiyeline sahiptir ancak ek fonksiyonellik ve yüksek taşıma kapasitesi gibi premium özelliklerden yoksundur."
+    },
+    "positioning_score": 0.6,
+    "positioning_rationale": "CampRoute, ahşap kolçak ve paslanmaz metal profil gibi kaliteli özellikler sunarak bütçe dostu rakiplerinden ayrışıyor. Ancak, bardaklık, yüksek taşıma kapasitesi veya ergonomik tasarım gibi premium özellikler sunmadığı için üst segmentte güçlü bir konumlandırmaya sahip değil.",
+    "variant_gap_opportunities": [
+      "Mevcut yeşil-beyaz ve mavi-beyaz çizgili desenlere ek olarak, düz renkler veya farklı modern desenler sunarak daha geniş bir kitleye hitap edilebilir.",
+      "Farklı boyutlarda (örneğin XL veya çocuk boyu) varyantlar sunarak farklı kullanıcı ihtiyaçlarına yönelik pazar boşlukları doldurulabilir."
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "success": false,
+  "fallback_used": true,
+  "data": {
+    "error": "Max retries reached: Empty response text from Gemini"
+  }
+}

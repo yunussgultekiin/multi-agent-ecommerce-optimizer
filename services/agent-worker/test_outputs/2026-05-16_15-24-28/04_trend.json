@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "Katlanabilir kamp masası",
+      "Kamp sandalyesi",
+      "Outdoor çanta & aksesuar",
+      "Kamp mutfağı ürünleri"
+    ],
+    "demand_signals": [
+      "Çevre dostu ve sürdürülebilir kamp ekipmanlarına artan ilgi",
+      "Çok fonksiyonlu ve hafif ürünlerin tercih edilmesi",
+      "Dijital detox ve doğayla iç içe aktivitelere yönelim"
+    ],
+    "platform_trends": [
+      "Birlikte alınan ürün setlerinin popülaritesi",
+      "Fiyat/performans odaklı ürünlerin ön plana çıkması",
+      "Hızlı teslimat ve kolay iade seçeneklerinin önemi"
+    ],
+    "category_trend_summary": "Kamp & Outdoor kategorisinde, kullanıcılar pratik, hafif ve çok fonksiyonlu ekipmanlara yöneliyor. Özellikle katlanabilir kamp masaları ve sandalyeleri gibi taşınabilir mobilyalar ile kamp mutfağı ürünleri popülerliğini artırıyor. Çevre dostu ve sürdürülebilir ürünler de tüketicilerin dikkatini çekmeye devam ediyor."
+  }
+}

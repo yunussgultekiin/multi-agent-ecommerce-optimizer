@@ -1,0 +1,69 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "Decathlon Quechua Katlanır Kamp Sandalyesi",
+          "Hundemir Katlanır Ahşap Kolçaklı Çizgili Desenli Outdoor Kamp Piknik Sandalyesi"
+        ],
+        "price_range_min": 1690.0,
+        "price_range_max": 1690.0
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "SECENART Ahşap Kollu Katlanır Kamp Sandalyesi",
+          "North Pacific Ahşap Kollu Kamp Sandalyesi"
+        ],
+        "price_range_min": 2796.0,
+        "price_range_max": 2890.0
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi",
+          "Coleman Convoy 28QT Taşınabilir Soğutucu Buzluk"
+        ],
+        "price_range_min": 5950.0,
+        "price_range_max": 11295.0
+      }
+    ],
+    "user_product_cluster": "budget",
+    "gap_opportunities": [
+      "Ahşap kolçaklı sandalyeler arasında uygun fiyatlı ve yüksek taşıma kapasitesine sahip ürünlerin eksikliği.",
+      "Bardaklık gibi ek konfor özellikleri sunan uygun fiyatlı ahşap kolçaklı kamp sandalyelerinin olmaması.",
+      "Kullanıcı yorumları ve puanlaması yüksek, uygun fiyatlı ahşap kolçaklı kamp sandalyelerine olan ihtiyaç."
+    ],
+    "sentiment_based_opportunities": [
+      "Yüksek taşıma kapasitesi (150 kg ve üzeri) sunan uygun fiyatlı ahşap kolçaklı modellerin eksikliği.",
+      "Bardaklık gibi ek özelliklerin uygun fiyatlı ürünlerde bulunmaması bir eksikliktir."
+    ],
+    "trend_based_opportunities": [
+      "Dayanıklılık, konfor ve pratikliği bir arada sunan, ahşap kolçaklı ve uygun fiyatlı kamp sandalyelerine olan talebi karşılamak.",
+      "Kullanıcıların ürünlerin teknik özelliklerine ve yorumlarına dikkat etmesi nedeniyle, ürün detaylarını ve avantajlarını vurgulayan içerikler oluşturmak."
+    ],
+    "strategic_actions": [
+      "Ürünün 110 kg taşıma kapasitesini ve gerçek ahşap kolçaklarını vurgulayarak, uygun fiyatlı ahşap kolçaklı sandalye arayan bütçe odaklı müşterilere hitap eden pazarlama materyalleri oluşturmak.",
+      "Ürüne bardaklık gibi ek bir özellik ekleyerek veya bu özelliği içeren yeni bir varyant sunarak, Decathlon gibi rakiplerin sunduğu konfor özelliklerini uygun fiyat segmentinde sunmak."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "Joyfull Turtle",
+        "Coleman"
+      ],
+      "budget_brands": [
+        "Decathlon",
+        "Hundemir"
+      ],
+      "user_brand_position": "CampRoute, ahşap kolçaklı kamp sandalyeleri pazarında uygun fiyatlı ve temel özelliklere sahip bir seçenek olarak konumlanmaktadır. Rakiplerine kıyasla daha erişilebilir bir fiyat noktasında ahşap kolçak ve sağlam yapı sunarak bütçe dostu bir alternatif oluşturmaktadır."
+    },
+    "positioning_score": 0.7,
+    "positioning_rationale": "CampRoute, ahşap kolçaklı kamp sandalyesi pazarında uygun fiyatlı bir seçenek olarak iyi konumlanmıştır. Ancak, ek özellikler ve daha yüksek taşıma kapasitesi sunarak konumunu güçlendirme potansiyeli bulunmaktadır.",
+    "variant_gap_opportunities": [
+      "Farklı renk seçenekleri sunarak (Yeşil - Beyaz Çizgili ve Mavi - Beyaz Çizgili) kullanıcıların kişisel tercihlerine hitap etmek ve ürünün estetik çekiciliğini artırmak."
+    ]
+  }
+}

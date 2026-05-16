@@ -1,0 +1,110 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "pain_points": [
+      "Kargo gecikmeleri ve siparişlerin zamanında teslim edilmemesi",
+      "Ürünlerin hasarlı veya eksik ulaşması, kötü paketleme",
+      "Müşteri hizmetlerinin yetersizliği ve iletişim sorunları, iade/değişim süreçlerinde yaşanan zorluklar",
+      "Ürün kalitesinin düşük olması, kısa sürede deformasyon veya kırılma (özellikle termos kapakları, valiz tekerlekleri gibi farklı ürünlerde belirtilse de genel bir kalite algısı oluşturabilir)",
+      "Yanlış veya eksik ürün gönderimi",
+      "Stok hatası bahanesiyle sipariş iptalleri ve fiyat farklılıkları"
+    ],
+    "praised_features": [
+      "Kolay katlanabilirlik ve taşınabilirlik",
+      "Sağlam ve dayanıklı yapı (bazı ürünler için belirtilmiştir)",
+      "Konforlu oturma alanı",
+      "Bardaklık gibi ek fonksiyonel özellikler (Quechua, Madfox ChillSeat)",
+      "Estetik ve şık tasarım (ahşap detaylar)"
+    ],
+    "competitor_sentiments": [
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "positive": [],
+        "negative": [
+          "Termos kapaklarının kırılması ve yedek parça temininde sorunlar",
+          "Valizlerin ilk kullanımda kırılması veya deforme olması",
+          "Genel olarak ürün kalitesizliği ve garanti sorunları"
+        ]
+      },
+      {
+        "competitor_name": "Decathlon Quechua Katlanabilir Kamp Sandalyesi",
+        "positive": [
+          "Taşıma kolaylığı için entegre kayış",
+          "Kolay katlanabilir/açılır sistem",
+          "Yüksek taşıma kapasitesi (150 kg)"
+        ],
+        "negative": [
+          "Kargo gecikmeleri ve siparişlerin zamanında teslim edilmemesi",
+          "Müşteri hizmetleri ile iletişim sorunları",
+          "Eksik ürün gönderimi"
+        ]
+      },
+      {
+        "competitor_name": "Funky Chairs Freedom Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Hafif ve sağlam yapı",
+          "Kolay taşınabilirlik ve katlanabilirlik",
+          "Konforlu tasarım"
+        ],
+        "negative": [
+          "Kargo gecikmeleri ve siparişlerin zamanında teslim edilmemesi",
+          "Ürünün sitedeki görselle farklı gelmesi",
+          "İade süreçlerinde yaşanan sorunlar ve müşteri hizmetleri ile iletişim eksikliği",
+          "Ürün kalitesinin beklentiyi karşılamaması (muadillerine göre yüksek fiyata rağmen)"
+        ]
+      },
+      {
+        "competitor_name": "Hastunç Ahşap Kolçaklı Katlanır Kamp Sandalyesi",
+        "positive": [],
+        "negative": [
+          "Hasarlı ürün gönderimi (paslı, kaşarlı)",
+          "Siparişlerin gönderilmemesi veya iptal edilmesi",
+          "Ücret iadesi yapılmaması"
+        ]
+      },
+      {
+        "competitor_name": "Bofigo Ahşap Kollu Kamp Sandalyesi",
+        "positive": [],
+        "negative": [
+          "Eksik parça gönderimi",
+          "Kargo gecikmeleri",
+          "Teslim edilmeyen ürünler",
+          "Müşteri hizmetleri ile iletişim sorunları"
+        ]
+      },
+      {
+        "competitor_name": "Nurgaz NG-C135 Çift Kişilik Yeşil Kamp Sandalyesi",
+        "positive": [],
+        "negative": [
+          "Farklı ürünlerde (termos, kamp ocağı, mangal) sızdırma, kırılma, arıza gibi kalite sorunları",
+          "Yedek parça temininde sorunlar",
+          "Müşteri hizmetleri ve garanti süreçlerinde yaşanan sıkıntılar"
+        ]
+      },
+      {
+        "competitor_name": "Haegs Kamp Sandalyesi, Outdoor, Plaj ve Piknik İçin Katlanır Kamp Sandalyesi",
+        "positive": [],
+        "negative": [
+          "Kırık ürün gönderimi",
+          "Kötü müşteri hizmetleri deneyimi",
+          "Siparişlerin uzun süre 'hazırlanıyor' durumunda kalması ve kargo gecikmeleri"
+        ]
+      }
+    ],
+    "marketing_angles": [
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi ile siparişleriniz zamanında, eksiksiz ve hasarsız ulaşır, kamp keyfiniz yarım kalmaz!",
+      "Rakiplerin aksine, CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi ile müşteri hizmetleri sorunları yaşamadan, kolay iade ve değişim imkanlarından faydalanın.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, sağlam ve dayanıklı yapısıyla uzun ömürlü kullanım sunar, kalitesiz ürün şikayetlerine son verir.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, kolay katlanabilir ve taşınabilir yapısıyla her yere sizinle gelir, kamp ve outdoor aktivitelerinizde konforunuzdan ödün vermeyin.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, konforlu oturma alanı ve şık ahşap detaylarıyla hem rahat hem de estetik bir deneyim sunar."
+    ],
+    "risk_warnings": [
+      "Kargo ve teslimat süreçlerinde yaşanan gecikmelerin ve hasarlı/eksik ürün gönderimlerinin önüne geçmek için sağlam paketleme ve güvenilir kargo firmalarıyla çalışılmalı.",
+      "Müşteri hizmetleri kalitesi yüksek tutulmalı, iade ve değişim süreçleri şeffaf ve hızlı bir şekilde yönetilmeli.",
+      "Ürün kalitesinden ödün verilmemeli, özellikle ahşap kolçaklar gibi hassas parçaların dayanıklılığı ve montaj kalitesi kontrol edilmeli.",
+      "Ürün görselleri ve açıklamaları gerçeği yansıtmalı, müşteriyi yanıltıcı bilgilerden kaçınılmalı.",
+      "Stok yönetimi doğru yapılmalı, stokta olmayan ürünlerin satışı veya sipariş iptalleri müşteri memnuniyetsizliğine yol açabilir."
+    ]
+  }
+}

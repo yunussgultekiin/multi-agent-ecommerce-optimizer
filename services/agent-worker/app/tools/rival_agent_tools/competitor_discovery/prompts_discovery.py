@@ -1,3 +1,4 @@
+from app.tools.json_prompt_rules import JSON_SELF_CORRECTION_SYNTAX, STRICT_JSON_SYNTAX_RULES
 from .models_discovery import MIN_COMPETITORS, PLATFORM_SITES, TARGET_COMPETITORS
 
 def build_discovery_prompt(
@@ -63,6 +64,7 @@ Rules:
 - Do NOT include products from brand "{brand}".
 - Avoid duplicate or nearly identical competitor_name values.
 - Do not include markdown, comments, or trailing commas.
+{STRICT_JSON_SYNTAX_RULES}
 """
 
 
@@ -76,4 +78,5 @@ def build_discovery_correction_context(last_error: str) -> str:
         "Do NOT include URLs or any extra fields.\n"
         "Do not include duplicate competitor_name values.\n"
         "Do not include the user's own brand."
+        f"{JSON_SELF_CORRECTION_SYNTAX}"
     )

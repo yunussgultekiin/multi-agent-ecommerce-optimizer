@@ -1,0 +1,48 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Bu sandalye, ahşap kollu ve katlanabilir kamp sandalyesi arayan müşteriler için doğrudan bir rakip olup, orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "Secen Art Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması nedeniyle kullanıcıların tercih edebileceği, orta segmentte bir alternatiftir."
+      },
+      {
+        "competitor_name": "Mocca Style Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi kategorisinde yer alan bu ürün, fiyat ve özellikleriyle orta segmentte rekabet etmektedir."
+      },
+      {
+        "competitor_name": "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, onu doğrudan bir rakip yapmaktadır ve genellikle orta segmentte konumlanır."
+      },
+      {
+        "competitor_name": "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, bu ürünü doğrudan bir rakip haline getirir ve orta segmentte yer alır."
+      },
+      {
+        "competitor_name": "Tevalli Katlanır Piknik ve Kamp Sandalyesi Ahşap Kollu",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, onu kullanıcılar için cazip bir orta segment alternatifi yapar."
+      },
+      {
+        "competitor_name": "Bofigo Kamp Sandalyesi Ahşap Kollu Katlanır Sandalye",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması nedeniyle, bu ürün orta segmentte doğrudan bir rakip olarak öne çıkmaktadır."
+      },
+      {
+        "competitor_name": "Holtech Ahşap Tasarım Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, bu ürünü orta segmentte rekabetçi bir seçenek haline getirir."
+      }
+    ]
+  }
+}

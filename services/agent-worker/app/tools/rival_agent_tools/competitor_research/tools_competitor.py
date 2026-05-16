@@ -45,7 +45,7 @@ async def _research_one(
                 config=types.GenerateContentConfig(
                     tools=[_SEARCH_TOOL],
                     temperature=0.2,
-                    max_output_tokens=800 if attempt > 0 else 1200,
+                    max_output_tokens=400 if attempt > 0 else 1200,
                     thinking_config=types.ThinkingConfig(thinking_budget=0),
                 ),
             )

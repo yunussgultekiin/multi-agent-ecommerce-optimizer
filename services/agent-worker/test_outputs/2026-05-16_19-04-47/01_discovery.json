@@ -1,0 +1,48 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "Mocca Style Kamp Sandalyesi Katlanır Ahşap Kollu Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Bu ürün, ahşap kollu ve katlanır yapısıyla kullanıcının ürününe doğrudan rakip olup, orta fiyat segmentinde yer almaktadır (mid-range)."
+      },
+      {
+        "competitor_name": "Leva House Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanabilir özelliğiyle kullanıcının ürünüyle benzer özelliklere sahip olup, orta fiyat segmentinde bir alternatiftir (mid-range)."
+      },
+      {
+        "competitor_name": "Bofigo Ahşap Kollu Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanır kamp sandalyesi olması nedeniyle doğrudan rakip olup, genellikle bütçe dostu fiyat segmentinde bulunur (budget)."
+      },
+      {
+        "competitor_name": "Tekno Trust Kamp Sandalyesi Katlanır Ahşap Kollu Kamp Piknik Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu, katlanır ve kamp/piknik kullanımına uygun olmasıyla kullanıcının ürününe benzer bir seçenektir ve orta fiyat segmentindedir (mid-range)."
+      },
+      {
+        "competitor_name": "T.Concept Ahşap Kollu Katlanır Sandalye",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanır yapısıyla kullanıcının ürününe benzer bir işlevsellik sunar ve orta-üst fiyat segmentinde yer alır (mid-range)."
+      },
+      {
+        "competitor_name": "Funky Chairs Freedom Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Katlanır kamp sandalyesi kategorisinde yer alması ve ahşap kol detaylarına sahip olabilmesi nedeniyle rakip bir üründür ve orta fiyat segmentindedir (mid-range)."
+      },
+      {
+        "competitor_name": "Hastunç Ahşap Kolçaklı Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kolçaklı ve katlanır kamp sandalyesi olması sebebiyle kullanıcının ürününe doğrudan rakip olup, orta fiyat segmentinde bir seçenektir (mid-range)."
+      },
+      {
+        "competitor_name": "Tedarik Center Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanır kamp sandalyesi olarak kullanıcının ürünüyle aynı kategoride yer alır ve bütçe dostu fiyat segmentindedir (budget)."
+      }
+    ]
+  }
+}

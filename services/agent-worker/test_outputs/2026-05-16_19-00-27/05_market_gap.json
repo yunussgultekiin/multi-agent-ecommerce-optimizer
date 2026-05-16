@@ -1,0 +1,71 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "Hastunç - Ahşap Kolçaklı Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 0.0,
+        "price_range_max": 679.99
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "Mocca Style - Neone Katlanır Ahşap Kollu Kamp Sandalyesi",
+          "Decathlon - Katlanır Kamp Sandalyesi XL Boy"
+        ],
+        "price_range_min": 1025.1,
+        "price_range_max": 1450.0
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "North Pacific - Ahşap Kollu Kamp Sandalyesi",
+          "Funky Chairs - Freedom Katlanır Kamp Sandalyesi",
+          "King Camp - Deluxe Siyah-Gri Kamp Sandalyesi"
+        ],
+        "price_range_min": 2599.0,
+        "price_range_max": 4839.12
+      }
+    ],
+    "user_product_cluster": "budget",
+    "gap_opportunities": [
+      "Bardaklık gibi ek özelliklere sahip, uygun fiyatlı ahşap kollu kamp sandalyesi eksikliği.",
+      "Hafiflik ve taşıma kolaylığını vurgulayan, ancak ahşap kolçak konforundan ödün vermeyen bir ürün segmenti boşluğu.",
+      "Çevre dostu üretim veya sürdürülebilir malzeme kullanımı gibi değer odaklı özelliklere sahip, orta segment bir ürünün olmaması."
+    ],
+    "sentiment_based_opportunities": [
+      "Müşterilerin dayanıklılık ve uzun ömürlülük beklentilerini karşılayacak, paslanmaz metal profil ve su itici kumaş gibi özelliklerin daha fazla vurgulanması.",
+      "Kolay temizlenebilirlik ve montaj gerektirmeme gibi pratik kullanım özelliklerinin öne çıkarılması."
+    ],
+    "trend_based_opportunities": [
+      "Ürünün 'taşınabilir ve katlanabilir' olma özelliğinin daha güçlü bir şekilde vurgulanması.",
+      "Doğal ahşap kolçakların 'doğal malzemelerle tasarlanmış ürünler' trendine uygunluğunun altının çizilmesi."
+    ],
+    "strategic_actions": [
+      "Ürünün 'gerçek ahşap kolçak' ve 'paslanmaz metal profil' gibi dayanıklılık ve kaliteyi vurgulayan özelliklerini ürün başlığında ve açıklamasında daha belirgin hale getirin.",
+      "Ürünün bagajda yer kaplamaması ve kolay taşınabilirliği gibi pratik avantajlarını görsellerle destekleyerek ve açıklamalarda öne çıkararak 'taşınabilirlik' trendine uygunluğunu vurgulayın."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "North Pacific",
+        "Funky Chairs",
+        "King Camp"
+      ],
+      "budget_brands": [
+        "Nurgaz",
+        "Hastunç"
+      ],
+      "user_brand_position": "CampRoute, uygun fiyatlı ve temel özelliklere sahip, ahşap kollu kamp sandalyeleri sunan bir marka olarak konumlanmıştır."
+    },
+    "positioning_score": 0.6,
+    "positioning_rationale": "CampRoute, ahşap kollu kamp sandalyesi segmentinde uygun fiyatıyla rekabetçi bir konumda. Ancak, ek özellikler ve marka bilinirliği açısından geliştirme potansiyeli bulunmaktadır.",
+    "variant_gap_opportunities": [
+      "Mevcut renk varyantlarına ek olarak, farklı desen veya kumaş seçenekleri sunarak kişiselleştirme arayan müşterilere hitap edilebilir.",
+      "Farklı taşıma kapasitelerine sahip veya daha kompakt katlanabilen boyut varyantları sunularak farklı kullanıcı ihtiyaçları karşılanabilir."
+    ]
+  }
+}

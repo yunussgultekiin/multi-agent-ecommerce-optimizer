@@ -1,0 +1,58 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "North Pacific - Ahşap Kollu Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kol detayı ve katlanabilir yapısıyla, estetik ve konforu birleştiren bu ürün doğrudan bir rakiptir (orta segment)."
+      },
+      {
+        "competitor_name": "Mocca Style - Neone Katlanır Ahşap Kollu Kamp Piknik Sandalyesi",
+        "platform": "amazon",
+        "reason": "Canlı renk seçenekleri ve ahşap kollu tasarımı ile benzer bir kullanıcı kitlesine hitap eden güçlü bir alternatiftir (orta segment)."
+      },
+      {
+        "competitor_name": "Outdoart - Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "140kg taşıma kapasitesi ve lüks olarak konumlandırılmasıyla, daha yüksek dayanıklılık arayan kullanıcılara hitap eder (premium)."
+      },
+      {
+        "competitor_name": "Bofigo - Ahşap Kollu Katlanır Sandalye",
+        "platform": "amazon",
+        "reason": "Genellikle çoklu paketlerde sunulan bu ürün, fiyat avantajı arayan ve birden fazla sandalye ihtiyacı olan kullanıcılara yöneliktir (bütçe)."
+      },
+      {
+        "competitor_name": "Joyfull - Turtle Ahşap Kollu Katlanır Sandalye",
+        "platform": "amazon",
+        "reason": "Farklı iskelet ve kılıf renk kombinasyonları sunarak kişiselleştirme arayan kullanıcılara hitap eden bir rakiptir (orta segment)."
+      },
+      {
+        "competitor_name": "SECENART - Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Kullanıcının ürünüyle doğrudan aynı kategori ve özelliklere sahip, standart ve popüler bir modeldir (orta segment)."
+      },
+      {
+        "competitor_name": "Nurgaz - Campout Ahşap Kollu Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Kamp malzemeleri alanında tanınan bir marka olması ve ahşap kollu model sunması nedeniyle önemli bir rakiptir (orta segment)."
+      },
+      {
+        "competitor_name": "Decathlon Quechua - Katlanır Kamp Sandalyesi Konforlu",
+        "platform": "amazon",
+        "reason": "Ahşap kolu olmasa da, Decathlon'un güçlü marka bilinirliği ve konfor odaklı tasarımıyla geniş bir kitleye hitap eder (orta segment)."
+      },
+      {
+        "competitor_name": "KOÇTAŞ - Deluks Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Büyük bir yapı market markası olarak geniş dağıtım ağına sahip olması ve benzer özellikler sunmasıyla rekabet oluşturur (bütçe)."
+      },
+      {
+        "competitor_name": "campfesto - Nomad Katlanabilir Outdoor Sandalye",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanabilir yapısıyla, outdoor odaklı markasıyla doğrudan kullanıcının ürününe alternatif oluşturur (orta segment)."
+      }
+    ]
+  }
+}

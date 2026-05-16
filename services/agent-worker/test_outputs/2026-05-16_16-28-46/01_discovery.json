@@ -1,0 +1,48 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "Madfox İnfinity Ultralight Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Bu sandalye, ahşap kollu ve çizgili tasarıma sahip, kullanıcı ürününün doğrudan bir rakibidir ve orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "Outdoart Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olmasıyla doğrudan rakip olan bu ürün, premium segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "Secenart Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması nedeniyle kullanıcı ürünüyle rekabet eden bu model, orta segmentte konumlanmaktadır."
+      },
+      {
+        "competitor_name": "Hastunç Ahşap Kolçaklı Lacivert Çizgili Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve çizgili tasarımıyla öne çıkan bu sandalye, kullanıcı ürününün orta segmentteki bir rakibidir."
+      },
+      {
+        "competitor_name": "Bofigo Ahşap Kollu Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, bu ürünü kullanıcı ürünüyle doğrudan rekabetçi kılmakta ve bütçe dostu bir seçenek olarak öne çıkmaktadır."
+      },
+      {
+        "competitor_name": "Leva House 4'lü Ahşap Kollu Katlanır Piknik Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olmasıyla benzer özellikler taşıyan bu ürün, orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "Bag The Joy Ahşap Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, bu ürünü kullanıcı ürünüyle rekabetçi hale getirmekte ve premium segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "CMS SANDALYE AHŞAP KATLANIR REJİSÖR KAMP SANDALYESİ",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olmasıyla doğrudan rakip olan bu ürün, orta segmentte yer almaktadır."
+      }
+    ]
+  }
+}

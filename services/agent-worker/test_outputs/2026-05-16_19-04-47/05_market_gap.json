@@ -1,0 +1,73 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "Bofigo Ahşap Kollu Kamp Sandalyesi",
+          "Hastunç Ahşap Kolçaklı Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 489.0,
+        "price_range_max": 679.99
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "Quechua Katlanabilir Kamp Sandalyesi - Bej - XL Boy 150kg",
+          "Leva House Ahşap Kollu Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 1450.0,
+        "price_range_max": 1450.0
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "Freecamp Huxley Katlanır Kamp Sandalyesi",
+          "Funky Chairs Freedom Katlanır Kamp Sandalyesi",
+          "Tedarik Center Ahşap Kollu Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 2251.65,
+        "price_range_max": 3200.0
+      }
+    ],
+    "user_product_cluster": "budget",
+    "gap_opportunities": [
+      "Piyasada bardak tutucu veya küçük eşya depolama alanı gibi ek pratik özelliklere sahip, ahşap kollu ve uygun fiyatlı kamp sandalyeleri eksikliği bulunmaktadır.",
+      "Yüksek taşıma kapasitesine (120 kg üzeri) sahip, ahşap kollu ve estetik tasarımlı, ancak premium fiyat etiketine sahip olmayan bir ürün segmenti boşluğu mevcuttur.",
+      "Çevre dostu malzemelerden üretilmiş veya sürdürülebilirlik vurgusu olan ahşap kollu kamp sandalyeleri için bir pazar boşluğu bulunmaktadır."
+    ],
+    "sentiment_based_opportunities": [],
+    "trend_based_opportunities": [
+      "Çevre dostu malzemeler ve sürdürülebilirlik vurgusu ile ürünün pazarlanması, artan çevre bilincine sahip tüketicilere hitap edebilir.",
+      "Ürünün dayanıklılığı ve uzun ömürlülüğü vurgulanarak, tüketicilerin uzun vadeli kullanım beklentileri karşılanabilir.",
+      "Çok fonksiyonlu özellikler (örneğin, bardak tutucu veya küçük depolama alanı) eklenerek ürünün pratikliği artırılabilir ve talep sinyallerine yanıt verilebilir."
+    ],
+    "strategic_actions": [
+      "Ürünün 'gerçek ahşap kolçak' ve 'paslanmaz metal profil' özelliklerini vurgulayarak dayanıklılık ve uzun ömürlülük beklentisini karşıladığını iletişimde öne çıkarın.",
+      "Ürüne bardak tutucu veya küçük bir yan cep gibi ek fonksiyonel özellikler ekleyerek çok fonksiyonlu ürün tercihine yanıt verin ve rekabet avantajı sağlayın.",
+      "Ürünün bagajda yer kaplamaması ve kolay taşınabilir olması gibi pratik yönlerini SEO anahtar kelimelerine ve ürün açıklamasına daha fazla dahil edin."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "Quechua",
+        "Freecamp",
+        "Funky Chairs",
+        "Tedarik Center"
+      ],
+      "budget_brands": [
+        "Bofigo",
+        "Hastunç",
+        "Leva House"
+      ],
+      "user_brand_position": "CampRoute, ahşap kollu katlanır kamp sandalyesi pazarında uygun fiyatlı ve temel özelliklere sahip bir marka olarak konumlanmaktadır. Kalite ve estetiği uygun fiyatla birleştirmeye çalışmaktadır."
+    },
+    "positioning_score": 0.6,
+    "positioning_rationale": "CampRoute, ahşap kolçak gibi ayırt edici bir özelliğe sahip olmasına rağmen, fiyatlandırma ve ek özellikler açısından bütçe segmentinde yer almaktadır. Marka bilinirliği ve ek fonksiyonlar açısından premium rakiplerine göre zayıf kalmaktadır.",
+    "variant_gap_opportunities": [
+      "Mevcut yeşil-beyaz ve mavi-beyaz çizgili desenlerin yanı sıra, tek renk (örneğin bej, gri, siyah) veya daha modern desenlere sahip varyantlar sunarak farklı estetik tercihlere sahip müşterilere ulaşılabilir.",
+      "Farklı boyutlarda (örneğin XL boy veya çocuk boyu) varyantlar sunarak daha geniş bir kullanıcı kitlesine hitap edilebilir ve taşıma kapasitesi beklentileri karşılanabilir."
+    ]
+  }
+}

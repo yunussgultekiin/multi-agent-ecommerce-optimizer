@@ -1,0 +1,53 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "SECENART Katlanır Kamp Sandalyesi-Ahşap Kollu",
+        "platform": "amazon",
+        "reason": "Bu ürün, ahşap kollu ve katlanır yapısıyla kullanıcının ürününe doğrudan rakip olup, orta fiyat segmentinde yer almaktadır (mid-range)."
+      },
+      {
+        "competitor_name": "campfesto Nomad Katlanabilir Outdoor Sandalye Ahşap Kollu Kamp & Piknik Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanabilir outdoor sandalye olması nedeniyle kullanıcının ürünüyle benzer özellikler taşımakta ve orta fiyat segmentindedir (mid-range)."
+      },
+      {
+        "competitor_name": "KUBİLAY ASKERİ MALZEME Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "amazon",
+        "reason": "Katlanır ve ahşap kollu kamp sandalyesi olarak kullanıcının ürününe doğrudan rakip olup, bütçe dostu bir fiyat segmentindedir (budget)."
+      },
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu kamp sandalyesi olmasıyla kullanıcının ürününe benzer bir alternatif sunmakta ve orta fiyat segmentindedir (mid-range)."
+      },
+      {
+        "competitor_name": "Weehome Başlıklı Ahşap Kollu Katlanabilir Piknik Kamp Balkon Sandalyesi",
+        "platform": "amazon",
+        "reason": "Başlıklı, ahşap kollu ve katlanabilir yapısıyla kullanıcının ürününe konfor odaklı bir rakip olup, orta fiyat segmentindedir (mid-range)."
+      },
+      {
+        "competitor_name": "LEVA HOUSE Ahşap Kollu Plaj Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve plaj/kamp kullanımına uygun katlanır yapısıyla kullanıcının ürününe alternatif oluşturmakta ve orta fiyat segmentindedir (mid-range)."
+      },
+      {
+        "competitor_name": "Cosargroup 1 Adet Katlanır Kamp Sandalyesi Ahşap Kollu",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanır kamp sandalyesi olarak kullanıcının ürününe doğrudan rakip olup, bütçe dostu bir fiyat segmentindedir (budget)."
+      },
+      {
+        "competitor_name": "Campmaster Katlanır Kamp Sandalyesi Ahşap Kollu Bahçe Koltuğu",
+        "platform": "amazon",
+        "reason": "Katlanır, ahşap kollu ve çok amaçlı kullanımıyla kullanıcının ürününe benzer bir işlevsellik sunmakta ve orta fiyat segmentindedir (mid-range)."
+      },
+      {
+        "competitor_name": "romee Ahşap Kollu Katlanır Kamp Piknik Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanır yapısıyla kullanıcının ürününe doğrudan rakip olup, orta fiyat segmentinde yer almaktadır (mid-range)."
+      }
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "Mira Kollu Katlanır Kamp Sandalyesi",
+          "DFT Kollu Katlanır Kamp Sandalyesi Rejisör - Yeşil",
+          "Büyük Boy Katlanır Kamp Plaj Piknik Ve Balıkçı Sandalyesi TN1"
+        ],
+        "price_range_min": 0.0,
+        "price_range_max": 517.49
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "ARGEUS Katlanabilir Piknik ve Kamp Sandalyesi – Bardaklıklı – Rock",
+          "FreeCamp Foster Plus Lacivert Buzluklu Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 1525.45,
+        "price_range_max": 3079.9
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "Outwell Cromer 5 Kademeli Katlanır Kamp Sandalyesi",
+          "Outwell Seaford 4 Pozisyonlu & Konforlu Katlanır Plaj Sandalyesi",
+          "Madfox SitCommand G92 Katlanır Kamp Koltuğu Yellow Graphite",
+          "HUSKY PROUD -30C UYKU TULUMU"
+        ],
+        "price_range_min": 4449.0,
+        "price_range_max": 6499.0
+      }
+    ],
+    "user_product_cluster": "budget",
+    "gap_opportunities": [
+      "Piyasada uygun fiyatlı, ayarlanabilir sırt desteğine sahip ve ek konfor özellikleri (boyun yastığı, bardaklık) sunan bir ürün eksikliği bulunmaktadır.",
+      "Bütçe dostu segmentte, şeffaf iletişim ve güvenilir kargo takibi gibi müşteri hizmetleri beklentilerini karşılayan bir marka boşluğu mevcuttur.",
+      "Uygun fiyatlı segmentte, ahşap kolçak gibi estetik ve doğal malzeme kullanımını öne çıkaran, ancak aynı zamanda dayanıklılık ve fonksiyonellikten ödün vermeyen bir ürün nişi bulunmaktadır."
+    ],
+    "sentiment_based_opportunities": [
+      "Müşterilerin sipariş sonrası iletişim eksikliği ve geçersiz kargo numarası mağduriyetini giderecek şeffaf bir süreç sunmak.",
+      "Rakiplerin kalitesiz ürün ve iade reddi sorunlarına karşılık, yüksek kaliteli ve dayanıklı ürünler sunarak müşteri güvenini kazanmak.",
+      "Kargo ücreti konusunda yanıltıcı bilgi verilmesi sorununa karşılık, şeffaf ve net fiyatlandırma politikası benimsemek.",
+      "Ayarlanabilir sırt desteği ve bardaklık gibi konfor artıran özellikleri uygun fiyatlı segmentte sunarak müşteri memnuniyetini artırmak."
+    ],
+    "trend_based_opportunities": [
+      "Kullanıcı ürününün 'katlanabilir tasarım' ve 'taşınabilir' özelliklerini vurgulayarak 'taşınabilir ve hafif kamp ekipmanlarına artan ilgi' trendinden faydalanmak.",
+      "Ürünün 'gerçek ahşap kolçak' gibi estetik bir özelliğini öne çıkararak 'uygun fiyatlı ve performans odaklı ürünlerin yükselişi' trendinde farklılaşmak.",
+      "Ürünün dayanıklılık ve konfor özelliklerini vurgulayarak 'hafif ama dayanıklı materyaller, kompakt tasarımlar ve gelişmiş ergonomi' trendlerine uyum sağlamak."
+    ],
+    "strategic_actions": [
+      "Ürün açıklamasını güncelleyerek 'ayarlanabilir sırt desteği' gibi konfor özelliklerini ve 'bardaklık' gibi ek fonksiyonları (eğer mevcutsa veya eklenebilirse) vurgulamak, böylece fiyatına göre sunduğu değeri artırmak.",
+      "Müşteri hizmetleri süreçlerini iyileştirerek sipariş takibi ve kargo bilgilerini şeffaf bir şekilde sunmak, müşteri memnuniyetsizliğini azaltmak ve olumlu yorumları teşvik etmek."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "Outwell",
+        "Husky",
+        "Madfox"
+      ],
+      "budget_brands": [
+        "Mira",
+        "DFT",
+        "Büyük"
+      ],
+      "user_brand_position": "CampRoute, uygun fiyatlı segmentte, ahşap kolçak gibi estetik ve doğal malzeme kullanımıyla öne çıkan, ancak konfor ve ek özellikler açısından geliştirilebilecek bir konumdadır."
+    },
+    "positioning_score": 0.6,
+    "positioning_rationale": "CampRoute, ahşap kolçak gibi benzersiz bir estetik özellik sunarak bütçe segmentinde farklılaşmaktadır. Ancak, ayarlanabilir sırt desteği veya bardaklık gibi konfor odaklı özelliklerin eksikliği, daha güçlü bir konumlandırmanın önünde engel teşkil etmektedir.",
+    "variant_gap_opportunities": [
+      "Mevcut renk varyantlarına ek olarak, farklı desen veya malzeme seçenekleri sunarak estetik çeşitliliği artırmak ve daha geniş bir müşteri kitlesine hitap etmek."
+    ]
+  }
+}

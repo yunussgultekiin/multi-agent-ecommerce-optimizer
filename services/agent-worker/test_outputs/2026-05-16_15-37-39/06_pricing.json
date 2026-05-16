@@ -1,0 +1,47 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "price_median": 1233.0,
+    "price_q1": 894.5,
+    "price_q3": 1428.5,
+    "predicted_price": 1233.0,
+    "price_range_min": 93.5,
+    "price_range_max": 2229.5,
+    "positioning": "underpriced",
+    "positioning_score": 0.0,
+    "market_power_gap": "User product is weakly positioned vs competitors (gap: -1.77)",
+    "confidence_score": 0.9,
+    "fallback_used": false,
+    "variant_pricing": [
+      {
+        "variant_name": "Yeşil - Beyaz Çizgili",
+        "base_price": 549.9,
+        "price_delta": -683.1,
+        "suggested_price": 894.5,
+        "positioning": "underpriced"
+      },
+      {
+        "variant_name": "Mavi - Beyaz Çizgili",
+        "base_price": 549.9,
+        "price_delta": -683.1,
+        "suggested_price": 894.5,
+        "positioning": "underpriced"
+      }
+    ],
+    "competitor_variant_overlap": [
+      {
+        "variant_name": "Yeşil - Beyaz Çizgili",
+        "matching_competitors": [
+          "Simple Living Ahşap Kollu Geniş Katlanır Kamp, Plaj ve Piknik Sandalyesi"
+        ]
+      },
+      {
+        "variant_name": "Mavi - Beyaz Çizgili",
+        "matching_competitors": [
+          "Simple Living Ahşap Kollu Geniş Katlanır Kamp, Plaj ve Piknik Sandalyesi"
+        ]
+      }
+    ]
+  }
+}

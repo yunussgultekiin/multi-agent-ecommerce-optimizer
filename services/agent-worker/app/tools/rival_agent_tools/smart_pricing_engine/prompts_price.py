@@ -1,6 +1,8 @@
 import json
 from typing import Optional
 
+from app.tools.json_prompt_rules import JSON_SELF_CORRECTION_SYNTAX, STRICT_JSON_SYNTAX_RULES
+
 def build_fallback_pricing_prompt(
     user_product: dict,
     competitors: list[dict],
@@ -84,6 +86,9 @@ Rules:
 - If no variants exist, return empty lists: "variant_pricing": [], "competitor_variant_overlap": [].
 - Keep JSON keys and enum labels in English, but write all natural-language values in Turkish (e.g., market_power_gap text and any descriptive variant names).
 - Do not invent specific competitor prices.
+- All price and score fields must be finite JSON numbers or null — never NaN or Infinity.
+- Use null only where the schema allows missing values; otherwise use conservative finite estimates (0.0 is not a substitute for unknown competitor prices in upstream data).
+{STRICT_JSON_SYNTAX_RULES}
 """
 
 def build_fallback_self_correction_prompt(original_prompt: str, last_error: str) -> str:
@@ -101,6 +106,8 @@ Key rules:
 - competitor_variant_overlap items MUST use keys: variant_name, matching_competitors (list of strings).
 - If no variants, return empty lists: "variant_pricing": [], "competitor_variant_overlap": [].
 - Keep JSON keys in English, but write all value texts in Turkish.
+- Never output NaN or Infinity for any numeric field — use null or a finite number.
+{JSON_SELF_CORRECTION_SYNTAX}
 
 ORIGINAL TASK:
 {original_prompt}

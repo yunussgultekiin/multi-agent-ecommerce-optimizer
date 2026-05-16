@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "Kamp Sandalyesi",
+      "Kamp Masası",
+      "Şişme Yatak & Koltuk",
+      "Kamp Lambaları",
+      "Kamp Mutfak Ürünleri",
+      "Outdoor Giyim"
+    ],
+    "demand_signals": [
+      "Doğa ile iç içe tatil yapma ve şehirden uzaklaşma isteği artıyor.",
+      "Ailece kamp yapmaya yönelik ürünlere ilgi artışı.",
+      "Konforlu ve güvenli kamp deneyimi sağlayan malzemelere talep artışı."
+    ],
+    "platform_trends": [
+      "Flaş Ürünler ve Fırsatlı Ürünler gibi indirim ve kampanya odaklı listeleme rozetleri popüler.",
+      "Hızlı teslimat seçeneği olan ürünler tercih ediliyor.",
+      "Çoklu alım ve set ürünlerde avantajlı fiyatlar sunulması bekleniyor."
+    ],
+    "category_trend_summary": "Trendyol'da \"Kamp & Outdoor\" kategorisinde, doğayla iç içe ve konforlu bir deneyim sunan ürünler öne çıkmaktadır. Özellikle kamp sandalyeleri, masaları, şişme yataklar ve mutfak ekipmanları gibi konfor odaklı ürünlere olan talep artarken, outdoor giyim de popülerliğini korumaktadır. Tüketiciler indirimli ve hızlı teslimat seçenekleri sunan ürünleri tercih etmektedir."
+  }
+}

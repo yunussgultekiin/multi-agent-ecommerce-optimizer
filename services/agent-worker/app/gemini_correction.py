@@ -24,7 +24,7 @@ _client = genai.Client(
 )
 
 class GeminiCorrectionLoop:
-    def __init__(self, model_name: str = "gemini-3.1-flash-lite") -> None:
+    def __init__(self, model_name: str = "gemini-2.5-flash-lite") -> None:
         self._model_name = model_name
 
     async def generate_and_validate(
@@ -79,8 +79,22 @@ class GeminiCorrectionLoop:
                     f"in project '{settings.google_cloud_project}'.",
                     task_id=task_id,
                 ) from exc
+
             try:
-                data = parser(response.text)
+                raw_text = response.text or ""
+            except Exception:
+                raw_text = ""
+
+            if not raw_text.strip():
+                last_error = "Gemini returned empty response"
+                logger.warning(
+                    "Gemini empty response | attempt=%d/%d model=%s",
+                    attempt + 1, _MAX_RETRIES + 1, self._model_name,
+                )
+                continue
+
+            try:
+                data = parser(raw_text)
                 result = output_model(**data)
                 logger.info("Gemini generation succeeded on attempt %d", attempt + 1)
                 return result
@@ -92,6 +106,7 @@ class GeminiCorrectionLoop:
                     _MAX_RETRIES + 1,
                     last_error,
                 )
+
         raise WorkflowError(
             f"Gemini self-correction exhausted after {_MAX_RETRIES + 1} attempts. Last error: {last_error}",
             task_id=task_id,

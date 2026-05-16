@@ -1,0 +1,137 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "pain_points": [
+      "Düşük kaliteli ve dayanıksız kumaş kullanımı, özellikle yırtılma ve bağlantı noktalarından ayrılma sorunları.",
+      "Ürünlerin küçük veya rahatsız edici olması, ergonomik tasarım eksikliği.",
+      "Geciken teslimatlar ve kargo süreçlerindeki aksaklıklar.",
+      "Ürün görsellerinin yanıltıcı olması veya eksik bilgi içermesi.",
+      "Metal iskeletin kalitesizliği veya bükülme sorunları."
+    ],
+    "praised_features": [
+      "Yüksek taşıma kapasitesi (150-160 kg).",
+      "Kolay katlanabilirlik ve taşınabilirlik.",
+      "Konforlu oturum sağlayan sünger dolgulu veya petli kumaşlar.",
+      "Bardak tutucu gibi ek fonksiyonel özellikler.",
+      "Şık ve modern tasarım."
+    ],
+    "competitor_sentiments": [
+      {
+        "competitor_name": "Bofigo Kamp Sandalyesi",
+        "positive": [
+          "Bazı kullanıcılar ürünü kusursuz buldu."
+        ],
+        "negative": [
+          "Küçük ve rahatsız edici, eklem yerleri sağlam değil, uzun ömürlü değil.",
+          "Ürün kalitesiz, kumaş ince, bağlantı noktaları zayıf, sırt kısmındaki metal çubuklar rahatsız ediyor, kumaş dikimleri hatalı, dengede durmuyor, taşıma kılıfı ince.",
+          "Ayak pabuçları çok hassas.",
+          "Bağlantı pimleri dışarıda.",
+          "Çizikler ve kumaş kısmında delikler mevcut.",
+          "Eksik parça gönderimi.",
+          "Teslimat sorunları ve gecikmeler."
+        ]
+      },
+      {
+        "competitor_name": "Orcamp Ahşap Kollu Katlanabilir Kamp Sandalyesi",
+        "positive": [],
+        "negative": [
+          "Termos kapağında sızdırma ve yalıtım sorunu (marka genelinde kalite kontrol sorunu düşündürüyor).",
+          "Kamp ocaklarında aşırı ısınma, alev almama, gaz kesmeme ve patlama gibi güvenlik riskleri (marka genelinde ürün kalitesi ve güvenliği endişesi).",
+          "Yanıltıcı ürün görselleri nedeniyle yanlış ürün gönderimi veya sipariş iptali."
+        ]
+      },
+      {
+        "competitor_name": "Naturehike Kamp Sandalyesi",
+        "positive": [
+          "Hafif ve taşınabilir yapı.",
+          "Dayanıklı malzeme.",
+          "Kolay katlanabilirlik.",
+          "Ergonomik sırt desteği.",
+          "Her türlü zeminde stabil duruş sağlayan özel ayak tasarımı."
+        ],
+        "negative": [
+          "Çadır ürünlerinde yanıltıcı özellikler (5 mevsim yerine 4 mevsim, rüzgarlı havada direklerin yamulması, içine kum ve su girmesi).",
+          "Yanlış ürün gönderimi.",
+          "Teslimat sorunları ve iade edilmeyen paralar."
+        ]
+      },
+      {
+        "competitor_name": "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "Campfesto Voyager Katlanabilir Outdoor Sandalye Ahşap Kollu",
+        "positive": [
+          "Dayanıklı alüminyum gövde, konforlu oturma yapısı ve şık ahşap kolçaklar.",
+          "Güçlü 600D Oxford kumaş ve ergonomik tasarım sayesinde uzun süreli oturumlarda bile konfor."
+        ],
+        "negative": []
+      },
+      {
+        "competitor_name": "ARGEUS Katlanabilir Piknik ve Kamp Sandalyesi",
+        "positive": [],
+        "negative": [
+          "120-130 kg ağırlığındaki kullanıcılar için rahatsız edici.",
+          "Kargo ücreti kesintisi ve iade süreçlerinde sorunlar."
+        ]
+      },
+      {
+        "competitor_name": "GRAY WOLF Kamp Sandalyesi Quatro Kollu Petli Siyah",
+        "positive": [
+          "160 kg taşıma kapasitesi ile sağlam ve güvenli kullanım.",
+          "Sünger dolgulu ekstra kalın Quatro pet kumaşı sayesinde konforlu oturum.",
+          "Kolay kurulup katlanabilen tasarım.",
+          "Bükülmez, kalın profil demir iskelet.",
+          "Yan sehpa hediyesi (bazı modellerde).",
+          "Geniş oturma alanı.",
+          "Çoklu pozisyon ayarı.",
+          "Taşıma çantası sayesinde kolay taşıma."
+        ],
+        "negative": [
+          "Bazı kullanıcılara büyük gelmesi."
+        ]
+      },
+      {
+        "competitor_name": "Simple Living Ahşap Kollu Geniş Katlanır Kamp Sandalyesi",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "DFT Kollu Katlanır Premium Kamp Sandalyesi",
+        "positive": [
+          "Kolay kurulup kaldırılabilme ve zahmetsizce taşınabilme.",
+          "Sağlam metal profiller ve yüksek kaliteli polyester kumaş.",
+          "Sağ kolunda dayanıklı bardak koyma yeri.",
+          "Ekstra güçlendirilmiş bağlantı noktaları ve dayanıklı dikişler.",
+          "Kaymaz ayaklar sayesinde güvenli kullanım.",
+          "Omuz askılı taşıma çantası ile kolay taşıma."
+        ],
+        "negative": []
+      }
+    ],
+    "marketing_angles": [
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi: Rakiplerin aksine, ürünümüzün kumaşı yırtılmaz, bağlantı noktaları sağlamdır ve uzun ömürlü kullanım sunar.",
+      "Rakiplerin küçük ve rahatsız edici sandalyelerinin aksine, CampRoute sandalyesi ergonomik tasarımıyla her boydan kullanıcıya maksimum konfor sağlar.",
+      "Gecikmeli teslimat ve eksik parça sorunlarına son! CampRoute ile siparişleriniz zamanında ve eksiksiz kapınızda.",
+      "Yanıltıcı görsellerle değil, gerçek ürün kalitesiyle tanışın. CampRoute, gördüğünüzü alırsınız garantisi verir.",
+      "CampRoute sandalyenizle 150 kg'a kadar güvenle oturun; sağlam iskelet yapımızla rakiplerin bükülme sorunlarını geride bırakın.",
+      "CampRoute, kolay katlanabilir ve taşınabilir yapısıyla kamp deneyiminizi zahmetsiz hale getirir.",
+      "Sünger dolgulu oturma alanı ve ergonomik sırt desteği ile CampRoute, uzun süreli kullanımlarda bile benzersiz bir konfor sunar.",
+      "Bardak tutucu gibi pratik özelliklerle CampRoute, kamp keyfinizi artırır."
+    ],
+    "risk_warnings": [
+      "Ürün kalitesinden ödün vermeyin; kumaş yırtılması, zayıf bağlantı noktaları ve iskelet bükülmesi gibi kronik sorunlardan kaçının.",
+      "Ürün boyutlarının ve ergonomisinin geniş bir kullanıcı kitlesine uygun olduğundan emin olun, 'küçük ve rahatsız' yorumlarından kaçının.",
+      "Teslimat süreçlerini optimize edin ve müşteri şikayetlerini en aza indirmek için eksiksiz ve zamanında gönderim sağlayın.",
+      "Ürün görsellerinin ve açıklamalarının gerçeği yansıttığından emin olun, yanıltıcı bilgilerden kaçının.",
+      "Müşteri hizmetleri ve iade/değişim süreçlerinde şeffaf ve çözüm odaklı olun, kargo ücreti kesintisi gibi sorunlara yol açmayın."
+    ]
+  }
+}

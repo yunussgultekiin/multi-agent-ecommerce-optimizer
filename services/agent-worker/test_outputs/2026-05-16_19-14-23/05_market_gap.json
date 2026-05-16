@@ -1,0 +1,64 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [],
+        "price_range_min": 0.0,
+        "price_range_max": 0.0
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "Kampseti 2 Adet Mavi Katlanır Kamp Sandalyesi - Plaj Piknik Sandalyesi Bardaklıklı M1",
+          "Walke Katlanır Kamp Sandalyesi Çift Taraf Bardaklı Piknik Sandalyesi Siyah",
+          "Katlanabilir Ahşap Kollu Kamp Sandalyesi Taşınabilir"
+        ],
+        "price_range_min": 699.0,
+        "price_range_max": 1499.0
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "Freecamp Huxley Pro Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 2915.0,
+        "price_range_max": 2915.0
+      }
+    ],
+    "user_product_cluster": "value_for_money",
+    "gap_opportunities": [
+      "Piyasada ahşap kollu, estetik ve uygun fiyatlı, aynı zamanda yüksek taşıma kapasitesine sahip ürünlerin eksikliği bulunmaktadır.",
+      "Müşteri hizmetleri ve satış sonrası destek konusunda güvenilir ve hızlı çözümler sunan bir markanın eksikliği mevcuttur.",
+      "Çok fonksiyonlu ve ek özelliklere sahip (bardaklık gibi) ahşap kollu sandalyelerin çeşitliliği sınırlıdır."
+    ],
+    "sentiment_based_opportunities": [
+      "Müşterilerin eksik/yanlış ürün gönderimi ve kargo gecikmeleri gibi sorunlar yaşamaması için güvenilir bir tedarik ve lojistik süreci sunmak.",
+      "Ürün kalitesizliği ve kısa sürede arızalanma sorunlarına karşı dayanıklı ve uzun ömürlü ürünler sunarak müşteri güvenini kazanmak.",
+      "Etkili ve çözüm odaklı müşteri hizmetleri ile iade/değişim süreçlerinde yaşanan zorlukları ortadan kaldırmak."
+    ],
+    "trend_based_opportunities": [
+      "Eko-dostu malzemelerden üretilmiş, ahşap kollu kamp sandalyelerinin çevre bilinci yüksek tüketicilere yönelik pazarlanması.",
+      "Hafif ve taşınabilir özelliklerinin yanı sıra, ahşap kollu sandalyenin estetik ve konforlu yapısını vurgulayarak öne çıkmak.",
+      "Çok fonksiyonlu kamp ekipmanlarına olan ilgiyi değerlendirerek, ahşap kollu sandalyeye entegre edilebilecek ek özellikler (bardaklık, küçük depolama alanı) sunmak."
+    ],
+    "strategic_actions": [
+      "Ürünün ahşap kolçaklarının gerçek ahşap olduğunu ve paslanmaz metal profilini vurgulayarak kalite algısını güçlendirin ve rakiplerden ayrışın.",
+      "Müşteri hizmetleri süreçlerini iyileştirerek, sipariş, kargo ve iade konularında şeffaf ve hızlı çözümler sunarak müşteri memnuniyetini artırın.",
+      "Ürünün 110 kg taşıma kapasitesini ve su itici Oxford kumaş özelliğini öne çıkararak dayanıklılık ve konfor avantajlarını vurgulayın.",
+      "Ürüne bardaklık gibi ek fonksiyonel özellikler ekleyerek çok fonksiyonlu ürün arayan tüketicilere hitap edin."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "Freecamp"
+      ],
+      "budget_brands": [],
+      "user_brand_position": "CampRoute, ahşap kollu ve estetik tasarımıyla orta fiyat segmentinde kaliteli ve dayanıklı bir seçenek sunarak 'değer odaklı' bir konumlandırmaya sahiptir."
+    },
+    "positioning_score": 0.7,
+    "positioning_rationale": "CampRoute, ahşap kolçak gibi ayırt edici bir özelliğe sahip olmasına rağmen, bardaklık gibi popüler ek özelliklerden yoksun olması ve fiyatının rakiplerine göre biraz daha yüksek olması nedeniyle tam olarak güçlü bir konumlandırmaya sahip değildir. Ancak gerçek ahşap kullanımı ve sağlam yapısı ile değer sunmaktadır.",
+    "variant_gap_opportunities": []
+  }
+}

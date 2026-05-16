@@ -1,3 +1,5 @@
+from app.tools.json_prompt_rules import STRICT_JSON_SYNTAX_RULES
+
 PLATFORM_TITLE_LIMITS: dict[str, int] = {
     "trendyol": 100,
     "amazon": 200,
@@ -209,4 +211,5 @@ Field rules:
 - competitor_comparison_summary: 2-3 Turkish sentences on competitive positioning
 - platform_specific_tips: 3-5 Turkish SEO tips for {platform}
 - variant_seo: one entry per variant OR empty []
-- product_development_ideas: Turkish ideas for features in gap_opportunities that user product does NOT have"""
+- product_development_ideas: Turkish ideas for features in gap_opportunities that user product does NOT have
+{STRICT_JSON_SYNTAX_RULES}"""

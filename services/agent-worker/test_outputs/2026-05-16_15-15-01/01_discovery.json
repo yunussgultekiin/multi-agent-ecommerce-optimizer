@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "SECENART Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Bu sandalye, ahşap kollu ve katlanabilir kamp sandalyesi olmasıyla doğrudan rakip konumundadır ve orta segmentte yer alır."
+      },
+      {
+        "competitor_name": "KUBİLAY ASKERİ MALZEME Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, bu ürünü doğrudan bir rakip yapmaktadır ve bütçe dostu bir seçenektir."
+      },
+      {
+        "competitor_name": "Mocca Style Neone Kırmızı Katlanır Ahşap Kollu Kamp Piknik Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu, katlanabilir kamp ve piknik sandalyesi olmasıyla benzer bir ürün olup, orta segmentte rekabet etmektedir."
+      },
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu kamp sandalyesi olması, bu ürünü doğrudan bir rakip haline getirmekte ve orta segmentte konumlanmaktadır."
+      },
+      {
+        "competitor_name": "Simple Living Ahşap Kollu Geniş Katlanır Kamp, Plaj ve Piknik Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu, katlanabilir kamp ve piknik sandalyesi olmasıyla benzer özellikler taşır ve orta segmentte yer alır."
+      },
+      {
+        "competitor_name": "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, bu ürünü doğrudan bir rakip yapmaktadır ve orta segmentte yer alır."
+      },
+      {
+        "competitor_name": "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, bu ürünü doğrudan bir rakip haline getirmekte ve orta segmentte rekabet etmektedir."
+      }
+    ]
+  }
+}

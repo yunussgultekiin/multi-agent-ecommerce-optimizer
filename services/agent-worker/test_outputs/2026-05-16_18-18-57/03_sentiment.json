@@ -1,0 +1,97 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "pain_points": [
+      "Ürün kalitesizliği ve dayanıksızlık (kumaş yırtılması, bağlantı noktalarının zayıflığı, iskelet sorunları).",
+      "Küçük boyut ve konforsuzluk (özellikle uzun boylular için yetersiz oturma alanı, sırt kısmının rahatsız edici olması).",
+      "Gecikmeli veya sorunlu teslimat.",
+      "Ürünlerde çizikler, delikler veya eksik parçalar gibi kalite kontrol sorunları.",
+      "Ahşap kollarda küflenme, çatlama gibi malzeme sorunları."
+    ],
+    "praised_features": [
+      "Kolay katlanabilirlik ve taşınabilirlik.",
+      "Sağlam iskelet yapısı (bazı modellerde).",
+      "Estetik ve şık tasarım (özellikle ahşap kollu modellerde).",
+      "Hafiflik.",
+      "Bardaklık gibi ek fonksiyonel özellikler."
+    ],
+    "competitor_sentiments": [
+      {
+        "competitor_name": "Bofigo Kamp Sandalyesi",
+        "positive": [
+          "Sağlam demirler ve dikiş kalitesi (bazı yorumlarda).",
+          "Hızlı teslimat (bazı yorumlarda)."
+        ],
+        "negative": [
+          "Küçük boyut, rahatsız edici oturma alanı.",
+          "Eklem yerlerinin sağlam olmaması, uzun ömürlü olmaması.",
+          "Kumaş yırtılması, bağlantı noktalarının zayıflığı.",
+          "Kumaşın ince olması, sırt kısmındaki metal çubukların batması.",
+          "Dengesiz duruş.",
+          "Taşıma kılıfının ince olması.",
+          "Ayak pabuçlarının hassas olması.",
+          "Bağlantı pimlerinin dışarıda olması.",
+          "Ürünlerde çizikler ve delikler bulunması."
+        ]
+      },
+      {
+        "competitor_name": "Praseat Kamp Sandalyesi",
+        "positive": [
+          "Sağlam malzeme ve iskelet yapısı.",
+          "Kolay kurulum.",
+          "Pratik ve hafif.",
+          "Piknik ve yolculuk molalarında kullanışlı."
+        ],
+        "negative": [
+          "Kumaş bağlantı yerlerinin kopması (eski model veya başka marka karşılaştırması)."
+        ]
+      },
+      {
+        "competitor_name": "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Doğal ahşap kolları ve sağlam iskeleti ile konforlu oturma alanı.",
+          "Kolayca katlanıp taşınabilen pratik tasarım.",
+          "Su itici özellikli, değiştirilebilir oturma kılıfı.",
+          "Kayın ağacından üretilmiş, dayanıklı ve uzun ömürlü.",
+          "Çevre dostu ahşap koruyucu yağ ile renklendirilmiş.",
+          "Kompakt ve hafif tasarım."
+        ],
+        "negative": []
+      },
+      {
+        "competitor_name": "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "positive": [
+          "Konforlu oturum alanı ve estetik ahşap kol tasarımı.",
+          "Kolay taşınabilirlik ve pratik kullanım.",
+          "Dayanıklı çelik iskelet ve 600D Oxford kumaş.",
+          "Ergonomik ahşap kol yapısı.",
+          "Kolay taşıma ve saklama imkanı.",
+          "Termos bölmeli modellerin işlevselliği.",
+          "Su geçirmez kumaş yüzeyi.",
+          "Fileli sırt detayı ile terlemeyi azaltma."
+        ],
+        "negative": []
+      }
+    ],
+    "marketing_angles": [
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi ile rakiplerin aksine, kumaş yırtılması ve bağlantı noktası zayıflığı gibi sorunlar yaşamadan uzun ömürlü kullanımın keyfini çıkarın.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, küçük boyut ve konforsuzluk şikayetlerine son vererek, her kullanıcıya ideal ve rahat bir oturma deneyimi sunar.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, sağlam iskelet yapısı ve estetik ahşap kolları ile hem dayanıklılık hem de şıklığı bir arada sunar.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi'nin kolay katlanabilir ve taşınabilir yapısı sayesinde, kamp ve outdoor aktivitelerinizde pratikliğin tadını çıkarın.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, kaliteli malzeme seçimiyle küflenme ve çatlama gibi ahşap kol sorunlarını ortadan kaldırır."
+    ],
+    "risk_warnings": [
+      "Ürün kalitesinden ödün vermeyin; kumaş yırtılması, zayıf bağlantı noktaları ve iskelet sorunları kronik şikayetlerdir.",
+      "Ürün boyutlarını ve ergonomisini dikkatle tasarlayın; küçük boyut ve konforsuzluk müşteri memnuniyetsizliğine yol açar.",
+      "Teslimat süreçlerini ve kalite kontrolü sıkı tutun; gecikmeli teslimat, çizik veya eksik ürünler marka imajını zedeler.",
+      "Ahşap kollarda kullanılan malzemenin dayanıklılığına ve dış etkenlere karşı direncine dikkat edin (küflenme, çatlama).",
+      "Ürünün dengeli durduğundan ve ayak pabuçlarının sağlam olduğundan emin olun."
+    ]
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "pain_points": [
+      "Kumaşta yırtılma ve deformasyon",
+      "Paslanma sorunları",
+      "Garanti kapsamı dışı bırakılma veya yetersiz garanti hizmeti",
+      "Kısa sürede kırılma veya bozulma",
+      "Yetersiz müşteri hizmetleri ve çözüm odaklı olmama",
+      "Ürünlerin beklenen konforu sağlamaması",
+      "Taşıma ipinin kopması"
+    ],
+    "praised_features": [
+      "Kolay katlanabilirlik ve taşınabilirlik",
+      "Dayanıklı iskelet yapısı",
+      "Konforlu oturma alanı",
+      "Bardaklık gibi ek özellikler",
+      "Doğal ahşap detaylar",
+      "Yüksek taşıma kapasitesi"
+    ],
+    "competitor_sentiments": [
+      {
+        "competitor_name": "SECENART Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "Mocca Style Neone Kırmızı Katlanır Ahşap Kollu Kamp Piknik Sandalyesi",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "KUBİLAY ASKERİ MALZEME Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "Aqua Katlanabilir ahşap kamp ve bahçe sandalyesi",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "Bahçeci Atina Mix - Atina sandalye mix",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "Simple Living Ahşap Kollu Geniş Katlanır Kamp, Plaj ve Piknik Sandalyesi",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "Joyfull Turtle Ahşap - Kollu Katlanır Kamp - Bahçe - Balkon Sandalyesi",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "Outdoart Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "positive": [],
+        "negative": []
+      },
+      {
+        "competitor_name": "moniev Natura 2 Adet Kamp Sandalyesi Katlanır Piknik Sandalye",
+        "positive": [],
+        "negative": [
+          "Katlanır şezlong kolçakları 5 kullanımda yamuldu ve kullanılmaz hale geldi."
+        ]
+      },
+      {
+        "competitor_name": "Armarks Kamp Sandalyesi, Katlanır Kamp Sandalyesi, Bardaklıklı Kamp Sandalyesi, Plaj Piknik Sandalyesi",
+        "positive": [
+          "Bardaklık özelliği."
+        ],
+        "negative": []
+      },
+      {
+        "competitor_name": "Decathlon Quechua Katlanır Kamp Sandalyesi",
+        "positive": [],
+        "negative": [
+          "Kumaşta yırtılma ve dikiş yerlerinden açılma.",
+          "Paslanma sorunları.",
+          "Kısa sürede deformasyon ve kırılma.",
+          "Garanti süresi sonrası veya garanti kapsamında yetersiz destek ve değişim reddi.",
+          "Kamp sandalyesi ayaklarının toprakta batması ve yedek parça bulunamaması.",
+          "Ürünün beklenen konforu sağlamaması.",
+          "Taşıma ipinin ilk kullanımda kopması."
+        ]
+      }
+    ],
+    "marketing_angles": [
+      "Ahşap Kollu Çizgili Katlanır Kamp Sandalyemiz, rakiplerin yaşadığı kumaş yırtılması ve paslanma sorunlarına karşı üstün dayanıklılık sunar.",
+      "Müşteri hizmetleri konusunda şikayet alan rakiplerin aksine, CampRoute olarak satış sonrası desteğimizle her zaman yanınızdayız.",
+      "Ürünlerimizin sağlam iskelet yapısı ve kaliteli malzemeleri sayesinde, rakiplerde görülen kısa sürede kırılma ve deformasyon problemlerini yaşamazsınız.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, kolay katlanabilirliği ve taşınabilirliği ile kamp deneyiminizi pratikleştirir.",
+      "Ahşap detaylı ve konforlu tasarımımızla doğayla iç içe vakit geçirirken maksimum rahatlığı yaşayın.",
+      "Yüksek taşıma kapasitesi sayesinde her kullanıcıya güvenli ve konforlu bir deneyim sunarız."
+    ],
+    "risk_warnings": [
+      "Ürün kumaşının yırtılmaya ve dikiş yerlerinden açılmaya karşı dayanıklı olduğundan emin olun.",
+      "Metal aksamda paslanma oluşumunu engelleyecek kaliteli malzeme ve kaplama kullanın.",
+      "Ürünlerin kısa sürede kırılma veya deformasyon göstermemesi için sağlam ve dayanıklı bir yapıya sahip olduğundan emin olun.",
+      "Müşteri hizmetleri ve garanti süreçlerinde şeffaf ve çözüm odaklı olun, garanti kapsamındaki ürünler için değişim veya onarım desteği sağlayın.",
+      "Taşıma ipi gibi kritik parçaların dayanıklılığını artırın.",
+      "Ürünlerin konfor beklentilerini karşıladığından emin olun."
+    ]
+  }
+}

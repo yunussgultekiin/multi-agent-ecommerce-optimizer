@@ -1,0 +1,156 @@
+[
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "Decathlon Quechua Katlanabilir Kamp Sandalyesi",
+      "platform": "amazon",
+      "estimated_price": 1450.0,
+      "currency": "TRY",
+      "features": [
+        "150 kg ağırlık taşıma kapasitesi",
+        "Bardak bölmesi bulunur",
+        "Kolay açılır ve kapanır, az yer kaplar",
+        "Entegre taşıma kayışı sayesinde kolay taşınır",
+        "Sağlam çelik yapı ve dayanıklı kumaş",
+        "Oturma yeri yüksekliği 44.5 cm",
+        "Katlı halde 30 L hacme sahiptir",
+        "Hızlı ve kolay temizlenir"
+      ],
+      "rating": 4.9,
+      "review_count": 3513,
+      "brand": "Decathlon Quechua",
+      "variants": [],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "katlanır sandalye",
+        "Decathlon kamp sandalyesi",
+        "Decathlon Quechua",
+        "outdoor sandalye"
+      ],
+      "category_trends": "Kamp mobilyaları, özellikle katlanabilir sandalyeler, hafiflik ve taşınabilirlik özellikleriyle öne çıkıyor. Kullanıcılar, dayanıklılık ve konforun yanı sıra pratik kullanım sunan ürünleri tercih ediyor."
+    }
+  },
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "Nurgaz Kamp Sandalyesi",
+      "platform": "amazon",
+      "estimated_price": 1550.0,
+      "currency": "TRY",
+      "features": [
+        "Suya ve toza dayanıklı kumaş malzemesi sayesinde dış etkenlere karşı dirençlidir.",
+        "Kolay katlanma özelliği ile taşıma ve depolama pratiktir.",
+        "Farklı zemin koşullarına uyum sağlayan ayaklara sahiptir.",
+        "Ergonomik oturma yüzeyi ile uzun süreli oturumlarda rahatlık sağlar.",
+        "Hafifliği sayesinde kolay taşınır.",
+        "Sırt kısmında destek bulunur.",
+        "Bardaklık veya eşya gözü gibi detaylar bulunabilir.",
+        "Metal veya alüminyum taşıyıcı gövde seçenekleri mevcuttur."
+      ],
+      "rating": null,
+      "review_count": null,
+      "brand": "Nurgaz",
+      "variants": [],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "katlanır sandalye",
+        "portatif sandalye",
+        "dayanıklı kamp sandalyesi",
+        "ergonomik kamp sandalyesi"
+      ],
+      "category_trends": "Kamp mobilyaları, özellikle taşınabilir ve hafif ürünler popülerliğini artırıyor. Kullanıcılar, dayanıklılık ve konforun yanı sıra kolay kurulum ve taşıma özelliklerine de önem veriyor."
+    }
+  },
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "Orcamp Katlanabilir Lüks Sandalye Yan Sehpalı",
+      "platform": "amazon",
+      "estimated_price": 3999.0,
+      "currency": "TRY",
+      "features": [
+        "Sağlam çelik profil iskeleti sayesinde 170 kg'a kadar taşıma kapasitesi sunar.",
+        "Entegre yan sehpa, içecekler ve küçük eşyalar için pratik bir alan sağlar.",
+        "Elektrostatik boya ile kaplanmış metal profili sayesinde dış etkenlere karşı dayanıklıdır.",
+        "Katlanabilir tasarımı sayesinde kolayca taşınır ve depolanır.",
+        "Uzun yıllar ilk formunu koruyacak kalitede üretilmiştir, ses ve gıcırtı yapmaz.",
+        "Kamp, piknik, bahçe ve balıkçılık gibi çeşitli outdoor aktiviteleri için uygundur.",
+        "Sandalye ölçüleri 94x47x59 cm, masa ölçüleri 44x24 cm'dir.",
+        "Paslanmaz ve kırılmaz malzemelerden üretilmiştir."
+      ],
+      "rating": null,
+      "review_count": null,
+      "brand": "Orcamp",
+      "variants": [
+        {
+          "name": "Haki",
+          "price_delta": null
+        },
+        {
+          "name": "Kırmızı",
+          "price_delta": null
+        }
+      ],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "katlanır sandalye",
+        "yan sehpalı sandalye",
+        "lüks kamp sandalyesi",
+        "outdoor sandalye"
+      ],
+      "category_trends": "Kamp mobilyaları kategorisinde, özellikle katlanabilir ve fonksiyonel ürünler öne çıkmaktadır. Yan sehpalı ve dayanıklı malzemelerden üretilmiş sandalyeler, kullanıcıların konforunu ve pratikliğini artırdığı için tercih edilmektedir."
+    }
+  },
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "FreeCamp Foster Plus Buzluklu Katlanır Sandalye",
+      "platform": "amazon",
+      "estimated_price": 3079.9,
+      "currency": "TRY",
+      "features": [
+        "Entegre buzluk bölmesi içecekleri serin tutar.",
+        "Katlanabilir tasarımı sayesinde taşıma ve depolama kolaylığı sağlar.",
+        "Dayanıklı polyester 600 x 300D PVC kumaş ve sağlam metal iskelet.",
+        "120 kg'a kadar taşıma kapasitesi ile güvenli kullanım sunar.",
+        "Ergonomik oturma alanı uzun süreli kullanımlarda konfor sağlar.",
+        "Yanında içecek veya küçük eşyalar için pratik saklama alanı bulunur.",
+        "Hızlı kurulum ve kullanım imkanı sunar.",
+        "Taşıma çantası ile kolayca taşınabilir."
+      ],
+      "rating": null,
+      "review_count": null,
+      "brand": "FreeCamp",
+      "variants": [
+        {
+          "name": "Kahve",
+          "price_delta": null
+        },
+        {
+          "name": "Sarı",
+          "price_delta": null
+        },
+        {
+          "name": "Lacivert",
+          "price_delta": null
+        },
+        {
+          "name": "Kahverengi",
+          "price_delta": null
+        }
+      ],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "buzluklu sandalye",
+        "katlanır sandalye",
+        "taşınabilir sandalye",
+        "outdoor sandalye"
+      ],
+      "category_trends": "Kamp ve outdoor mobilyaları, özellikle taşınabilir ve fonksiyonel ürünlere olan talep artmaktadır. Dayanıklı malzemelerden yapılmış, kolay taşınabilen ve ek özelliklere sahip (buzluk gibi) ürünler öne çıkmaktadır."
+    }
+  }
+]

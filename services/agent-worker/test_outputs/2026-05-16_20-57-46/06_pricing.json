@@ -1,0 +1,48 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "price_median": 1323.0,
+    "price_q1": 899.0,
+    "price_q3": 1499.0,
+    "predicted_price": 1323.0,
+    "price_range_min": 0.0,
+    "price_range_max": 2399.0,
+    "positioning": "underpriced",
+    "positioning_score": 0.0,
+    "market_power_gap": "User product is weakly positioned vs competitors (gap: -1.61)",
+    "confidence_score": 0.5,
+    "fallback_used": false,
+    "variant_pricing": [
+      {
+        "variant_name": "Yeşil - Beyaz Çizgili",
+        "base_price": 549.9,
+        "price_delta": -773.1,
+        "suggested_price": 899.0,
+        "positioning": "underpriced"
+      },
+      {
+        "variant_name": "Mavi - Beyaz Çizgili",
+        "base_price": 549.9,
+        "price_delta": -773.1,
+        "suggested_price": 899.0,
+        "positioning": "underpriced"
+      }
+    ],
+    "competitor_variant_overlap": [
+      {
+        "variant_name": "Yeşil - Beyaz Çizgili",
+        "matching_competitors": [
+          "Kampseti 2 Adet Mavi Katlanır Kamp Sandalyesi - Plaj Piknik Sandalyesi Bardaklıklı M1",
+          "Walke Katlanır Kamp Sandalyesi Çİft Taraf Bardaklı Piknik Sandalyesi Siyah"
+        ]
+      },
+      {
+        "variant_name": "Mavi - Beyaz Çizgili",
+        "matching_competitors": [
+          "Walke Katlanır Kamp Sandalyesi Çİft Taraf Bardaklı Piknik Sandalyesi Siyah"
+        ]
+      }
+    ]
+  }
+}

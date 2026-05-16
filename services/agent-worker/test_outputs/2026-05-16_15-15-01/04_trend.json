@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "katlanır kamp sandalyesi",
+      "şişme kamp çadırı",
+      "kamp mutfak ürünleri",
+      "outdoor ayakkabı",
+      "termos"
+    ],
+    "demand_signals": [
+      "doğa ile iç içe tatil yapma isteği",
+      "şehir hayatının stresinden uzaklaşma",
+      "bütçe dostu kamp malzemelerine ilgi",
+      "fonksiyonel ve sağlam outdoor ekipmanlarına talep"
+    ],
+    "platform_trends": [
+      "hızlı teslimat imkanı sunan ürünler",
+      "Trendyol Plus'a özel fırsatlar",
+      "çoklu alım indirimleri (Çok Al Az Öde)",
+      "kuponlu ürünler"
+    ],
+    "category_trend_summary": "Trendyol'da \"Kamp & Outdoor\" kategorisinde, doğayla iç içe tatil yapma ve şehir hayatının stresinden uzaklaşma isteğiyle birlikte, katlanabilir ve pratik kamp ekipmanlarına olan talep artmaktadır. Özellikle şişme kamp çadırları, kamp sandalyeleri ve kamp mutfak ürünleri gibi fonksiyonel ve bütçe dostu ürünler öne çıkarken, hızlı teslimat ve çeşitli indirim fırsatları da alıcılar için önemli birer tercih sebebi olmaktadır."
+  }
+}

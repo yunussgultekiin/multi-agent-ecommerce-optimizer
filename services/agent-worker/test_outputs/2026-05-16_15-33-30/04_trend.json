@@ -1,0 +1,32 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "katlanır kamp sandalyesi",
+      "kamp masası",
+      "termos",
+      "çadır",
+      "uyku tulumu",
+      "kamp mutfak ürünleri",
+      "outdoor ayakkabı",
+      "outdoor giyim",
+      "hızlı kurulum çadır",
+      "taşınabilir zincirli kamp testeresi"
+    ],
+    "demand_signals": [
+      "doğayla iç içe tatil ve etkinliklere artan ilgi",
+      "şehir hayatının stresinden uzaklaşma isteği",
+      "fonksiyonel ve dayanıklı kamp malzemelerine yönelim",
+      "bütçe dostu kamp malzemelerine talep"
+    ],
+    "platform_trends": [
+      "hızlı teslimat seçeneği sunan ürünler",
+      "kargo bedava avantajı sunan ürünler",
+      "fırsatlı ve flaş ürünler",
+      "kampanyalı ürünler ve indirim fırsatları",
+      "birlikte al kazan ve çok al az öde gibi toplu satış teşvikleri"
+    ],
+    "category_trend_summary": "Trendyol'da \"Kamp & Outdoor\" kategorisinde doğa ile iç içe aktiviteler ve şehir hayatından kaçış teması ön planda. Tüketiciler, fonksiyonel, dayanıklı ve bütçe dostu kamp malzemelerine yönelirken, özellikle hızlı kurulum çadırlar, katlanır kamp sandalyeleri ve kamp mutfak ürünleri gibi pratik ürünler popülerlik kazanıyor. Platformda hızlı teslimat, kargo bedava ve çeşitli indirim kampanyaları gibi avantajlar da alıcı davranışlarını etkileyen önemli faktörler arasında yer alıyor."
+  }
+}

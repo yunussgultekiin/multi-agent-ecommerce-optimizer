@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "Simple Living Ahşap Kollu Geniş Katlanır Kamp, Plaj ve Piknik Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Bu sandalye, ahşap kolları ve katlanabilir yapısıyla doğrudan kullanıcı ürünüyle rekabet etmektedir ve orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "Mocca Style Neone Kırmızı Katlanır Ahşap Kollu Kamp Piknik Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, bu ürünü doğrudan bir rakip yapmaktadır ve orta segmentte konumlanmaktadır."
+      },
+      {
+        "competitor_name": "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, bu ürünü kullanıcı ürünüyle benzer kılmaktadır ve orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "SECENART Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, bu ürünü doğrudan bir rakip yapmaktadır ve orta segmentte konumlanmaktadır."
+      },
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, bu ürünü kullanıcı ürünüyle benzer kılmaktadır ve orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "KUBİLAY ASKERİ MALZEME Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, bu ürünü doğrudan bir rakip yapmaktadır ve orta segmentte konumlanmaktadır."
+      },
+      {
+        "competitor_name": "Hundemir Katlanır Ahşap Kolçaklı Çizgili Desenli Outdoor Kamp Piknik Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Çizgili deseni ve ahşap kolları ile kullanıcı ürününe benzemektedir ve orta segmentte yer almaktadır."
+      }
+    ]
+  }
+}

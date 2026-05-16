@@ -1,0 +1,68 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "Walke Katlanır Kamp Sandalyesi Çİft Taraf Bardaklı Piknik Sandalyesi Siyah",
+          "Kampseti 2 Adet Mavi Katlanır Kamp Sandalyesi - Plaj Piknik Sandalyesi Bardaklıklı M1"
+        ],
+        "price_range_min": 899.0,
+        "price_range_max": 1499.0
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "Freecamp Huxley Pro Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 2251.65,
+        "price_range_max": 2251.65
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "Outwell Cromer 5 Kademeli Katlanır Kamp Sandalyesi Green V",
+          "Outwell Seaford 4 Pozisyonlu & Konforlu Katlanır Plaj Sandalyesi O.Blue"
+        ],
+        "price_range_min": 5129.1,
+        "price_range_max": 5699.05
+      }
+    ],
+    "user_product_cluster": "budget",
+    "gap_opportunities": [
+      "Piyasada, ahşap kolçaklı, estetik ve dayanıklı, ancak uygun fiyatlı kamp sandalyeleri segmentinde boşluk bulunmaktadır.",
+      "Müşteri hizmetleri ve garanti süreçlerinde şeffaflık ve hız konusunda genel bir eksiklik mevcuttur.",
+      "Taşıma kapasitesi belirtilenin altında kalan veya bağlantı noktalarında zayıflık gösteren ürünlere karşı güvenilir ve sağlam alternatiflere ihtiyaç duyulmaktadır."
+    ],
+    "sentiment_based_opportunities": [
+      "Bağlantı yerlerinde plastik parça kırılması ve vida paslanması gibi kronik sorunları yaşamayan, uzun ömürlü ve dayanıklı ürünler sunmak.",
+      "Belirtilen taşıma kapasitesini güvenle karşılayan ve bağlantı noktalarında sağlamlık sunan ürünler geliştirmek.",
+      "Garanti ve iade süreçlerinde şeffaf, hızlı ve sorunsuz bir müşteri hizmeti deneyimi sağlamak."
+    ],
+    "trend_based_opportunities": [
+      "Hafiflik ve dayanıklılığı birleştiren, kolay taşınabilir ve katlanabilir kamp sandalyeleri sunmak.",
+      "Çok fonksiyonlu özelliklere sahip (örneğin ayarlanabilir sırt desteği, bardaklık gibi) kamp sandalyeleri geliştirmek.",
+      "Hızlı teslimat seçeneği sunarak müşteri beklentilerini karşılamak."
+    ],
+    "strategic_actions": [
+      "Ürünün ahşap kolçaklarının gerçek ahşap olduğunu ve plastik parçaların kırılması gibi sorunlar yaşatmadığını vurgulayarak rakiplerden ayrışan bir pazarlama kampanyası başlatın.",
+      "Ürünün 110 kg taşıma kapasitesini ve paslanmaz metal profilini öne çıkararak dayanıklılık ve güvenilirlik algısını güçlendirin, bu konuda müşteri yorumlarını ve test sonuçlarını paylaşın.",
+      "Müşteri hizmetleri süreçlerini iyileştirerek garanti ve iade konularında hızlı ve şeffaf çözümler sunulduğunu aktif olarak iletişimde kullanın."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "Outwell"
+      ],
+      "budget_brands": [
+        "Kampseti",
+        "Walke"
+      ],
+      "user_brand_position": "CampRoute, ahşap kolçak gibi estetik ve dayanıklılık odaklı özelliklerle, bütçe dostu fiyat segmentinde kaliteli bir alternatif sunarak konumlanmaktadır."
+    },
+    "positioning_score": 0.7,
+    "positioning_rationale": "CampRoute, ahşap kolçak ve paslanmaz metal gibi kaliteli özellikleriyle bütçe segmentinde öne çıkarken, rakiplerin yaşadığı kronik sorunlara çözüm sunma potansiyeliyle güçlü bir konumlandırmaya sahiptir.",
+    "variant_gap_opportunities": []
+  }
+}

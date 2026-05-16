@@ -1,0 +1,48 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olmasıyla doğrudan rakip, orta segmentte yer alıyor."
+      },
+      {
+        "competitor_name": "Decathlon Quechua Katlanabilir Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Popüler bir outdoor markası olan Decathlon'un katlanabilir kamp sandalyesi, benzer kullanım alanlarına hitap ediyor ve orta segmentte konumlanıyor."
+      },
+      {
+        "competitor_name": "Madfox İnfinity Ultralight Retro Çizgili Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Çizgili deseni ve katlanabilir yapısıyla benzerlik gösteren bu ürün, orta segmentte rekabetçi bir seçenek sunuyor."
+      },
+      {
+        "competitor_name": "Funky Chairs Freedom Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olmasıyla doğrudan rakip, orta segmentte yer alıyor."
+      },
+      {
+        "competitor_name": "Hastunç Ahşap Kolçaklı Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kolçaklı ve katlanabilir yapısıyla benzerlik gösteren bu ürün, daha uygun fiyatlı bir alternatif sunarak bütçe segmentinde rekabet ediyor."
+      },
+      {
+        "competitor_name": "Bofigo Ahşap Kollu Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olmasıyla doğrudan rakip, bütçe segmentinde yer alıyor."
+      },
+      {
+        "competitor_name": "Nurgaz NG-C135 Çift Kişilik Yeşil Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Çift kişilik olması dışında benzer özelliklere sahip bu ürün, orta segmentte yer alıyor."
+      },
+      {
+        "competitor_name": "Haegs Kamp Sandalyesi, Outdoor, Plaj ve Piknik İçin Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Katlanabilir ve outdoor kullanımına uygun olmasıyla benzerlik gösteren bu ürün, orta segmentte rekabetçi bir seçenek sunuyor."
+      }
+    ]
+  }
+}

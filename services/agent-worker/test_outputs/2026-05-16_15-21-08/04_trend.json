@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "5 Kişilik Çadırlar",
+      "Kamp Ocakları",
+      "Kamp Sandalyeleri",
+      "Kamp Termosları",
+      "Katlanabilir Bisikletler"
+    ],
+    "demand_signals": [
+      "dayanıklılık ve pratik kurulum özelliklerine sahip çadırlar",
+      "taşınabilirlik ve konfor sunan kamp malzemeleri",
+      "mevsimsel ihtiyaçlara uygun outdoor giyim ve ekipmanlar"
+    ],
+    "platform_trends": [
+      "çok satanlar listelerinde çadır, kamp ocağı ve kamp sandalyesi gibi temel kamp malzemelerinin öne çıkması",
+      "fiyat karşılaştırması ve kullanıcı yorumlarının satın alma kararında etkili olması"
+    ],
+    "category_trend_summary": "Hepsiburada'daki \"Kamp & Outdoor\" kategorisinde, kullanıcılar özellikle 5 kişilik çadırlar, kamp ocakları ve katlanabilir bisikletler gibi pratik ve fonksiyonel ürünlere yöneliyor. Dayanıklılık, taşınabilirlik ve kolay kurulum gibi özellikler, alıcı davranışlarını etkileyen önemli faktörler arasında yer alıyor. Platformda çok satanlar listeleri ve kullanıcı yorumları, ürün seçiminde belirleyici rol oynuyor."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "title_suggestion": "Katlanır Kamp Sandalyesi Ahşap Kollu 110 kg CampRoute",
+    "meta_description": "KampRoute Katlanır Kamp Sandalyesi, gerçek ahşap kolçakları ve paslanmaz metal profiliyle dayanıklı ve şık bir deneyim sunar. 110 kg taşıma kapasitesi ve su itici Oxford kumaşı sayesinde her türlü outdoor maceranda yanında. Her siparişi özenle hazırlıyor, kurulum kolaylığı ve uzun ömürlü kullanım vadediyoruz. Müşteri geri bildirimlerine göre sürekli geliştirdiğimiz ürünümüzle doğanın tadını çıkarırken konforundan ödün verme. CE ve RoHS sertifikalı malzemelerle üretilmiştir. Soruların için 24 saat içinde yanındayız.",
+    "content_recommendations": [
+      "Ürünün kurulum kolaylığını ve katlanabilir tasarımını vurgulayan görseller ekle.",
+      "Su itici Oxford kumaşın suya dayanıklılığını gösteren bir video veya fotoğraf kullan.",
+      "110 kg taşıma kapasitesini güven veren bir şekilde öne çıkararak dayanıklılığı vurgula."
+    ],
+    "keyword_gaps": [
+      "katlanır ahşap kollu sandalye",
+      "piknik sandalyesi katlanır",
+      "kamp sandalyesi sağlam",
+      "hafif kamp sandalyesi",
+      "bahçe sandalyesi katlanır"
+    ],
+    "competitor_comparison_summary": "Piyasadaki lüks kamp sandalyesi seçeneklerine kıyasla, CampRoute Katlanır Kamp Sandalyesi estetik ahşap kolları ve dayanıklı yapısını daha uygun fiyatla sunarak bütçe dostu bir alternatif oluşturuyor. Büyük markaların genel ürün tanımlamalarının aksine, teknik özelliklerini ön planda tutarak niş bir konuma yerleşiyor ve kalitesini detaylarla ispatlıyor.",
+    "platform_specific_tips": [
+      "Ürünün ilk 5 kelimesini 'Katlanır Kamp Sandalyesi Ahşap Kollu' olarak belirleyerek A9 algoritmasında görünürlüğü artırın.",
+      "Açıklamada 'Gerçek Ahşap Kolçak' ve 'Paslanmaz Metal Profil' gibi özelliklerin üretim sürecindeki detaylarını anlatarak güven inşa edin.",
+      "Backend search terms kısmına 'ahşap kollu kamp sandalyesi', 'taşınabilir sandalye' gibi anahtar kelimeleri ekleyerek arama görünürlüğünü artırın.",
+      "Görsel galerisinde ürünün katlanma ve açılma adımlarını gösteren bir GIF veya kısa video kullanın.",
+      "Ürünün 'underpriced' konumlandırmasına uygun olarak, kalite-fiyat dengesini vurgulayan 'Uygun Fiyatlı Lüks' gibi ifadeleri açıklamalarda kullanın."
+    ],
+    "variant_seo": [
+      {
+        "variant_name": "Yeşil - Beyaz Çizgili",
+        "title_suggestion": "Katlanır Kamp Sandalyesi Yeşil-Beyaz Çizgili Ahşap Kollu 110 kg CampRoute",
+        "keyword_additions": [
+          "yeşil çizgili kamp sandalyesi",
+          "outdoor yeşil sandalye"
+        ]
+      },
+      {
+        "variant_name": "Mavi - Beyaz Çizgili",
+        "title_suggestion": "Katlanır Kamp Sandalyesi Mavi-Beyaz Çizgili Ahşap Kollu 110 kg CampRoute",
+        "keyword_additions": [
+          "mavi çizgili kamp sandalyesi",
+          "outdoor mavi sandalye"
+        ]
+      }
+    ],
+    "product_development_ideas": [
+      "Sandalyeye bardak tutucu veya küçük bir yan cep ekleyerek ek fonksiyonellik sunulabilir.",
+      "Daha hafif ve kompakt tasarımlar üzerinde çalışılarak taşıma kolaylığı artırılabilir."
+    ]
+  }
+}

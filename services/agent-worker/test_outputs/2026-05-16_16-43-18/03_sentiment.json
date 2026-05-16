@@ -1,0 +1,110 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "pain_points": [
+      "Ürünün ilk kullanımda kırılması veya yırtılması",
+      "Plastik parçaların dayanıksızlığı ve kısa sürede kırılması",
+      "Siparişin geç kargolanması veya hiç gönderilmemesi",
+      "Kumaş kalitesinin düşük olması ve kısa sürede yıpranması",
+      "İade ve değişim süreçlerinde yaşanan zorluklar ve müşteri hizmetlerine ulaşılamaması",
+      "Ürünün beklenenden daha ağır ve kaba olması",
+      "Metal aksamın paslanması",
+      "Siparişin eksik veya hasarlı gönderilmesi"
+    ],
+    "praised_features": [
+      "Sağlam ve dayanıklı iskelet yapısı",
+      "Konforlu ve geniş oturma alanı",
+      "Şık ve estetik tasarım (özellikle ahşap detaylar)",
+      "Yüksek taşıma kapasitesi",
+      "Kolay katlanıp taşınabilme",
+      "Fiyat/performans dengesi"
+    ],
+    "competitor_sentiments": [
+      {
+        "competitor_name": "Funky Chairs Freedom Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Sağlam iskelet ve paslanmaz malzeme beklentisi.",
+          "İyi işçilik ve güzel tasarım."
+        ],
+        "negative": [
+          "İlk kullanımda yırtılma ve plastik aksamda kırılma.",
+          "Sandalye kilit mekanizmasının bozulması.",
+          "Siparişin 'aynı gün kargo' denmesine rağmen gönderilmemesi.",
+          "Kumaş ve genel kalitenin 5 ay gibi kısa bir sürede bozulması.",
+          "Fuar standından alınan ürünlerin 21 gün geçmesine rağmen kargoya verilmemesi.",
+          "Stokta olmayan ürünün satılıp siparişin iptal edilmesi.",
+          "İade sürecinde yaşanan zorluklar ve müşteri hizmetlerine ulaşılamaması."
+        ]
+      },
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "positive": [
+          "Fiyatına göre iyi ve dayanıklı bir ürün olması.",
+          "Kullanıcılar tarafından memnuniyetle karşılanan bütçe performansı."
+        ],
+        "negative": [
+          "Markanın diğer ürünlerinde (valiz, termos) yaşanan kalite sorunları ve yedek parça bulunamaması.",
+          "Trendyol'da ürün hakkında henüz hiç yorum yazılmamış olması."
+        ]
+      },
+      {
+        "competitor_name": "Hastunç Ahşap Kolçaklı Katlanır Kamp Sandalyesi",
+        "positive": [],
+        "negative": [
+          "Sipariş edilen ürünlerin paslı ve hasarlı gelmesi.",
+          "İndirimli alınan ürünlerin firma tarafından gönderilmemesi.",
+          "Ücret iadesi sürecinde yaşanan sorunlar."
+        ]
+      },
+      {
+        "competitor_name": "Mocca Style Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "positive": [],
+        "negative": [
+          "Markanın (Mocca Home) diğer ürünlerinde eksik veya hasarlı gönderim yapılması.",
+          "Teslimatın gecikmesi ve siparişlerin gönderilmemesi.",
+          "Müşteri hizmetlerinin ilgisizliği ve ulaşılamaması."
+        ]
+      },
+      {
+        "competitor_name": "Bag The Joy Ahşap Katlanır Kamp Sandalyesi",
+        "positive": [
+          "İlgili satıcı ve sorun çözme odaklı yaklaşım (kırılan parça için yenileme yapılması).",
+          "Kaliteli ve şık ürün."
+        ],
+        "negative": [
+          "Ağır, kaba ve hantal olarak değerlendirilmesi."
+        ]
+      },
+      {
+        "competitor_name": "Outdoart Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Uzun süreli oturumlarda konforun düşmemesi.",
+          "Standart bez sandalyelerden daha iyi ve estetik bulunması."
+        ],
+        "negative": []
+      },
+      {
+        "competitor_name": "Simple Living Ahşap Kollu Geniş Katlanır Kamp Sandalyesi",
+        "positive": [],
+        "negative": [
+          "Marka (Simple.Life/Simple Premium) ile ilgili şikayetler genellikle bir diyet/sağlık uygulamasıyla ilgilidir ve izinsiz üyelik ücreti çekilmesi gibi konuları kapsar, kamp sandalyesi ile doğrudan ilgili değildir."
+        ]
+      }
+    ],
+    "marketing_angles": [
+      "Rakiplerin aksine, CampRoute sandalyeniz ilk kullanımda ne yırtılır ne de kırılır. Yıllarca güvenle kullanın.",
+      "Plastik kabusuna son! Sağlam ahşap kollarımız ve metal iskeletimizle dayanıksız sandalyeleri unutun.",
+      "Siparişiniz söz verdiğimiz gibi zamanında kapınızda. Beklenmedik iptaller ve gecikmelerle kamp planlarınızı ertelemeyin.",
+      "Piyasada övülen sağlamlık ve konforu, CampRoute kalitesiyle birleştirdik. Hem şık hem de uzun ömürlü.",
+      "Geniş oturma alanı ve sağlam yapısıyla konforu yeniden tanımlıyoruz. Ahşabın doğallığı ve estetiğiyle kamp keyfinizi ikiye katlayın."
+    ],
+    "risk_warnings": [
+      "Ürün kalitesinden taviz vermeyin. Rakiplerde sıkça görülen ilk kullanımda kırılma, yırtılma ve plastik aksam sorunları marka imajına kalıcı zarar verebilir.",
+      "Lojistik ve kargo süreçlerini titizlikle yönetin. 'Aynı gün kargo' gibi vaatler yerine getirilemeyecekse kullanılmamalıdır. Geç ve hiç gönderilmeyen siparişler en büyük şikayet konularından biridir.",
+      "Müşteri hizmetleri ve iade süreçleri kritik öneme sahiptir. Ulaşılamayan müşteri hizmetleri ve zorlaştırılan iade süreçleri, olumsuz yorumların ana kaynağıdır.",
+      "Ürün görselleri ve açıklamaları gerçekle birebir örtüşmelidir. 'Ağır ve kaba' gibi olumsuz geri bildirimleri engellemek için ürünün ağırlık ve boyut bilgileri net bir şekilde belirtilmelidir.",
+      "Metal aksamın paslanmaya karşı dayanıklı olduğundan emin olun. 'Paslanmaz' veya 'paslanmaya karşı korumalı' gibi ifadeler kullanılıyorsa bu özelliğin test edilmiş olması gerekir."
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "trending_features": [
+      "Gölgelikli kamp sandalyesi",
+      "Otomatik kamp çadırı",
+      "Katlanabilir kamp masası",
+      "Portatif kamp ocağı"
+    ],
+    "demand_signals": [
+      "Doğa ile iç içe tatil yapma isteği artıyor, bu da kamp malzemelerine olan talebi yükseltiyor.",
+      "Şehir hayatının yorucu temposundan uzaklaşma ve doğada vakit geçirme eğilimi, outdoor ekipmanlarına olan ilgiyi artırıyor.",
+      "Kamp yaparken ev konforunu arayan tüketiciler, kullanışlı ve fonksiyonel kamp malzemelerine yöneliyor.",
+      "Kolay taşınabilirlik ve hızlı kurulum özelliklerine sahip ürünler tercih ediliyor."
+    ],
+    "platform_trends": [
+      "Trendyol'da kamp malzemeleri için indirim fırsatları ve avantajlı fiyatlar sunuluyor.",
+      "Hızlı teslimat seçeneği sunulan ürünler dikkat çekiyor.",
+      "Trendyol Plus üyelerine özel avantajlar bulunuyor.",
+      "Çok satanlar ve fırsatlı ürünler kategorileri aktif olarak kullanılıyor."
+    ],
+    "category_trend_summary": "Trendyol'da \"Kamp & Outdoor\" kategorisinde, tüketicilerin doğayla daha konforlu ve pratik bir şekilde vakit geçirme arayışı öne çıkıyor. Özellikle gölgelikli kamp sandalyeleri, otomatik ve kurulumu kolay kamp çadırları ile katlanabilir kamp masaları gibi ürünler popülerlik kazanıyor. Bu trend, şehir hayatından uzaklaşma ve doğada ev konforunu arama isteğiyle destekleniyor."
+  }
+}

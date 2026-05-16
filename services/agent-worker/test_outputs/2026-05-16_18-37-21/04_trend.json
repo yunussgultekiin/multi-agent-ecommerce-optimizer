@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "katlanabilir kamp sandalyesi",
+      "5 kişilik çadırlar",
+      "kamp ocakları",
+      "kafa feneri",
+      "dağcılık ayakkabısı"
+    ],
+    "demand_signals": [
+      "taşınabilirlik ve pratik kurulum özelliklerine sahip kamp malzemelerine artan ilgi",
+      "dayanıklı ve uzun ömürlü outdoor ürünlerine talep artışı",
+      "mevsim koşullarına uygun çadır ve giyim ürünlerine yönelim",
+      "kullanıcı yorumları ve ürün açıklamaları ile bilinçli alışveriş yapma eğilimi"
+    ],
+    "platform_trends": [
+      "Hepsiburada'da popüler markaların (Stanley, Orcamp, Naturehike) kamp malzemeleri öne çıkıyor",
+      "indirim dönemleri ve kampanyalar kamp malzemeleri satışlarını artırıyor",
+      "fiyat karşılaştırması yaparak bütçe dostu ürün arayışı yaygın",
+      "yarın kapında gibi hızlı teslimat seçenekleri tercih sebebi"
+    ],
+    "category_trend_summary": "Hepsiburada'da \"Kamp & Outdoor\" kategorisinde taşınabilir, dayanıklı ve mevsim koşullarına uygun ürünler popülerlik kazanıyor. Tüketiciler, bilinçli alışveriş için ürün yorumlarına ve teknik özelliklere dikkat ederken, indirimler ve hızlı teslimat seçenekleri de satın alma kararlarında etkili oluyor."
+  }
+}

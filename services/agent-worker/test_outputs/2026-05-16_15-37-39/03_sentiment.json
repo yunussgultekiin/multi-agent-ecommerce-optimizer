@@ -1,0 +1,96 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "pain_points": [
+      "Ürünlerin kısa sürede yırtılması veya kırılması gibi malzeme kalitesi sorunları.",
+      "Termos kapaklarının kırılması ve yedek parça temininde yaşanan zorluklar.",
+      "Kargo ve teslimat süreçlerinde yaşanan aksaklıklar (teslim edilmeme, gecikme).",
+      "Ürünlerin beklentiyi karşılamaması, kalitesiz malzeme hissi vermesi."
+    ],
+    "praised_features": [
+      "Katlanabilir ve taşınabilir tasarım.",
+      "Ergonomik ve konforlu oturma alanı.",
+      "Dayanıklı iskelet ve kumaş malzemeleri (özellikle alüminyum çerçeve ve Oxford kumaş).",
+      "Kolay kurulum ve kullanım.",
+      "Ahşap kolçaklar gibi estetik ve konfor artırıcı detaylar."
+    ],
+    "competitor_sentiments": [
+      {
+        "competitor_name": "Madfox Infinity Ultralight Katlanır Kamp Sandalyesi-Retro Çizgili",
+        "positive": [
+          "Taşınabilir tasarım ve dayanıklı naylon torba.",
+          "Yüksek dayanıklılık (600D Oxford kumaş, 7075 havacılık alüminyum alaşımı çerçeve).",
+          "Süper konforlu ve ergonomik koltuk tasarımı.",
+          "Nefes alabilen ve yumuşak koltuk ağı.",
+          "Kolay kurulum (bir dakika içinde).",
+          "Çok yönlülük (kamp, yürüyüş, piknik, balık tutma, bahçe, plaj).",
+          "Hafif ve küçük, taşıması kolay."
+        ],
+        "negative": [
+          "Farklı bir Madfox kamp sandalyesi modelinde kısa sürede yırtılma şikayeti."
+        ]
+      },
+      {
+        "competitor_name": "Outwell Breaker Airflow Terletmeyen Ultra Konforlu Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Katlanır kamp sandalyesi rahat, geniş ve sağlam yapılıdır.",
+          "İyi takip edilen ve verimli hizmet.",
+          "Hızlı teslimat."
+        ],
+        "negative": [
+          "Kargo teslimatında sorunlar yaşanması (ürünün teslim edilmemesi)."
+        ]
+      },
+      {
+        "competitor_name": "Urban Badger Nidavel Kanvas Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Gelişmiş konfor (güçlendirilmiş sırtlık, kalınlaştırılmış koltuk, ergonomik tasarım).",
+          "Dayanıklı çelik ve sağlam üçgen çerçeve ile yüksek güvenlik ve 120 kg ağırlık kapasitesi.",
+          "Suya, aşınmaya ve UV ışınlarına dayanıklı çift katlı 600D oxford kumaş.",
+          "Koltuk kısmında ek pamuk tabakası ile rahat oturma.",
+          "Hafif (2.2 kg) ve tek elle taşınabilir.",
+          "Saniyeler içinde kolayca açılıp kapanır, montaj gerektirmez.",
+          "Taşıma çantası dahil."
+        ],
+        "negative": []
+      },
+      {
+        "competitor_name": "SECENART Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Çok hızlı geldi.",
+          "Paketleme güzeldi."
+        ],
+        "negative": []
+      },
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "positive": [
+          "Sağlam çelik iskelet ve 600D Oxford kumaş.",
+          "Ergonomik ahşap kol tasarımı ile konforlu oturum.",
+          "130 kg'a kadar taşıma kapasitesi.",
+          "Kolay taşıma ve saklama için katlanabilir yapı.",
+          "Nemli bir bezle kolay temizlenebilir.",
+          "Estetik ahşap kol detayları.",
+          "Pratik kullanım."
+        ],
+        "negative": [
+          "Termos kapaklarının kısa sürede kırılması ve yedek parça temininde sorun yaşanması (marka genelinde)."
+        ]
+      }
+    ],
+    "marketing_angles": [
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi ile uzun süreli kullanımlarda bile yırtılma endişesi yaşamayın, dayanıklı malzemelerle üretilmiştir.",
+      "Hızlı ve sorunsuz teslimat garantisiyle CampRoute kamp sandalyeniz kapınızda, kargo aksaklıklarına son verin.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, ergonomik tasarımı ve sağlam yapısıyla maksimum konfor sunar, beklentilerinizi fazlasıyla karşılar.",
+      "Hafif ve kolay taşınabilir CampRoute kamp sandalyenizle her yere rahatça gidin, kurulumu saniyeler sürer.",
+      "Ahşap kollu tasarımıyla CampRoute kamp sandalyenizde hem konforu hem de şıklığı bir arada yaşayın."
+    ],
+    "risk_warnings": [
+      "Ürünlerin malzeme kalitesinden ödün vermeyin; kısa sürede yırtılma veya kırılma gibi kronik sorunlardan kaçının.",
+      "Kargo ve teslimat süreçlerini titizlikle yönetin, müşteri memnuniyetsizliğine yol açan gecikmelerden ve teslimat hatalarından kaçının.",
+      "Ürün açıklamalarının ve görsellerinin gerçekçi olduğundan emin olun, müşteri beklentilerini doğru yönetin.",
+      "Yedek parça temini konusunda müşteri taleplerini karşılayacak bir sistem kurun, özellikle ahşap kolçak gibi detaylarda oluşabilecek sorunlara karşı hazırlıklı olun."
+    ]
+  }
+}

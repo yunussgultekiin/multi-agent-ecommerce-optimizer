@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "kamp çakısı",
+      "kamp testeresi",
+      "kamp mutfak malzemeleri",
+      "kişiye özel isim yazılı ürünler"
+    ],
+    "demand_signals": [
+      "dayanıklı ve çok amaçlı ürünlere artan ilgi",
+      "taşınabilir ve pratik kamp ekipmanlarına yönelim",
+      "kişiselleştirilmiş kamp ürünlerine talep"
+    ],
+    "platform_trends": [
+      "Hepsiburada'da 'çok satanlar' listelerinde kamp çakıları ve bıçakları gibi küçük ama işlevsel ürünlerin yükselişi",
+      "kamp mutfak malzemeleri gibi niş alt kategorilerde ürün çeşitliliğinin artması",
+      "satıcıların 'sepete özel' indirimler ve taksit seçenekleri sunması"
+    ],
+    "category_trend_summary": "Hepsiburada'daki 'Kamp & Outdoor' kategorisinde genel eğilim, işlevselliği yüksek, dayanıklı ve taşınabilir ürünlere doğru kaymaktadır. Özellikle kamp çakıları, testereleri ve mutfak malzemeleri gibi pratik ekipmanlar popülerlik kazanmaktadır. Ayrıca, kişiye özel isim yazılı ürünler gibi kişiselleştirilmiş seçeneklere olan talep de artış göstermektedir."
+  }
+}

@@ -1,0 +1,211 @@
+[
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "Moniev Natura Kamp Sandalyesi",
+      "platform": "trendyol",
+      "estimated_price": 689.91,
+      "currency": "TRY",
+      "features": [
+        "19mm çapında ve 0.80mm et kalınlığında DKP boru iskelet",
+        "Mat siyah elektrostatik toz boyalı",
+        "3 katmanlı kumaş yapısı (600 denye Oxford PVC, polietilen şilte, astar)",
+        "Tek parça ve çift dikişli kumaş",
+        "Benzersiz açma kapama mekanizması",
+        "Kopolimer moblen plastik aksamlar",
+        "100kg taşıma kapasitesi",
+        "Bardaklık özelliği"
+      ],
+      "rating": 4.4,
+      "review_count": 407,
+      "brand": "Moniev",
+      "variants": [],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "katlanır sandalye",
+        "piknik sandalyesi",
+        "bardaklıklı sandalye",
+        "Moniev"
+      ],
+      "category_trends": "Kamp ve outdoor mobilyalarında hafif, dayanıklı ve kolay taşınabilir ürünler ön plandadır. Bardaklık gibi ek özellikler kullanıcıların tercih sebebi olmaktadır."
+    }
+  },
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "Decathlon Quechua Kamp Sandalyesi",
+      "platform": "trendyol",
+      "estimated_price": 1450.0,
+      "currency": "TRY",
+      "features": [
+        "150 kg'a kadar taşıma kapasitesi",
+        "Çelik yapı ve polyester kumaş",
+        "Bardak bölmesi bulunur",
+        "Kolay katlanıp açılabilir",
+        "Az yer kaplar",
+        "Taşıma için entegre kayış",
+        "Oturma yeri yüksekliği: 44,5 cm",
+        "Toplam ağırlık: 3,6 kg"
+      ],
+      "rating": 4.5,
+      "review_count": 3513,
+      "brand": "Quechua",
+      "variants": [],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "katlanır sandalye",
+        "Decathlon kamp sandalyesi",
+        "piknik sandalyesi",
+        "outdoor sandalye"
+      ],
+      "category_trends": "Kamp mobilyaları, özellikle katlanabilir ve portatif sandalyeler, outdoor aktiviteler için popülerliğini artırmaktadır. Kullanıcılar konfor, dayanıklılık ve taşıma kolaylığı gibi özelliklere önem vermektedir."
+    }
+  },
+  {
+    "success": false,
+    "fallback_used": true,
+    "data": {
+      "error": "Research failed: Expecting value: line 1 column 1 (char 0)"
+    }
+  },
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+      "platform": "trendyol",
+      "estimated_price": 3476.0,
+      "currency": "TRY",
+      "features": [
+        "Dayanıklı metal iskelet",
+        "Rahat ahşap kolçaklar",
+        "Kolay katlanabilir ve taşınabilir",
+        "Kamp, piknik ve outdoor aktiviteler için ideal",
+        "Tek kişilik kullanım için uygun",
+        "Sağlam ve dengeli yapı",
+        "Uzun ömürlü kullanım"
+      ],
+      "rating": null,
+      "review_count": null,
+      "brand": "Tekno Trust",
+      "variants": [],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "katlanır sandalye",
+        "ahşap kollu sandalye",
+        "outdoor sandalye",
+        "piknik sandalyesi"
+      ],
+      "category_trends": "Kamp sandalyelerinde konfor ve taşınabilirlik ön planda. Ahşap detaylı ve sağlam yapılı modeller popülerliğini koruyor."
+    }
+  },
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "Outdoart Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+      "platform": "trendyol",
+      "estimated_price": 1699.0,
+      "currency": "TRY",
+      "features": [
+        "Sağlam galvaniz kaplama demir iskelet yapısı, paslanmaya karşı dayanıklı",
+        "Yüksek taşıma kapasitesi (140 kg)",
+        "Gerçek ahşap kolluklar, estetik ve doğal bir dokunuş sunar",
+        "Kaymayı önleyen özel ayak pabucu tasarımı",
+        "Katlanabilir ve taşınabilir, kamp ve piknikler için ideal",
+        "Nostaljik ve zarif tasarım"
+      ],
+      "rating": null,
+      "review_count": null,
+      "brand": "Outdoart",
+      "variants": [],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "katlanır sandalye",
+        "ahşap kollu sandalye",
+        "piknik sandalyesi",
+        "outdoor sandalye"
+      ],
+      "category_trends": "Kamp ve outdoor mobilyalarında dayanıklılık, taşınabilirlik ve estetik ön plandadır. Ahşap detaylar ve yüksek taşıma kapasitesi gibi özellikler kullanıcılar tarafından tercih edilmektedir."
+    }
+  },
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "Simple Living Ahşap Kollu Geniş Katlanır Kamp Sandalyesi",
+      "platform": "trendyol",
+      "estimated_price": 499.0,
+      "currency": "TRY",
+      "features": [
+        "Ahşap kolları sayesinde şık ve doğal bir görünüm sunar.",
+        "Geniş oturma alanı ile ekstra konfor sağlar.",
+        "Kolayca katlanıp taşınabilen portatif yapıdadır.",
+        "Sağlam metal gövdeye sahiptir.",
+        "Polyester kumaşı sayesinde suya dayanıklıdır.",
+        "110 kg'a kadar taşıma kapasitesi bulunur.",
+        "Bardak tutacağı mevcuttur.",
+        "Taşıma çantası ile birlikte gelir."
+      ],
+      "rating": null,
+      "review_count": null,
+      "brand": "Simple Living",
+      "variants": [
+        {
+          "name": "Yeşil",
+          "price_delta": 0.0
+        },
+        {
+          "name": "Kırmızı",
+          "price_delta": 0.0
+        },
+        {
+          "name": "Mavi",
+          "price_delta": 0.0
+        }
+      ],
+      "trending_keywords": [
+        "kamp sandalyesi",
+        "katlanır sandalye",
+        "ahşap kollu sandalye",
+        "piknik sandalyesi",
+        "outdoor sandalye"
+      ],
+      "category_trends": "Kamp mobilyalarında konfor ve taşınabilirlik ön planda. Ahşap detaylar ve suya dayanıklı malzemeler popülerliğini koruyor."
+    }
+  },
+  {
+    "success": true,
+    "fallback_used": false,
+    "data": {
+      "competitor_name": "Bahçeci Atina Mix - Atina sandalye mix",
+      "platform": "trendyol",
+      "estimated_price": 7735.75,
+      "currency": "TRY",
+      "features": [
+        "Gürgen ağacından üretilmiştir, bu nedenle sağlam ve dayanıklıdır.",
+        "Katlanabilir yapısı sayesinde yer tasarrufu sağlar ve taşınması kolaydır.",
+        "Pvc oturumu sayesinde ek minder ihtiyacı olmadan konforlu bir kullanım sunar.",
+        "Suya ve dış hava koşullarına karşı dayanıklıdır.",
+        "İç ve dış mekanlarda kullanıma uygundur.",
+        "Şık ve modern bir tasarıma sahiptir.",
+        "Hassas zımparalama ve vernik uygulaması ile pürüzsüz bir yüzey elde edilmiştir.",
+        "2 yıl garanti süresi bulunmaktadır."
+      ],
+      "rating": null,
+      "review_count": null,
+      "brand": "Bahçeci",
+      "variants": [],
+      "trending_keywords": [
+        "bahçe sandalyesi",
+        "katlanır sandalye",
+        "ahşap sandalye",
+        "pvc oturum",
+        "dayanıklı sandalye"
+      ],
+      "category_trends": "Kamp ve outdoor kategorisinde, özellikle bahçe mobilyaları ve taşınabilir oturma çözümleri popülerdir. Kullanıcılar dayanıklı, fonksiyonel ve estetik ürünlere yönelmektedir."
+    }
+  }
+]

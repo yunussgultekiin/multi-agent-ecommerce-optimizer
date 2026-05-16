@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "Bofigo Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Bu marka, ahşap kollu katlanır kamp sandalyeleri sunarak doğrudan rakip oluşturmaktadır ve genellikle orta segmentte yer alır."
+      },
+      {
+        "competitor_name": "Orcamp Ahşap Kollu Katlanabilir Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Orcamp, yerli üretim ve kamp malzemeleriyle bilinen bir markadır ve ahşap kollu katlanır kamp sandalyeleri ile rekabetçi bir ürün sunar, genellikle orta segmentte konumlanır."
+      },
+      {
+        "competitor_name": "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Joyfull Turtle, ahşap kollu katlanır kamp sandalyeleri sunarak benzer bir ürün gamına sahiptir ve genellikle orta segmentte yer alır."
+      },
+      {
+        "competitor_name": "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "hepsiburada",
+        "reason": "Tekno Trust, ahşap kollu katlanır kamp sandalyeleri ile doğrudan rekabet eder ve genellikle orta segmentte fiyatlandırılır."
+      },
+      {
+        "competitor_name": "Nurgaz Campout Lux Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Nurgaz, kamp malzemeleri konusunda tanınmış bir markadır ve ahşap kollu modelleri olmasa da benzer işlevselliğe sahip sandalyeleriyle rekabet eder, genellikle orta-üst segmentte yer alır."
+      },
+      {
+        "competitor_name": "Outdoart Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Outdoart, gerçek ahşap kollu ve yüksek taşıma kapasiteli lüks kamp sandalyeleri sunarak premium segmentte rekabet eder."
+      },
+      {
+        "competitor_name": "Simple Living Ahşap Kollu Geniş Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Simple Living, ahşap kollu ve geniş oturma alanına sahip katlanır kamp sandalyeleri ile orta segmentte rekabetçi bir seçenektir."
+      }
+    ]
+  }
+}

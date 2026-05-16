@@ -77,7 +77,7 @@ async def run_sentiment_analyzer(
                 config=types.GenerateContentConfig(
                     tools=[_GROUNDING_TOOL],
                     temperature=0.2,
-                    max_output_tokens=4096,
+                    max_output_tokens=1572,
                     thinking_config=types.ThinkingConfig(thinking_budget=0),
                 ),
             )

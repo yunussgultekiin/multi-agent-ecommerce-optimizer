@@ -1,0 +1,76 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "Bofigo Ahşap Kollu Kamp Sandalyesi"
+        ],
+        "price_range_min": 0.0,
+        "price_range_max": 500.0
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "Motzi Beşiktaş Çizgili Kamp Sandalyesi",
+          "Haegs Kamp Sandalyesi",
+          "Decathlon Quechua Katlanabilir Kamp Sandalyesi"
+        ],
+        "price_range_min": 500.0,
+        "price_range_max": 1700.0
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "North Pacific Ahşap Kollu Kamp Sandalyesi",
+          "KingCamp - Lotus XL Cool Ice Ultra Konforlu & Takviyeli Kamp Sandalyesi",
+          "Freecamp - Shelby Katlanır Sandalye"
+        ],
+        "price_range_min": 1700.0,
+        "price_range_max": 4250.0
+      }
+    ],
+    "user_product_cluster": "value_for_money",
+    "gap_opportunities": [
+      "Müşteri hizmetleri ve kargo süreçlerinde yaşanan kronik sorunlara çözüm sunan, güvenilir bir marka imajı oluşturma fırsatı.",
+      "Yüksek taşıma kapasitesine sahip, aynı zamanda ahşap kollu ve estetik görünümlü, uygun fiyatlı bir ürün segmentinde boşluk.",
+      "Bardaklık, yan cep gibi ek fonksiyonel özelliklere sahip, ancak premium fiyat etiketine sahip olmayan ürünlere olan talep.",
+      "Kullanım kolaylığı ve mekanik aksamın sorunsuz çalışması konusunda garanti veren, müşteri şikayetlerini minimize eden bir ürün konumlandırması."
+    ],
+    "sentiment_based_opportunities": [
+      "Rakiplerin yaşadığı ürün kalitesizliği, kısa sürede kırılma ve deformasyon sorunlarına karşı üstün dayanıklılık ve uzun ömürlülük vaadiyle öne çıkma.",
+      "Kargo gecikmeleri, yanlış/eksik ürün gönderimi ve iade/değişim süreçlerindeki aksaklıklar gibi müşteri hizmetleri zafiyetlerine karşı hızlı, şeffaf ve çözüm odaklı bir deneyim sunma.",
+      "Vaat edilen taşıma kapasitesini gerçekten karşılayan ve kilitlenme/kapanma gibi kullanım zorlukları olmayan, güvenilir bir ürün olarak konumlanma."
+    ],
+    "trend_based_opportunities": [
+      "Katlanabilir tasarım ve ahşap kolçak gibi mevcut özelliklerin 'doğayla iç içe tatil' ve 'şehir hayatından uzaklaşma' temalarıyla daha güçlü bir şekilde ilişkilendirilmesi.",
+      "Ürünün 'fonksiyonel ve dayanıklı' özelliklerini vurgulayarak bütçe dostu kamp malzemelerine olan talebi karşılama.",
+      "Hızlı teslimat ve kargo bedava gibi platform trendlerine uyum sağlayarak müşteri çekme."
+    ],
+    "strategic_actions": [
+      "Ürünün 'Gerçek Ahşap Kolçak' ve 'Paslanmaz Metal Profil' özelliklerini vurgulayarak, rakiplerin plastik aksam sorunlarına karşı bir kalite ve dayanıklılık avantajı olarak iletişimini güçlendirin.",
+      "Müşteri hizmetleri süreçlerini iyileştirin ve kargo takibi, iade/değişim kolaylığı gibi konularda şeffaf bir iletişim stratejisi benimseyerek müşteri güvenini artırın.",
+      "Ürüne bardaklık veya küçük bir yan cep gibi ek fonksiyonel özellikler ekleyerek, premium rakiplerin sunduğu konforu daha uygun bir fiyat noktasında sunun.",
+      "Ürünün 110 kg taşıma kapasitesini ve su itici Oxford kumaşını vurgulayarak, dayanıklılık ve uzun ömürlülük beklentisini karşılayın ve bu özellikleri pazarlama materyallerinde öne çıkarın."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "North Pacific",
+        "KingCamp",
+        "Freecamp"
+      ],
+      "budget_brands": [
+        "Bofigo"
+      ],
+      "user_brand_position": "CampRoute, ahşap kolçak gibi estetik ve dayanıklılık odaklı özellikler sunarak, uygun fiyatlı ancak kaliteden ödün vermeyen bir 'değer odaklı' marka olarak konumlanmaktadır."
+    },
+    "positioning_score": 0.7,
+    "positioning_rationale": "CampRoute, ahşap kolçak ve sağlam yapı gibi özelliklerle rakiplerinden ayrışırken, fiyatıyla da 'value for money' segmentinde iyi bir yer edinmiştir. Ancak, ek fonksiyonel özellikler ve müşteri hizmetleri alanında geliştirme potansiyeli bulunmaktadır.",
+    "variant_gap_opportunities": [
+      "Yeşil - Beyaz Çizgili ve Mavi - Beyaz Çizgili gibi mevcut renk seçeneklerine ek olarak, daha geniş bir renk yelpazesi sunarak farklı zevklere hitap etme.",
+      "Farklı desen veya kumaş seçenekleri sunarak ürünün kişiselleştirilebilirliğini artırma ve niş pazarlara ulaşma."
+    ]
+  }
+}

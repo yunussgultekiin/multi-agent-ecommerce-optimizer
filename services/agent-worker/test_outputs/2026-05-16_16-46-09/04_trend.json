@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "Kamp mutfağı ürünleri",
+      "Taşınabilir kamp baharatlığı",
+      "Kamp tencere setleri"
+    ],
+    "demand_signals": [
+      "Kamp yemek setlerine artan ilgi",
+      "Hızlı teslimat seçeneği sunulan ürünlerde talep artışı",
+      "Çok satanlar listesindeki kamp ocakları ve çaydanlıkların popülaritesi"
+    ],
+    "platform_trends": [
+      "Trendyol Plus'a özel indirimler ve hızlı teslimat avantajları",
+      "Sepette indirim kampanyaları",
+      "Çok satanlar ve en çok ziyaret edilenler gibi listelemelerin öne çıkması"
+    ],
+    "category_trend_summary": "Trendyol'da \"Kamp & Outdoor\" kategorisinde kamp mutfağına yönelik ürünler, özellikle taşınabilir baharatlıklar ve tencere setleri büyük ilgi görüyor. Tüketiciler hızlı teslimat ve indirimli ürünlere yönelirken, kamp ocakları ve çaydanlıklar gibi temel mutfak ekipmanları da popülerliğini koruyor."
+  }
+}

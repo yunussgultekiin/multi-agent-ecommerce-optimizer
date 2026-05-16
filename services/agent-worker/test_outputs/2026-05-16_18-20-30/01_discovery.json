@@ -1,0 +1,58 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "Best Choice Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu, çizgili ve katlanır kamp sandalyesi ile doğrudan rekabet eden, genel olarak uygun fiyatlı bir seçenektir (budget)."
+      },
+      {
+        "competitor_name": "Mocca Style Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanır kamp sandalyesi olması, kullanıcıların benzer ihtiyaçlarına hitap eder ve genellikle orta segmentte yer alır (mid-range)."
+      },
+      {
+        "competitor_name": "Tevalli Katlanır Piknik ve Kamp Sandalyesi Ahşap Kollu",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir yapısıyla, kullanıcıların aradığı temel özelliklere sahip, genellikle bütçe dostu bir alternatiftir (budget)."
+      },
+      {
+        "competitor_name": "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanır kamp sandalyesi olması, benzer kullanım senaryolarına hitap eder ve fiyat aralığına göre orta segmente konumlanabilir (mid-range)."
+      },
+      {
+        "competitor_name": "Secen Art Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, doğrudan rakip konumundadır ve genellikle orta fiyat segmentinde bulunur (mid-range)."
+      },
+      {
+        "competitor_name": "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, kullanıcıların aradığı konfor ve pratikliği sunar, genellikle orta segmentte yer alır (mid-range)."
+      },
+      {
+        "competitor_name": "Funky Chairs Freedom Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Katlanır kamp sandalyesi olması ve ahşap detaylara sahip olabilmesiyle benzer bir kullanıcı kitlesine hitap eder, fiyat aralığına göre farklı segmentlerde bulunabilir (mid-range)."
+      },
+      {
+        "competitor_name": "Hastunç Ahşap Kolçaklı Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kolçaklı ve katlanır kamp sandalyesi olması, doğrudan rakip olarak konumlandırılabilir ve genellikle orta segmentte yer alır (mid-range)."
+      },
+      {
+        "competitor_name": "Bofigo Ahşap Kollu Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu kamp sandalyesi olması, kullanıcıların aradığı estetik ve fonksiyonelliği bir araya getirir, genellikle orta fiyat segmentindedir (mid-range)."
+      },
+      {
+        "competitor_name": "Nurgaz NG-C135 Çift Kişilik Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Çift kişilik olması ve kamp sandalyesi kategorisinde yer almasıyla farklı bir ihtiyaca hitap etse de, genel kamp mobilyaları pazarında rekabet eder ve genellikle orta segmentte yer alır (mid-range)."
+      }
+    ]
+  }
+}

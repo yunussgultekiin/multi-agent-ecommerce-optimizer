@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "trending_features": [
+      "taşınabilirlik",
+      "dayanıklılık",
+      "pratik kurulum",
+      "su geçirmezlik",
+      "hafiflik"
+    ],
+    "demand_signals": [
+      "kamp sandalyesi ve masası gibi konfor odaklı ürünlere artan ilgi",
+      "mevsimsel ihtiyaçlara uygun teknik giyim ve ekipman talebi",
+      "uzun ömürlü ve kaliteli outdoor ürünlerine yönelim"
+    ],
+    "platform_trends": [
+      "Hepsiburada'da kamp malzemeleri için indirim dönemlerinin takip edilmesi",
+      "kullanıcı yorumlarının ve ürün açıklamalarının satın alma kararında etkili olması",
+      "marka çeşitliliğinin ve fiyat karşılaştırma imkanının önemi"
+    ],
+    "category_trend_summary": "Kamp & Outdoor kategorisinde tüketiciler, taşınabilirlik, dayanıklılık ve pratik kuruluma sahip ürünleri tercih etmektedir. Özellikle kamp sandalyesi ve masası gibi konfor sağlayan ekipmanlara olan talep artarken, değişen hava koşullarına uygun teknik giyim ve su geçirmezlik gibi özellikler de öne çıkmaktadır. Hepsiburada özelinde ise indirim dönemleri ve kullanıcı yorumları, alışveriş alışkanlıklarını etkileyen önemli faktörlerdendir."
+  }
+}

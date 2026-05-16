@@ -1,0 +1,88 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "pain_points": [
+      "Ürünlerin kalitesiz malzemeden üretilmesi ve kısa sürede kırılması veya bozulması.",
+      "Taşıma kılıfının kalitesiz ve ince olması.",
+      "Kol dayama yerlerinin vidalarının gevşemesi veya ahşap kolların kırılması.",
+      "Kargo süreçlerinde yaşanan gecikmeler, eksik veya hasarlı ürün teslimatları.",
+      "Müşteri hizmetlerinin yetersizliği ve sorunlara çözüm üretmemesi."
+    ],
+    "praised_features": [
+      "Sağlam ve kaliteli malzeme yapısı.",
+      "Geniş ve konforlu oturum alanı.",
+      "Kolay katlanabilir ve taşınabilir tasarım.",
+      "Ahşap kolçakların estetik görünümü ve doğal hissi.",
+      "Fiyatına göre yüksek performans sunması."
+    ],
+    "competitor_sentiments": [
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "positive": [
+          "Ergonomik tasarım omurga desteği ve kas koruması sağlar.",
+          "Alüminyum çerçeve ve yırtılmaz kumaştan üretilmiştir.",
+          "Katlanabilir özelliği ve taşıma çantası ile taşınabilir.",
+          "Kullanıcılar rahatlığı ve dayanıklılığını övmektedir."
+        ],
+        "negative": [
+          "Valiz ve termos gibi diğer ürünlerinde tekerlek kırılması, kapak kırılması gibi dayanıklılık sorunları yaşanmıştır.",
+          "Çadır ürünlerinde ilk kullanımda yırtılma ve defo şikayetleri bulunmaktadır.",
+          "Termos kapaklarının kısa sürede kırılması ve yedek parça temininde sorunlar yaşanması."
+        ]
+      },
+      {
+        "competitor_name": "Outdoart Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Sağlam galvaniz kaplama demir iskelet yapısı.",
+          "Gerçek ahşap kolları ile estetik ve doğal bir dokunuş.",
+          "Katlanabilir tasarımı sayesinde kolay taşıma ve saklama.",
+          "Uzun süre oturmalarda konfor düşmüyor."
+        ],
+        "negative": []
+      },
+      {
+        "competitor_name": "Leva House 4'lü Ahşap Kollu Katlanır Piknik Kamp Sandalyesi",
+        "positive": [
+          "Hızlı bir şekilde ilgilenen firma yetkilileri.",
+          "Şık ve rahat ahşap kollar."
+        ],
+        "negative": [
+          "Sandalyelerin kalitesiz olması ve kısa sürede kırılması.",
+          "Ürünlerin 3-4 oturuşta bükülmesi.",
+          "Kırık ürün teslimatı ve müşteri hizmetlerinden geri dönüş alınamaması."
+        ]
+      },
+      {
+        "competitor_name": "Bofigo Ahşap Kollu Kamp Sandalyesi",
+        "positive": [
+          "Sağlam ve kaliteli malzeme yapısı.",
+          "Geniş ve konforlu oturum alanı.",
+          "Kumaş kalitesi üst düzeyde ve desenler canlı.",
+          "Fiyatına göre yüksek performans sunar."
+        ],
+        "negative": [
+          "Taşıma kılıfının kalitesiz ve ince olması.",
+          "Kol dayama yerlerinin vidalarının zaman zaman gevşemesi.",
+          "Metal kısımlarında boya akması ve soyulması.",
+          "Eksik parça gönderimi ve uzun teslimat süreleri."
+        ]
+      }
+    ],
+    "marketing_angles": [
+      "CampRoute Ahşap Kollu Çizgili Kamp Sandalyesi ile dayanıklılık ve konforu bir arada yaşayın, rakiplerin kalitesizlik sorunlarını geride bırakın.",
+      "Geniş ve ergonomik oturma alanı sunan CampRoute sandalyenizle uzun süreli kullanımlarda bile rahatlığın keyfini çıkarın.",
+      "Kolay katlanabilir ve taşınabilir CampRoute sandalyenizle kamp, piknik ve plaj keyfinizi her yere taşıyın.",
+      "CampRoute sandalyenizin sağlam iskelet yapısı ve kaliteli kumaşı sayesinde uzun ömürlü kullanım garantisiyle tanışın.",
+      "Estetik ahşap kolları ve sağlam yapısıyla CampRoute, rakiplerin gevşeyen vidaları ve kırılan kollarına karşı üstün bir deneyim sunar.",
+      "CampRoute ile hızlı ve eksiksiz teslimatın rahatlığını yaşayın, rakiplerin kargo sorunlarını unutun."
+    ],
+    "risk_warnings": [
+      "Ürün kalitesine dikkat edilmeli, kısa sürede kırılacak veya bozulacak malzemelerden kaçınılmalıdır.",
+      "Taşıma kılıfı dayanıklı ve kaliteli malzemeden yapılmalı, kolay yırtılmamalıdır.",
+      "Kol dayama yerlerinin bağlantı noktaları sağlam olmalı, vidaların gevşemesi gibi sorunlar yaşanmamalıdır.",
+      "Kargo ve teslimat süreçleri titizlikle yönetilmeli, eksik veya hasarlı ürün gönderiminden kaçınılmalıdır.",
+      "Müşteri hizmetleri etkili ve çözüm odaklı olmalı, şikayetlere hızlı geri dönüş sağlanmalıdır."
+    ]
+  }
+}

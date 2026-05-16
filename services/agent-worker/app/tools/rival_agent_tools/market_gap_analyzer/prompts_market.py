@@ -1,5 +1,7 @@
 import json
 
+from app.tools.json_prompt_rules import JSON_SELF_CORRECTION_SYNTAX, STRICT_JSON_SYNTAX_RULES
+
 _JSON_SCHEMA = """{
     "clusters": [
         {
@@ -37,6 +39,7 @@ Rules:
 - variant_gap_opportunities: [] if user product has no variants.
 - Keep JSON keys and enum labels in English, but write all natural-language values in Turkish.
 - Do not include markdown, comments, or trailing commas.
+{STRICT_JSON_SYNTAX_RULES}
 """
 
 
@@ -145,6 +148,7 @@ Key rules:
 - sentiment_based_opportunities, trend_based_opportunities, strategic_actions,
   variant_gap_opportunities may be empty lists but must be present.
 - Keep JSON keys in English, but write all value texts in Turkish.
+{JSON_SELF_CORRECTION_SYNTAX}
 
 ORIGINAL TASK:
 {original_prompt}

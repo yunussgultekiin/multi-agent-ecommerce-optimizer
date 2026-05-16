@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "kamp sandalyesi",
+      "kamp mutfağı",
+      "outdoor çanta & aksesuar"
+    ],
+    "demand_signals": [
+      "taşınabilirlik ve hafiflik",
+      "çok fonksiyonluluk",
+      "dayanıklılık ve hava koşullarına dayanıklılık"
+    ],
+    "platform_trends": [
+      "bestseller rozetli ürünlerde artış",
+      "kamp sandalyesi ve masa setlerinin popülaritesi"
+    ],
+    "category_trend_summary": "Kamp & Outdoor kategorisinde, kullanıcılar pratik, taşınabilir ve çok fonksiyonlu ürünlere yöneliyor. Özellikle kamp sandalyesi ve masa setleri gibi konfor odaklı ürünler ile kamp mutfağı ekipmanları öne çıkıyor. Dayanıklılık ve hava koşullarına uygunluk gibi özellikler de alıcılar için önemli bir tercih sebebi haline gelmiştir."
+  }
+}

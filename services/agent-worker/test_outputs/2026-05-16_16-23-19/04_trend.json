@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "kamp sandalyesi",
+      "kamp masa & sandalye seti",
+      "outdoor çanta & aksesuar",
+      "kamp mutfağı",
+      "outdoor ayakkabı",
+      "outdoor giyim",
+      "taşınabilir zincirli kamp testeresi"
+    ],
+    "demand_signals": [
+      "çevre dostu malzemelere artan tercih",
+      "taşınabilirlik ve hafiflik arayışı",
+      "çok fonksiyonlu ürünlere ilgi"
+    ],
+    "platform_trends": [
+      "bestseller rozeti olan ürünlerde artış",
+      "indirimli ürünlerin öne çıkması",
+      "yarın kapında gibi hızlı teslimat seçeneklerinin tercih edilmesi"
+    ],
+    "category_trend_summary": "Kamp & Outdoor kategorisinde, kullanıcılar özellikle kamp sandalyesi, masa setleri ve outdoor giyim gibi temel ekipmanlara yöneliyor. Taşınabilirlik ve çok fonksiyonluluk gibi özellikler ön planda olup, çevre dostu ürünlere olan ilgi de artış gösteriyor. Amazon'da hızlı teslimat ve indirimli ürünler, alıcıların karar verme süreçlerinde önemli rol oynuyor."
+  }
+}

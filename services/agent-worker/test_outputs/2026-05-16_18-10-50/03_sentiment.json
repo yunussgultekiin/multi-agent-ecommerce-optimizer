@@ -1,0 +1,96 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "pain_points": [
+      "Ürün kalitesizliği, kumaşın yırtılması, bağlantı noktalarının zayıf olması ve sırt kısmındaki metal çubukların rahatsızlık vermesi.",
+      "Kısa sürede kırılma, dikiş hataları ve paslanma gibi dayanıklılık sorunları.",
+      "Kargo takibi eksikliği, teslimat gecikmeleri ve eksik parça gönderimi.",
+      "Müşteri hizmetlerinin yetersizliği, garanti kapsamındaki ürünlere destek verilmemesi ve iade süreçlerinde yaşanan sorunlar.",
+      "Sandalye ayaklarının toprak zeminde batması ve yedek parça bulunamaması."
+    ],
+    "praised_features": [
+      "Kolay taşınabilirlik ve az yer kaplama özelliği.",
+      "Yüksek taşıma kapasitesi (110 kg ve üzeri).",
+      "Konforlu oturum ve ergonomik tasarım.",
+      "Bardak tutucu gibi ek özellikler.",
+      "Hızlı ve kolay açılıp kapanma mekanizması."
+    ],
+    "competitor_sentiments": [
+      {
+        "competitor_name": "Bofigo Kamp Sandalyesi",
+        "positive": [
+          "Demirleri sağlam ve dikişleri mükemmel."
+        ],
+        "negative": [
+          "Ürün kalitesiz, kumaş yırtılıyor, bağlantı noktaları zayıf.",
+          "Sırt kısmındaki metal çubuklar rahatsızlık veriyor.",
+          "Ayak pabuçları hassas, zemini iyi seçmek gerekiyor.",
+          "Teslimat süresi uzun (1 ay).",
+          "Bağlantı pimleri dışarıda.",
+          "Üründe çizikler ve delikler mevcut."
+        ]
+      },
+      {
+        "competitor_name": "Decathlon - Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Rahat ve konforlu.",
+          "Kolay açılıp kapanıyor ve az yer kaplıyor.",
+          "Entegre kayışı sayesinde kolay taşınıyor.",
+          "Yüksek taşıma kapasitesi (110 kg)."
+        ],
+        "negative": [
+          "Kısa sürede kırılma ve dikiş hataları.",
+          "Garanti süresi sonrası yedek parça bulunamaması.",
+          "Sandalye ayakları toprak zeminde batıyor.",
+          "Paslanma sorunları.",
+          "Kargo takip bilgisi eksikliği ve teslimat gecikmesi."
+        ]
+      },
+      {
+        "competitor_name": "Nurgaz Campout Lux Kamp Sandalyesi",
+        "positive": [
+          "Kaliteli kumaş ve metal aksamlar.",
+          "Rahat ve konforlu oturum, dolgulu yapı.",
+          "Baş kısmı minderi rahat.",
+          "Sırt kısmının 3 kademe yatması.",
+          "Diz kapağı arkasında metal olmaması sayesinde rahatsızlık vermemesi.",
+          "Hafif ve kolay taşınabilir."
+        ],
+        "negative": [
+          "Kısa sürede kırılma ve deformasyon.",
+          "Kolçaklarda çatlama ve kırılma.",
+          "Hızlı paslanma.",
+          "Müşteri hizmetleri ve garanti süreçlerinde sorunlar.",
+          "Üretim hatası ve boya atması."
+        ]
+      },
+      {
+        "competitor_name": "Outdoart Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Uzun süre oturmalarda konforlu.",
+          "Ahşap kolları estetik ve sağlam his veriyor."
+        ],
+        "negative": []
+      }
+    ],
+    "marketing_angles": [
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi ile kalitesiz kumaş, zayıf bağlantı noktaları ve sırt ağrısı sorunlarına son verin; dayanıklı yapısı ve ergonomik tasarımıyla uzun süreli konforun keyfini çıkarın.",
+      "Rakiplerin aksine, CampRoute sandalyenizde paslanma, kırılma veya dikiş hataları yaşamayın; ürünümüz sağlamlığı ve uzun ömürlü kullanımı garanti eder.",
+      "CampRoute ile kargo gecikmeleri ve eksik parça derdine düşmeyin; hızlı ve eksiksiz teslimatla kamp keyfinize hemen başlayın.",
+      "Müşteri memnuniyetini ön planda tutan CampRoute, garanti ve iade süreçlerinde size tam destek sunar, sorunsuz bir alışveriş deneyimi yaşatır.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, rakiplerin toprakta batan ayak sorununu ortadan kaldırır ve kolay taşınabilirliği sayesinde her zeminde rahat kullanım sunar.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, kolay taşınabilirlik ve az yer kaplama özellikleriyle kamp ve outdoor aktiviteleriniz için idealdir.",
+      "Yüksek taşıma kapasitesi ve ergonomik tasarımıyla CampRoute sandalyenizde maksimum konfor ve güvenliği bir arada yaşayın.",
+      "Bardak tutucu gibi pratik özelliklerle donatılmış CampRoute sandalyeniz, kamp deneyiminizi daha keyifli hale getirir.",
+      "Hızlı ve kolay açılıp kapanma mekanizması sayesinde CampRoute sandalyenizle zamandan tasarruf edin, anında dinlenmeye başlayın."
+    ],
+    "risk_warnings": [
+      "Ürün kalitesizliği, kumaş yırtılması, zayıf bağlantı noktaları ve sırt kısmındaki metal çubukların rahatsızlık vermesi gibi kronik kalite sorunlarından kaçınılmalı.",
+      "Kısa sürede kırılma, dikiş hataları ve paslanma gibi dayanıklılık sorunlarına karşı ürünün malzeme kalitesi ve işçiliği yüksek tutulmalı.",
+      "Kargo takibi eksikliği, teslimat gecikmeleri ve eksik parça gönderimi gibi lojistik ve operasyonel hatalar minimize edilmeli.",
+      "Müşteri hizmetleri süreçleri iyileştirilmeli, garanti ve iade taleplerine hızlı ve etkili çözümler sunulmalı.",
+      "Sandalye ayaklarının toprak zeminde batması gibi kullanım kolaylığına etki eden tasarım eksiklikleri giderilmeli ve yedek parça temini sağlanmalı."
+    ]
+  }
+}

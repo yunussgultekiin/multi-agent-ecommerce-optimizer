@@ -1,0 +1,60 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "Decathlon Quechua Katlanabilir Kamp Sandalyesi",
+          "Nurgaz Kamp Sandalyesi"
+        ],
+        "price_range_min": 1450.0,
+        "price_range_max": 1550.0
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "FreeCamp Foster Plus Buzluklu Katlanır Sandalye",
+          "Orcamp Katlanabilir Lüks Sandalye Yan Sehpalı"
+        ],
+        "price_range_min": 3079.9,
+        "price_range_max": 3999.0
+      }
+    ],
+    "user_product_cluster": "budget",
+    "gap_opportunities": [
+      "Uygun fiyatlı, estetik ve doğal malzeme (ahşap) kullanan, ancak dayanıklılık ve konfor özelliklerinden ödün vermeyen bir kamp sandalyesi segmenti eksikliği.",
+      "Müşteri hizmetleri ve iade süreçlerinde şeffaflık ve güvenilirlik konusunda piyasada genel bir boşluk bulunmaktadır.",
+      "Ürün görselleri ile gerçek ürün arasında tutarlılık konusunda piyasada bir boşluk bulunmaktadır."
+    ],
+    "sentiment_based_opportunities": [
+      "Kumaş yırtılması ve iskelet kırılması gibi dayanıklılık sorunlarına karşı daha uzun ömürlü ve sağlam ürünler sunarak müşteri memnuniyetsizliğini giderme.",
+      "Belirtilen taşıma kapasitesinin gerçekçi ve güvenilir olduğunu vurgulayarak müşteri güvenini kazanma.",
+      "Müşteri hizmetleri ve iade süreçlerinde şeffaf ve hızlı çözümler sunarak rakiplerden ayrışma."
+    ],
+    "trend_based_opportunities": [
+      "Hafiflik ve taşınabilirlik özelliklerini vurgulayarak artan talebi karşılama.",
+      "Dayanıklılık ve konforu ön plana çıkararak kullanıcıların beklentilerini karşılama.",
+      "Kurulum kolaylığını vurgulayarak pratik kullanım arayan tüketicilere hitap etme."
+    ],
+    "strategic_actions": [
+      "Ürünün 'gerçek ahşap kolçak' ve 'yeşil beyaz çizgili şık tasarım' gibi estetik ve doğal malzeme özelliklerini vurgulayarak, uygun fiyatlı premium bir alternatif olarak konumlandırma.",
+      "Ürünün 'paslanmaz metal profil' ve '110 kg taşıma kapasitesi' gibi dayanıklılık özelliklerini ön plana çıkararak, müşteri şikayetlerine (kumaş yırtılması, iskelet kırılması) çözüm sunan bir marka imajı oluşturma.",
+      "Müşteri hizmetleri ve iade süreçlerinde şeffaflık ve hız vaat eden bir iletişim stratejisi benimseyerek müşteri güvenini artırma."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "Orcamp",
+        "FreeCamp"
+      ],
+      "budget_brands": [
+        "CampRoute"
+      ],
+      "user_brand_position": "CampRoute, uygun fiyatlı ancak estetik ve doğal malzeme kullanımıyla dikkat çeken, dayanıklılığı ve taşınabilirliği ön planda tutan bir marka olarak konumlanmıştır."
+    },
+    "positioning_score": 0.6,
+    "positioning_rationale": "CampRoute, uygun fiyatıyla bütçe dostu bir seçenek sunarken, ahşap kolçak gibi estetik detaylarla rakiplerinden ayrışmaktadır. Dayanıklılık ve taşınabilirlik özelliklerini vurgulayarak pazarda kendine yer bulma potansiyeline sahiptir.",
+    "variant_gap_opportunities": []
+  }
+}

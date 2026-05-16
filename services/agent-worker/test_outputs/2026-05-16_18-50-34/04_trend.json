@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "katlanır kamp sandalyesi",
+      "şişme yatak",
+      "kamp masası",
+      "çok fonksiyonlu kamp feneri",
+      "kamp çadırı"
+    ],
+    "demand_signals": [
+      "kurulum kolaylığına yönelik artan talep",
+      "dayanıklılık ve kaliteye verilen önemin artması",
+      "çok fonksiyonlu ürün tercihleri"
+    ],
+    "platform_trends": [
+      "indirimli ürünlere ilgi",
+      "paket/set halinde satışlarda artış",
+      "hızlı kurulum özellikli ürünlerin popülaritesi"
+    ],
+    "category_trend_summary": "Kamp & Outdoor kategorisinde katlanabilir ve şişme ürünler gibi pratik çözümlerin yanı sıra, kurulum kolaylığı ve dayanıklılık öne çıkıyor. Tüketiciler çok fonksiyonlu ürünleri ve indirimli setleri tercih ederek hem bütçelerine uygun hem de kullanışlı seçeneklere yöneliyor."
+  }
+}

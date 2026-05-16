@@ -1,0 +1,630 @@
+{
+  "run_id": "2026-05-16_18-18-57",
+  "user_product": {
+    "title": "Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi",
+    "brand": "CampRoute",
+    "category": "Kamp & Outdoor",
+    "price": 549.9,
+    "description": "Kampta, plajda veya piknikte rahatça kullanabileceğiniz katlanabilir sandalye. Kolları gerçek ahşaptır, plastik değildir. Demirleri sağlamdır ve kolay taşınır. Yeşil beyaz çizgili deseniyle çok şık durur. Bagajda yer kaplamaz.",
+    "features": [
+      "Katlanabilir Tasarım",
+      "Gerçek Ahşap Kolçak",
+      "Paslanmaz Metal Profil",
+      "110 kg Taşıma Kapasitesi",
+      "Su İtici Oxford Kumaş"
+    ],
+    "variants": [
+      {
+        "name": "Yeşil - Beyaz Çizgili",
+        "price": 549.9,
+        "price_delta": 0.0
+      },
+      {
+        "name": "Mavi - Beyaz Çizgili",
+        "price": 549.9,
+        "price_delta": 0.0
+      }
+    ],
+    "seo_tone": "casual",
+    "rating": null,
+    "review_count": null
+  },
+  "target_platform": "hepsiburada",
+  "rival": {
+    "competitor_names": [
+      {
+        "competitor_name": "Bofigo Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Bofigo, dayanıklı yapısı ve ahşap kollu tasarımıyla doğrudan rakip olan, farklı renk seçenekleri sunan bir markadır (mid-range)."
+      },
+      {
+        "competitor_name": "Orcamp Ahşap Kollu Katlanabilir Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Orcamp, yerli üretim ve 90 kg taşıma kapasitesi ile öne çıkan, kamp sandalyesi pazarında bilinen bir markadır (mid-range)."
+      },
+      {
+        "competitor_name": "Naturehike Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Naturehike, yüksek taşıma kapasitesi (120 kg) ve kaliteli malzemesiyle dikkat çeken, uluslararası alanda da tanınan bir markadır (premium)."
+      },
+      {
+        "competitor_name": "Gci Outdoor Sunshade Big Surf Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Gci Outdoor, güneşlikli olması ve ek özellikleriyle (sehpa, bardaklık) plaj ve balık tutkunları için popüler bir seçenektir (premium)."
+      },
+      {
+        "competitor_name": "Praseat Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Praseat, yerli üretimi, 110 kg taşıma kapasitesi ve az yer kaplamasıyla bisiklet ve motosiklet kullanıcıları arasında popülerdir (mid-range)."
+      },
+      {
+        "competitor_name": "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Joyfull Turtle, ahşap iskeleti ve konforlu tasarımıyla kamp, bahçe ve balkon kullanımı için uygun bir alternatiftir (mid-range)."
+      },
+      {
+        "competitor_name": "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "hepsiburada",
+        "reason": "Tekno Trust, ahşap kollu katlanır kamp sandalyesi sunarak doğrudan rekabet eden, genellikle set halinde de satılan bir markadır (budget)."
+      },
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "North Pacific, ahşap kollu ve katlanabilir kamp sandalyesi modeliyle kullanıcıların tercihleri arasında yer almaktadır (mid-range)."
+      }
+    ],
+    "competitor_research_results": [
+      {
+        "success": true,
+        "fallback_used": false,
+        "data": {
+          "competitor_name": "Bofigo Kamp Sandalyesi",
+          "platform": "hepsiburada",
+          "estimated_price": 649.9,
+          "currency": "TRY",
+          "features": [
+            "Sağlam metal iskelet yapısı ile dengeli ve sağlam oturma düzeni sunar.",
+            "Dayanıklı polyester kumaş yüzeyi konforlu bir temas sağlar.",
+            "Kolayca katlanabilir ve taşıma çantası ile birlikte gelir.",
+            "110 kg'a kadar taşıma kapasitesine sahiptir.",
+            "Sağ kolda bardak tutucu bulunur.",
+            "Suya dayanıklı malzemeden üretilmiştir.",
+            "Farklı zemin koşullarında dengeyi korur.",
+            "Bahçe, balkon, plaj ve kamp gibi çeşitli alanlarda kullanılabilir."
+          ],
+          "rating": null,
+          "review_count": 466,
+          "brand": "Bofigo",
+          "variants": [],
+          "trending_keywords": [
+            "kamp sandalyesi",
+            "katlanır sandalye",
+            "piknik sandalyesi",
+            "taşıma çantalı",
+            "dayanıklı"
+          ],
+          "category_trends": "Kamp ve outdoor mobilyaları arasında katlanabilir ve taşınabilir sandalyeler popülerliğini korumaktadır. Kullanıcılar, dayanıklılık, konfor ve ek özellikler (bardaklık gibi) sunan ürünleri tercih etmektedir."
+        }
+      },
+      {
+        "success": true,
+        "fallback_used": false,
+        "data": {
+          "competitor_name": "Nurgaz Campout Alüminyum Kamp Masası XXL",
+          "platform": "hepsiburada",
+          "estimated_price": 3964.8,
+          "currency": "TRY",
+          "features": [
+            "Tamamen alüminyum malzemeden üretilmiştir, bu da onu hem hafif hem de dayanıklı kılar.",
+            "Katlanabilir tasarımı sayesinde kolayca taşınabilir ve az yer kaplar.",
+            "Geniş kullanım alanı sunar, 110x70 cm boyutlarındadır.",
+            "Taşıma çantası ile birlikte gelir, bu da portatifliğini artırır.",
+            "4-6 kişilik gruplar için idealdir.",
+            "Kolay kurulumu vardır.",
+            "5.5 kg ağırlığındadır.",
+            "Açık hava etkinlikleri, kamp ve piknik için uygundur."
+          ],
+          "rating": 4.5,
+          "review_count": null,
+          "brand": "Nurgaz",
+          "variants": [],
+          "trending_keywords": [
+            "kamp masası",
+            "alüminyum kamp masası",
+            "katlanır kamp masası",
+            "XXL kamp masası",
+            "portatif kamp masası"
+          ],
+          "category_trends": "Kamp ve outdoor ürünlerinde hafif, dayanıklı ve kolay taşınabilir malzemeler ön plana çıkıyor. Katlanabilir ve portatif tasarımlar, kullanıcıların doğada daha konforlu vakit geçirmesini sağlıyor."
+        }
+      },
+      {
+        "success": true,
+        "fallback_used": false,
+        "data": {
+          "competitor_name": "Funky Chairs XXL Moon Kamp Koltuğu",
+          "platform": "hepsiburada",
+          "estimated_price": 4545.45,
+          "currency": "TRY",
+          "features": [
+            "136 kg'a kadar taşıma kapasiteli sağlam çelik iskelet",
+            "Su geçirmez ve güneş ışığına dayanıklı 600D Oxford lüks kumaş",
+            "Geniş oturum alanı ile konforlu kullanım",
+            "İçecek ve atıştırmalıklar için eşya bölmesi",
+            "Özel dolgulu ped yastık ve sünger kol desteği ile ekstra konfor",
+            "Kolay taşınabilirlik için katlanabilir tasarım ve taşıma çantası",
+            "Güneşe ve yağmura karşı dayanıklı yapı",
+            "Ergonomik tasarım"
+          ],
+          "rating": 5.0,
+          "review_count": null,
+          "brand": "Funky Chairs",
+          "variants": [],
+          "trending_keywords": [
+            "kamp koltuğu",
+            "katlanır sandalye",
+            "XXL kamp sandalyesi",
+            "dayanıklı kamp sandalyesi",
+            "konforlu kamp koltuğu"
+          ],
+          "category_trends": "Kamp sandalyesi pazarında, kullanıcılar konfor, dayanıklılık ve taşınabilirlik özelliklerine odaklanıyor. XXL boyutlar ve ekstra destek sağlayan tasarımlar popülerliğini artırıyor."
+        }
+      },
+      {
+        "success": true,
+        "fallback_used": false,
+        "data": {
+          "competitor_name": "Gci Outdoor Sunshade Big Surf Kamp Sandalyesi",
+          "platform": "hepsiburada",
+          "estimated_price": 5449.0,
+          "currency": "TRY",
+          "features": [
+            "UPF 50 korumalı hareketli güneşlik",
+            "4 kademeli sırt ayarı",
+            "Ayarlanabilir boyun yastığı",
+            "Bardaklık",
+            "Dahili taşıma kolu",
+            "Sürgülü masa",
+            "Alüminyum malzeme ile hafif ve dayanıklı yapı",
+            "113 kg taşıma kapasitesi"
+          ],
+          "rating": null,
+          "review_count": null,
+          "brand": "GCI Outdoor",
+          "variants": [],
+          "trending_keywords": [
+            "kamp sandalyesi",
+            "plaj sandalyesi",
+            "katlanır sandalye",
+            "güneşlikli sandalye",
+            "taşınabilir sandalye"
+          ],
+          "category_trends": "Kamp ve outdoor mobilyaları, özellikle taşınabilir ve fonksiyonel ürünler popülerliğini koruyor. Güneş korumalı ve ayarlanabilir özelliklere sahip ürünler öne çıkıyor."
+        }
+      },
+      {
+        "success": true,
+        "fallback_used": false,
+        "data": {
+          "competitor_name": "Praseat Kamp Sandalyesi",
+          "platform": "hepsiburada",
+          "estimated_price": 1999.9,
+          "currency": "TRY",
+          "features": [
+            "Kolay taşınabilirlik için hafif ve kompakt tasarım",
+            "Saniyeler içinde kurulabilen dayanıklı metal gövde",
+            "Su geçirmez ve nefes alabilen örgü/fileli kumaş",
+            "110 kg'a kadar taşıma kapasitesi",
+            "Özel taşıma çantası ile birlikte gelir",
+            "Katlanabilir yapısı sayesinde az yer kaplar",
+            "Piknik, kamp ve yolculuk molaları için idealdir",
+            "Güçlendirici demir ile artırılmış taşıma kapasitesi"
+          ],
+          "rating": 4.3,
+          "review_count": 1015,
+          "brand": "Praseat",
+          "variants": [
+            {
+              "name": "Kırmızı",
+              "price_delta": null
+            },
+            {
+              "name": "Mavi",
+              "price_delta": null
+            },
+            {
+              "name": "Siyah",
+              "price_delta": null
+            }
+          ],
+          "trending_keywords": [
+            "kamp sandalyesi",
+            "katlanır sandalye",
+            "portatif sandalye",
+            "plaj sandalyesi",
+            "hafif kamp sandalyesi"
+          ],
+          "category_trends": "Kamp sandalyeleri, hafiflik, dayanıklılık ve kolay taşınabilirlik gibi özellikleriyle öne çıkıyor. Kullanıcılar, pratik kurulumu olan ve uzun ömürlü ürünleri tercih ediyor."
+        }
+      },
+      {
+        "success": true,
+        "fallback_used": true,
+        "data": {
+          "competitor_name": "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi",
+          "platform": "hepsiburada",
+          "estimated_price": 5950.0,
+          "currency": "TRY",
+          "features": [
+            "Doğal ahşap kolları ve sağlam iskeleti ile konforlu oturma alanı sunar.",
+            "Kolayca katlanıp taşınabilen pratik tasarıma sahiptir.",
+            "Su itici özellikli, değiştirilebilir oturma kılıfı bulunur.",
+            "Kamp, piknik, bahçe ve balkon gibi çeşitli alanlarda kullanıma uygundur.",
+            "Taşıma çantası ile birlikte gelir, kolayca taşınabilir.",
+            "Kayın ağacından üretilmiştir, dayanıklı ve uzun ömürlüdür.",
+            "Çevre dostu ahşap koruyucu yağ ile renklendirilmiştir.",
+            "Maksimum 120 kg taşıma kapasitesine sahiptir."
+          ],
+          "rating": null,
+          "review_count": null,
+          "brand": "Joyfull Turtle",
+          "variants": [],
+          "trending_keywords": [
+            "katlanır kamp sandalyesi",
+            "ahşap kollu sandalye",
+            "taşınabilir kamp sandalyesi",
+            "piknik sandalyesi",
+            "bahçe mobilyası"
+          ],
+          "category_trends": "Katlanabilir kamp sandalyeleri, hafiflikleri ve kullanım kolaylıkları sayesinde popülerdir. Ahşap detaylı modeller, şık tasarımları ve doğal görünümleriyle öne çıkmaktadır."
+        }
+      },
+      {
+        "success": true,
+        "fallback_used": false,
+        "data": {
+          "competitor_name": "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+          "platform": "hepsiburada",
+          "estimated_price": 3476.0,
+          "currency": "TRY",
+          "features": [
+            "Katlanabilir metal iskelet",
+            "Ahşap kolluklar",
+            "Kamp ve piknik için uygun",
+            "Taşıma çantası dahil",
+            "Dayanıklı kumaş",
+            "Tek kişilik kullanım"
+          ],
+          "rating": null,
+          "review_count": null,
+          "brand": "Tekno Trust",
+          "variants": [],
+          "trending_keywords": [
+            "kamp sandalyesi",
+            "katlanır sandalye",
+            "ahşap kollu sandalye",
+            "piknik sandalyesi",
+            "outdoor sandalye"
+          ],
+          "category_trends": "Katlanabilir kamp sandalyeleri, taşınabilirlik ve kullanım kolaylığı açısından popülerdir. Farklı ihtiyaçlara yönelik çeşitli modeller mevcuttur."
+        }
+      },
+      {
+        "success": true,
+        "fallback_used": false,
+        "data": {
+          "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+          "platform": "hepsiburada",
+          "estimated_price": 2599.0,
+          "currency": "TRY",
+          "features": [
+            "Konforlu oturum alanı ve estetik ahşap kol tasarımı",
+            "Kamp, piknik, plaj, bahçe ve balkon kullanımları için ideal",
+            "Katlanabilir yapısı sayesinde kolay taşınır ve pratik kullanım sağlar",
+            "Dayanıklı çelik iskelet",
+            "600D Oxford kumaş",
+            "Maksimum 130 kg taşıma kapasitesi",
+            "Ergonomik ahşap kol yapısı",
+            "Kolay taşıma ve saklama imkanı"
+          ],
+          "rating": null,
+          "review_count": null,
+          "brand": "North Pacific",
+          "variants": [],
+          "trending_keywords": [
+            "kamp sandalyesi",
+            "ahşap kollu sandalye",
+            "portatif sandalye",
+            "outdoor sandalye",
+            "katlanır sandalye"
+          ],
+          "category_trends": "Kamp ve outdoor mobilyalarında konfor ve taşınabilirlik ön planda. Ahşap detaylı ve dayanıklı malzemelerden üretilen ürünler tercih ediliyor."
+        }
+      }
+    ],
+    "sentiment_result": {
+      "pain_points": [
+        "Ürün kalitesizliği ve dayanıksızlık (kumaş yırtılması, bağlantı noktalarının zayıflığı, iskelet sorunları).",
+        "Küçük boyut ve konforsuzluk (özellikle uzun boylular için yetersiz oturma alanı, sırt kısmının rahatsız edici olması).",
+        "Gecikmeli veya sorunlu teslimat.",
+        "Ürünlerde çizikler, delikler veya eksik parçalar gibi kalite kontrol sorunları.",
+        "Ahşap kollarda küflenme, çatlama gibi malzeme sorunları."
+      ],
+      "praised_features": [
+        "Kolay katlanabilirlik ve taşınabilirlik.",
+        "Sağlam iskelet yapısı (bazı modellerde).",
+        "Estetik ve şık tasarım (özellikle ahşap kollu modellerde).",
+        "Hafiflik.",
+        "Bardaklık gibi ek fonksiyonel özellikler."
+      ],
+      "competitor_sentiments": [
+        {
+          "competitor_name": "Bofigo Kamp Sandalyesi",
+          "positive": [
+            "Sağlam demirler ve dikiş kalitesi (bazı yorumlarda).",
+            "Hızlı teslimat (bazı yorumlarda)."
+          ],
+          "negative": [
+            "Küçük boyut, rahatsız edici oturma alanı.",
+            "Eklem yerlerinin sağlam olmaması, uzun ömürlü olmaması.",
+            "Kumaş yırtılması, bağlantı noktalarının zayıflığı.",
+            "Kumaşın ince olması, sırt kısmındaki metal çubukların batması.",
+            "Dengesiz duruş.",
+            "Taşıma kılıfının ince olması.",
+            "Ayak pabuçlarının hassas olması.",
+            "Bağlantı pimlerinin dışarıda olması.",
+            "Ürünlerde çizikler ve delikler bulunması."
+          ]
+        },
+        {
+          "competitor_name": "Praseat Kamp Sandalyesi",
+          "positive": [
+            "Sağlam malzeme ve iskelet yapısı.",
+            "Kolay kurulum.",
+            "Pratik ve hafif.",
+            "Piknik ve yolculuk molalarında kullanışlı."
+          ],
+          "negative": [
+            "Kumaş bağlantı yerlerinin kopması (eski model veya başka marka karşılaştırması)."
+          ]
+        },
+        {
+          "competitor_name": "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi",
+          "positive": [
+            "Doğal ahşap kolları ve sağlam iskeleti ile konforlu oturma alanı.",
+            "Kolayca katlanıp taşınabilen pratik tasarım.",
+            "Su itici özellikli, değiştirilebilir oturma kılıfı.",
+            "Kayın ağacından üretilmiş, dayanıklı ve uzun ömürlü.",
+            "Çevre dostu ahşap koruyucu yağ ile renklendirilmiş.",
+            "Kompakt ve hafif tasarım."
+          ],
+          "negative": []
+        },
+        {
+          "competitor_name": "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+          "positive": [],
+          "negative": []
+        },
+        {
+          "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+          "positive": [
+            "Konforlu oturum alanı ve estetik ahşap kol tasarımı.",
+            "Kolay taşınabilirlik ve pratik kullanım.",
+            "Dayanıklı çelik iskelet ve 600D Oxford kumaş.",
+            "Ergonomik ahşap kol yapısı.",
+            "Kolay taşıma ve saklama imkanı.",
+            "Termos bölmeli modellerin işlevselliği.",
+            "Su geçirmez kumaş yüzeyi.",
+            "Fileli sırt detayı ile terlemeyi azaltma."
+          ],
+          "negative": []
+        }
+      ],
+      "marketing_angles": [
+        "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi ile rakiplerin aksine, kumaş yırtılması ve bağlantı noktası zayıflığı gibi sorunlar yaşamadan uzun ömürlü kullanımın keyfini çıkarın.",
+        "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, küçük boyut ve konforsuzluk şikayetlerine son vererek, her kullanıcıya ideal ve rahat bir oturma deneyimi sunar.",
+        "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, sağlam iskelet yapısı ve estetik ahşap kolları ile hem dayanıklılık hem de şıklığı bir arada sunar.",
+        "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi'nin kolay katlanabilir ve taşınabilir yapısı sayesinde, kamp ve outdoor aktivitelerinizde pratikliğin tadını çıkarın.",
+        "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, kaliteli malzeme seçimiyle küflenme ve çatlama gibi ahşap kol sorunlarını ortadan kaldırır."
+      ],
+      "risk_warnings": [
+        "Ürün kalitesinden ödün vermeyin; kumaş yırtılması, zayıf bağlantı noktaları ve iskelet sorunları kronik şikayetlerdir.",
+        "Ürün boyutlarını ve ergonomisini dikkatle tasarlayın; küçük boyut ve konforsuzluk müşteri memnuniyetsizliğine yol açar.",
+        "Teslimat süreçlerini ve kalite kontrolü sıkı tutun; gecikmeli teslimat, çizik veya eksik ürünler marka imajını zedeler.",
+        "Ahşap kollarda kullanılan malzemenin dayanıklılığına ve dış etkenlere karşı direncine dikkat edin (küflenme, çatlama).",
+        "Ürünün dengeli durduğundan ve ayak pabuçlarının sağlam olduğundan emin olun."
+      ]
+    },
+    "trend_result": {
+      "trending_features": [
+        "kamp sandalyesi",
+        "kamp masaları",
+        "şişme yataklar",
+        "kamp mutfağı ürünleri",
+        "çakı ve bıçaklar"
+      ],
+      "demand_signals": [
+        "kişiye özel isim yazılı taktik kamp çakısı gibi kişiselleştirilmiş ürünlere ilgi",
+        "dayanıklı askeri kumaş gibi spesifik malzeme tercihlerinde artış",
+        "taşınabilir ve çok amaçlı ürünlerin popülaritesi"
+      ],
+      "platform_trends": [
+        "Hepsiburada'da 'çok satanlar' listelerinde kamp ve outdoor ürünlerinin yer alması",
+        "farklı satıcıların (Çılgıntrend, UTX, Trend Store) kamp ve outdoor ürünleri sunması",
+        "kampanyalı ve indirimli ürünlerin öne çıkması"
+      ],
+      "category_trend_summary": "Kamp & Outdoor kategorisinde genel olarak işlevsel ve dayanıklı ürünlere yönelik bir talep artışı gözlemlenmektedir. Özellikle kamp sandalyesi, kamp masası, şişme yatak ve kamp mutfağı gibi temel ekipmanlar ile kişiselleştirilmiş ve çok amaçlı çakı-bıçak gibi ürünler popülerliğini korumaktadır. Tüketiciler, ürünlerin taşınabilirliği ve malzeme kalitesine önem vermektedir."
+    },
+    "gap_result": {
+      "clusters": [
+        {
+          "label": "budget",
+          "competitors": [
+            "Nurgaz Campout Alüminyum Kamp Masası XXL"
+          ],
+          "price_range_min": 3964.8,
+          "price_range_max": 3964.8
+        },
+        {
+          "label": "value_for_money",
+          "competitors": [
+            "Bofigo Kamp Sandalyesi",
+            "Praseat Kamp Sandalyesi",
+            "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+            "North Pacific Ahşap Kollu Kamp Sandalyesi"
+          ],
+          "price_range_min": 649.9,
+          "price_range_max": 3476.0
+        },
+        {
+          "label": "premium",
+          "competitors": [
+            "Funky Chairs XXL Moon Kamp Koltuğu",
+            "Gci Outdoor Sunshade Big Surf Kamp Sandalyesi",
+            "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi"
+          ],
+          "price_range_min": 4545.45,
+          "price_range_max": 5950.0
+        }
+      ],
+      "user_product_cluster": "value_for_money",
+      "gap_opportunities": [
+        "Piyasada ahşap kollu, estetik ve dayanıklı, ancak uygun fiyatlı kamp sandalyesi seçenekleri sınırlıdır.",
+        "Konfor ve ergonomi odaklı, özellikle uzun süreli kullanıma uygun, geniş oturma alanına sahip ahşap kollu kamp sandalyeleri eksikliği bulunmaktadır.",
+        "Bardaklık, yan cep gibi ek fonksiyonel özelliklere sahip, ahşap kollu ve estetik tasarımlı, orta segment kamp sandalyelerine olan talep karşılanmamaktadır.",
+        "Kullanıcıların kumaş yırtılması, bağlantı noktası zayıflığı gibi kronik sorunlar yaşamayacağı, yüksek kaliteli malzeme ve işçilik sunan, ancak premium fiyat etiketine sahip olmayan ahşap kollu sandalyeler için bir boşluk mevcuttur."
+      ],
+      "sentiment_based_opportunities": [
+        "Kumaş yırtılması ve bağlantı noktası zayıflığı gibi kronik şikayetleri ortadan kaldıran, dayanıklı kumaş ve sağlam bağlantı elemanları kullanan bir ürün sunmak.",
+        "Küçük boyut ve konforsuzluk şikayetlerine çözüm olarak, daha geniş oturma alanı ve ergonomik sırt desteği sunan bir tasarım geliştirmek.",
+        "Ahşap kollarda küflenme ve çatlama gibi sorunları önlemek için suya ve dış etkenlere dayanıklı, kaliteli ahşap malzeme ve koruyucu uygulamalar kullanmak.",
+        "Estetik ve şık tasarımı korurken, bardaklık gibi ek fonksiyonel özellikler ekleyerek kullanıcı deneyimini zenginleştirmek."
+      ],
+      "trend_based_opportunities": [
+        "Kişiselleştirilmiş ürünlere olan ilgiyi değerlendirerek, ahşap kollara isim veya logo işleme gibi kişiselleştirme seçenekleri sunmak.",
+        "Dayanıklı askeri kumaş gibi spesifik malzeme tercihlerine uygun, daha sağlam ve uzun ömürlü kumaş seçenekleri sunmak.",
+        "Taşınabilir ve çok amaçlı ürünlerin popülaritesini göz önünde bulundurarak, sandalyeyi farklı kullanım senaryolarına (plaj, piknik, bahçe) uygun hale getiren ek aksesuarlar veya modüler özellikler sunmak."
+      ],
+      "strategic_actions": [
+        "Ürünün 'Gerçek Ahşap Kolçak' ve 'Paslanmaz Metal Profil' özelliklerini vurgulayarak, rakiplerin 'ahşap kollarda küflenme/çatlama' ve 'iskelet sorunları' gibi pain point'lerine karşı üstünlüğünü iletişimde öne çıkarmak.",
+        "Ürünün '110 kg Taşıma Kapasitesi' ve 'Su İtici Oxford Kumaş' özelliklerini, rakiplerin 'kumaş yırtılması' ve 'dayanıksızlık' şikayetlerine çözüm olarak konumlandırmak ve pazarlama materyallerinde bu dayanıklılığı görsel olarak desteklemek.",
+        "Ürünün ergonomik tasarımını ve konforunu vurgulayan görseller ve açıklamalar ekleyerek, 'küçük boyut ve konforsuzluk' şikayetlerine karşı bir çözüm sunduğunu belirtmek.",
+        "Ürüne bardaklık veya küçük bir yan cep gibi ek fonksiyonel özellikler ekleyerek, 'ek fonksiyonel özellikler' beklentisini karşılamak ve rekabet avantajı sağlamak."
+      ],
+      "brand_landscape": {
+        "premium_brands": [
+          "Funky Chairs",
+          "GCI Outdoor",
+          "Joyfull Turtle"
+        ],
+        "budget_brands": [
+          "Nurgaz"
+        ],
+        "user_brand_position": "CampRoute, ahşap kollu ve estetik tasarımlı, dayanıklılığı vurgulayan özelliklere sahip bir ürünle orta segmentte, fiyat/performans odaklı bir konumlandırmaya sahiptir. Rakiplerine göre daha uygun fiyatlı ahşap kollu seçenek sunarak 'value for money' segmentinde yer almaktadır."
+      },
+      "positioning_score": 0.7,
+      "positioning_rationale": "CampRoute, ahşap kollu ve estetik tasarımıyla rakiplerinden ayrışırken, fiyatıyla da orta segmentte cazip bir seçenek sunmaktadır. Ancak, ek fonksiyonel özellikler ve konfor detayları açısından geliştirme potansiyeli bulunmaktadır.",
+      "variant_gap_opportunities": [
+        "Mavi - Beyaz Çizgili varyantı ile Yeşil - Beyaz Çizgili varyantının yanı sıra, daha fazla renk ve desen seçeneği sunarak farklı zevklere hitap etmek."
+      ]
+    },
+    "pricing_result": {
+      "price_median": 1324.9,
+      "price_q1": 649.9,
+      "price_q3": 1999.9,
+      "predicted_price": 1324.9,
+      "price_range_min": 0.0,
+      "price_range_max": 4024.9,
+      "positioning": "underpriced",
+      "positioning_score": 0.0,
+      "market_power_gap": "User product is weakly positioned vs competitors (gap: -3.72)",
+      "confidence_score": 0.5,
+      "fallback_used": false,
+      "variant_pricing": [
+        {
+          "variant_name": "Yeşil - Beyaz Çizgili",
+          "base_price": 549.9,
+          "price_delta": -775.0,
+          "suggested_price": 649.9,
+          "positioning": "underpriced"
+        },
+        {
+          "variant_name": "Mavi - Beyaz Çizgili",
+          "base_price": 549.9,
+          "price_delta": -775.0,
+          "suggested_price": 649.9,
+          "positioning": "underpriced"
+        }
+      ],
+      "competitor_variant_overlap": [
+        {
+          "variant_name": "Yeşil - Beyaz Çizgili",
+          "matching_competitors": []
+        },
+        {
+          "variant_name": "Mavi - Beyaz Çizgili",
+          "matching_competitors": [
+            "Praseat Kamp Sandalyesi"
+          ]
+        }
+      ]
+    }
+  },
+  "seo": {
+    "seo_output": {
+      "title_suggestion": "CampRoute Kamp Sandalyesi Ahşap Kolçaklı Çizgili Katlanır 110 kg Taşıma Kapasiteli Su İtici Kumaş",
+      "meta_description": "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi ile doğanın tadını çıkar! Paslanmaz metal profili ve 110 kg taşıma kapasitesiyle hem sağlam hem de estetik. Su itici Oxford kumaşı sayesinde yağmurlu havalarda bile endişelenmene gerek kalmaz. Katlanabilir tasarımıyla kolayca taşıyabilir, kamp, piknik veya plaj keyfini doyasıya yaşayabilirsin. Rakip ürünlerde sıkça karşılaşılan kumaş yırtılması ve bağlantı noktası zayıflığı gibi sorunları CampRoute farkıyla geride bırak. Bu sandalye, küçük boyut ve konforsuzluk şikayetlerine son vererek her kullanıcıya ideal ve rahat bir oturma deneyimi sunar. Sağlam iskelet yapısı ve estetik ahşap kolları ile hem dayanıklılık hem de şıklığı bir arada yaşatır. Kaliteli malzeme seçimiyle ahşap kol sorunlarını, küflenme ve çatlamayı ortadan kaldırır. KampRoute Ahşap Kollu Kamp Sandalyesi, kolay katlanabilirlik ve taşınabilirlik özellikleriyle öne çıkar, böylece kamp ve outdoor aktivitelerinde pratikliğin tadını çıkarırsın. Ürünün teknik özellikleri: Malzeme: Gerçek ahşap kolçaklar, paslanmaz metal profil. Kumaş: Su itici Oxford kumaş. Taşıma Kapasitesi: 110 kg. Katlanabilirlik: Kolay katlanabilir tasarım. CampRoute kalitesi ve güvencesiyle üretilmiştir. Herhangi bir üretim hatasına karşı 2 yıl garanti. Doğa maceralarında senin yanında olmak için tasarlandı!",
+      "content_recommendations": [
+        "Ürünün su itici Oxford kumaş özelliğini vurgulayarak, yağışlı hava koşullarında bile konforlu kullanım senaryolarını öne çıkar.",
+        "110 kg taşıma kapasitesi ve paslanmaz metal profilini öne çıkararak, ürünün dayanıklılığını ve uzun ömürlü kullanımını vurgula.",
+        "Kolay katlanabilir tasarımı ve hafif yapısını vurgulayarak, taşıma ve depolama kolaylığını ön plana çıkar.",
+        "Ahşap kolçakların estetik görünümünü ve doğayla uyumlu tasarımını vurgulayarak, görsel çekiciliğini artır."
+      ],
+      "keyword_gaps": [
+        "katlanır ahşap kolçaklı sandalye",
+        "piknik sandalyesi katlanabilir",
+        "dayanıklı kamp koltuğu",
+        "portatif plaj sandalyesi",
+        "küçük alan için katlanır sandalye"
+      ],
+      "competitor_comparison_summary": "CampRoute kamp sandalyesi, rakiplerin yaşadığı kumaş yırtılması, bağlantı noktası zayıflığı ve ahşap kol küflenmesi gibi kronik sorunları kaliteli malzeme seçimiyle ortadan kaldırıyor. Yüksek taşıma kapasitesi ve estetik ahşap kolçaklarıyla hem dayanıklılık hem de şıklığı uygun fiyatlı bir paketle sunarak pazar boşluğunu dolduruyor.",
+      "platform_specific_tips": [
+        "Hepsiburada alıcısının teknik detaylara verdiği önemi göz önünde bulundurarak ürün açıklamasında tüm teknik özellikleri tablo halinde sun.",
+        "Ürün adında marka ismini sona alarak ve ilk 40-50 karakterde 'kamp sandalyesi ahşap kolçaklı' gibi anahtar kelimeleri kullanarak Hepsiburada'da daha görünür ol.",
+        "'Ev kullanımı için katlanır sandalye', 'balkon için ahşap kolçaklı sandalye' gibi niş kullanım senaryolarını açıklama metnine ekleyerek longtail aramalarından faydalan."
+      ],
+      "variant_seo": [
+        {
+          "variant_name": "Yeşil - Beyaz Çizgili",
+          "title_suggestion": "CampRoute Kamp Sandalyesi Yeşil Beyaz Çizgili Ahşap Kolçaklı Katlanır 110 kg",
+          "keyword_additions": [
+            "yeşil çizgili kamp sandalyesi",
+            "ahşap kollu yeşil katlanır sandalye"
+          ]
+        },
+        {
+          "variant_name": "Mavi - Beyaz Çizgili",
+          "title_suggestion": "CampRoute Kamp Sandalyesi Mavi Beyaz Çizgili Ahşap Kolçaklı Katlanır 110 kg",
+          "keyword_additions": [
+            "mavi çizgili kamp sandalyesi",
+            "ahşap kollu mavi katlanır sandalye"
+          ]
+        }
+      ],
+      "product_development_ideas": [
+        "Bardaklık veya yan cep gibi ek fonksiyonel özellikler ekleyerek kullanım kolaylığını artırmak.",
+        "Kişiselleştirilmiş ürünlere olan ilgiyi değerlendirerek ahşap kollara isim veya logo işleme seçenekleri sunmak."
+      ]
+    },
+    "generated_image_url": null
+  },
+  "timing": {
+    "01_discovery": 7.19,
+    "02_research": 12.4,
+    "03_04_sentiment_trend_parallel": 14.2,
+    "05_market_gap": 7.29,
+    "06_pricing": 0.0,
+    "07_08_seo_image_parallel": 11.6,
+    "TOTAL": 52.72
+  }
+}

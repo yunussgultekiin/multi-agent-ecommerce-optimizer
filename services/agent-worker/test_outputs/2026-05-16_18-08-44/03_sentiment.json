@@ -1,0 +1,76 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "pain_points": [
+      "Ürünlerin kalitesiz malzemeden üretilmesi ve kolayca kırılması veya deforme olması.",
+      "Kargo ve teslimat süreçlerinde yaşanan sorunlar (gecikme, eksik ürün, hasarlı ürün).",
+      "Müşteri hizmetlerinin yetersizliği ve iade/değişim süreçlerinde yaşanan zorluklar.",
+      "Ürün açıklamalarının yanıltıcı olması (örneğin, taşıma kapasitesi veya ürün içeriği hakkında yanlış bilgi)."
+    ],
+    "praised_features": [
+      "Hızlı teslimat.",
+      "Sağlam ve kaliteli malzeme.",
+      "Konforlu oturma deneyimi.",
+      "Kolay katlanabilirlik ve taşınabilirlik.",
+      "Estetik ve şık tasarım."
+    ],
+    "competitor_sentiments": [
+      {
+        "competitor_name": "Secenart Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Çok hızlı geldi.",
+          "Paketleme güzeldi."
+        ],
+        "negative": []
+      },
+      {
+        "competitor_name": "Mocca Style Neone Kırmızı Katlanır Ahşap Kollu Kamp Piknik Sandalyesi",
+        "positive": [],
+        "negative": [
+          "Dambıl ürünlerinde kum dökülmesi ve kalitesizlik.",
+          "Eksik ürün gönderimi."
+        ]
+      },
+      {
+        "competitor_name": "Outdoart Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Uzun süre oturmalarda konfor düşmüyor.",
+          "Sağlam galvaniz kaplama demir iskelet yapısı, paslanmaya karşı dayanıklı.",
+          "Yüksek taşıma kapasitesi (140 kg).",
+          "Gerçek ahşap kolluklar, estetik ve doğal bir dokunuş sunar.",
+          "Kaymayı önleyen özel ayak pabucu tasarımı."
+        ],
+        "negative": []
+      },
+      {
+        "competitor_name": "Bahçeci Atina Mix - Atina sandalye mix",
+        "positive": [
+          "Gürgen ağacından üretilmiştir, bu nedenle sağlam ve dayanıklıdır.",
+          "Katlanabilir yapısı sayesinde yer tasarrufu sağlar ve taşınması kolaydır.",
+          "Pvc oturumu sayesinde ek minder ihtiyacı olmadan konforlu bir kullanım sunar.",
+          "Suya ve dış hava koşullarına karşı dayanıklıdır.",
+          "Şık ve modern bir tasarıma sahiptir."
+        ],
+        "negative": []
+      }
+    ],
+    "marketing_angles": [
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi ile kalitesiz malzeme ve kolay kırılma sorunlarına son verin, uzun ömürlü kullanımın keyfini çıkarın!",
+      "Hızlı ve eksiksiz teslimat garantisiyle CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi kapınızda!",
+      "Müşteri memnuniyetini ön planda tutan CampRoute ile iade ve değişim süreçlerinde asla sorun yaşamazsınız.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, gerçek taşıma kapasitesi ve doğru ürün bilgileriyle beklentilerinizi karşılar.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, hızlı teslimatıyla kamp keyfinizi ertelemez.",
+      "Sağlam ve kaliteli malzemelerle üretilen CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, doğada güvenle vakit geçirmenizi sağlar.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi ile her an konforlu bir oturma deneyimi yaşayın.",
+      "Kolayca katlanıp taşınabilen CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, her maceranızda yanınızda.",
+      "Estetik ve şık tasarımıyla CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, kamp alanınıza değer katar."
+    ],
+    "risk_warnings": [
+      "Ürün kalitesinden ödün vermeyin; özellikle plastik kolçaklar gibi hassas parçaların dayanıklılığına dikkat edin.",
+      "Kargo ve paketleme süreçlerini titizlikle yönetin, ürünlerin hasarsız ve eksiksiz ulaşmasını sağlayın.",
+      "Müşteri hizmetleri ve iade/değişim politikalarınızı şeffaf ve erişilebilir tutun, müşteri şikayetlerine hızlı ve etkili çözümler sunun.",
+      "Ürün açıklamalarını ve özelliklerini doğru ve yanıltıcı olmayacak şekilde belirtin, taşıma kapasitesi gibi kritik bilgileri net bir şekilde ifade edin."
+    ]
+  }
+}

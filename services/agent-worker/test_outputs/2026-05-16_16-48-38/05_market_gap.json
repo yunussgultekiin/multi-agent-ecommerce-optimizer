@@ -1,0 +1,83 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "Simple Living Ahşap Kollu Geniş Katlanır Kamp, Plaj ve Piknik Sandalyesi",
+          "Armarks Kamp Sandalyesi, Katlanır Kamp Sandalyesi, Bardaklıklı Kamp Sandalyesi, Plaj Piknik Sandalyesi"
+        ],
+        "price_range_min": 499.0,
+        "price_range_max": 539.62
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "SECENART Ahşap Kollu Katlanır Kamp Sandalyesi",
+          "Mocca Style Neone Kırmızı Katlanır Ahşap Kollu Kamp Piknik Sandalyesi",
+          "KUBİLAY ASKERİ MALZEME Kamp Sandalyesi Katlanır Ahşap Kollu",
+          "Decathlon Quechua Katlanır Kamp Sandalyesi",
+          "moniev Natura 2 Adet Kamp Sandalyesi Katlanır Piknik Sandalye"
+        ],
+        "price_range_min": 1000.0,
+        "price_range_max": 1250.0
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "Aqua Katlanabilir ahşap kamp ve bahçe sandalyesi",
+          "Bahçeci Atina Mix - Atina sandalye mix",
+          "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu"
+        ],
+        "price_range_min": 3476.0,
+        "price_range_max": 9250.0
+      }
+    ],
+    "user_product_cluster": "budget",
+    "gap_opportunities": [
+      "Bardaklık veya telefon tutucu gibi ek fonksiyonel özelliklere sahip, uygun fiyatlı ahşap kollu kamp sandalyesi eksikliği.",
+      "Müşteri hizmetleri ve garanti süreçlerinde şeffaflık ve çözüm odaklılık sunan, uygun fiyatlı ve dayanıklı bir ürünün pazarda öne çıkma potansiyeli.",
+      "Farklı renk ve desen seçenekleri sunan, ancak ahşap kolçak kalitesinden ödün vermeyen uygun fiyatlı ürünlerin azlığı."
+    ],
+    "sentiment_based_opportunities": [
+      "Kumaş yırtılması ve paslanma sorunlarına karşı üstün dayanıklılık sunan bir ürünle müşteri memnuniyetini artırma.",
+      "Sağlam iskelet yapısı ve kaliteli malzemelerle kısa sürede kırılma ve deformasyon problemlerini ortadan kaldırma.",
+      "Müşteri hizmetleri ve garanti süreçlerinde şeffaf ve çözüm odaklı bir yaklaşım sergileyerek müşteri güvenini kazanma.",
+      "Taşıma ipi gibi kritik parçaların dayanıklılığını artırarak kullanıcı deneyimini iyileştirme.",
+      "Ürünün konfor beklentilerini karşıladığından emin olarak olumsuz geri bildirimleri azaltma."
+    ],
+    "trend_based_opportunities": [
+      "Hızlı teslimat seçenekleri sunarak müşteri taleplerine hızlı yanıt verme.",
+      "Trendyol Plus'a özel ürün veya indirimler sunarak platform avantajlarından yararlanma.",
+      "Fırsatlı ürünler ve kampanyalı satışlarla rekabet avantajı sağlama.",
+      "Çok al az öde indirimleri gibi stratejilerle toplu alımları teşvik etme.",
+      "Ürünün katlanabilir ve taşınabilir özelliklerini vurgulayarak doğa ile iç içe tatil yapma isteğine hitap etme."
+    ],
+    "strategic_actions": [
+      "Ürünün 'Paslanmaz Metal Profil' özelliğini ve 'Su İtici Oxford Kumaş' özelliğini vurgulayarak rakiplerin paslanma ve kumaş yırtılması sorunlarına karşı üstünlüğünü iletişimde öne çıkarın.",
+      "Müşteri hizmetleri süreçlerini iyileştirin ve garanti koşullarını net bir şekilde belirtin, olası sorunlarda hızlı ve çözüm odaklı destek sunarak müşteri memnuniyetini artırın.",
+      "Ürüne bardaklık veya küçük bir yan cep gibi ek fonksiyonel özellikler ekleyerek 'value for money' segmentindeki rakiplerle rekabet edebilir ve bütçe segmentinde farklılaşabilirsiniz.",
+      "Trendyol'daki 'fırsatlı ürünler' ve 'kampanyalı ürünler' trendlerine uygun olarak dönemsel indirimler ve promosyonlar düzenleyerek satışları artırın."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "Aqua",
+        "Bahçeci",
+        "Tekno Trust"
+      ],
+      "budget_brands": [
+        "Simple Living",
+        "Armarks"
+      ],
+      "user_brand_position": "CampRoute, uygun fiyatlı ve ahşap kollu kamp sandalyesi segmentinde yer almaktadır. Kaliteli ahşap kolçak ve paslanmaz metal profil gibi özellikleriyle bütçe dostu bir seçenek sunarken, rakiplerine göre daha estetik bir tasarıma sahiptir."
+    },
+    "positioning_score": 0.7,
+    "positioning_rationale": "CampRoute, ahşap kolçak ve paslanmaz metal gibi özellikleriyle bütçe segmentinde iyi bir değer sunuyor. Ancak, ek özellikler ve daha güçlü bir marka iletişimiyle pazar konumunu daha da güçlendirebilir.",
+    "variant_gap_opportunities": [
+      "Mevcut yeşil-beyaz ve mavi-beyaz çizgili seçeneklere ek olarak, düz renkler (örneğin siyah, gri) veya daha modern desenler sunarak farklı estetik tercihlere sahip müşterilere ulaşılabilir.",
+      "Farklı boyutlarda (örneğin daha geniş oturma alanı veya daha yüksek sırtlık) varyantlar sunarak farklı kullanıcı ihtiyaçlarına (örneğin daha uzun boylu kişiler veya daha fazla konfor arayanlar) hitap edilebilir."
+    ]
+  }
+}

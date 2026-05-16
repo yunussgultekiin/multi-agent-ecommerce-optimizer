@@ -1,0 +1,58 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "Nurgaz - Ahşap Kollu Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kollu ve katlanabilir yapısıyla doğrudan rakip olan bu ürün, dayanıklılığı ve marka bilinirliği ile öne çıkmaktadır (orta sınıf)."
+      },
+      {
+        "competitor_name": "Bofigo - Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Uygun fiyatlı alternatifler sunan Bofigo'nun bu modeli, ahşap kol detayı ve katlanabilir yapısıyla benzer bir kullanıcı kitlesine hitap etmektedir (bütçe)."
+      },
+      {
+        "competitor_name": "North Pacific - Ahşap Kollu Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Estetik tasarımı ve ahşap kol detayıyla benzer bir ürün olup, özellikle piknik ve plaj kullanımı için popüler bir alternatiftir (orta sınıf). [5, 6]"
+      },
+      {
+        "competitor_name": "Funky Chairs - Freedom Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Ahşap kolçaklı ve katlanabilir tasarımıyla benzer özellikler sunarken, daha premium bir algı ve malzeme kalitesiyle farklılaşmaktadır (premium). [2]"
+      },
+      {
+        "competitor_name": "Adakamp - Ahşap Kollu Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Kamp malzemeleri konusunda bilinen bir marka olan Adakamp'ın bu sandalyesi, ahşap kolları ve sağlam yapısıyla doğrudan bir rakip oluşturur (orta sınıf)."
+      },
+      {
+        "competitor_name": "Decathlon - Katlanır Kamp Sandalyesi XL Boy",
+        "platform": "amazon",
+        "reason": "Doğrudan ahşap kollu olmasa da, geniş oturma alanı ve yüksek taşıma kapasitesi sunan bu popüler model, konfor odaklı kullanıcılar için bir alternatiftir (orta sınıf). [13]"
+      },
+      {
+        "competitor_name": "King Camp - Deluxe Siyah-Gri Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Uluslararası bilinirliğe sahip King Camp'in bu modeli, kalite ve konforu bir arada sunarak ahşap kollu sandalye arayan kullanıcılara hitap eder (premium). [15]"
+      },
+      {
+        "competitor_name": "Outdoart - Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Yüksek taşıma kapasitesi ve lüks olarak konumlandırılan bu ürün, ahşap kollu tasarımıyla daha kaliteli bir alternatif arayanlara yöneliktir (premium). [1]"
+      },
+      {
+        "competitor_name": "Mocca Style - Neone Katlanır Ahşap Kollu Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Farklı renk seçenekleri ve standart ahşap kollu katlanır yapısıyla, özellikle uygun fiyatlı ve çeşitli tasarımlar arayanlar için bir rakiptir (bütçe). [1]"
+      },
+      {
+        "competitor_name": "Hastunç - Ahşap Kolçaklı Katlanır Kamp Sandalyesi",
+        "platform": "amazon",
+        "reason": "Piyasadaki uygun fiyatlı seçeneklerden biri olan bu ürün, temel ahşap kollu ve katlanabilir sandalye ihtiyacını karşılamaktadır (bütçe). [2]"
+      }
+    ]
+  }
+}

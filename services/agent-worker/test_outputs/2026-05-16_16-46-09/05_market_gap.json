@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "Bofigo Ahşap Kollu Kamp Sandalyesi",
+          "Hastunç Ahşap Kolçaklı Katlanır Kamp Sandalyesi",
+          "moniev Natura Kamp Sandalyesi"
+        ],
+        "price_range_min": 489.0,
+        "price_range_max": 689.91
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "Decathlon Quechua Katlanabilir Kamp Sandalyesi",
+          "Haegs Kamp Sandalyesi, Outdoor, Plaj ve Piknik İçin Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 1169.9,
+        "price_range_max": 1250.0
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "North Pacific Ahşap Kollu Kamp Sandalyesi",
+          "Funky Chairs Freedom Katlanır Kamp Sandalyesi",
+          "Nurgaz NG-C135 Çift Kişilik Yeşil Kamp Sandalyesi"
+        ],
+        "price_range_min": 2599.0,
+        "price_range_max": 3500.0
+      }
+    ],
+    "user_product_cluster": "budget",
+    "gap_opportunities": [
+      "Piyasada ahşap kollu, estetik ve uygun fiyatlı ürünler arasında, müşteri hizmetleri ve teslimat kalitesiyle öne çıkan bir marka boşluğu bulunmaktadır.",
+      "Bardaklık gibi ek fonksiyonel özelliklere sahip, ahşap kollu ve uygun fiyatlı kamp sandalyesi segmentinde bir boşluk mevcuttur.",
+      "Çift kişilik ahşap kollu kamp sandalyesi gibi niş bir ürün segmenti henüz yeterince keşfedilmemiştir."
+    ],
+    "sentiment_based_opportunities": [
+      "Müşteri hizmetleri kalitesi ve iade/değişim süreçlerinin şeffaflığı konusunda rakiplerin yaşadığı sorunlar, CampRoute için güçlü bir rekabet avantajı oluşturabilir.",
+      "Kargo gecikmeleri, hasarlı/eksik ürün gönderimi ve kötü paketleme gibi temel lojistik sorunların çözümü, müşteri memnuniyetini artırarak pazarda öne çıkma fırsatı sunar.",
+      "Ürün kalitesinin düşük olması ve kısa sürede deformasyon gibi şikayetler, CampRoute'un \"sağlam ve dayanıklı\" özelliklerini vurgulayarak güven inşa etme fırsatı yaratır.",
+      "Rakiplerin aksine, ürün görselleri ve açıklamalarının gerçeği yansıtması, müşteri beklentilerini doğru yöneterek olumlu bir algı oluşturabilir."
+    ],
+    "trend_based_opportunities": [
+      "Kamp mutfağı ürünlerine olan ilginin artmasıyla birlikte, sandalyenin yanında kamp mutfağına yönelik aksesuarlar (örneğin, sandalyeye takılabilir küçük bir masa veya baharatlık tutucu) sunulabilir.",
+      "Hızlı teslimat seçeneği sunarak, tüketicilerin artan talep sinyallerine yanıt verilebilir.",
+      "Trendyol Plus gibi platform avantajlarından faydalanarak, indirimler ve hızlı teslimat ile ürünün görünürlüğü ve çekiciliği artırılabilir."
+    ],
+    "strategic_actions": [
+      "Ürünün \"Gerçek Ahşap Kolçak\" ve \"Paslanmaz Metal Profil\" özelliklerini vurgulayarak, rakiplerin kalite sorunlarına karşı bir çözüm olarak konumlandırın ve ürün açıklamalarını bu yönde güncelleyin.",
+      "Müşteri hizmetleri süreçlerini iyileştirin, iade ve değişim politikalarını şeffaf hale getirin ve kargo süreçlerinde güvenilir iş ortaklarıyla çalışarak teslimat kalitesini artırın. Bu iyileştirmeleri pazarlama materyallerinde açıkça belirtin.",
+      "Ürüne entegre edilebilir veya opsiyonel olarak sunulabilecek bir bardaklık veya küçük eşya cebi gibi ek fonksiyonel özellikler ekleyerek, moniev ve Hastunç gibi rakiplerin sunduğu bu avantajı yakalayın.",
+      "Trendyol Plus gibi platform avantajlarından faydalanarak, hızlı teslimat ve özel indirimler sunarak ürünün rekabetçiliğini artırın ve trendlere uyum sağlayın."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "North Pacific",
+        "Funky Chairs",
+        "Nurgaz"
+      ],
+      "budget_brands": [
+        "Bofigo",
+        "Hastunç",
+        "moniev"
+      ],
+      "user_brand_position": "CampRoute, uygun fiyatlı ve ahşap kollu kamp sandalyesi segmentinde yer alarak, estetik ve dayanıklılığı bütçe dostu bir seçenekle sunmaya çalışmaktadır."
+    },
+    "positioning_score": 0.6,
+    "positioning_rationale": "CampRoute, ahşap kolçak ve şık tasarım gibi özelliklerle rakiplerinden ayrışırken, fiyatıyla bütçe dostu segmentte yer almaktadır. Ancak, bardaklık gibi bazı fonksiyonel eksiklikler ve marka bilinirliği eksikliği nedeniyle daha güçlü bir konumlandırma potansiyeli bulunmaktadır.",
+    "variant_gap_opportunities": [
+      "Mevcut renk varyantlarına ek olarak, farklı desen veya kumaş seçenekleri sunarak müşteri tercihlerine daha geniş bir yelpazede hitap edilebilir.",
+      "Çift kişilik veya daha büyük boyutlarda varyantlar sunarak, Nurgaz gibi rakiplerin çift kişilik sandalye segmentindeki boşluktan faydalanılabilir."
+    ]
+  }
+}

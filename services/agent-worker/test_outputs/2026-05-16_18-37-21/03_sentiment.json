@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "pain_points": [
+      "Kamp sandalyelerinde düşük kalite ve kısa sürede kırılma/bükülme sorunları yaşanmaktadır.",
+      "Ürünlerin teslimatında gecikmeler ve eksik/hasarlı ürün gönderimi sıkça görülmektedir.",
+      "Müşteri hizmetleri ve satış sonrası destek konusunda yetersizlikler bulunmaktadır.",
+      "Ürünlerin montajı sırasında eksik parça gönderimi gibi sorunlar yaşanmaktadır.",
+      "İade edilen ürünlerin kontrol edilmeden tekrar gönderilmesi gibi durumlar mevcuttur."
+    ],
+    "praised_features": [
+      "Ahşap detaylı ve estetik tasarım beğenilmektedir.",
+      "Katlanabilir ve kolay taşınabilir olması kullanıcılar için önemlidir.",
+      "Uzun süreli oturumlarda konfor sağlayan tasarımlar takdir edilmektedir.",
+      "Su itici kumaş ve taşıma çantası gibi pratik özellikler olumlu karşılanmaktadır.",
+      "Sağlam ve dayanıklı iskelet yapısı aranmaktadır."
+    ],
+    "competitor_sentiments": [
+      {
+        "competitor_name": "Leva House - 4'lü Ahşap Kollu Katlanır Piknik Kamp Sandalyesi",
+        "positive": [
+          "Hızlı ilgi gösterilmesi ve ürünün eline ulaşması olumlu bulunmuştur."
+        ],
+        "negative": [
+          "Sandalye kalitesizliği nedeniyle 2 ayda kırılmıştır.",
+          "Sağlam diye alınan sandalyeler 3-4 oturuşta bükülmüştür.",
+          "Sandalye kırık gelmiş ve müşteri hizmetleri süreci uzamıştır.",
+          "Tek sandalyede ön bağlantı noktası cıvatası düşmüş ve sigara yanığı ile gelmiştir."
+        ]
+      },
+      {
+        "competitor_name": "Outdoart - Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Bez sandalyelere göre daha iyi ve konforlu bulunmuştur."
+        ],
+        "negative": []
+      },
+      {
+        "competitor_name": "Bofigo - Ahşap Kollu Kamp Sandalyesi",
+        "positive": [
+          "Ürün montajı esnasında yaşanan soruna hızlı çözüm bulunmuştur."
+        ],
+        "negative": [
+          "Eksik parça gönderimi ve uzayan teslimat sorunu yaşanmıştır.",
+          "Teslim edilmemiş mutfak dolabı ve yanıltıcı adres iddiaları mevcuttur.",
+          "Teslim edilmeyen sipariş ve iade sorunları yaşanmıştır."
+        ]
+      },
+      {
+        "competitor_name": "Bag The Joy Kids - Ahşap Katlanır Kamp Sandalyesi",
+        "positive": [
+          "Çok kaliteli ve kullanışlı bulunmuştur.",
+          "Kumaş kalitesi yüksek ve oturması rahattır."
+        ],
+        "negative": [
+          "Tek sandalyede ön bağlantı noktası cıvatası düşmüş ve sigara yanığı ile gelmiştir.",
+          "İade edilmiş ürünün kontrol edilmeden gönderildiği belirtilmiştir."
+        ]
+      }
+    ],
+    "marketing_angles": [
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi ile dayanıklılığı ve uzun ömürlü kullanımı garanti edin, rakiplerin kısa sürede kırılan sandalyelerine son verin.",
+      "Hızlı ve eksiksiz teslimatımızla CampRoute, rakiplerin gecikme ve hasarlı ürün sorunlarını ortadan kaldırır.",
+      "CampRoute'un üstün müşteri hizmetleri ile satış sonrası sorunsuz bir deneyim yaşayın, rakiplerin yetersiz desteğine takılmayın.",
+      "Ürünlerimizde eksiksiz parça garantisiyle kolay kurulum sağlayın, rakiplerin eksik parça sorunlarını unutun.",
+      "CampRoute Ahşap Kollu Çizgili Katlanır Kamp Sandalyesi, ahşap detayları ve estetik tasarımıyla kamp deneyiminize şıklık katıyor.",
+      "Katlanabilir ve kolay taşınabilir CampRoute sandalyelerimizle her yere konforu götürün.",
+      "Su itici kumaş ve pratik taşıma çantası özellikleriyle CampRoute, kamp keyfinizi artırır."
+    ],
+    "risk_warnings": [
+      "Ürün kalitesinden ödün vermeyin, sandalyelerin kısa sürede kırılması veya bükülmesi müşteri memnuniyetsizliğine yol açar.",
+      "Teslimat süreçlerini iyileştirin, gecikmeler ve eksik/hasarlı ürün gönderimleri müşteri şikayetlerinin ana nedenidir.",
+      "Müşteri hizmetleri ve satış sonrası desteği güçlendirin, sorunlara hızlı ve etkili çözümler sunun.",
+      "Ürünlerin paketlemesini ve kontrolünü titizlikle yapın, iade edilmiş veya kusurlu ürünlerin tekrar gönderilmesinden kaçının.",
+      "Ürün montajı için gerekli tüm parçaların eksiksiz gönderildiğinden emin olun."
+    ]
+  }
+}

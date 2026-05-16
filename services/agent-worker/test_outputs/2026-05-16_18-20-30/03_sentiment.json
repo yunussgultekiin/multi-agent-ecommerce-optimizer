@@ -1,0 +1,7 @@
+{
+  "success": false,
+  "fallback_used": true,
+  "data": {
+    "error": "Gemini client error [400] | model='gemini-2.5-pro' | Unable to submit request because thinking_budget is out of range; supported values are integers from 128 to 32768. Learn more: https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/gemini"
+  }
+}

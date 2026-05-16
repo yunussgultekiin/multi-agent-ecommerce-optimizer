@@ -74,14 +74,14 @@ def calculate_positioning_score(
     if max_distance == 0:
         return 1.0
 
-    return round(1.0 - min(distance / max_distance, 1.0), 3)
+    return round(1.0 - min(distance / max_distance, 1.0), 4)
 
 def calculate_market_power_score(
     rating: Optional[float], review_count: Optional[int]
 ) -> float:
     if rating is None or review_count is None:
         return 0.0
-    return round(rating * math.log(review_count + 1), 3)
+    return round(rating * math.log(review_count + 1), 4)
 
 def calculate_market_power_gap(
     user_rating: Optional[float],
@@ -133,8 +133,8 @@ def calculate_variant_pricing(
             VariantPricing(
                 variant_name=variant.get("name", ""),
                 base_price=base_price,
-                price_delta=round(price_delta, 2),
-                suggested_price=round(suggested_price, 2),
+                price_delta=round(price_delta, 3),
+                suggested_price=round(suggested_price, 3),
                 positioning=determine_positioning(base_price, q1, q3),
             )
         )

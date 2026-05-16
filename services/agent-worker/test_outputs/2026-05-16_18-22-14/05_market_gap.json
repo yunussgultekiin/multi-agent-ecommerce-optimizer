@@ -1,0 +1,80 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "Simple Living Ahşap Kollu Geniş Katlanır Kamp Sandalyesi",
+          "Bofigo Kamp Sandalyesi Yeşil Ahşap Kollu Katlanır Sandalye"
+        ],
+        "price_range_min": 499.0,
+        "price_range_max": 499.98
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "Decathlon Quechua Katlanabilir Kamp Sandalyesi"
+        ],
+        "price_range_min": 1690.0,
+        "price_range_max": 1690.0
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "North Pacific Ahşap Kollu Kamp Sandalyesi",
+          "SECENART Ahşap Kollu Katlanır Kamp Sandalyesi",
+          "Tekno Trust Metal Kamp Sandalyesi Katlanır Ahşap Kollu",
+          "Joyfull Turtle Ahşap Kollu Katlanır Kamp Sandalyesi"
+        ],
+        "price_range_min": 2599.0,
+        "price_range_max": 5950.0
+      }
+    ],
+    "user_product_cluster": "budget",
+    "gap_opportunities": [
+      "Piyasada, uygun fiyatlı segmentte dahi, kumaş kalitesi ve dikiş sağlamlığı konusunda güven veren, uzun ömürlü ürün eksikliği bulunmaktadır.",
+      "Sırt demirlerinin konforu olumsuz etkilemediği, ergonomik olarak tasarlanmış uygun fiyatlı kamp sandalyeleri için bir boşluk mevcuttur.",
+      "Denge sorunları yaşamayan, sağlam iskelet yapısına sahip ve plastik aksamları dayanıklı uygun fiyatlı kamp sandalyelerine ihtiyaç duyulmaktadır.",
+      "Kullanıcıların beklentilerini karşılayacak büyüklükte ve konfor seviyesinde, ancak bütçe dostu seçenekler sınırlıdır."
+    ],
+    "sentiment_based_opportunities": [
+      "Kumaş kalitesi ve dikiş sağlamlığını vurgulayarak, rakiplerin yaşadığı yırtılma ve zayıf dikiş sorunlarına çözüm sunmak.",
+      "Ergonomik sırt desteği ve demirlerin sırta batmasını engelleyen bir tasarım ile kullanıcı konforunu ön plana çıkarmak.",
+      "Sağlam metal iskelet ve dayanıklı plastik parçalar kullanarak ürünün genel dayanıklılığını ve denge stabilitesini artırmak.",
+      "Ürünün boyutları ve konfor seviyesi hakkında net bilgiler sunarak, kullanıcıların 'beklenenden küçük' veya 'konforsuz' algısını ortadan kaldırmak.",
+      "Kolay katlanabilirlik, taşınabilirlik, ahşap kolların estetiği ve hafiflik gibi beğenilen özellikleri daha da vurgulamak."
+    ],
+    "trend_based_opportunities": [
+      "Ürünün dayanıklılık ve uzun ömürlülük özelliklerini vurgulayarak, hafif ve dayanıklı ürün trendine uyum sağlamak.",
+      "Ahşap kolların estetiğini ve konforunu öne çıkararak, ahşap detaylı ve fonksiyonel tasarım trendini yakalamak.",
+      "Ürünün kolay taşınabilir ve katlanabilir yapısını vurgulayarak, pratik ve taşınabilir kamp ekipmanları trendine hitap etmek."
+    ],
+    "strategic_actions": [
+      "Ürünün açıklamasında ve pazarlama materyallerinde 'güçlendirilmiş dikişler', 'yüksek kaliteli su itici Oxford kumaş' ve 'paslanmaz metal profil' gibi dayanıklılık ve kaliteyi vurgulayan ifadeleri daha belirgin hale getirin. Mümkünse, kumaş ve dikiş kalitesini gösteren yakın çekim görseller ekleyin.",
+      "Ürünün ergonomik tasarımını ve sırt demirlerinin konforu nasıl etkilemediğini açıklayan detaylı bilgiler sunun. Kullanıcıların sırtına batma endişesini gidermek için 'ergonomik sırt desteği' veya 'sırt konforunu artıran tasarım' gibi ifadeler kullanın.",
+      "Ürünün taşıma kapasitesini (110 kg) ve sağlamlığını vurgulayarak, rakiplerin denge ve iskelet zayıflığı sorunlarına karşı bir avantaj olarak konumlandırın. Ürünün gerçek boyutlarını ve oturma alanının genişliğini belirterek, 'beklenenden küçük' algısını önleyin.",
+      "Ürünün yeşil-beyaz ve mavi-beyaz çizgili varyantlarının şık ve estetik görünümünü vurgulayarak, ahşap detaylı ve fonksiyonel tasarım trendine uygunluğunu öne çıkarın. Bu varyantların görsellerini daha çekici ve yaşam tarzı odaklı hale getirin."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "North Pacific",
+        "SECENART",
+        "Tekno Trust",
+        "Joyfull Turtle"
+      ],
+      "budget_brands": [
+        "Simple Living",
+        "Bofigo"
+      ],
+      "user_brand_position": "CampRoute, uygun fiyatlı segmentte yer almasına rağmen, ahşap kolçak ve paslanmaz metal profil gibi özelliklerle kalite algısı yaratmaya çalışmaktadır. Ancak, rakiplerin yaşadığı kalite sorunları nedeniyle bu segmentte güvenilir bir alternatif olma potansiyeli taşımaktadır."
+    },
+    "positioning_score": 0.6,
+    "positioning_rationale": "CampRoute, uygun fiyatlı segmentte yer almasına rağmen, gerçek ahşap kolçak ve paslanmaz metal profil gibi özelliklerle rakiplerinden ayrışmaktadır. Ancak, marka bilinirliği ve müşteri yorumlarının eksikliği nedeniyle konumlandırması henüz tam olarak güçlü değildir.",
+    "variant_gap_opportunities": [
+      "Mevcut renk varyantları (Yeşil - Beyaz Çizgili, Mavi - Beyaz Çizgili) estetik bir çeşitlilik sunsa da, piyasada kişiselleştirilebilir ürünlere olan talep göz önüne alındığında, farklı desen veya düz renk seçenekleri gibi daha geniş bir yelpaze sunulabilir.",
+      "Bazı rakiplerin taşıma çantası veya bardak bölmesi gibi ek özellikler sunan varyantları bulunurken, CampRoute'un varyantları sadece renk farklılığı sunmaktadır. Fonksiyonel özellikler eklenmiş varyantlar, ürünün çekiciliğini artırabilir."
+    ]
+  }
+}

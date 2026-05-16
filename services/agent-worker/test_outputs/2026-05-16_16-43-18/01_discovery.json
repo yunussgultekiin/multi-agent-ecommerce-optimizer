@@ -1,0 +1,48 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "Secenart Ahşap Kollu Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Bu sandalye, ahşap kollu ve katlanabilir kamp sandalyesi kategorisinde doğrudan rakip olup, orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "Outdoart Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu ve lüks katlanabilir kamp sandalyesi olmasıyla benzer bir kullanıcı kitlesine hitap eder ve orta-üst segmentte konumlanır."
+      },
+      {
+        "competitor_name": "Mocca Style Kamp Sandalyesi Katlanır Ahşap Kollu",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, onu doğrudan bir rakip haline getirir ve genellikle bütçe dostu bir seçenektir."
+      },
+      {
+        "competitor_name": "North Pacific Ahşap Kollu Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu kamp sandalyesi olmasıyla benzer bir ürün sunar ve orta segmentte yer alır."
+      },
+      {
+        "competitor_name": "Simple Living Ahşap Kollu Geniş Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu, geniş ve katlanabilir kamp sandalyesi olması, onu doğrudan bir rakip yapar ve orta segmentte yer alır."
+      },
+      {
+        "competitor_name": "Bag The Joy Ahşap Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Doğal ahşap yapısı ve konforlu tasarımıyla öne çıkan bu ürün, ahşap kollu kamp sandalyesi pazarında premium segmentte yer alan bir alternatiftir."
+      },
+      {
+        "competitor_name": "Funky Chairs Freedom Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu olmasa da katlanabilir kamp sandalyesi olması ve bilinen bir marka olması nedeniyle orta segmentte rekabetçi bir üründür."
+      },
+      {
+        "competitor_name": "Hastunç Ahşap Kolçaklı Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kolçaklı ve katlanabilir kamp sandalyesi olmasıyla doğrudan rakip olup, genellikle bütçe dostu bir seçenektir."
+      }
+    ]
+  }
+}

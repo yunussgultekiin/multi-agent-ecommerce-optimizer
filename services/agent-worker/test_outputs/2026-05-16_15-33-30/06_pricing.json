@@ -1,0 +1,47 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "price_median": 1034.95,
+    "price_q1": 694.5,
+    "price_q3": 1429.95,
+    "predicted_price": 1034.95,
+    "price_range_min": 0.0,
+    "price_range_max": 2533.125,
+    "positioning": "underpriced",
+    "positioning_score": 0.0,
+    "market_power_gap": "User product has similar market power to competitors (gap: 0.00)",
+    "confidence_score": 0.7,
+    "fallback_used": false,
+    "variant_pricing": [
+      {
+        "variant_name": "Yeşil - Beyaz Çizgili",
+        "base_price": 549.9,
+        "price_delta": -485.05,
+        "suggested_price": 694.5,
+        "positioning": "underpriced"
+      },
+      {
+        "variant_name": "Mavi - Beyaz Çizgili",
+        "base_price": 549.9,
+        "price_delta": -485.05,
+        "suggested_price": 694.5,
+        "positioning": "underpriced"
+      }
+    ],
+    "competitor_variant_overlap": [
+      {
+        "variant_name": "Yeşil - Beyaz Çizgili",
+        "matching_competitors": [
+          "Haegs Kamp Sandalyesi"
+        ]
+      },
+      {
+        "variant_name": "Mavi - Beyaz Çizgili",
+        "matching_competitors": [
+          "Haegs Kamp Sandalyesi"
+        ]
+      }
+    ]
+  }
+}

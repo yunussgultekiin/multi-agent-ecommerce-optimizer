@@ -1,0 +1,28 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "Leva House - 4'lü Ahşap Kollu Katlanır Piknik Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Bu ürün, ahşap kollu ve katlanır kamp sandalyesi olmasıyla doğrudan rakip konumundadır ve orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "Outdoart - Ahşap Kollu Lüks Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve lüks katlanır kamp sandalyesi olması, kullanıcıların konfor ve estetik beklentilerini karşılayarak doğrudan rekabet oluşturmaktadır ve orta-üst segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "Bofigo - Ahşap Kollu Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanabilir kamp sandalyesi olması, kullanıcıların benzer ihtiyaçlarına hitap ederek doğrudan bir rakip oluşturmaktadır ve orta segmentte yer almaktadır."
+      },
+      {
+        "competitor_name": "Bag The Joy Kids - Ahşap Katlanır Kamp Sandalyesi",
+        "platform": "hepsiburada",
+        "reason": "Ahşap kollu ve katlanır kamp sandalyesi olması, özellikle çocuklu aileler için benzer bir kullanım alanı sunarak rekabet etmektedir ve orta segmentte yer almaktadır."
+      }
+    ]
+  }
+}

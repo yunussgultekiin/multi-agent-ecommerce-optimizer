@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "trending_features": [
+      "katlanır kamp sandalyesi",
+      "kamp masası",
+      "şişme yatak",
+      "kamp feneri",
+      "termos"
+    ],
+    "demand_signals": [
+      "dayanıklı ve fonksiyonel kamp ekipmanlarına artan ilgi",
+      "taşınabilir ve kurulumu kolay ürünlerin tercih edilmesi",
+      "kamp malzemelerinde kalite ve garanti beklentisi"
+    ],
+    "platform_trends": [
+      "çok satanlar listelerinde kamp sandalyesi ve masası gibi temel ekipmanların yükselişi",
+      "kamp malzemelerinde set veya bundle ürünlerin popülerliği",
+      "ürün incelemelerinde kurulum kolaylığı ve dayanıklılık vurgusu"
+    ],
+    "category_trend_summary": "Kamp & Outdoor kategorisinde, kullanıcılar pratik, dayanıklı ve taşınabilir ekipmanlara yöneliyor. Özellikle katlanır kamp sandalyesi, kamp masası ve şişme yatak gibi temel ürünlerde talep artışı gözlemleniyor. Tüketiciler, ürünlerin kalitesine ve kullanım kolaylığına önem veriyor."
+  }
+}

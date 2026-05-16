@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "price_median": 679.99,
+    "price_q1": 518.01,
+    "price_q3": 1277.0,
+    "predicted_price": 679.99,
+    "price_range_min": 0.0,
+    "price_range_max": 2415.485,
+    "positioning": "optimal",
+    "positioning_score": 0.7821,
+    "market_power_gap": "User product is weakly positioned vs competitors (gap: -3.03)",
+    "confidence_score": 0.7,
+    "fallback_used": false,
+    "variant_pricing": [
+      {
+        "variant_name": "Yeşil - Beyaz Çizgili",
+        "base_price": 549.9,
+        "price_delta": -130.09,
+        "suggested_price": 549.9,
+        "positioning": "optimal"
+      },
+      {
+        "variant_name": "Mavi - Beyaz Çizgili",
+        "base_price": 549.9,
+        "price_delta": -130.09,
+        "suggested_price": 549.9,
+        "positioning": "optimal"
+      }
+    ],
+    "competitor_variant_overlap": [
+      {
+        "variant_name": "Yeşil - Beyaz Çizgili",
+        "matching_competitors": []
+      },
+      {
+        "variant_name": "Mavi - Beyaz Çizgili",
+        "matching_competitors": []
+      }
+    ]
+  }
+}

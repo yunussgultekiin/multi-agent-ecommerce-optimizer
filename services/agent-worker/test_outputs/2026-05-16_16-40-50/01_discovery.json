@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "fallback_used": true,
+  "data": {
+    "competitors": [
+      {
+        "competitor_name": "Madfox Infinity Ultralight Retro Çizgili Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Bu sandalye, ahşap kollu ve çizgili kamp sandalyesi ile doğrudan rekabet eden, benzer özelliklere sahip popüler bir modeldir (mid-range)."
+      },
+      {
+        "competitor_name": "ARGEUS Sırt Ayarlı Katlanabilir Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ayarlanabilir sırt özelliği ile ekstra konfor sunan bu sandalye, kullanıcıların benzer ihtiyaçlarına hitap etmektedir (mid-range)."
+      },
+      {
+        "competitor_name": "Simple Living Ahşap Kollu Geniş Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu ve katlanabilir olmasıyla doğrudan rakip olan bu ürün, geniş oturma alanı ile konforu ön plana çıkarır (mid-range)."
+      },
+      {
+        "competitor_name": "Grootland Ahşap Katlanır Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Ahşap detayları ve katlanabilir yapısıyla kullanıcıların ilgisini çeken bu sandalye, benzer bir segmente hitap etmektedir (mid-range)."
+      },
+      {
+        "competitor_name": "Windcamp Katlanır Kamp Sandalyesi (Bel Korunaklı)",
+        "platform": "trendyol",
+        "reason": "Bel destekli tasarımıyla ek konfor sunan bu sandalye, benzer fiyat aralığında rekabetçi bir alternatiftir (mid-range)."
+      },
+      {
+        "competitor_name": "Campfesto Voyager Katlanabilir Outdoor Sandalye Ahşap Kollu",
+        "platform": "trendyol",
+        "reason": "Ahşap kollu ve katlanabilir olmasıyla doğrudan rakip olan bu model, outdoor kullanımına uygunluğuyla öne çıkar (premium)."
+      },
+      {
+        "competitor_name": "DFT Kollu Katlanır Premium Kamp Sandalyesi",
+        "platform": "trendyol",
+        "reason": "Kollu ve katlanabilir yapısıyla benzer özellikler sunan bu premium model, kalite arayan tüketicilere hitap eder (premium)."
+      }
+    ]
+  }
+}

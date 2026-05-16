@@ -1,5 +1,7 @@
 import json
 
+from app.tools.json_prompt_rules import JSON_SELF_CORRECTION_SYNTAX, STRICT_JSON_SYNTAX_RULES
+
 _JSON_SCHEMA = """{
     "pain_points": ["recurring complaint 1", "recurring complaint 2"],
     "praised_features": ["praised feature 1", "praised feature 2"],
@@ -25,9 +27,16 @@ Rules:
     (2) praised_features: if the user product shares a praised feature, write an angle that claims or reinforces that strength.
   Each angle must be a concrete phrase the seller can use in listings or ads. [] if neither source yields usable material.
 - risk_warnings: specific pitfalls to avoid, derived from competitor failures; [] if none.
+- Limit lists to keep JSON compact:
+  pain_points max 5, praised_features max 5, competitor_sentiments max 6,
+  marketing_angles max 7, risk_warnings max 7.
+- Write short single-sentence strings only. Do not use semicolons, markdown bullets, or embedded line breaks.
+- Do not put quoted phrases inside Turkish text. Write rakiplerde "gecikme" var as rakiplerde "gecikme" var.
 - Do not invent data. If a competitor has no findable reviews, omit it from competitor_sentiments.
 - Keep JSON keys and enum labels in English, but write all natural-language output strings in Turkish.
 - Do not include markdown, comments, or trailing commas.
+- Keep the exact key names from the schema; do not add or remove keys.
+{STRICT_JSON_SYNTAX_RULES}
 
 PRODUCT-SPECIFIC DEFECT FILTER (apply when using brand/company-level findings):
   When a complaint originates from a different product type than the one being analyzed
@@ -123,6 +132,11 @@ and poor price/value perception.
 RESPOND ONLY in this JSON format:
 {_JSON_SCHEMA}
 {_COMMON_RULES}
+FINAL OUTPUT CONTRACT:
+- Return exactly one JSON object that starts with '{' and ends with '}'.
+- No explanations, no headings, no markdown.
+- All string values must be single-line strings with no unescaped internal double quotes.
+- Check every array item and object property has the required comma separator.
 """
 
 def build_fallback_sentiment_prompt(
@@ -173,6 +187,11 @@ ease-of-use, and price/value issues typical to "{category}" on {target_platform}
 RESPOND ONLY in this JSON format:
 {_JSON_SCHEMA}
 {_COMMON_RULES}
+FINAL OUTPUT CONTRACT:
+- Return exactly one JSON object that starts with '{' and ends with '}'.
+- No explanations, no headings, no markdown.
+- All string values must be single-line strings with no unescaped internal double quotes.
+- Check every array item and object property has the required comma separator.
 """
 
 def build_self_correction_prompt(original_prompt: str, last_error: str) -> str:
@@ -188,6 +207,10 @@ Key rules:
 - competitor_sentiments, marketing_angles, risk_warnings may be empty lists but must be present.
 - All string values must be non-empty.
 - Keep JSON keys in English, but write all value texts in Turkish.
+- Return only one JSON object, with no markdown fences and no extra text.
+- Keep strings short and single-line; remove or escape internal double quotes.
+- Re-check comma separators between all array items and object properties.
+{JSON_SELF_CORRECTION_SYNTAX}
 
 ORIGINAL TASK:
 {original_prompt}

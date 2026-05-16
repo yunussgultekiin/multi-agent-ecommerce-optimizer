@@ -1,0 +1,81 @@
+{
+  "success": true,
+  "fallback_used": false,
+  "data": {
+    "clusters": [
+      {
+        "label": "budget",
+        "competitors": [
+          "SECENART Katlanır Kamp Sandalyesi-Ahşap Kollu",
+          "LEVA HOUSE Ahşap Kollu Plaj Sandalyesi",
+          "romee Ahşap Kollu Katlanır Kamp Piknik Sandalyesi"
+        ],
+        "price_range_min": 0.0,
+        "price_range_max": 780.0
+      },
+      {
+        "label": "value_for_money",
+        "competitors": [
+          "Windcamp Katlanır Kamp Sandalyesi (Bel Korunaklı) - Gri",
+          "North Pacific Ahşap Kollu Kamp Sandalyesi"
+        ],
+        "price_range_min": 2399.4,
+        "price_range_max": 2890.0
+      },
+      {
+        "label": "premium",
+        "competitors": [
+          "campfesto Nomad Katlanabilir Outdoor Sandalye Ahşap Kollu Kamp & Piknik Sandalyesi",
+          "HUSKY PROUD -30C Uyku Tulumu",
+          "Evolite Excamp 4 Pro Çadır",
+          "Ferrino Tent Hekla 3 Çadır"
+        ],
+        "price_range_min": 3990.0,
+        "price_range_max": 25271.04
+      }
+    ],
+    "user_product_cluster": "budget",
+    "gap_opportunities": [
+      "Piyasada bel destekli veya ayarlanabilir sırt yapısına sahip ahşap kollu katlanır sandalyelerin eksikliği.",
+      "Yüksek taşıma kapasitesine sahip (130 kg üzeri) ancak uygun fiyatlı ahşap kollu katlanır sandalye seçeneklerinin azlığı.",
+      "Çamurda veya kumda batmayan özel ayaklara sahip ahşap kollu katlanır sandalyelerin niş bir pazar oluşturması.",
+      "Yan cep gibi ek depolama alanları sunan ahşap kollu katlanır sandalyelerin sınırlı olması.",
+      "Çeşitli renk ve desen seçenekleri sunan ahşap kollu katlanır sandalyelerde hala boşluklar bulunması."
+    ],
+    "sentiment_based_opportunities": [
+      "Müşteri hizmetleri ve teslimat süreçlerinde rakiplerin yaşadığı sorunları avantaja çevirerek güvenilir bir marka imajı oluşturma.",
+      "Ürün kalitesizliği ve kısa sürede kırılma/bükülme sorunlarına karşı ürünün dayanıklılığını ve uzun ömürlülüğünü vurgulama.",
+      "Montaj için gerekli parçaların eksiksiz gönderilmesi ve hasarsız teslimat garantisi sunma.",
+      "Yüksek taşıma kapasitesi ve konforlu oturma alanı gibi müşteri tarafından beğenilen özellikleri daha fazla öne çıkarma."
+    ],
+    "trend_based_opportunities": [
+      "Ürünün dayanıklılık ve yüksek performans özelliklerini vurgulayarak artan talebi karşılama.",
+      "Katlanabilir tasarımın kolay taşınabilirlik ve kurulum kolaylığı avantajlarını öne çıkarma."
+    ],
+    "strategic_actions": [
+      "Ürünün 'Paslanmaz Metal Profil' ve '110 kg Taşıma Kapasitesi' özelliklerini vurgulayarak dayanıklılık ve uzun ömürlülük konusunda rakiplerden ayrışan bir pazarlama stratejisi benimseyin.",
+      "Müşteri hizmetleri ve teslimat süreçlerinde şeffaflık ve hız garantisi sunarak, rakiplerin yaşadığı 'teslimat gecikmeleri' ve 'müşteri hizmetleri ilgisizliği' gibi pain point'leri avantaja çevirin.",
+      "Ürünün 'Gerçek Ahşap Kolçak' özelliğini vurgulayarak, estetik ve doğal malzeme arayan tüketicilere hitap edin ve bu özelliği rakiplerin plastik kolçaklı ürünlerinden üstün kılın.",
+      "Ürünün 'Su İtici Oxford Kumaş' özelliğini öne çıkararak, dış mekan kullanımına uygunluğunu ve kolay temizlenebilirliğini vurgulayın, böylece kullanım kolaylığına önem veren tüketicileri hedefleyin."
+    ],
+    "brand_landscape": {
+      "premium_brands": [
+        "CAMPFESTO",
+        "Husky",
+        "Evolite",
+        "Ferrino"
+      ],
+      "budget_brands": [
+        "SECENART",
+        "LEVA HOUSE",
+        "Romee"
+      ],
+      "user_brand_position": "CampRoute, uygun fiyatlı ve temel özelliklere sahip katlanır kamp sandalyeleri sunarak bütçe dostu bir marka olarak konumlanmıştır."
+    },
+    "positioning_score": 0.6,
+    "positioning_rationale": "CampRoute, uygun fiyatı ve temel özellikleriyle bütçe dostu bir seçenek sunmaktadır. Ancak, rakiplerin sunduğu ek konfor ve dayanıklılık özellikleriyle kıyaslandığında, ürünün benzersiz satış noktalarını daha net vurgulaması gerekmektedir.",
+    "variant_gap_opportunities": [
+      "Mevcut yeşil-beyaz ve mavi-beyaz çizgili seçeneklere ek olarak, düz renkler (örneğin haki, gri) veya farklı desenler sunarak daha geniş bir müşteri kitlesine hitap etme potansiyeli."
+    ]
+  }
+}

@@ -1,3 +1,5 @@
+from app.tools.json_prompt_rules import JSON_SELF_CORRECTION_SYNTAX, STRICT_JSON_SYNTAX_RULES
+
 _JSON_SCHEMA = """{
     "trending_features": ["feature1", "feature2"],
     "demand_signals": ["signal1", "signal2"],
@@ -11,9 +13,15 @@ Rules:
 - demand_signals: observable buyer behavior or preference shifts (e.g. "increasing preference for eco-friendly materials"); [] if none found.
 - platform_trends: platform-specific listing or search behavior patterns on the target platform (e.g. bestseller badge patterns, bundle trends); [] if none found.
 - category_trend_summary: required, 2-3 sentences summarizing the current trend direction.
+- Limit lists to keep JSON compact:
+  trending_features max 5, demand_signals max 4, platform_trends max 4.
+- Write short single-sentence strings only. Do not use semicolons, markdown bullets, or embedded line breaks.
+- Do not put quoted phrases inside Turkish text. Write aramalar artıyor, not "aramalar" artıyor.
+- category_trend_summary must be one single-line string, max 280 characters.
 - All strings must be non-empty.
 - Keep JSON keys in English, but write all natural-language values in Turkish.
 - Do not include markdown, comments, or trailing commas.
+{STRICT_JSON_SYNTAX_RULES}
 """
 
 _PLATFORM_BESTSELLER_PAGES = {
@@ -69,6 +77,11 @@ Prefer data-backed signals (search volume rise, bestseller movement, review volu
 RESPOND ONLY in this JSON format:
 {_JSON_SCHEMA}
 {_COMMON_RULES}
+FINAL OUTPUT CONTRACT:
+- Return exactly one JSON object that starts with '{' and ends with '}'.
+- No explanations, no headings, no markdown.
+- All string values must be single-line strings with no unescaped internal double quotes.
+- Check every array item and object property has the required comma separator.
 """
 
 def build_fallback_trend_prompt(
@@ -103,6 +116,11 @@ TASK:
 RESPOND ONLY in this JSON format:
 {_JSON_SCHEMA}
 {_COMMON_RULES}
+FINAL OUTPUT CONTRACT:
+- Return exactly one JSON object that starts with '{' and ends with '}'.
+- No explanations, no headings, no markdown.
+- All string values must be single-line strings with no unescaped internal double quotes.
+- Check every array item and object property has the required comma separator.
 """
 
 def build_self_correction_prompt(original_prompt: str, last_error: str) -> str:
@@ -116,6 +134,9 @@ Key rules:
 - category_trend_summary must be a non-empty string.
 - demand_signals and platform_trends may be empty lists but must be present.
 - Keep JSON keys in English, but write all value texts in Turkish.
+- Keep strings short and single-line; remove or escape internal double quotes.
+- Re-check comma separators between all array items and object properties.
+{JSON_SELF_CORRECTION_SYNTAX}
 
 ORIGINAL TASK:
 {original_prompt}

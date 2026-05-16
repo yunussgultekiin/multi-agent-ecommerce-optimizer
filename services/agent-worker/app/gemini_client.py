@@ -82,8 +82,25 @@ async def call_gemini(
             None,
         )
     )
+
     try:
         text = response.text or ""
     except Exception:
         text = ""
+
+    if not text.strip():
+        finish_reason = None
+        try:
+            candidates = getattr(response, "candidates", None) or []
+            if candidates:
+                finish_reason = getattr(candidates[0], "finish_reason", None)
+        except Exception:
+            pass
+        logger.warning(
+            "call_gemini returned empty text | model=%s finish_reason=%s grounding=%s",
+            model,
+            finish_reason,
+            grounding_hit,
+        )
+
     return text, grounding_hit
