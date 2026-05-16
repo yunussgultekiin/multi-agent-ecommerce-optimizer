@@ -1,7 +1,0 @@
-{
-  "success": false,
-  "fallback_used": true,
-  "data": {
-    "error": "Gemini client error [400] | model='gemini-2.5-flash' | Unable to submit request because controlled generation is not supported with Search tool. Learn more: https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/gemini"
-  }
-}

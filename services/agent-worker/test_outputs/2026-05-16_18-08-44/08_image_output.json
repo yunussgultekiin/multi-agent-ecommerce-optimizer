@@ -1,8 +1,0 @@
-{
-  "success": false,
-  "fallback_used": true,
-  "data": {
-    "generated_image_url": null,
-    "error": "image generation disabled in run_e2e_test"
-  }
-}
