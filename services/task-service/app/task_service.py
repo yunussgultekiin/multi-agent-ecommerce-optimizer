@@ -25,9 +25,13 @@ class TaskService:
         task = await self.repo.create(
             user_id=user_id, payload=payload, seo_tone=seo_tone
         )
+        queue_payload = payload
+        if seo_tone is not None:
+            user_product = {**payload.get("user_product", {}), "seo_tone": seo_tone.value}
+            queue_payload = {**payload, "user_product": user_product}
         await self.redis.lpush(
             "task_queue",
-            json.dumps({"task_id": str(task.id), "payload": payload}),
+            json.dumps({"task_id": str(task.id), "payload": queue_payload}),
         )
         return task
 

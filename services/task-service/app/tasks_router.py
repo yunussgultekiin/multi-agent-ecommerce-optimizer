@@ -1,3 +1,4 @@
+import asyncio
 from app.dependencies import get_db, get_redis
 from app.task_schemas import (
     TaskCreate,
@@ -104,24 +105,47 @@ async def cancel_task(task_id: UUID, service: TaskService = Depends(get_service)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
 
+_TERMINAL_STATUSES = {"completed", "failed", "cancelled"}
+_KEEPALIVE_INTERVAL = 15.0
+
 @router.get("/{task_id}/status/stream")
 async def stream_status(task_id: UUID, redis: aioredis.Redis = Depends(get_redis)):
     async def event_generator():
         current = await redis.hgetall(f"task_progress:{task_id}")
         if current:
             yield f"data: {json.dumps(current)}\n\n"
+            if current.get("status") in _TERMINAL_STATUSES:
+                return
+
         pubsub = redis.pubsub()
         await pubsub.subscribe(f"progress:{task_id}")
-        try:
+        queue: asyncio.Queue[str] = asyncio.Queue()
+
+        async def _reader():
             async for message in pubsub.listen():
                 if message["type"] == "message":
-                    yield f"data: {message['data']}\n\n"
-                    data = json.loads(message["data"])
-                    if data.get("status") in ("completed", "failed", "cancelled"):
-                        break
+                    await queue.put(message["data"])
+
+        reader = asyncio.create_task(_reader())
+        try:
+            while True:
+                try:
+                    data_str = await asyncio.wait_for(queue.get(), timeout=_KEEPALIVE_INTERVAL)
+                except asyncio.TimeoutError:
+                    yield ": keepalive\n\n"
+                    continue
+
+                yield f"data: {data_str}\n\n"
+                if json.loads(data_str).get("status") in _TERMINAL_STATUSES:
+                    break
         finally:
+            reader.cancel()
+            try:
+                await reader
+            except asyncio.CancelledError:
+                pass
             await pubsub.unsubscribe(f"progress:{task_id}")
-            await pubsub.close()
+            await pubsub.aclose()
 
     return StreamingResponse(
         event_generator(),
