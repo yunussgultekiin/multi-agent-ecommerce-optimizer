@@ -7,9 +7,6 @@ logger = logging.getLogger(__name__)
 
 def select_variant(user_product: dict, pricing_result: dict) -> dict | None:
     variants = user_product.get("variants", [])
-    if not variants:
-        return None
-
     valid = [v for v in variants if isinstance(v, dict)]
     if not valid:
         return None
@@ -68,14 +65,12 @@ async def upload_to_gcs(
 def log_image_tool_call(
     target_platform: str,
     selected_variant: str | None,
-    generated_image_success: bool,
-    fallback_used: bool,
+    *,
+    success: bool,
 ) -> None:
     logger.info(
-        "ImageGenerationTool completed | target_platform=%s selected_variant=%s "
-        "generated_image_success=%s fallback_used=%s",
+        "ImageGenerationTool completed | platform=%s variant=%s success=%s",
         target_platform,
         selected_variant,
-        generated_image_success,
-        fallback_used,
+        success,
     )
