@@ -53,7 +53,7 @@ async def run_trend_analyzer(
 
         try:
             response_text, grounding_hit = await call_gemini(
-                model=settings.gemini_flash_model,
+                model=settings.rival_trends_model,
                 prompt=current_prompt,
                 config=types.GenerateContentConfig(
                     tools=[_GROUNDING_TOOL],
@@ -124,7 +124,7 @@ async def run_trend_analyzer(
 
         try:
             response_text, _ = await call_gemini(
-                model=settings.gemini_flash_model,
+                model=settings.rival_trends_model,
                 prompt=current_prompt,
                 config=types.GenerateContentConfig(
                     tools=[_GROUNDING_TOOL],

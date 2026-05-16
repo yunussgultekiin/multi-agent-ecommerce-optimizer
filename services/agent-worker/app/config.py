@@ -16,10 +16,29 @@ class Settings(BaseSettings):
     google_cloud_location: str = Field(
         default="us-central1", alias="GOOGLE_CLOUD_LOCATION"
     )
-    gemini_flash_model: str = Field(
-        default="gemini-2.5-flash", alias="GEMINI_FLASH_MODEL"
+
+    rival_discovery_model: str = Field(
+        default="gemini-2.5-flash-lite", alias="RIVAL_DISCOVERY_MODEL"
     )
-    gemini_pro_model: str = Field(default="gemini-2.5-pro", alias="GEMINI_PRO_MODEL")
+    rival_research_model: str = Field(
+        default="gemini-2.5-flash-lite", alias="RIVAL_RESEARCH_MODEL"
+    )
+    rival_sentiment_model: str = Field(
+        default="gemini-2.5-flash", alias="RIVAL_SENTIMENT_MODEL"
+    )
+    rival_trends_model: str = Field(
+        default="gemini-2.5-flash", alias="RIVAL_TRENDS_MODEL"
+    )
+    rival_market_gap_model: str = Field(
+        default="gemini-2.5-flash", alias="RIVAL_MARKET_GAP_MODEL"
+    )
+    rival_pricing_model: str = Field(
+        default="gemini-2.5-flash", alias="RIVAL_PRICING_MODEL"
+    )
+
+    seo_optimizer_model: str = Field(
+        default="gemini-2.5-flash", alias="SEO_OPTIMIZER_MODEL"
+    )
     chroma_collection_name: str = Field(
         default="seo_rules", alias="CHROMA_COLLECTION_NAME"
     )

@@ -107,7 +107,7 @@ async def run_competitor_discovery_tool(
 
         try:
             response_text, grounding_hit = await call_gemini(
-                model=settings.gemini_flash_model,
+                model=settings.rival_discovery_model,
                 prompt=prompt,
                 config=_build_discovery_gemini_config(),
             )

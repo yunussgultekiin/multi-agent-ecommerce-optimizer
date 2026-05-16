@@ -56,7 +56,7 @@ async def run_fallback_analysis(
 
         try:
             response_text, _ = await call_gemini(
-                model=settings.gemini_flash_model,
+                model=settings.rival_pricing_model,
                 prompt=current_prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",

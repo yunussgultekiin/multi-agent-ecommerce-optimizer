@@ -51,7 +51,7 @@ async def analyze_market_gap(
 
         try:
             response_text, _ = await call_gemini(
-                model=settings.gemini_flash_model,
+                model=settings.rival_market_gap_model,
                 prompt=current_prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",

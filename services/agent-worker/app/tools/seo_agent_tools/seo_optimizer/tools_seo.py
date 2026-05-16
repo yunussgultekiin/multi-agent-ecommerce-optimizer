@@ -1,6 +1,7 @@
 from .models_seo import SeoOptimizerInput, SeoOutput
 from .prompts_seo import PLATFORM_TITLE_LIMITS, build_seo_prompt
 from .utils_seo import log_seo_tool_call, query_chroma, resolve_tone
+from app.config import settings
 from app.core import ToolResult, WorkflowError
 from app.gemini_correction import GeminiCorrectionLoop
 import asyncio
@@ -10,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class SeoOptimizerTool:
     def __init__(self) -> None:
-        self._correction_loop = GeminiCorrectionLoop()
+        self._correction_loop = GeminiCorrectionLoop(model_name=settings.seo_optimizer_model)
 
     async def run(self, input_data: SeoOptimizerInput) -> ToolResult:
         user_product = input_data.user_product

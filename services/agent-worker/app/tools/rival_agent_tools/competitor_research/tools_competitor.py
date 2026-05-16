@@ -40,7 +40,7 @@ async def _research_one(
                 correction_context=correction_context,
             )
             response_text, grounding_hit = await call_gemini(
-                model=settings.gemini_flash_model,
+                model=settings.rival_research_model,
                 prompt=prompt,
                 config=types.GenerateContentConfig(
                     tools=[_SEARCH_TOOL],
@@ -162,7 +162,7 @@ async def run_competitor_research_tool(
         "Researching %d competitors | category=%s | model=%s",
         input_count,
         category,
-        settings.gemini_flash_model,
+        settings.rival_research_model,
     )
 
     raw_results = await asyncio.gather(

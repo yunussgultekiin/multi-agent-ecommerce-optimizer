@@ -72,7 +72,7 @@ async def run_sentiment_analyzer(
 
         try:
             response_text, grounding_hit = await call_gemini(
-                model=settings.gemini_flash_model,
+                model=settings.rival_sentiment_model,
                 prompt=current_prompt,
                 config=types.GenerateContentConfig(
                     tools=[_GROUNDING_TOOL],
