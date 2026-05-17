@@ -6,7 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'MarketPilot',
+  title: 'Synapse',
   description: 'E-ticaret ürünlerinizi rakipler, fiyat, SEO ve görsel kalite açısından analiz edin.',
 };
 

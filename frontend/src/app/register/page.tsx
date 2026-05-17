@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { Loader2, ShoppingBag, CheckCircle2, ArrowLeft, Zap } from 'lucide-react';
+import { Loader2, CheckCircle2, ArrowLeft, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -74,10 +74,7 @@ export default function RegisterPage() {
       >
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center shadow-lg shadow-indigo-500/25">
-              <ShoppingBag className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-bold text-lg tracking-tight">MarketPilot</span>
+            <img src="/synapse-logo.png" alt="Synapse" className="h-9 w-auto" />
           </Link>
           <Link href="/">
             <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-foreground">
@@ -143,10 +140,7 @@ export default function RegisterPage() {
           className="w-full max-w-sm"
         >
           <div className="flex items-center gap-2 mb-8 lg:hidden">
-            <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
-              <ShoppingBag className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-bold tracking-tight">MarketPilot</span>
+            <img src="/synapse-logo.png" alt="Synapse" className="h-8 w-auto" />
           </div>
 
           <div className="mb-8">

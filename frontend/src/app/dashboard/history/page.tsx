@@ -18,6 +18,7 @@ import {
   Loader2,
   Clock,
   Ban,
+  Download,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -366,9 +367,19 @@ export default function HistoryPage() {
                       </div>
                     </div>
 
-                    <div className="shrink-0 flex items-center gap-1.5 text-primary text-xs font-medium opacity-0 group-hover:opacity-100 transition-all duration-200 -translate-x-2 group-hover:translate-x-0">
-                      <span className="hidden sm:inline">Detaylar</span>
-                      <ArrowRight className="w-4 h-4" />
+                    <div className="shrink-0 flex items-center gap-3">
+                      {/* TODO: connect to generated_image_url */}
+                      <span
+                        className="hidden sm:flex items-center gap-1 text-[11px] text-muted-foreground/40 cursor-default select-none"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        İndir
+                      </span>
+                      <span className="flex items-center gap-1.5 text-primary text-xs font-medium opacity-0 group-hover:opacity-100 transition-all duration-200 -translate-x-2 group-hover:translate-x-0">
+                        <span className="hidden sm:inline">Detaylar</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
                     </div>
                   </div>
                 </Link>

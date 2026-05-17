@@ -30,16 +30,16 @@ const slideVariants = {
 };
 
 const SEO_TONE_DEFAULTS: Record<Platform, SeoTone> = {
-  trendyol: 'casual',
+  trendyol: 'professional',
   amazon: 'professional',
   hepsiburada: 'professional',
 };
 
-const SEO_TONE_LABELS: Record<SeoTone, string> = {
-  casual: 'Samimi & Genç',
-  professional: 'Profesyonel',
-  premium: 'Premium & Minimal',
-};
+const SEO_TONE_OPTIONS: { value: SeoTone; label: string; description: string }[] = [
+  { value: 'casual',       label: 'Samimi & Genç',  description: 'Sıcak, samimi ve genç bir dil' },
+  { value: 'professional', label: 'Profesyonel',    description: 'Güvenilir ve bilgilendirici' },
+  { value: 'premium',      label: 'Premium',        description: 'Minimal, seçkin ve prestijli' },
+];
 
 export default function AnalyzePage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +61,7 @@ export default function AnalyzePage() {
     resolver: zodResolver(analyzeSchema),
     defaultValues: {
       platform: 'trendyol',
-      seo_tone: 'casual',
+      seo_tone: 'professional',
       variants: [],
     },
   });
@@ -433,24 +433,37 @@ export default function AnalyzePage() {
                   <CardDescription>Daha iyi analiz için opsiyonel detayları ekleyin</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-5">
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <Label>SEO Tonu</Label>
-                    <Select
-                      value={seoToneValue}
-                      onValueChange={(v: SeoTone) => setValue('seo_tone', v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Ton seçin" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {(Object.entries(SEO_TONE_LABELS) as [SeoTone, string][]).map(([value, label]) => (
-                          <SelectItem key={value} value={value}>{label}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <p className="text-xs text-muted-foreground">
-                      Platform değiştiğinde otomatik güncellenir
-                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {SEO_TONE_OPTIONS.map((opt) => {
+                        const isSelected = seoToneValue === opt.value;
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => setValue('seo_tone', opt.value)}
+                            className={`flex flex-col gap-1.5 p-4 rounded-xl border text-left transition-all duration-150 ${
+                              isSelected
+                                ? 'border-primary/40 bg-primary/[0.07] shadow-sm shadow-primary/10'
+                                : 'border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.12]'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <span className={`text-sm font-semibold leading-tight ${isSelected ? 'text-primary' : ''}`}>
+                                {opt.label}
+                              </span>
+                              <div className={`shrink-0 w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${
+                                isSelected ? 'border-primary' : 'border-white/20'
+                              }`}>
+                                {isSelected && <div className="w-2 h-2 rounded-full bg-primary" />}
+                              </div>
+                            </div>
+                            <p className="text-xs text-muted-foreground leading-snug">{opt.description}</p>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   <div className="space-y-2">

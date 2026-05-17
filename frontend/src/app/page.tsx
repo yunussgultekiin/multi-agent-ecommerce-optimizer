@@ -9,14 +9,12 @@ import {
   LineChart,
   Search,
   Sparkles,
-  ShoppingBag,
   ArrowRight,
   CheckCircle2,
   Zap,
   Shield,
   Star,
   TrendingUp,
-  Image as ImageIcon,
   Check,
   Package,
 } from 'lucide-react';
@@ -72,9 +70,9 @@ const features = [
 ];
 
 const mockRivals = [
-  { name: 'TechBrand Pro X200', price: '₺1.249', rating: 4.7, brand: 'TechBrand' },
-  { name: 'SmartStore Plus ANC', price: '₺989', rating: 4.3, brand: 'SmartStore' },
-  { name: 'ElitePro Series V2', price: '₺1.549', rating: 4.8, brand: 'ElitePro' },
+  { name: 'Mug Art "Stay Calm" Seramik Kupa', price: '₺139,90', rating: 4.6, brand: 'Mug Art' },
+  { name: 'Siyah Slogan Baskılı Seramik Kupa', price: '₺119,90', rating: 4.3, brand: 'HomeStyle' },
+  { name: 'Renkli Keep Calm Kupa 330ml', price: '₺164,90', rating: 4.7, brand: 'CeramicPlus' },
 ];
 
 const plans = [
@@ -93,8 +91,8 @@ const plans = [
     name: 'Orta',
     badge: 'Yakında',
     badgeClass: 'text-blue-400 border-blue-400/30 bg-blue-400/10',
-    price: '₺150–₺250',
-    sub: '/ ay · tahmini',
+    price: 'Yakında',
+    sub: '',
     features: ['20 analiz / gün', 'Gelişmiş raporlar', 'Öncelikli destek', 'Tüm platformlar', 'Dışa aktarma'],
     cta: 'Listeye Katıl',
     href: '/register',
@@ -104,8 +102,8 @@ const plans = [
     name: 'Yüksek',
     badge: 'Yakında',
     badgeClass: 'text-violet-400 border-violet-400/30 bg-violet-400/10',
-    price: '₺400–₺600',
-    sub: '/ ay · tahmini',
+    price: 'Yakında',
+    sub: '',
     features: ['Sınırsız analiz', 'API erişimi', 'Özel entegrasyon', 'Takım hesabı', 'SLA desteği'],
     cta: 'Listeye Katıl',
     href: '/register',
@@ -124,7 +122,6 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
 
-      {/* ── Background mesh ───────────────────────────── */}
       <div className="pointer-events-none fixed inset-0 z-0">
         <div className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-indigo-600/10 blur-[160px]" />
         <div className="absolute top-1/2 right-0 w-[500px] h-[500px] rounded-full bg-violet-600/8 blur-[140px]" />
@@ -132,14 +129,10 @@ export default function Home() {
         <div className="absolute inset-0 bg-grid pointer-events-none" />
       </div>
 
-      {/* ── Nav ───────────────────────────────────────── */}
       <nav className="relative z-50 border-b border-white/[0.06] bg-background/70 backdrop-blur-2xl sticky top-0">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center shadow-lg shadow-indigo-500/25">
-              <ShoppingBag className="w-5 h-5 text-white" />
-            </div>
-            <span className="font-bold text-lg tracking-tight">MarketPilot</span>
+          <div className="flex items-center">
+            <img src="/synapse-logo.png" alt="Synapse" className="h-9 w-auto" />
           </div>
 
           <div className="flex items-center gap-3">
@@ -168,14 +161,12 @@ export default function Home() {
 
       <main className="relative z-10 flex-1 flex flex-col">
 
-        {/* ── Hero ──────────────────────────────────────── */}
         <motion.section
           variants={stagger}
           initial="hidden"
           animate="visible"
           className="container mx-auto px-6 pt-24 md:pt-36 pb-20 text-center max-w-5xl"
         >
-          {/* Beta badge */}
           <motion.div variants={fadeUp} custom={0} className="flex justify-center mb-8">
             <Badge
               variant="outline"
@@ -188,7 +179,6 @@ export default function Home() {
             </Badge>
           </motion.div>
 
-          {/* Heading */}
           <motion.h1
             variants={fadeUp}
             custom={0.05}
@@ -221,7 +211,6 @@ export default function Home() {
             daha rekabetçi hale getirin
           </motion.h1>
 
-          {/* Subtitle */}
           <motion.p
             variants={fadeUp}
             custom={0.1}
@@ -230,7 +219,6 @@ export default function Home() {
             Ürünlerinizi rakipler, fiyat, SEO ve görsel kalite açısından analiz edin. Daha güçlü listelemelerle satış potansiyelinizi artırın.
           </motion.p>
 
-          {/* Checkmarks */}
           <motion.div
             variants={fadeUp}
             custom={0.15}
@@ -244,7 +232,6 @@ export default function Home() {
             ))}
           </motion.div>
 
-          {/* CTAs */}
           <motion.div
             variants={fadeUp}
             custom={0.2}
@@ -274,7 +261,6 @@ export default function Home() {
             </a>
           </motion.div>
 
-          {/* Platform badges */}
           <motion.div
             variants={fadeUp}
             custom={0.25}
@@ -293,7 +279,6 @@ export default function Home() {
           </motion.div>
         </motion.section>
 
-        {/* ── Stats bar ─────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -315,7 +300,6 @@ export default function Home() {
           </div>
         </motion.div>
 
-        {/* ── Features ──────────────────────────────────── */}
         <section className="container mx-auto px-6 max-w-6xl mb-28">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -357,7 +341,6 @@ export default function Home() {
           </motion.div>
         </section>
 
-        {/* ── Sample Analysis Preview ────────────────────── */}
         <motion.section
           id="preview"
           initial={{ opacity: 0 }}
@@ -366,7 +349,6 @@ export default function Home() {
           transition={{ duration: 0.4 }}
           className="container mx-auto px-6 max-w-6xl mb-28 scroll-mt-20"
         >
-          {/* Section header */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -385,10 +367,8 @@ export default function Home() {
             </p>
           </motion.div>
 
-          {/* Preview grid */}
           <div className="grid lg:grid-cols-[5fr_7fr] gap-5 items-stretch">
 
-            {/* Left: product visual */}
             <motion.div
               initial={{ opacity: 0, x: -28 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -396,7 +376,6 @@ export default function Home() {
               transition={{ duration: 0.5 }}
               className="glass-card rounded-2xl overflow-hidden border border-white/[0.07] flex flex-col"
             >
-              {/* window bar */}
               <div className="px-4 py-3 border-b border-white/[0.06] flex items-center gap-2 shrink-0">
                 <div className="flex gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
@@ -408,30 +387,27 @@ export default function Home() {
                 </span>
               </div>
 
-              {/* image area */}
               <div className="flex-1 relative bg-gradient-to-br from-indigo-500/[0.08] via-violet-500/[0.06] to-purple-500/[0.08] flex flex-col items-center justify-center min-h-[300px]">
                 <div className="absolute inset-0 bg-grid-sm pointer-events-none" />
-                {/* mock product card */}
                 <div className="relative z-10 flex flex-col items-center gap-5 p-8">
-                  <div className="w-36 h-36 rounded-2xl bg-gradient-to-br from-indigo-500/25 to-violet-600/25 border border-white/[0.12] flex items-center justify-center shadow-2xl shadow-indigo-500/10 backdrop-blur">
-                    <ImageIcon className="w-14 h-14 text-indigo-300/50" />
+                  <div className="w-36 h-36 rounded-2xl overflow-hidden border border-white/[0.12] shadow-2xl shadow-indigo-500/10">
+                    <img src="/demo-kupa.jpg" alt="Keep Calm Kupa" className="w-full h-full object-cover" />
                   </div>
                   <div className="text-center">
-                    <p className="text-sm font-semibold">Bluetooth 5.3 Kablosuz Kulaklık Pro</p>
-                    <p className="text-xs text-muted-foreground mt-1">Optimize edilmiş ürün görseli oluşturuldu</p>
+                    <p className="text-sm font-semibold">Kırmızı Keep Calm Baskılı Seramik Kupa</p>
+                    <p className="text-xs text-muted-foreground mt-1">Keep Calm baskılı 330ml seramik kupa</p>
                   </div>
                 </div>
-                {/* product info bar */}
                 <div className="absolute bottom-4 left-4 right-4">
                   <div className="glass-card rounded-xl p-3 backdrop-blur-xl border border-white/[0.09]">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-xs font-medium">Wireless Kulaklık Pro</p>
-                        <p className="text-[10px] text-muted-foreground mt-0.5">Trendyol · Elektronik</p>
+                        <p className="text-xs font-medium">Keep Calm Kupa 330ml</p>
+                        <p className="text-[10px] text-muted-foreground mt-0.5">Trendyol · Kupa / Bardak</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-bold text-primary">₺1.149</p>
-                        <p className="text-[10px] text-emerald-500">Optimal fiyat</p>
+                        <p className="text-sm font-bold text-primary">₺154,90</p>
+                        <p className="text-[10px] text-emerald-500">Önerilen fiyat</p>
                       </div>
                     </div>
                   </div>
@@ -439,7 +415,6 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Right: agent outputs */}
             <motion.div
               initial={{ opacity: 0, x: 28 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -447,7 +422,6 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.08 }}
               className="flex flex-col gap-4"
             >
-              {/* Rival Agent */}
               <motion.div
                 initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -455,13 +429,12 @@ export default function Home() {
                 transition={{ duration: 0.4, delay: 0.14 }}
                 className="glass-card rounded-2xl border border-white/[0.07] overflow-hidden flex-1"
               >
-                {/* header */}
                 <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <div className="w-7 h-7 rounded-lg bg-blue-500/15 border border-blue-500/20 flex items-center justify-center">
                       <TrendingUp className="w-3.5 h-3.5 text-blue-400" />
                     </div>
-                    <span className="text-sm font-semibold">Rival Agent Çıktısı</span>
+                    <span className="text-sm font-semibold">Rakip Analizi Çıktısı</span>
                   </div>
                   <Badge variant="outline" className="text-[10px] text-emerald-400 border-emerald-500/25 bg-emerald-500/8 py-0.5">
                     3 rakip bulundu
@@ -469,7 +442,6 @@ export default function Home() {
                 </div>
 
                 <div className="p-5 space-y-4">
-                  {/* Rival list */}
                   <div className="space-y-0 divide-y divide-white/[0.05]">
                     {mockRivals.map((r, i) => (
                       <div key={i} className="flex items-center justify-between py-2.5">
@@ -493,12 +465,11 @@ export default function Home() {
                     ))}
                   </div>
 
-                  {/* Price band */}
                   <div className="grid grid-cols-3 gap-2 pt-1">
                     {[
-                      { label: 'Min', val: '₺989', cls: '' },
-                      { label: 'Optimal', val: '₺1.149', cls: 'text-primary bg-primary/8 border-primary/20' },
-                      { label: 'Max', val: '₺1.549', cls: '' },
+                      { label: 'Min', val: '₺119,90', cls: '' },
+                      { label: 'Optimal', val: '₺154,90', cls: 'text-primary bg-primary/8 border-primary/20' },
+                      { label: 'Max', val: '₺164,90', cls: '' },
                     ].map((p) => (
                       <div
                         key={p.label}
@@ -510,18 +481,16 @@ export default function Home() {
                     ))}
                   </div>
 
-                  {/* Opportunity pill */}
                   <div className="flex items-start gap-2 p-3 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/15">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
                     <p className="text-xs text-muted-foreground leading-relaxed">
                       <span className="text-foreground font-medium">Fırsat: </span>
-                      Rakipler ₺999–₺1.549 aralığında. ₺1.149 ile rekabetçi konumdaki pazar boşluğunu değerlendirin.
+                      Rakipler ₺119–₺164 aralığında. Hediye paketi sunan rakip yok — kişiselleştirme fırsatı mevcut.
                     </p>
                   </div>
                 </div>
               </motion.div>
 
-              {/* SEO Agent */}
               <motion.div
                 initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -529,13 +498,12 @@ export default function Home() {
                 transition={{ duration: 0.4, delay: 0.22 }}
                 className="glass-card rounded-2xl border border-white/[0.07] overflow-hidden flex-1"
               >
-                {/* header */}
                 <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <div className="w-7 h-7 rounded-lg bg-violet-500/15 border border-violet-500/20 flex items-center justify-center">
                       <Search className="w-3.5 h-3.5 text-violet-400" />
                     </div>
-                    <span className="text-sm font-semibold">SEO Agent Çıktısı</span>
+                    <span className="text-sm font-semibold">SEO Optimizasyon Çıktısı</span>
                   </div>
                   <Badge variant="outline" className="text-[10px] text-violet-400 border-violet-500/25 bg-violet-500/8 py-0.5">
                     Profesyonel Ton
@@ -543,31 +511,28 @@ export default function Home() {
                 </div>
 
                 <div className="p-5 space-y-4">
-                  {/* SEO title */}
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium mb-1.5">SEO Başlığı</p>
                     <div className="p-3 bg-white/[0.03] rounded-xl border border-white/[0.08]">
                       <p className="text-sm font-medium leading-snug">
-                        Bluetooth 5.3 Kablosuz Kulaklık – 40 Saat Pil | Aktif Gürültü Engelleme
+                        Keep Calm Seramik Kupa 330ml | Kırmızı Slogan Baskılı | Hediye Ambalaj Seçeneği
                       </p>
                     </div>
                   </div>
 
-                  {/* Meta */}
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium mb-1.5">Meta Açıklama</p>
                     <div className="p-3 bg-white/[0.03] rounded-xl border border-white/[0.08]">
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        Üstün ses kalitesi ve 40 saat pil ömrüyle Bluetooth kulaklık deneyimini yeniden keşfedin. Trendyol&apos;da hızlı teslimat garantisiyle.
+                        Keep Calm baskılı kırmızı seramik kupa. 330ml kapasiteli, bulaşık makinesinde yıkanabilir. Hediye ambalaj seçeneğiyle Trendyol&apos;da hızlı teslimat.
                       </p>
                     </div>
                   </div>
 
-                  {/* Keywords */}
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium mb-1.5">Anahtar Kelimeler</p>
                     <div className="flex flex-wrap gap-1.5">
-                      {['bluetooth kulaklık', 'kablosuz kulaklık', 'anc kulaklık', 'ses kalitesi', 'gürültü engelleme'].map((kw) => (
+                      {['seramik kupa hediye', 'slogan baskılı kupa', 'kırmızı ofis kupası', 'kupa 330ml', 'özel baskılı kupa'].map((kw) => (
                         <Badge key={kw} variant="outline" className="text-[10px] bg-white/[0.03] border-white/[0.09]">
                           {kw}
                         </Badge>
@@ -580,7 +545,6 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* ── Plans ─────────────────────────────────────── */}
         <section className="container mx-auto px-6 max-w-6xl mb-28">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -658,7 +622,6 @@ export default function Home() {
           </motion.div>
         </section>
 
-        {/* ── CTA strip ─────────────────────────────────── */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -689,26 +652,19 @@ export default function Home() {
         </motion.section>
       </main>
 
-      {/* ── Footer ────────────────────────────────────── */}
       <footer className="relative z-10 border-t border-white/[0.06] bg-background/60 backdrop-blur-xl">
         <div className="container mx-auto px-6 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            {/* Brand */}
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg gradient-bg flex items-center justify-center">
-                <ShoppingBag className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-bold tracking-tight">MarketPilot</span>
+              <img src="/synapse-logo.png" alt="Synapse" className="h-6 w-auto" />
               <span className="text-muted-foreground text-sm">© 2026</span>
             </div>
 
-            {/* Links */}
             <div className="flex items-center gap-6 text-sm text-muted-foreground">
               <Link href="/login" className="hover:text-foreground transition-colors">Giriş Yap</Link>
               <Link href="/register" className="hover:text-foreground transition-colors">Kayıt Ol</Link>
             </div>
 
-            {/* Beta badge */}
             <Badge variant="outline" className="text-[10px] text-muted-foreground border-white/10 bg-white/[0.03] flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
               Beta Sürüm

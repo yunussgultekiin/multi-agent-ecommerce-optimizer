@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, PlusCircle, History, LogOut, ShoppingBag, Menu, X, Zap } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, History, LogOut, Menu, X, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
@@ -33,11 +33,8 @@ function SidebarContent({
   return (
     <>
       <div className="flex h-16 shrink-0 items-center px-6 border-b border-white/5">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
-            <ShoppingBag className="w-5 h-5 text-white" />
-          </div>
-          <span className="font-bold tracking-tight">MarketPilot</span>
+        <Link href="/dashboard" className="flex items-center">
+          <img src="/synapse-logo.png" alt="Synapse" className="h-7 w-auto" />
         </Link>
       </div>
 
@@ -129,8 +126,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (!isAuthenticated && isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <div className="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center animate-pulse">
-          <ShoppingBag className="w-6 h-6 text-white" />
+        <div className="animate-pulse">
+          <img src="/synapse-logo.png" alt="Synapse" className="h-10 w-auto opacity-60" />
         </div>
       </div>
     );
@@ -180,11 +177,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)}>
               <Menu className="w-5 h-5" />
             </Button>
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg gradient-bg flex items-center justify-center">
-                <ShoppingBag className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-semibold text-sm">MarketPilot</span>
+            <div className="flex items-center">
+              <img src="/synapse-logo.png" alt="Synapse" className="h-6 w-auto" />
             </div>
           </div>
           {quota && (

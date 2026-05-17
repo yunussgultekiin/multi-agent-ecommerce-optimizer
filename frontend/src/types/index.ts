@@ -67,7 +67,7 @@ export interface Competitor {
   rating: number;
   review_count: number;
   brand: string;
-  source_url: string;
+  source_url?: string;
 }
 
 export interface MarketGapCluster {
@@ -80,7 +80,14 @@ export interface MarketGapCluster {
 export interface MarketGapResult {
   clusters: MarketGapCluster[];
   gap_opportunities: string[];
+  strategic_actions: string[];
   positioning_rationale: string;
+}
+
+export interface VariantPricing {
+  variant_name: string;
+  suggested_price: number;
+  positioning: string;
 }
 
 export interface PricingResult {
@@ -89,7 +96,15 @@ export interface PricingResult {
   suggested_max: number;
   optimal_price: number;
   confidence_score: number;
+  fallback_used: boolean;
+  variant_pricing: VariantPricing[];
   competitor_prices: { name: string; price: number }[];
+}
+
+export interface VariantSeo {
+  variant_name: string;
+  title_suggestion: string;
+  keyword_additions: string[];
 }
 
 export interface SeoResult {
@@ -98,7 +113,21 @@ export interface SeoResult {
   keyword_gaps: string[];
   content_recommendations: string[];
   platform_tips: string[];
+  variant_seo: VariantSeo[];
   product_development_ideas?: string[];
+}
+
+export interface SentimentResult {
+  pain_points: string[];
+  praised_features: string[];
+  marketing_angles: string[];
+  risk_warnings: string[];
+}
+
+export interface TrendResult {
+  category_trend_summary: string;
+  demand_signals: string[];
+  platform_trends: string[];
 }
 
 export interface VisionResult {
@@ -110,6 +139,10 @@ export interface VisionResult {
 export interface AnalysisResult {
   task_id: string;
   product_title: string;
+  product_brand?: string;
+  product_category?: string;
+  product_description?: string;
+  product_price?: number;
   platform: Platform;
   analyzed_at: string;
   status: AnalysisStatus;
@@ -118,6 +151,8 @@ export interface AnalysisResult {
   market_gap: MarketGapResult;
   pricing: PricingResult;
   seo: SeoResult;
+  sentiment: SentimentResult;
+  trend: TrendResult;
   vision: VisionResult;
   generated_image_url: string | null;
 }
