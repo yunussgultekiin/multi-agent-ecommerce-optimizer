@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { formatDate } from '@/lib/utils';
 import {
   Plus,
   ArrowRight,
@@ -26,7 +25,6 @@ import api from '@/lib/api';
 import { useAuthStore } from '@/store/auth';
 import type { AnalysisTask } from '@/types';
 
-/* ── Variants ──────────────────────────────────────────────── */
 const page = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.07 } },
@@ -37,7 +35,6 @@ const row = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.38 } },
 };
 
-/* ── Status map ─────────────────────────────────────────────── */
 const statusMap = {
   pending:   { label: 'Bekliyor',       variant: 'pending'     },
   running:   { label: 'Analiz Ediliyor', variant: 'info'       },
@@ -53,7 +50,6 @@ function getTaskLink(task: AnalysisTask): string {
   return '#';
 }
 
-/* ── Stat card ──────────────────────────────────────────────── */
 function StatCard({
   label,
   value,
@@ -89,7 +85,6 @@ function StatCard({
   );
 }
 
-/* ── Page ───────────────────────────────────────────────────── */
 export default function DashboardPage() {
   const { user, quota } = useAuthStore();
   const { toast } = useToast();
@@ -120,7 +115,6 @@ export default function DashboardPage() {
   return (
     <motion.div variants={page} initial="hidden" animate="visible" className="space-y-7">
 
-      {/* ── Header ──────────────────────────────────────── */}
       <motion.div variants={row} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-1">Dashboard</p>
@@ -153,10 +147,8 @@ export default function DashboardPage() {
         </div>
       </motion.div>
 
-      {/* ── Quota + Stats ────────────────────────────────── */}
       <motion.div variants={row} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-        {/* Quota — spans 2 cols on lg */}
         <motion.div
           whileHover={{ y: -3, transition: { duration: 0.18 } }}
           className="lg:col-span-2 relative overflow-hidden rounded-2xl border border-primary/20 bg-primary/[0.04] p-5 cursor-default group"
@@ -219,10 +211,8 @@ export default function DashboardPage() {
         />
       </motion.div>
 
-      {/* ── Action cards ─────────────────────────────────── */}
       <motion.div variants={row} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-        {/* New analysis */}
         <Link href="/dashboard/analyze" className="block group">
           <motion.div
             whileHover={{ y: -3, scale: 1.005, transition: { duration: 0.18 } }}
@@ -249,7 +239,6 @@ export default function DashboardPage() {
           </motion.div>
         </Link>
 
-        {/* History shortcut */}
         <Link href="/dashboard/history" className="block group">
           <motion.div
             whileHover={{ y: -3, scale: 1.005, transition: { duration: 0.18 } }}
@@ -277,7 +266,6 @@ export default function DashboardPage() {
         </Link>
       </motion.div>
 
-      {/* ── Recent analyses ─────────────────────────────── */}
       <motion.div variants={row} className="space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -305,7 +293,6 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {/* Loading */}
         {isLoading && (
           <div className="space-y-2.5">
             {[1, 2, 3].map((i) => (
@@ -314,7 +301,6 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Empty */}
         {!isLoading && recentTasks.length === 0 && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -343,7 +329,6 @@ export default function DashboardPage() {
           </motion.div>
         )}
 
-        {/* List */}
         {!isLoading && recentTasks.length > 0 && (
           <div className="space-y-2">
             {recentTasks.map((task, index) => (
@@ -357,7 +342,6 @@ export default function DashboardPage() {
                 <Link href={getTaskLink(task)}>
                   <div className="group flex items-center gap-3.5 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 hover:bg-white/[0.06] hover:border-white/[0.11] hover:shadow-lg hover:shadow-black/20 transition-all duration-200 cursor-pointer">
 
-                    {/* Thumbnail */}
                     <div className="shrink-0 w-11 h-11 rounded-lg overflow-hidden border border-white/[0.09] bg-white/[0.04] flex items-center justify-center">
                       {task.generated_image_url ? (
                         <img
@@ -370,7 +354,6 @@ export default function DashboardPage() {
                       )}
                     </div>
 
-                    {/* Info */}
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm truncate group-hover:text-primary transition-colors">
                         {task.payload.title}
@@ -380,12 +363,11 @@ export default function DashboardPage() {
                           {task.payload.platform}
                         </span>
                         <span className="text-[10px] text-muted-foreground">
-                          {format(new Date(task.updated_at), 'd MMM, HH:mm', { locale: tr })}
+                          {formatDate(task.updated_at, 'd MMM, HH:mm')}
                         </span>
                       </div>
                     </div>
 
-                    {/* Status + arrow */}
                     <div className="flex items-center gap-2.5 shrink-0">
                       <Badge variant={statusMap[task.status].variant as any} className="text-[10px]">
                         {statusMap[task.status].label}

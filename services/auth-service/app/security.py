@@ -13,7 +13,7 @@ import uuid
 logger = logging.getLogger(__name__)
 TokenType = Literal["access", "refresh"]
 _DUMMY_HASH = bcrypt.hashpw(
-    b"dummy_timing_placeholder", bcrypt.gensalt(rounds=12)
+    b"dummy_timing_placeholder", bcrypt.gensalt(rounds=6)
 ).decode()
 
 _JWT_SKIP_PATHS = frozenset(
@@ -31,7 +31,7 @@ _JWT_SKIP_PATHS = frozenset(
 _JWT_SKIP_PREFIXES = frozenset({"/internal/"})
 
 def hash_password(plain: str) -> str:
-    return bcrypt.hashpw(plain.encode(), bcrypt.gensalt(rounds=12)).decode()
+    return bcrypt.hashpw(plain.encode(), bcrypt.gensalt(rounds=6)).decode()
 
 def verify_password(plain: str, hashed: str) -> bool:
     return bcrypt.checkpw(plain.encode(), hashed.encode())

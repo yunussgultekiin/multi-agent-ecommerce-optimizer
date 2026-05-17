@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { useAuthStore } from '@/store/auth';
-import { Skeleton } from '@/components/ui/skeleton';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -113,28 +113,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
+    const token = Cookies.get('access_token');
+    if (!token) {
+      router.push('/login');
+      return;
+    }
     fetchUser();
     fetchQuota();
-  }, [fetchUser, fetchQuota]);
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push('/login');
-    }
-  }, [isLoading, isAuthenticated, router]);
+  }, [fetchUser, fetchQuota, router]);
 
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
 
-  if (isLoading || !isAuthenticated) {
+  if (!isAuthenticated && isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center animate-pulse">
-            <ShoppingBag className="w-6 h-6 text-white" />
-          </div>
-          <Skeleton className="w-32 h-4 rounded" />
+        <div className="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center animate-pulse">
+          <ShoppingBag className="w-6 h-6 text-white" />
         </div>
       </div>
     );

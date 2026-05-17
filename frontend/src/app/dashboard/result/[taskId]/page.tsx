@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { formatDate } from '@/lib/utils';
 import {
   Check,
   Copy,
@@ -61,7 +61,8 @@ const PLATFORM_COLORS: Record<string, string> = {
   hepsiburada: 'text-red-400 border-red-400/30 bg-red-400/10',
 };
 
-export default function ResultPage({ params }: { params: { taskId: string } }) {
+export default function ResultPage() {
+  const { taskId } = useParams<{ taskId: string }>();
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [copiedStates, setCopiedStates] = useState<Record<string, boolean>>({});
@@ -69,12 +70,32 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
 
   useEffect(() => {
     const fetchResult = async () => {
-      try {
-        const [resultRes, taskRes] = await Promise.all([
-          api.get(`/analyze/${params.taskId}/result`),
-          api.get(`/analyze/${params.taskId}`),
-        ]);
+      let resultRes;
+      let taskRes;
 
+      for (let attempt = 0; attempt < 10; attempt++) {
+        try {
+          [resultRes, taskRes] = await Promise.all([
+            api.get(`/analyze/${taskId}/result`),
+            api.get(`/analyze/${taskId}`),
+          ]);
+          break;
+        } catch (_err: any) {
+          if (attempt < 9) {
+            await new Promise((r) => setTimeout(r, 1000));
+            continue;
+          }
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      if (!resultRes || !taskRes) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
         const { task_id, result: raw, created_at } = resultRes.data;
         const task = taskRes.data;
         const { rival_json, seo_output, generated_image_url } = raw || {};
@@ -157,7 +178,7 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
       }
     };
     fetchResult();
-  }, [params.taskId, toast]);
+  }, [taskId, toast]);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -234,7 +255,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
         animate="visible"
         className="space-y-8"
       >
-        {/* Back button */}
         <motion.div variants={itemVariants}>
           <Link href="/dashboard/history">
             <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground -ml-2">
@@ -244,7 +264,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
           </Link>
         </motion.div>
 
-        {/* Summary card */}
         <motion.div variants={itemVariants}>
           <div className="glass-card rounded-2xl overflow-hidden relative border border-white/[0.08]">
             <div className="absolute top-0 right-0 w-80 h-80 bg-primary/8 rounded-full blur-[120px] pointer-events-none" />
@@ -268,7 +287,7 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                       </Badge>
                     )}
                     <span className="text-xs text-muted-foreground">
-                      {format(new Date(result.analyzed_at), 'd MMM yyyy, HH:mm', { locale: tr })}
+                      {formatDate(result.analyzed_at, 'd MMM yyyy, HH:mm')}
                     </span>
                   </div>
                   <h1 className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight leading-snug">
@@ -283,7 +302,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                 </div>
               </div>
 
-              {/* Quick stats */}
               <div className="grid grid-cols-3 gap-3 mt-5 pt-5 border-t border-white/[0.05]">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center shrink-0">
@@ -317,10 +335,8 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
           </div>
         </motion.div>
 
-        {/* Two-column section */}
         <div className="grid lg:grid-cols-[5fr_7fr] gap-6 items-start">
 
-          {/* LEFT: Image */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
@@ -328,7 +344,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
             className="space-y-0"
           >
             <div className="glass-card rounded-2xl overflow-hidden border border-white/[0.08]">
-              {/* Card header */}
               <div className="px-4 pt-4 pb-3 flex items-center justify-between border-b border-white/[0.05]">
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-lg gradient-bg flex items-center justify-center">
@@ -360,14 +375,13 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                       <ImageIcon className="w-10 h-10 text-muted-foreground/25" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground/60">Görsel üretimi tamamlandı</p>
-                      <p className="text-xs text-muted-foreground/35 mt-1">Prompt alttaki Görsel sekmesinde</p>
+                      <p className="text-sm font-medium text-muted-foreground/60">Görsel oluşturulamadı</p>
+                      <p className="text-xs text-muted-foreground/35 mt-1">Ürün görseli sağlanmadı veya yükleme başarısız oldu</p>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Dominant colors */}
               {result.vision.dominant_colors.length > 0 && (
                 <div className="px-4 py-3 border-t border-white/[0.05]">
                   <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2.5">Renk Paleti</p>
@@ -389,7 +403,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
             </div>
           </motion.div>
 
-          {/* RIGHT: Agent boxes */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -397,7 +410,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
             className="space-y-4"
           >
 
-            {/* Rival Agent Box */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -424,7 +436,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                 </div>
 
                 <div className="p-4 space-y-4">
-                  {/* Competitors list */}
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2.5">Rakipler</p>
                     <div className="space-y-2.5">
@@ -465,7 +476,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                     </div>
                   </div>
 
-                  {/* Price band */}
                   <div className="grid grid-cols-3 gap-2">
                     <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-center">
                       <p className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">Min</p>
@@ -482,7 +492,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                     </div>
                   </div>
 
-                  {/* Market opportunity */}
                   {result.market_gap.gap_opportunities.length > 0 && (
                     <div className="p-3 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/20">
                       <div className="flex items-start gap-2.5">
@@ -498,7 +507,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
               </div>
             </motion.div>
 
-            {/* SEO Agent Box */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -527,7 +535,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                 </div>
 
                 <div className="p-4 space-y-4">
-                  {/* SEO Title */}
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">SEO Başlığı</p>
@@ -539,7 +546,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                     </div>
                   </div>
 
-                  {/* Meta */}
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Meta Açıklama</p>
@@ -550,7 +556,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                     </p>
                   </div>
 
-                  {/* Keywords */}
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">Anahtar Kelimeler</p>
                     <div className="flex flex-wrap gap-1.5">
@@ -566,7 +571,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
                     </div>
                   </div>
 
-                  {/* Platform tips */}
                   {result.seo.platform_tips.length > 0 && (
                     <div>
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2 flex items-center gap-1.5">
@@ -594,7 +598,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
           </motion.div>
         </div>
 
-        {/* Detailed report */}
         <motion.div variants={itemVariants} className="space-y-4">
           <div>
             <h2 className="text-xl font-bold tracking-tight">Detaylı Rapor</h2>
@@ -616,9 +619,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
               </TabsTrigger>
               <TabsTrigger value="seo" className="gap-2">
                 <Search className="w-4 h-4" /> SEO Detay
-              </TabsTrigger>
-              <TabsTrigger value="vision" className="gap-2">
-                <ImageIcon className="w-4 h-4" /> Görsel
               </TabsTrigger>
             </TabsList>
 
@@ -962,37 +962,6 @@ export default function ResultPage({ params }: { params: { taskId: string } }) {
               )}
             </TabsContent>
 
-            <TabsContent value="vision" className="space-y-6 mt-6">
-              <div className="grid lg:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between pb-3">
-                    <CardTitle className="text-base">Görsel Üretim Promptu</CardTitle>
-                    <CopyButton text={result.vision.generation_prompt} id="prompt" />
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm p-4 bg-black/40 rounded-xl border border-white/10 font-mono leading-relaxed">
-                      {result.vision.generation_prompt}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-base">Görsel İyileştirme Önerileri</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-3">
-                      {result.vision.improvement_suggestions.map((sug, i) => (
-                        <li key={i} className="flex items-start gap-3 text-sm">
-                          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                          <span className="text-muted-foreground">{sug}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
           </Tabs>
         </motion.div>
       </motion.div>

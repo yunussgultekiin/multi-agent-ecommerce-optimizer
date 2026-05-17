@@ -149,10 +149,10 @@ async def stream_status(request: Request, task_id: str):
 
         async def _watch_disconnect() -> None:
             while not disconnected.is_set():
+                await asyncio.sleep(5.0)
                 if await request.is_disconnected():
                     disconnected.set()
                     return
-                await asyncio.sleep(1.0)
 
         watcher = asyncio.create_task(_watch_disconnect())
         try:

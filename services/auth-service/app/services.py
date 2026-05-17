@@ -2,6 +2,7 @@ from app.models import User
 from app.repositories import UserRepository
 from app.schemas import TokenResponse, UserResponse
 from app.security import TokenService, dummy_verify, hash_password, verify_password
+import asyncio
 import logging
 from sqlalchemy.ext.asyncio import AsyncSession
 import uuid
@@ -29,7 +30,9 @@ class AuthService:
         if await self._repo.get_by_email(email) is not None:
             raise EmailAlreadyRegisteredError(email)
 
-        user = await self._repo.create(email, hash_password(password))
+        loop = asyncio.get_running_loop()
+        hashed = await loop.run_in_executor(None, hash_password, password)
+        user = await self._repo.create(email, hashed)
         await self._session.commit()
 
         logger.info("user_registered", extra={"user_id": str(user.id)})
@@ -38,11 +41,13 @@ class AuthService:
     async def login(self, email: str, password: str) -> TokenResponse:
         user = await self._repo.get_by_email(email)
 
+        loop = asyncio.get_running_loop()
         if user is None:
-            dummy_verify()
+            await loop.run_in_executor(None, dummy_verify)
             raise InvalidCredentialsError("Invalid credentials")
 
-        if not verify_password(password, user.hashed_password):
+        ok = await loop.run_in_executor(None, verify_password, password, user.hashed_password)
+        if not ok:
             raise InvalidCredentialsError("Invalid credentials")
 
         if not user.is_active:

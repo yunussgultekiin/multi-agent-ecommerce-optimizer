@@ -83,6 +83,9 @@ services:
     env_file: .env
     environment:
       TASK_SERVICE_URL: http://task-service:8080
+      GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp_credentials.json
+    volumes:
+      - ${HOME}/.config/gcloud/application_default_credentials.json:/tmp/gcp_credentials.json:ro
     depends_on:
       postgres:
         condition: service_healthy
@@ -101,6 +104,9 @@ services:
       AUTH_SERVICE_URL: http://auth-service:8080
       TASK_SERVICE_URL: http://task-service:8080
       QUOTA_SERVICE_URL: http://quota-service:8080
+      GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp_credentials.json
+    volumes:
+      - ${HOME}/.config/gcloud/application_default_credentials.json:/tmp/gcp_credentials.json:ro
     depends_on:
       - auth-service
       - task-service

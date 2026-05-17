@@ -17,23 +17,21 @@ interface AuthState {
   fetchQuota: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   quota: null,
   isLoading: true,
   isAuthenticated: false,
 
-  login: async (email, password) => {
+  login: async (email: string, password: string) => {
     const res = await api.post('/auth/login', { email, password });
     const { access_token, refresh_token } = res.data;
     Cookies.set('access_token', access_token, { expires: 1 });
     Cookies.set('refresh_token', refresh_token, { expires: 7 });
-    set({ isAuthenticated: true });
-    await get().fetchUser();
-    await get().fetchQuota();
+    set({ isAuthenticated: true, isLoading: false, user: { id: '', email } });
   },
 
-  register: async (email, password) => {
+  register: async (email: string, password: string) => {
     await api.post('/auth/register', { email, password });
   },
 
@@ -56,6 +54,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const res = await api.get('/auth/me');
       set({ user: res.data, isLoading: false, isAuthenticated: true });
     } catch {
+      Cookies.remove('access_token');
+      Cookies.remove('refresh_token');
       set({ user: null, isLoading: false, isAuthenticated: false });
     }
   },

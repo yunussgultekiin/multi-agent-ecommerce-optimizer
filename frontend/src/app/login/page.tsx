@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
@@ -23,6 +24,7 @@ const panelFeatures = [
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const { login } = useAuthStore();
   const { toast } = useToast();
 
@@ -38,7 +40,7 @@ export default function LoginPage() {
     try {
       setIsLoading(true);
       await login(data.email, data.password);
-      window.location.href = '/dashboard';
+      router.push('/dashboard');
     } catch (error: any) {
       toast({
         variant: 'destructive',
@@ -53,21 +55,18 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex relative overflow-hidden bg-background">
 
-      {/* Background */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-indigo-600/10 blur-[140px]" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-violet-600/8 blur-[120px]" />
         <div className="absolute inset-0 bg-grid pointer-events-none" />
       </div>
 
-      {/* Left panel – branding (hidden on mobile) */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
         className="hidden lg:flex lg:w-[48%] relative flex-col justify-between p-10 border-r border-white/[0.06]"
       >
-        {/* Top: logo + back */}
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center shadow-lg shadow-indigo-500/25">
@@ -83,7 +82,6 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        {/* Middle: headline + features */}
         <div className="space-y-8">
           <div>
             <Badge
@@ -113,7 +111,6 @@ export default function LoginPage() {
           </ul>
         </div>
 
-        {/* Bottom: quote / social proof */}
         <div className="glass-card rounded-2xl p-5 border border-white/[0.08]">
           <p className="text-sm text-muted-foreground leading-relaxed italic">
             &ldquo;Rakip analizini manuel yapmak saatler alıyordu. MarketPilot ile bunu dakikalar içinde yapıyorum.&rdquo;
@@ -128,7 +125,6 @@ export default function LoginPage() {
         </div>
       </motion.div>
 
-      {/* Right panel – form */}
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -136,7 +132,6 @@ export default function LoginPage() {
           transition={{ duration: 0.45 }}
           className="w-full max-w-sm"
         >
-          {/* Mobile logo */}
           <div className="flex items-center gap-2 mb-8 lg:hidden">
             <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
               <ShoppingBag className="w-4 h-4 text-white" />
@@ -202,7 +197,6 @@ export default function LoginPage() {
             </Link>
           </p>
 
-          {/* Back link – mobile */}
           <div className="mt-6 text-center lg:hidden">
             <Link href="/" className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-1">
               <ArrowLeft className="w-3 h-3" />

@@ -26,19 +26,7 @@ export const analyzeSchema = z.object({
     .transform((v) => Number(v))
     .pipe(z.number().positive('Fiyat pozitif olmalıdır')),
   category: z.string().min(1, 'Kategori zorunludur'),
-  stock: z
-    .string()
-    .min(1, 'Stok gereklidir')
-    .transform((v) => Number(v))
-    .pipe(z.number().int().nonnegative('Stok negatif olamaz')),
-  weight: z
-    .string()
-    .optional()
-    .transform((v) => (v === '' || v === undefined ? undefined : Number(v)))
-    .pipe(z.number().positive().optional()),
-  dimensions: z.string().optional(),
   seo_keywords: z.string().optional(),
-  image_urls: z.string().optional(),
   platform: z.enum(['trendyol', 'amazon', 'hepsiburada']),
   seo_tone: z.enum(['casual', 'professional', 'premium']),
   variants: z

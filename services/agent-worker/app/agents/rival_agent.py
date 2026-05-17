@@ -83,7 +83,7 @@ class RivalAgent:
 
         return {**state, "competitor_research_results": competitor_research_results}
 
-    async def analyze_sentiment(self, state: RivalAgentState) -> RivalAgentState:
+    async def analyze_sentiment(self, state: RivalAgentState) -> dict:
         task_id = state["task_id"]
 
         try:
@@ -103,11 +103,11 @@ class RivalAgent:
                 task_id,
                 result.data.get("error"),
             )
-            return {**state, "sentiment_result": {}}
+            return {"sentiment_result": {}}
 
-        return {**state, "sentiment_result": result.data}
+        return {"sentiment_result": result.data}
 
-    async def analyze_trends(self, state: RivalAgentState) -> RivalAgentState:
+    async def analyze_trends(self, state: RivalAgentState) -> dict:
         task_id = state["task_id"]
 
         try:
@@ -125,11 +125,11 @@ class RivalAgent:
                 task_id,
                 result.data.get("error"),
             )
-            return {**state, "trend_result": {}}
+            return {"trend_result": {}}
 
-        return {**state, "trend_result": result.data}
+        return {"trend_result": result.data}
 
-    async def market_gap(self, state: RivalAgentState) -> RivalAgentState:
+    async def market_gap(self, state: RivalAgentState) -> dict:
         task_id = state["task_id"]
 
         try:
@@ -147,7 +147,7 @@ class RivalAgent:
                 task_id,
                 exc,
             )
-            return {**state, "gap_result": {}}
+            return {"gap_result": {}}
 
         if not result.success:
             logger.warning(
@@ -155,11 +155,11 @@ class RivalAgent:
                 task_id,
                 result.data.get("error"),
             )
-            return {**state, "gap_result": {}}
+            return {"gap_result": {}}
 
-        return {**state, "gap_result": result.data}
+        return {"gap_result": result.data}
 
-    async def pricing(self, state: RivalAgentState) -> RivalAgentState:
+    async def pricing(self, state: RivalAgentState) -> dict:
         task_id = state["task_id"]
 
         try:
@@ -182,7 +182,7 @@ class RivalAgent:
                 task_id=task_id,
             )
 
-        return {**state, "pricing_result": result.data}
+        return {"pricing_result": result.data}
 
     async def finalize(self, state: RivalAgentState) -> RivalAgentState:
         rival_json = {

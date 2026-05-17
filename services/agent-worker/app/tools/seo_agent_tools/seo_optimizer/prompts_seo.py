@@ -86,14 +86,17 @@ def build_seo_prompt(
             competitor_brands.append(brand)
         competitor_keywords.extend(data.get("trending_keywords", [])[:5])
 
-    all_keywords = list(dict.fromkeys(competitor_keywords + trending_features))
+    user_description: str = user_product.get("description", "")
+    user_seo_keywords: list[str] = user_product.get("seo_keywords", [])
+
+    all_keywords = list(dict.fromkeys(user_seo_keywords + competitor_keywords + trending_features))
     strengthen_args = (
         praised_features[:5]
         if praised_features
-        else user_product.get("features", [])[:5]
+        else [user_description[:200]] if user_description
+        else []
     )
 
-    user_features: list = user_product.get("features", [])
     variants: list = user_product.get("variants", [])
     variant_names = [
         v.get("name", "") for v in variants if isinstance(v, dict) and v.get("name")
@@ -140,7 +143,8 @@ Output language: TURKISH — Every output field value must be written in Turkish
 Title: {user_product.get("title", "")}
 Brand: {brand}
 Category: {category}
-Features: {user_features[:10]}
+Description: {user_description[:500] or "not provided"}
+User-defined SEO Keywords (prioritize in title/description where natural): {user_seo_keywords[:10] or "none"}
 Variants: {variant_names}
 Price: {user_product.get("price")}
 
@@ -176,10 +180,10 @@ Market positioning: {positioning or "not specified"}
 {description_directive}
 
 === SAFE COLLISION RULE — CRITICAL ===
-User product confirmed features: {user_features[:10]}
+User product description: {user_description[:300] or "not provided"}
 Gap opportunities from market: {gap_opportunities[:6]}
-RULE: Only put features in title and meta_description that are ACTUALLY PRESENT in the user product confirmed features.
-Gap opportunities NOT in the confirmed features must go ONLY to product_development_ideas[], never in title or description.
+RULE: Only put features in title and meta_description that are ACTUALLY PRESENT in the user product description.
+Gap opportunities NOT mentioned in the description must go ONLY to product_development_ideas[], never in title or description.
 
 === KEYWORD GAPS RULES ===
 Source from: competitor trending keywords {all_keywords[:10]}, gap opportunities, and RAG platform rules.

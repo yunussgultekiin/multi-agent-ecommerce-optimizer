@@ -4,11 +4,14 @@ from app.logging_config import configure_logging
 from app.middleware.auth import JWTAuthMiddleware
 from app.routers.analyze import router as analyze_router
 from app.routers.auth import router as auth_router
+from app.routers.upload import router as upload_router
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import httpx
 import logging
+from pathlib import Path
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
@@ -65,3 +68,8 @@ async def health(request: Request) -> dict:
 
 app.include_router(auth_router)
 app.include_router(analyze_router)
+app.include_router(upload_router)
+
+_upload_dir = Path("/tmp/uploads")
+_upload_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=str(_upload_dir)), name="uploads")

@@ -31,7 +31,7 @@ class NodeRunner:
                     task_id,
                     step_name,
                 )
-                return {**state, "cancelled": True, "status": "cancelled"}
+                return {"cancelled": True, "status": "cancelled"}
             await report_progress(task_id, step_name, "running", completion_pct)
             updated_state = await node_fn(state)
             if not updated_state.get("cancelled"):

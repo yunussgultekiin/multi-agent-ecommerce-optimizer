@@ -106,7 +106,7 @@ async def cancel_task(task_id: UUID, service: TaskService = Depends(get_service)
         raise HTTPException(status_code=404, detail="Task not found")
 
 _TERMINAL_STATUSES = {"completed", "failed", "cancelled"}
-_KEEPALIVE_INTERVAL = 15.0
+_KEEPALIVE_INTERVAL = 5.0
 
 @router.get("/{task_id}/status/stream")
 async def stream_status(task_id: UUID, redis: aioredis.Redis = Depends(get_redis)):

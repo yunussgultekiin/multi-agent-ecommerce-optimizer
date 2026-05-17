@@ -13,5 +13,7 @@ class Settings(BaseSettings):
     )
     rate_limit: str = Field(default="60/minute", alias="RATE_LIMIT")
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
+    gcs_bucket: str = Field(default="ai-driven-seller-support-images", alias="GCS_BUCKET")
+    google_cloud_project: str = Field(default="ai-driven-seller-support", alias="GOOGLE_CLOUD_PROJECT")
 
 settings = Settings()

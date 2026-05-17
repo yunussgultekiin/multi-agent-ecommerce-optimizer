@@ -25,6 +25,9 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
         if request.url.path.rstrip("/") in _PUBLIC_PATHS:
             return await call_next(request)
 
+        if request.url.path.startswith("/uploads/"):
+            return await call_next(request)
+
         authorization = request.headers.get("Authorization", "")
         if not authorization.startswith("Bearer "):
             return JSONResponse(

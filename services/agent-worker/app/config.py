@@ -55,6 +55,9 @@ class Settings(BaseSettings):
     gcs_bucket: str = Field(
         default="ai-driven-seller-support-images", alias="GCS_BUCKET"
     )
+    api_gateway_internal_url: str = Field(
+        default="http://api-gateway:8080", alias="API_GATEWAY_INTERNAL_URL"
+    )
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
     jwt_secret_key: str = Field(default="local-dev-secret", alias="JWT_SECRET_KEY")
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")

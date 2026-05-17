@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { formatDate } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Calendar,
@@ -36,7 +35,6 @@ import { useToast } from '@/hooks/use-toast';
 import api from '@/lib/api';
 import type { AnalysisTask, AnalysisStatus, SeoTone } from '@/types';
 
-/* ── Variants ──────────────────────────────────────────────── */
 const page = {
   hidden:  { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.06 } },
@@ -58,14 +56,12 @@ const cardItem = {
   exit:    { opacity: 0, scale: 0.97, transition: { duration: 0.2 } },
 };
 
-/* ── Static maps ─────────────────────────────────────────────── */
 const SEO_TONE_LABELS: Record<SeoTone, string> = {
   casual:       'Samimi & Genç',
   professional: 'Profesyonel',
   premium:      'Premium & Minimal',
 };
 
-/* Status config with icon + colors */
 const statusConfig = {
   completed: {
     label:    'Tamamlandı',
@@ -118,7 +114,6 @@ function getTaskLink(task: AnalysisTask): string {
   return '#';
 }
 
-/* ── Status badge component ─────────────────────────────────── */
 function StatusBadge({ status }: { status: AnalysisTask['status'] }) {
   const cfg = statusConfig[status];
   const Icon = cfg.icon;
@@ -132,7 +127,6 @@ function StatusBadge({ status }: { status: AnalysisTask['status'] }) {
   );
 }
 
-/* ── Page ───────────────────────────────────────────────────── */
 export default function HistoryPage() {
   const [tasks,           setTasks]           = useState<AnalysisTask[]>([]);
   const [isLoading,       setIsLoading]       = useState(true);
@@ -188,7 +182,6 @@ export default function HistoryPage() {
   return (
     <motion.div variants={page} initial="hidden" animate="visible" className="space-y-6">
 
-      {/* ── Header ──────────────────────────────────────── */}
       <motion.div variants={row} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-1">Geçmiş</p>
@@ -228,10 +221,8 @@ export default function HistoryPage() {
         </div>
       </motion.div>
 
-      {/* ── Search + filter (only when data exists) ──────── */}
       {!isLoading && tasks.length > 0 && (
         <motion.div variants={row} className="space-y-3">
-          {/* Search */}
           <div className="relative">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
@@ -242,7 +233,6 @@ export default function HistoryPage() {
             />
           </div>
 
-          {/* Filter chips */}
           <div className="flex flex-wrap gap-2">
             {STATUS_FILTERS.map((s) => {
               const active = filterStatus === s;
@@ -275,9 +265,6 @@ export default function HistoryPage() {
         </motion.div>
       )}
 
-      {/* ── States ──────────────────────────────────────── */}
-
-      {/* Loading */}
       {isLoading && (
         <div className="space-y-3">
           {[1, 2, 3, 4, 5].map((i) => (
@@ -286,7 +273,6 @@ export default function HistoryPage() {
         </div>
       )}
 
-      {/* Empty — no tasks at all */}
       {!isLoading && tasks.length === 0 && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -315,7 +301,6 @@ export default function HistoryPage() {
         </motion.div>
       )}
 
-      {/* Empty — no search results */}
       {!isLoading && tasks.length > 0 && filteredTasks.length === 0 && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -328,7 +313,6 @@ export default function HistoryPage() {
         </motion.div>
       )}
 
-      {/* Card list */}
       {!isLoading && filteredTasks.length > 0 && (
         <motion.div variants={cardList} initial="hidden" animate="visible" className="space-y-2.5">
           <AnimatePresence mode="popLayout">
@@ -343,7 +327,6 @@ export default function HistoryPage() {
                 <Link href={getTaskLink(task)}>
                   <div className="group relative flex items-center gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 hover:bg-white/[0.06] hover:border-white/[0.11] hover:shadow-xl hover:shadow-black/20 transition-all duration-200 cursor-pointer">
 
-                    {/* Thumbnail */}
                     <div className="shrink-0 w-14 h-14 rounded-xl overflow-hidden border border-white/[0.09] bg-white/[0.04] flex items-center justify-center">
                       {task.generated_image_url ? (
                         <img
@@ -356,9 +339,7 @@ export default function HistoryPage() {
                       )}
                     </div>
 
-                    {/* Body */}
                     <div className="flex-1 min-w-0 space-y-1.5">
-                      {/* Title row */}
                       <div className="flex items-center gap-2 flex-wrap">
                         <StatusBadge status={task.status} />
                         <span className="font-semibold text-sm truncate group-hover:text-primary transition-colors">
@@ -366,7 +347,6 @@ export default function HistoryPage() {
                         </span>
                       </div>
 
-                      {/* Meta row */}
                       <div className="flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <Tag className="w-3 h-3" />
@@ -381,12 +361,11 @@ export default function HistoryPage() {
 
                         <span className="flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
-                          {format(new Date(task.updated_at), 'd MMM yyyy, HH:mm', { locale: tr })}
+                          {formatDate(task.updated_at, 'd MMM yyyy, HH:mm')}
                         </span>
                       </div>
                     </div>
 
-                    {/* Arrow */}
                     <div className="shrink-0 flex items-center gap-1.5 text-primary text-xs font-medium opacity-0 group-hover:opacity-100 transition-all duration-200 -translate-x-2 group-hover:translate-x-0">
                       <span className="hidden sm:inline">Detaylar</span>
                       <ArrowRight className="w-4 h-4" />
@@ -399,7 +378,6 @@ export default function HistoryPage() {
         </motion.div>
       )}
 
-      {/* ── Delete dialog ─────────────────────────────── */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

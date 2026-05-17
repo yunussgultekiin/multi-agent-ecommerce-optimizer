@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, CircleDashed, Loader2, XCircle, AlertTriangle, ArrowLeft, RotateCcw } from 'lucide-react';
@@ -15,7 +15,6 @@ import type { SSEProgressEvent, StepName, StepStatus } from '@/types';
 const STEP_LABELS: Record<StepName, string> = {
   competitor_discovery: 'Rakip Keşfi',
   competitor_research: 'Rakip Araştırması',
-  vision_synthesis: 'Görsel Sentezi',
   market_gap: 'Pazar Boşluğu',
   pricing_analysis: 'Fiyat Analizi',
   seo_context: 'SEO Bağlamı',
@@ -60,7 +59,8 @@ function StepIcon({ status }: { status: StepStatus }) {
   return <CircleDashed className="w-5 h-5 text-muted-foreground/40" />;
 }
 
-export default function ProgressPage({ params }: { params: { taskId: string } }) {
+export default function ProgressPage() {
+  const { taskId } = useParams<{ taskId: string }>();
   const router = useRouter();
   const { toast } = useToast();
   const [progress, setProgress] = useState<number>(0);
@@ -73,20 +73,21 @@ export default function ProgressPage({ params }: { params: { taskId: string } })
   useEffect(() => {
     const token = Cookies.get('access_token');
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    const url = `${baseUrl}/analyze/${params.taskId}/status/stream`;
     const abortController = new AbortController();
 
     const fetchStream = async () => {
+      let terminated = false;
       try {
-        const response = await fetch(url, {
+        const response = await fetch(`${baseUrl}/analyze/${taskId}/status/stream`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
-          signal: abortController.signal
+          signal: abortController.signal,
         });
         if (!response.ok) throw new Error('Network error');
         const reader = response.body?.getReader();
+        if (!reader) return;
         const decoder = new TextDecoder();
         let buffer = '';
-        if (!reader) return;
+
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
@@ -94,51 +95,106 @@ export default function ProgressPage({ params }: { params: { taskId: string } })
           const lines = buffer.split('\n');
           buffer = lines.pop() || '';
           for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const dataStr = line.replace('data: ', '').trim();
-              if (!dataStr) continue;
-              if (['Task not found', 'Forbidden', 'Task service error', 'Task service unavailable'].includes(dataStr)) {
-                setErrorMessage(dataStr);
+            if (!line.startsWith('data: ')) continue;
+            const dataStr = line.slice(6).trim();
+            if (!dataStr) continue;
+            if (
+              ['Task not found', 'Forbidden', 'Task service error', 'Task service unavailable'].includes(dataStr)
+            ) {
+              setErrorMessage(dataStr);
+              setTaskStatus('failed');
+              terminated = true;
+              return;
+            }
+            try {
+              const data: SSEProgressEvent = JSON.parse(dataStr);
+              const pct =
+                typeof data.pct === 'number' ? data.pct : parseFloat(String(data.pct)) || 0;
+              setProgress(pct);
+
+              if (data.step && data.status) {
+                setSteps((prev: Record<StepName, StepStatus>) => ({
+                  ...prev,
+                  [data.step as StepName]: data.status as StepStatus,
+                }));
+              }
+
+              if (data.status === 'failed' || data.status === 'cancelled') {
                 setTaskStatus('failed');
+                setErrorMessage(data.message || 'Analiz sırasında beklenmeyen bir hata oluştu.');
+                terminated = true;
                 return;
               }
-              try {
-                const data: SSEProgressEvent = JSON.parse(dataStr);
-                setProgress(data.pct);
-                setSteps(data.steps);
-                setTaskStatus(data.status as typeof taskStatus);
-                setConnectionLost(false);
-                if (data.status === 'completed') {
-                  toast({ title: 'Analiz Tamamlandı!', description: 'Sonuçlarınız hazır.', variant: 'success' });
-                  setTimeout(() => {
-                    router.push(`/dashboard/result/${params.taskId}`);
-                  }, 1500);
-                  return;
-                } else if (data.status === 'failed') {
-                  setErrorMessage(data.message || 'Analiz sırasında beklenmeyen bir hata oluştu.');
-                  return;
-                }
-              } catch (e) {
+
+              if (pct >= 100 && data.status === 'completed') {
+                setTaskStatus('completed');
+                const navigateWhenReady = async () => {
+                  for (let i = 0; i < 20; i++) {
+                    if (abortController.signal.aborted) return;
+                    try {
+                      const res = await fetch(`${baseUrl}/analyze/${taskId}/result`, {
+                        headers: token ? { Authorization: `Bearer ${token}` } : {},
+                      });
+                      if (res.ok) {
+                        window.location.href = `/dashboard/result/${taskId}`;
+                        return;
+                      }
+                    } catch (_) {}
+                    await new Promise((r) => setTimeout(r, 800));
+                  }
+                  window.location.href = `/dashboard/result/${taskId}`;
+                };
+                navigateWhenReady();
+                terminated = true;
+                return;
               }
-            }
+
+              setTaskStatus('running');
+            } catch (_) {}
           }
         }
-      } catch (error: any) {
-        if (error.name !== 'AbortError') {
-          setConnectionLost(true);
-          toast({
-            variant: 'destructive',
-            title: 'Bağlantı Koptu',
-            description: 'Canlı akış bağlantısı kesildi. Sayfayı yenileyerek tekrar bağlanabilirsiniz.',
-          });
-        }
+      } catch (err: any) {
+        if (err.name === 'AbortError') return;
       }
+
+      if (terminated) return;
+
+      try {
+        const taskRes = await fetch(`${baseUrl}/analyze/${taskId}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          signal: abortController.signal,
+        });
+        if (taskRes.ok) {
+          const task = await taskRes.json();
+          if (task.status === 'failed' || task.status === 'cancelled') {
+            setTaskStatus('failed');
+            setErrorMessage(task.error_message || 'Analiz sırasında beklenmeyen bir hata oluştu.');
+            return;
+          }
+          if (task.status === 'completed') {
+            setTaskStatus('completed');
+            window.location.href = `/dashboard/result/${taskId}`;
+            return;
+          }
+        }
+      } catch (_) {}
+
+      if (!abortController.signal.aborted) {
+        await fetchStream();
+        return;
+      }
+
+      setConnectionLost(true);
+      toast({
+        variant: 'destructive',
+        title: 'Bağlantı Koptu',
+        description: 'Canlı akış bağlantısı kesildi. Sayfayı yenileyerek tekrar bağlanabilirsiniz.',
+      });
     };
+
     fetchStream();
-    return () => {
-      abortController.abort();
-    };
-  }, [params.taskId, router, toast]);
+    return () => abortController.abort();
+  }, [taskId, router, toast]);
 
   if (taskStatus === 'failed') {
     return (

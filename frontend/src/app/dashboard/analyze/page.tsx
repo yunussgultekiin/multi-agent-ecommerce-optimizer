@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, Plus, Trash2, Box, Store, Search, ArrowRight, ArrowLeft, Sparkles, Tag } from 'lucide-react';
+import { Loader2, Plus, Trash2, Box, Store, Search, ArrowRight, ArrowLeft, Sparkles, Tag, Upload, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -19,8 +19,8 @@ import api from '@/lib/api';
 
 const STEPS = [
   { id: 0, title: 'Temel Bilgiler', icon: Box, subtitle: 'Ürün adı, açıklama ve platform' },
-  { id: 1, title: 'Satış Bilgileri', icon: Store, subtitle: 'Fiyat, stok ve kategori' },
-  { id: 2, title: 'Detaylar', icon: Search, subtitle: 'SEO, görseller ve varyantlar' },
+  { id: 1, title: 'Satış Bilgileri', icon: Store, subtitle: 'Fiyat ve kategori' },
+  { id: 2, title: 'Detaylar', icon: Search, subtitle: 'SEO tonu ve varyantlar' },
 ];
 
 const slideVariants = {
@@ -44,6 +44,8 @@ const SEO_TONE_LABELS: Record<SeoTone, string> = {
 export default function AnalyzePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(0);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -73,7 +75,7 @@ export default function AnalyzePage() {
       step === 0
         ? ['title', 'description', 'brand', 'platform']
         : step === 1
-        ? ['price', 'stock', 'category']
+        ? ['price', 'category']
         : [];
     const isValid = await trigger(fieldsToValidate);
     if (isValid) setStep((s) => Math.min(s + 1, 2));
@@ -81,14 +83,36 @@ export default function AnalyzePage() {
 
   const prevStep = () => setStep((s) => Math.max(s - 1, 0));
 
+  const handleImageUpload = async (file: File) => {
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const token = (await import('js-cookie')).default.get('access_token');
+      const res = await fetch(`${baseUrl}/upload/image`, {
+        method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: formData,
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || 'Yükleme başarısız');
+      }
+      const { url } = await res.json();
+      setUploadedImageUrl(url);
+    } catch (error: any) {
+      toast({ variant: 'destructive', title: 'Görsel Yüklenemedi', description: error.message });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const onSubmit = async (data: AnalyzeFormData) => {
     try {
       setIsLoading(true);
       const seoKeywords = data.seo_keywords
         ? data.seo_keywords.split(',').map((k) => k.trim()).filter(Boolean)
-        : [];
-      const imageUrls = data.image_urls
-        ? data.image_urls.split(',').map((u) => u.trim()).filter(Boolean)
         : [];
 
       const userProduct = {
@@ -97,12 +121,12 @@ export default function AnalyzePage() {
         brand: data.brand,
         price: data.price,
         category: data.category,
-        stock: data.stock,
-        ...(data.weight !== undefined && { weight: data.weight }),
-        ...(data.dimensions && { dimensions: data.dimensions }),
         seo_keywords: seoKeywords,
-        image_urls: imageUrls,
-        variants: data.variants || [],
+        image_urls: uploadedImageUrl ? [uploadedImageUrl] : [],
+        variants: (data.variants || []).map((v) => ({
+          ...v,
+          price: data.price + v.price_diff,
+        })),
       };
 
       const payload = {
@@ -302,37 +326,22 @@ export default function AnalyzePage() {
                     <Store className="w-5 h-5 text-primary" />
                     Satış Bilgileri
                   </CardTitle>
-                  <CardDescription>Fiyat, stok ve kategori bilgilerini belirleyin</CardDescription>
+                  <CardDescription>Fiyat ve kategori bilgilerini belirleyin</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-5">
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="price">Mevcut Fiyat (TL) *</Label>
-                      <Input
-                        id="price"
-                        type="number"
-                        step="0.01"
-                        placeholder="999.90"
-                        {...register('price')}
-                        className={errors.price ? 'border-destructive' : ''}
-                      />
-                      {errors.price && (
-                        <p className="text-sm text-destructive">{errors.price.message}</p>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="stock">Stok Miktarı *</Label>
-                      <Input
-                        id="stock"
-                        type="number"
-                        placeholder="100"
-                        {...register('stock')}
-                        className={errors.stock ? 'border-destructive' : ''}
-                      />
-                      {errors.stock && (
-                        <p className="text-sm text-destructive">{errors.stock.message}</p>
-                      )}
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="price">Mevcut Fiyat (TL) *</Label>
+                    <Input
+                      id="price"
+                      type="number"
+                      step="0.01"
+                      placeholder="999.90"
+                      {...register('price')}
+                      className={errors.price ? 'border-destructive' : ''}
+                    />
+                    {errors.price && (
+                      <p className="text-sm text-destructive">{errors.price.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="category">Kategori *</Label>
@@ -346,21 +355,58 @@ export default function AnalyzePage() {
                       <p className="text-sm text-destructive">{errors.category.message}</p>
                     )}
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="weight">Ağırlık (kg)</Label>
-                      <Input
-                        id="weight"
-                        type="number"
-                        step="0.1"
-                        placeholder="0.5"
-                        {...register('weight')}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="dimensions">Boyutlar (cm)</Label>
-                      <Input id="dimensions" placeholder="10x20x5" {...register('dimensions')} />
-                    </div>
+                  <div className="space-y-2">
+                    <Label>Ürün Görseli</Label>
+                    {uploadedImageUrl ? (
+                      <div className="relative group rounded-xl overflow-hidden border border-white/10 bg-white/[0.02]">
+                        <img
+                          src={uploadedImageUrl}
+                          alt="Yüklenen görsel"
+                          className="w-full max-h-48 object-contain p-2"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setUploadedImageUrl(null)}
+                          className="absolute top-2 right-2 p-1 rounded-full bg-destructive/80 hover:bg-destructive transition-colors"
+                        >
+                          <X className="w-3 h-3 text-white" />
+                        </button>
+                        <p className="text-xs text-emerald-500 px-3 pb-2">Görsel yüklendi</p>
+                      </div>
+                    ) : (
+                      <label className="flex flex-col items-center justify-center gap-3 p-6 rounded-xl border border-dashed border-white/10 bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/20 cursor-pointer transition-all">
+                        {isUploading ? (
+                          <>
+                            <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                            <span className="text-sm text-muted-foreground">Yükleniyor...</span>
+                          </>
+                        ) : (
+                          <>
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                              <Upload className="w-5 h-5 text-primary" />
+                            </div>
+                            <div className="text-center">
+                              <p className="text-sm font-medium">Görsel yükle</p>
+                              <p className="text-xs text-muted-foreground mt-0.5">JPEG, PNG veya WebP · Maks 10 MB</p>
+                            </div>
+                          </>
+                        )}
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp"
+                          className="hidden"
+                          disabled={isUploading}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleImageUpload(file);
+                            e.target.value = '';
+                          }}
+                        />
+                      </label>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Opsiyonel — görsel yoksa AI arka plan temizleme adımı atlanır
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -382,7 +428,7 @@ export default function AnalyzePage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Search className="w-5 h-5 text-primary" />
-                    SEO & Görseller
+                    SEO & Anahtar Kelimeler
                   </CardTitle>
                   <CardDescription>Daha iyi analiz için opsiyonel detayları ekleyin</CardDescription>
                 </CardHeader>
@@ -417,14 +463,6 @@ export default function AnalyzePage() {
                     <p className="text-xs text-muted-foreground">
                       Birden fazla kelime virgül ile ayrılmalıdır
                     </p>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="image_urls">Ürün Görsel URL&apos;leri</Label>
-                    <Input
-                      id="image_urls"
-                      placeholder="virgülle ayırın (https://...)"
-                      {...register('image_urls')}
-                    />
                   </div>
                 </CardContent>
               </Card>

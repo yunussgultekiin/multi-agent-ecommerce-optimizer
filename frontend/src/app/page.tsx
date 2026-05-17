@@ -21,7 +21,6 @@ import {
   Package,
 } from 'lucide-react';
 
-/* ─── Animation variants ─────────────────────────────────────── */
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.55 } },
@@ -37,7 +36,6 @@ const cardIn = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.45 } },
 };
 
-/* ─── Static data ─────────────────────────────────────────────── */
 const features = [
   {
     title: 'Rakip Analizi',
@@ -122,7 +120,6 @@ const highlights = [
   'Fiyat optimizasyonu',
 ];
 
-/* ─── Component ───────────────────────────────────────────────── */
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">

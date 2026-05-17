@@ -34,6 +34,10 @@ def select_variant(user_product: dict, pricing_result: dict) -> dict | None:
     return best
 
 async def fetch_image_bytes(url: str) -> bytes:
+    from app.config import settings
+    # Rewrite localhost upload URLs to the Docker-internal API gateway URL
+    internal_base = settings.api_gateway_internal_url.rstrip("/")
+    url = url.replace("http://localhost:8000", internal_base)
     async with httpx.AsyncClient(timeout=20.0) as client:
         response = await client.get(url)
         response.raise_for_status()

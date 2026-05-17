@@ -13,7 +13,7 @@ _seo_optimizer = SeoOptimizerTool()
 _image_tool = ImageGenerationTool()
 
 class SeoAgent:
-    async def generate_seo(self, state: SeoAgentState) -> SeoAgentState:
+    async def generate_seo(self, state: SeoAgentState) -> dict:
         result = await _seo_optimizer.run(
             SeoOptimizerInput(
                 rival_json=state.get("rival_json", {}),
@@ -23,15 +23,15 @@ class SeoAgent:
         )
 
         if result.success:
-            return {**state, "seo_output": result.data}
+            return {"seo_output": result.data}
 
         logger.warning(
             "SeoOptimizerTool failed, using empty seo_output | error=%s",
             result.data.get("error"),
         )
-        return {**state, "seo_output": result.data}
+        return {"seo_output": result.data}
 
-    async def generate_image(self, state: SeoAgentState) -> SeoAgentState:
+    async def generate_image(self, state: SeoAgentState) -> dict:
         result = await _image_tool.run(
             ImageGenerationInput(
                 user_product=state.get("user_product", {}),
@@ -41,7 +41,7 @@ class SeoAgent:
         )
 
         generated_url = result.data.get("generated_image_url") if result.data else None
-        return {**state, "generated_image_url": generated_url}
+        return {"generated_image_url": generated_url}
 
     async def finalize(self, state: SeoAgentState) -> SeoAgentState:
         final_result = {

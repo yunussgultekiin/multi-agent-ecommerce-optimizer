@@ -40,7 +40,6 @@ export interface AnalysisTask {
 export type StepName =
   | 'competitor_discovery'
   | 'competitor_research'
-  | 'vision_synthesis'
   | 'market_gap'
   | 'pricing_analysis'
   | 'seo_context'
@@ -56,10 +55,9 @@ export interface ProgressStep {
 }
 
 export interface SSEProgressEvent {
-  status: AnalysisStatus;
-  pct: number;
-  current_step: StepName;
-  steps: Record<StepName, StepStatus>;
+  step: string;
+  status: string;
+  pct: number | string;
   message?: string;
 }
 

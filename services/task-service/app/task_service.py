@@ -56,9 +56,20 @@ class TaskService:
             raise ValueError(
                 f"Transition '{task.status}' -> '{new_status}' is not allowed. Allowed: {allowed}"
             )
-        return await self.repo.update_status(
+        result = await self.repo.update_status(
             task_id, new_status, error_message=error_message
         )
+        if new_status in (TaskStatus.failed, TaskStatus.cancelled):
+            current = await self.redis.hgetall(f"task_progress:{task_id}")
+            event = {
+                "step": current.get("step", ""),
+                "status": new_status.value,
+                "pct": current.get("pct", "0"),
+                "message": error_message or "",
+            }
+            await self.redis.hset(f"task_progress:{task_id}", mapping=event)
+            await self.redis.publish(f"progress:{task_id}", json.dumps(event))
+        return result
 
     async def cancel_task(self, task_id: UUID) -> Task | None:
         task = await self.update_status(task_id, TaskStatus.cancelled)
