@@ -1,9 +1,6 @@
 name: Deploy auth-service
 
 on:
-  push:
-    branches: [main]
-    paths: ['services/auth-service/**']
   workflow_dispatch:
 
 permissions:
@@ -11,7 +8,7 @@ permissions:
   id-token: write
 
 jobs:
-  build-and-push:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,32 +21,34 @@ jobs:
       - name: Configure Docker for GAR
         run: gcloud auth configure-docker ${{ secrets.GAR_LOCATION }}-docker.pkg.dev --quiet
 
-      - uses: docker/setup-buildx-action@v3
+      - name: Build and push
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/auth-service"
+          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services/auth-service
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
 
-      - uses: docker/build-push-action@v6
-        with:
-          context: ./services/auth-service
-          push: true
-          tags: |
-            ${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/auth-service:${{ github.sha }}
-            ${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/auth-service:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      - name: Deploy to Cloud Run
+        id: deploy
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/auth-service"
+          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},CLOUD_SQL_INSTANCE=${{ secrets.CLOUD_SQL_INSTANCE }},DB_USER=${{ secrets.DB_USER }},DB_PASS=${{ secrets.DB_PASS }},DB_NAME=${{ secrets.DB_NAME }},DB_IP_TYPE=${{ secrets.DB_IP_TYPE }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},ACCESS_TOKEN_EXPIRE_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }},REFRESH_TOKEN_EXPIRE_DAYS=${{ secrets.REFRESH_TOKEN_EXPIRE_DAYS }},REGISTRATION_ENABLED=${{ secrets.REGISTRATION_ENABLED }}"
+          gcloud run deploy auth-service \
+            --image="$IMAGE:${{ github.sha }}" \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --service-account="auth-service-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
+            --no-allow-unauthenticated \
+            --add-cloudsql-instances="${{ secrets.CLOUD_SQL_INSTANCE }}" \
+            --set-env-vars="$ENV_VARS"
+          URL=$(gcloud run services describe auth-service \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --format='value(status.url)')
+          echo "url=$URL" >> $GITHUB_OUTPUT
 
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
-      - uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-
-      - uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: auth-service
-          region: ${{ secrets.GCP_REGION }}
-          image: ${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/auth-service:${{ github.sha }}
-          flags: --allow-unauthenticated
-          env_vars: |
-            DATABASE_URL=${{ secrets.DATABASE_URL }}
+      - name: Deployment Summary
+        run: |
+          echo "## auth-service deployed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** ${{ steps.deploy.outputs.url }}" >> $GITHUB_STEP_SUMMARY

@@ -1,9 +1,6 @@
 name: Deploy quota-service
 
 on:
-  push:
-    branches: [main]
-    paths: ['services/quota-service/**']
   workflow_dispatch:
 
 permissions:
@@ -11,7 +8,7 @@ permissions:
   id-token: write
 
 jobs:
-  build-and-push:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,32 +21,35 @@ jobs:
       - name: Configure Docker for GAR
         run: gcloud auth configure-docker ${{ secrets.GAR_LOCATION }}-docker.pkg.dev --quiet
 
-      - uses: docker/setup-buildx-action@v3
+      - name: Build and push
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/quota-service"
+          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services/quota-service
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
 
-      - uses: docker/build-push-action@v6
-        with:
-          context: ./services/quota-service
-          push: true
-          tags: |
-            ${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/quota-service:${{ github.sha }}
-            ${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/quota-service:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      - name: Deploy to Cloud Run
+        id: deploy
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/quota-service"
+          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},REDIS_URL=${{ secrets.REDIS_URL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},QUOTA_LIMIT=${{ secrets.QUOTA_LIMIT }},QUOTA_TTL_SECONDS=${{ secrets.QUOTA_TTL_SECONDS }}"
+          gcloud run deploy quota-service \
+            --image="$IMAGE:${{ github.sha }}" \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --service-account="quota-service-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
+            --no-allow-unauthenticated \
+            --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
+            --vpc-egress=private-ranges-only \
+            --set-env-vars="$ENV_VARS"
+          URL=$(gcloud run services describe quota-service \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --format='value(status.url)')
+          echo "url=$URL" >> $GITHUB_OUTPUT
 
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
-      - uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-
-      - uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: quota-service
-          region: ${{ secrets.GCP_REGION }}
-          image: ${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/quota-service:${{ github.sha }}
-          flags: --allow-unauthenticated
-          env_vars: |
-            REDIS_URL=${{ secrets.REDIS_URL }}
+      - name: Deployment Summary
+        run: |
+          echo "## quota-service deployed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** ${{ steps.deploy.outputs.url }}" >> $GITHUB_STEP_SUMMARY

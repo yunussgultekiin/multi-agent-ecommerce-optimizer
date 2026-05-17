@@ -45,9 +45,6 @@ class Settings(BaseSettings):
     )
     chroma_top_k: int = Field(default=6, alias="CHROMA_TOP_K")
 
-    imagen_model: str = Field(
-        default="imagen-3.0-capability-001", alias="IMAGEN_MODEL"
-    )
     gemini_image_model: str = Field(
         default="gemini-2.5-flash-preview-image-generation",
         alias="GEMINI_IMAGE_MODEL",

@@ -1,9 +1,6 @@
 name: Deploy api-gateway
 
 on:
-  push:
-    branches: [main]
-    paths: ['services/api-gateway/**']
   workflow_dispatch:
 
 permissions:
@@ -11,7 +8,7 @@ permissions:
   id-token: write
 
 jobs:
-  build-and-push:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,30 +21,33 @@ jobs:
       - name: Configure Docker for GAR
         run: gcloud auth configure-docker ${{ secrets.GAR_LOCATION }}-docker.pkg.dev --quiet
 
-      - uses: docker/setup-buildx-action@v3
+      - name: Build and push
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/api-gateway"
+          docker build -f ./services/api-gateway/Dockerfile -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
 
-      - uses: docker/build-push-action@v6
-        with:
-          context: ./services/api-gateway
-          push: true
-          tags: |
-            ${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/api-gateway:${{ github.sha }}
-            ${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/api-gateway:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      - name: Deploy to Cloud Run
+        id: deploy
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/api-gateway"
+          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},GCS_BUCKET=${{ secrets.GCS_BUCKET }},GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }},AUTH_SERVICE_URL=${{ secrets.AUTH_SERVICE_URL }},TASK_SERVICE_URL=${{ secrets.TASK_SERVICE_URL }},QUOTA_SERVICE_URL=${{ secrets.QUOTA_SERVICE_URL }}"
+          gcloud run deploy api-gateway \
+            --image="$IMAGE:${{ github.sha }}" \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --service-account="api-gateway-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
+            --allow-unauthenticated \
+            --set-env-vars="$ENV_VARS"
+          URL=$(gcloud run services describe api-gateway \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --format='value(status.url)')
+          echo "url=$URL" >> $GITHUB_OUTPUT
 
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
-      - uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-
-      - uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: api-gateway
-          region: ${{ secrets.GCP_REGION }}
-          image: ${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/api-gateway:${{ github.sha }}
-          flags: --allow-unauthenticated
+      - name: Deployment Summary
+        run: |
+          echo "## api-gateway deployed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** ${{ steps.deploy.outputs.url }}" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,237 @@
+name: Deploy All Services (Bootstrap)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy-all:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Configure Docker for GAR
+        run: gcloud auth configure-docker ${{ secrets.GAR_LOCATION }}-docker.pkg.dev --quiet
+
+      # ── Build and push all images ────────────────────────────────────────────
+
+      - name: Build and push auth-service
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/auth-service"
+          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services/auth-service
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
+
+      - name: Build and push quota-service
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/quota-service"
+          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services/quota-service
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
+
+      - name: Build and push task-service
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/task-service"
+          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services/task-service
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
+
+      - name: Build and push broker-worker
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/broker-worker"
+          docker build -f ./services/broker-worker/Dockerfile -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
+
+      - name: Build and push agent-worker
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/agent-worker"
+          docker build -f ./services/agent-worker/Dockerfile -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
+
+      - name: Build and push api-gateway
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/api-gateway"
+          docker build -f ./services/api-gateway/Dockerfile -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
+
+      - name: Build and push frontend
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/frontend"
+          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./frontend
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
+
+      # ── Deploy auth-service ──────────────────────────────────────────────────
+
+      - name: Deploy auth-service
+        id: auth
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/auth-service"
+          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},CLOUD_SQL_INSTANCE=${{ secrets.CLOUD_SQL_INSTANCE }},DB_USER=${{ secrets.DB_USER }},DB_PASS=${{ secrets.DB_PASS }},DB_NAME=${{ secrets.DB_NAME }},DB_IP_TYPE=${{ secrets.DB_IP_TYPE }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},ACCESS_TOKEN_EXPIRE_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }},REFRESH_TOKEN_EXPIRE_DAYS=${{ secrets.REFRESH_TOKEN_EXPIRE_DAYS }},REGISTRATION_ENABLED=${{ secrets.REGISTRATION_ENABLED }}"
+          gcloud run deploy auth-service \
+            --image="$IMAGE:${{ github.sha }}" \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --service-account="auth-service-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
+            --no-allow-unauthenticated \
+            --add-cloudsql-instances="${{ secrets.CLOUD_SQL_INSTANCE }}" \
+            --set-env-vars="$ENV_VARS"
+          URL=$(gcloud run services describe auth-service \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --format='value(status.url)')
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      # ── Deploy quota-service ─────────────────────────────────────────────────
+
+      - name: Deploy quota-service
+        id: quota
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/quota-service"
+          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},REDIS_URL=${{ secrets.REDIS_URL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},QUOTA_LIMIT=${{ secrets.QUOTA_LIMIT }},QUOTA_TTL_SECONDS=${{ secrets.QUOTA_TTL_SECONDS }}"
+          gcloud run deploy quota-service \
+            --image="$IMAGE:${{ github.sha }}" \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --service-account="quota-service-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
+            --no-allow-unauthenticated \
+            --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
+            --vpc-egress=private-ranges-only \
+            --set-env-vars="$ENV_VARS"
+          URL=$(gcloud run services describe quota-service \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --format='value(status.url)')
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      # ── Deploy task-service ──────────────────────────────────────────────────
+
+      - name: Deploy task-service
+        id: task
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/task-service"
+          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},DATABASE_URL=${{ secrets.DATABASE_URL }},REDIS_URL=${{ secrets.REDIS_URL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},TASK_QUEUE_NAME=${{ secrets.TASK_QUEUE_NAME }}"
+          gcloud run deploy task-service \
+            --image="$IMAGE:${{ github.sha }}" \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --service-account="task-service-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
+            --no-allow-unauthenticated \
+            --add-cloudsql-instances="${{ secrets.CLOUD_SQL_INSTANCE }}" \
+            --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
+            --vpc-egress=private-ranges-only \
+            --set-env-vars="$ENV_VARS"
+          URL=$(gcloud run services describe task-service \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --format='value(status.url)')
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      # ── Deploy agent-worker ──────────────────────────────────────────────────
+
+      - name: Deploy agent-worker
+        id: agent
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/agent-worker"
+          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }},GOOGLE_CLOUD_LOCATION=${{ secrets.GOOGLE_CLOUD_LOCATION }},GCS_BUCKET=${{ secrets.GCS_BUCKET }},REDIS_URL=${{ secrets.REDIS_URL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},RIVAL_DISCOVERY_MODEL=${{ secrets.RIVAL_DISCOVERY_MODEL }},RIVAL_RESEARCH_MODEL=${{ secrets.RIVAL_RESEARCH_MODEL }},RIVAL_SENTIMENT_MODEL=${{ secrets.RIVAL_SENTIMENT_MODEL }},RIVAL_TRENDS_MODEL=${{ secrets.RIVAL_TRENDS_MODEL }},RIVAL_MARKET_GAP_MODEL=${{ secrets.RIVAL_MARKET_GAP_MODEL }},RIVAL_PRICING_MODEL=${{ secrets.RIVAL_PRICING_MODEL }},SEO_OPTIMIZER_MODEL=${{ secrets.SEO_OPTIMIZER_MODEL }},GEMINI_IMAGE_MODEL=${{ secrets.GEMINI_IMAGE_MODEL }},CHROMA_COLLECTION_NAME=${{ secrets.CHROMA_COLLECTION_NAME }},CHROMA_TOP_K=${{ secrets.CHROMA_TOP_K }},TASK_SERVICE_URL=${{ steps.task.outputs.url }}"
+          gcloud run deploy agent-worker \
+            --image="$IMAGE:${{ github.sha }}" \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --service-account="agent-worker-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
+            --no-allow-unauthenticated \
+            --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
+            --vpc-egress=private-ranges-only \
+            --set-env-vars="$ENV_VARS"
+          URL=$(gcloud run services describe agent-worker \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --format='value(status.url)')
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      # ── Deploy broker-worker ─────────────────────────────────────────────────
+
+      - name: Deploy broker-worker
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/broker-worker"
+          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},BROKER_DATABASE_URL=${{ secrets.BROKER_DATABASE_URL }},REDIS_URL=${{ secrets.REDIS_URL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},TASK_QUEUE_NAME=${{ secrets.TASK_QUEUE_NAME }},MAX_RETRY_COUNT=${{ secrets.MAX_RETRY_COUNT }},RETRY_BASE_DELAY=${{ secrets.RETRY_BASE_DELAY }},TASK_SERVICE_URL=${{ steps.task.outputs.url }},AGENT_WORKER_URL=${{ steps.agent.outputs.url }}"
+          gcloud run deploy broker-worker \
+            --image="$IMAGE:${{ github.sha }}" \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --service-account="broker-worker-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
+            --no-allow-unauthenticated \
+            --add-cloudsql-instances="${{ secrets.CLOUD_SQL_INSTANCE }}" \
+            --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
+            --vpc-egress=private-ranges-only \
+            --set-env-vars="$ENV_VARS"
+
+      # ── Deploy api-gateway ───────────────────────────────────────────────────
+
+      - name: Deploy api-gateway
+        id: gateway
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/api-gateway"
+          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},GCS_BUCKET=${{ secrets.GCS_BUCKET }},GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }},AUTH_SERVICE_URL=${{ steps.auth.outputs.url }},TASK_SERVICE_URL=${{ steps.task.outputs.url }},QUOTA_SERVICE_URL=${{ steps.quota.outputs.url }}"
+          gcloud run deploy api-gateway \
+            --image="$IMAGE:${{ github.sha }}" \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --service-account="api-gateway-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
+            --allow-unauthenticated \
+            --set-env-vars="$ENV_VARS"
+          URL=$(gcloud run services describe api-gateway \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --format='value(status.url)')
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      # ── Deploy frontend ──────────────────────────────────────────────────────
+
+      - name: Deploy frontend
+        id: frontend
+        run: |
+          IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/frontend"
+          ENV_VARS="NEXT_PUBLIC_API_URL=${{ steps.gateway.outputs.url }}"
+          gcloud run deploy frontend \
+            --image="$IMAGE:${{ github.sha }}" \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --service-account="frontend-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
+            --allow-unauthenticated \
+            --set-env-vars="$ENV_VARS"
+          URL=$(gcloud run services describe frontend \
+            --region="${{ secrets.GCP_REGION }}" \
+            --project="${{ secrets.GCP_PROJECT_ID }}" \
+            --format='value(status.url)')
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      # ── Summary ──────────────────────────────────────────────────────────────
+
+      - name: Deployment Summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
+          ## Deployment Complete
+
+          ### Add these to GitHub Secrets:
+          NEXT_PUBLIC_API_URL=${{ steps.gateway.outputs.url }}
+          AUTH_SERVICE_URL=${{ steps.auth.outputs.url }}
+          QUOTA_SERVICE_URL=${{ steps.quota.outputs.url }}
+          TASK_SERVICE_URL=${{ steps.task.outputs.url }}
+          AGENT_WORKER_URL=${{ steps.agent.outputs.url }}
+
+          ### Public URLs:
+          API Gateway: ${{ steps.gateway.outputs.url }}
+          Frontend:    ${{ steps.frontend.outputs.url }}
+          EOF
