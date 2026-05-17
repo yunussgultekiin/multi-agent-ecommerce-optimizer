@@ -84,7 +84,7 @@ jobs:
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --service-account="auth-service-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
-            --no-allow-unauthenticated \
+            --allow-unauthenticated \
             --add-cloudsql-instances="${{ secrets.CLOUD_SQL_INSTANCE }}" \
             --set-env-vars="$ENV_VARS"
           URL=$(gcloud run services describe auth-service \
@@ -105,7 +105,7 @@ jobs:
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --service-account="quota-service-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
-            --no-allow-unauthenticated \
+            --allow-unauthenticated \
             --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
             --vpc-egress=private-ranges-only \
             --set-env-vars="$ENV_VARS"
@@ -127,7 +127,7 @@ jobs:
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --service-account="task-service-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
-            --no-allow-unauthenticated \
+            --allow-unauthenticated \
             --add-cloudsql-instances="${{ secrets.CLOUD_SQL_INSTANCE }}" \
             --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
             --vpc-egress=private-ranges-only \
@@ -150,7 +150,7 @@ jobs:
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --service-account="agent-worker-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
-            --no-allow-unauthenticated \
+            --allow-unauthenticated \
             --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
             --vpc-egress=private-ranges-only \
             --set-env-vars="$ENV_VARS"
@@ -171,7 +171,7 @@ jobs:
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --service-account="broker-worker-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
-            --no-allow-unauthenticated \
+            --allow-unauthenticated \
             --add-cloudsql-instances="${{ secrets.CLOUD_SQL_INSTANCE }}" \
             --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
             --vpc-egress=private-ranges-only \

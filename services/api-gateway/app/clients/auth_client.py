@@ -1,16 +1,19 @@
 from app.config import settings
-from shared.oidc_client import OidcHttpClient
+import httpx
+
 
 class AuthServiceError(Exception):
     pass
 
+
 class AuthClient:
     def __init__(self) -> None:
-        self._client = OidcHttpClient(base_url=settings.auth_service_url)
+        self._base_url = settings.auth_service_url
 
     async def _request(self, method: str, path: str, **kwargs):
         try:
-            return await self._client.request(method, path, **kwargs)
+            async with httpx.AsyncClient(base_url=self._base_url) as client:
+                return await client.request(method, path, **kwargs)
         except Exception as exc:
             raise AuthServiceError(f"Connection error: {exc}") from exc
 

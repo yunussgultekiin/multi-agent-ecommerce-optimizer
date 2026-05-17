@@ -1,6 +1,6 @@
 from app.config import settings
 import logging
-from shared.oidc_client import InternalHttpClient
+from shared.internal_client import InternalHttpClient
 
 logger = logging.getLogger(__name__)
 

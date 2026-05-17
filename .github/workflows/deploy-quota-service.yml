@@ -38,7 +38,7 @@ jobs:
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --service-account="quota-service-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
-            --no-allow-unauthenticated \
+            --allow-unauthenticated \
             --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
             --vpc-egress=private-ranges-only \
             --set-env-vars="$ENV_VARS"

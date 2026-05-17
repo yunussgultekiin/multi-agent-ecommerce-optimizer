@@ -9,7 +9,7 @@ from fastapi.responses import StreamingResponse
 import httpx
 import logging
 from pydantic import BaseModel
-from shared.oidc_client import InternalTokenProvider
+from shared.internal_client import InternalTokenProvider
 from typing import Any
 
 logger = logging.getLogger(__name__)

@@ -1,5 +1,5 @@
 from app.config import settings
-from shared.oidc_client import InternalHttpClient
+from shared.internal_client import InternalHttpClient
 
 class TaskServiceError(Exception):
     pass

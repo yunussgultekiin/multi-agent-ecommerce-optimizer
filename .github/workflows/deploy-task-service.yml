@@ -38,7 +38,7 @@ jobs:
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --service-account="task-service-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
-            --no-allow-unauthenticated \
+            --allow-unauthenticated \
             --add-cloudsql-instances="${{ secrets.CLOUD_SQL_INSTANCE }}" \
             --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
             --vpc-egress=private-ranges-only \

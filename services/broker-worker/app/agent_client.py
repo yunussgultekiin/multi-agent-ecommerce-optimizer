@@ -1,7 +1,7 @@
 from app.config import settings
 import httpx
 import logging
-from shared.oidc_client import SyncInternalTokenProvider
+from shared.internal_client import SyncInternalTokenProvider
 
 logger = logging.getLogger(__name__)
 
