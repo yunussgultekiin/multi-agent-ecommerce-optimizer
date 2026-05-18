@@ -46,7 +46,7 @@ async def upload_image(request: Request, file: UploadFile = File(...)):
     try:
         filename = f"{uuid.uuid4()}.{ext}"
         (_LOCAL_DIR / filename).write_bytes(content)
-        base = str(request.base_url).rstrip("/")
+        base = str(request.base_url).rstrip("/").replace("http://", "https://")
         url = f"{base}/uploads/{filename}"
         logger.info("image_uploaded_local | file=%s size=%d", filename, len(content))
         return {"url": url}

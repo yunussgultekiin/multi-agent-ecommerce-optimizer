@@ -118,7 +118,6 @@ async def delete_history(request: Request):
         raise HTTPException(status_code=502, detail="Task service error")
 
 @router.get("/{task_id}/status/stream")
-@limiter.limit(settings.rate_limit)
 async def stream_status(request: Request, task_id: str):
     user_id = request.state.user_id
     try:

@@ -82,6 +82,11 @@ export default function ProgressPage() {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
           signal: abortController.signal,
         });
+        if (response.status === 429) {
+          await new Promise(resolve => setTimeout(resolve, 3000));
+          await fetchStream();
+          return;
+        }
         if (!response.ok) throw new Error('Network error');
         const reader = response.body?.getReader();
         if (!reader) return;
@@ -180,6 +185,7 @@ export default function ProgressPage() {
       } catch (_) {}
 
       if (!abortController.signal.aborted) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await fetchStream();
         return;
       }
