@@ -16,31 +16,6 @@ T = TypeVar("T", bound=BaseModel)
 _MAX_RETRIES = 2
 _CALL_TIMEOUT_SECONDS = 30
 
-_client: genai.Client | None = None
-
-
-def _get_client() -> genai.Client:
-    global _client
-    if _client is None:
-        _client = genai.Client(
-            vertexai=True,
-            project=settings.google_cloud_project,
-            location=settings.google_cloud_location,
-            http_options=HttpOptions(api_version="v1"),
-        )
-    return _client
-
-
-def _reset_client() -> genai.Client:
-    global _client
-    _client = genai.Client(
-        vertexai=True,
-        project=settings.google_cloud_project,
-        location=settings.google_cloud_location,
-        http_options=HttpOptions(api_version="v1"),
-    )
-    return _client
-
 
 class GeminiCorrectionLoop:
     def __init__(self, model_name: str = "gemini-2.5-flash-lite") -> None:
@@ -58,7 +33,12 @@ class GeminiCorrectionLoop:
         last_error = ""
         for attempt in range(_MAX_RETRIES + 1):
             current_prompt = self._build_retry_prompt(prompt, last_error, attempt)
-            client = _get_client()
+            client = genai.Client(
+                vertexai=True,
+                project=settings.google_cloud_project,
+                location=settings.google_cloud_location,
+                http_options=HttpOptions(api_version="v1"),
+            )
             try:
                 response = await asyncio.wait_for(
                     client.aio.models.generate_content(
@@ -73,27 +53,6 @@ class GeminiCorrectionLoop:
                     ),
                     timeout=_CALL_TIMEOUT_SECONDS,
                 )
-            except RuntimeError as exc:
-                if "closed" in str(exc).lower():
-                    logger.warning(
-                        "Gemini client was closed, resetting | model=%s", self._model_name
-                    )
-                    client = _reset_client()
-                    response = await asyncio.wait_for(
-                        client.aio.models.generate_content(
-                            model=self._model_name,
-                            contents=current_prompt,
-                            config=types.GenerateContentConfig(
-                                thinking_config=types.ThinkingConfig(thinking_budget=0),
-                                automatic_function_calling=types.AutomaticFunctionCallingConfig(
-                                    disable=True
-                                ),
-                            ),
-                        ),
-                        timeout=_CALL_TIMEOUT_SECONDS,
-                    )
-                else:
-                    raise
             except asyncio.TimeoutError:
                 last_error = f"timed out after {_CALL_TIMEOUT_SECONDS}s"
                 logger.warning(
