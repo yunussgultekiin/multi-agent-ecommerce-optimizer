@@ -29,7 +29,7 @@ jobs:
       - name: Build and push
         run: |
           IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/frontend"
-          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./frontend
+          docker build --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./frontend
           docker push "$IMAGE:${{ github.sha }}"
           docker push "$IMAGE:latest"
 
