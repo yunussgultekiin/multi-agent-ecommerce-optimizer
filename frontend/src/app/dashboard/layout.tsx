@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, PlusCircle, History, LogOut, Menu, X, Zap, UserCircle } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, History, LogOut, Menu, X, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
@@ -15,7 +15,6 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Yeni Analiz', href: '/dashboard/analyze', icon: PlusCircle },
   { name: 'Geçmiş', href: '/dashboard/history', icon: History },
-  { name: 'Kullanıcı Profili Ayarları', href: '/dashboard/profile', icon: UserCircle },
 ];
 
 function SidebarContent({
@@ -35,7 +34,12 @@ function SidebarContent({
     <>
       <div className="flex h-16 shrink-0 items-center px-6 border-b border-white/5">
         <Link href="/dashboard" className="flex items-center">
-          <img src="/synapse-logo.png" alt="Synapse" className="h-7 w-auto" />
+          <div className="flex flex-col leading-none">
+            <span className="text-xl font-extrabold tracking-tight gradient-text">Synapse</span>
+            <span className="text-[9px] text-muted-foreground/60 tracking-widest uppercase mt-0.5">
+              Akıllı Pazar Analitiği
+            </span>
+          </div>
         </Link>
       </div>
 
@@ -127,9 +131,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (!isAuthenticated && isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <div className="animate-pulse">
-          <img src="/synapse-logo.png" alt="Synapse" className="h-10 w-auto opacity-60" />
-        </div>
+        <span className="text-2xl font-extrabold tracking-tight gradient-text animate-pulse">Synapse</span>
       </div>
     );
   }
@@ -138,7 +140,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const sidebarProps = { user, quota, pathname, quotaPercentage, logout };
 
   return (
-    <div className="min-h-screen flex bg-background">
+    <div className="h-screen flex bg-background overflow-hidden">
       <div className="hidden md:flex w-64 flex-col fixed inset-y-0 border-r border-white/5 bg-card/50 backdrop-blur-xl z-20">
         <SidebarContent {...sidebarProps} />
       </div>
@@ -172,14 +174,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )}
       </AnimatePresence>
 
-      <div className="flex-1 flex flex-col md:pl-64">
+      <div className="flex-1 flex flex-col md:pl-64 h-full overflow-hidden">
         <div className="md:hidden sticky top-0 z-30 flex h-16 items-center justify-between border-b border-white/5 bg-background/80 backdrop-blur-xl px-4">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)}>
               <Menu className="w-5 h-5" />
             </Button>
             <div className="flex items-center">
-              <img src="/synapse-logo.png" alt="Synapse" className="h-6 w-auto" />
+              <span className="text-lg font-extrabold tracking-tight gradient-text">Synapse</span>
             </div>
           </div>
           {quota && (
@@ -191,7 +193,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           )}
         </div>
 
-        <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
+        <main className="flex-1 p-4 md:p-6 overflow-y-auto scrollbar-hide">
           <div className="max-w-6xl mx-auto">
             {children}
           </div>
