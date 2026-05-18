@@ -18,20 +18,18 @@ _session_maker: async_sessionmaker | None = None
 
 async def _build_engine() -> AsyncEngine:
     if settings.cloud_sql_instance:
-        connector = Connector()
-        ip_type = (
-            IPTypes.PRIVATE if settings.db_ip_type == "PRIVATE" else IPTypes.PUBLIC
-        )
+        ip_type = IPTypes.PRIVATE if settings.db_ip_type == "PRIVATE" else IPTypes.PUBLIC
 
         async def _getconn():
-            return await connector.connect_async(
-                settings.cloud_sql_instance,
-                "asyncpg",
-                user=settings.db_user,
-                password=settings.db_pass,
-                db=settings.db_name,
-                ip_type=ip_type,
-            )
+            async with Connector() as connector:
+                return await connector.connect_async(
+                    settings.cloud_sql_instance,
+                    "asyncpg",
+                    user=settings.db_user,
+                    password=settings.db_pass,
+                    db=settings.db_name,
+                    ip_type=ip_type,
+                )
 
         return create_async_engine(
             "postgresql+asyncpg://",
