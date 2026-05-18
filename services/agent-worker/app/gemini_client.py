@@ -1,5 +1,4 @@
 from app.config import settings
-import asyncio
 from google import genai
 import google.api_core.exceptions
 import google.auth.exceptions
@@ -9,19 +8,6 @@ from google.genai.types import HttpOptions
 import logging
 
 logger = logging.getLogger(__name__)
-
-def _get_client() -> genai.Client:
-    logger.debug(
-        "Initializing Gemini client | project=%s location=%s",
-        settings.google_cloud_project,
-        settings.google_cloud_location,
-    )
-    return genai.Client(
-        vertexai=True,
-        project=settings.google_cloud_project,
-        location=settings.google_cloud_location,
-        http_options=HttpOptions(api_version="v1"),
-    )
 
 async def call_gemini(
     model: str,
@@ -34,15 +20,17 @@ async def call_gemini(
         settings.google_cloud_project,
         settings.google_cloud_location,
     )
-    loop = asyncio.get_running_loop()
+    client = genai.Client(
+        vertexai=True,
+        project=settings.google_cloud_project,
+        location=settings.google_cloud_location,
+        http_options=HttpOptions(api_version="v1"),
+    )
     try:
-        response = await loop.run_in_executor(
-            None,
-            lambda: _get_client().models.generate_content(
-                model=model,
-                contents=prompt,
-                config=config,
-            ),
+        response = await client.aio.models.generate_content(
+            model=model,
+            contents=prompt,
+            config=config,
         )
     except google.auth.exceptions.DefaultCredentialsError as exc:
         raise RuntimeError(
