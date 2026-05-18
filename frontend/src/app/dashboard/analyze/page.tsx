@@ -30,7 +30,7 @@ const slideVariants = {
 };
 
 const SEO_TONE_DEFAULTS: Record<Platform, SeoTone> = {
-  trendyol: 'professional',
+  trendyol: 'casual',
   amazon: 'professional',
   hepsiburada: 'professional',
 };
@@ -61,7 +61,7 @@ export default function AnalyzePage() {
     resolver: zodResolver(analyzeSchema),
     defaultValues: {
       platform: 'trendyol',
-      seo_tone: 'professional',
+      seo_tone: 'casual',
       variants: [],
     },
   });

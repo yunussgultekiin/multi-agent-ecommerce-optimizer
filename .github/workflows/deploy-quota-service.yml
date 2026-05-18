@@ -1,6 +1,11 @@
 name: Deploy quota-service
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "services/quota-service/**"
+      - ".github/workflows/deploy-quota-service.yml"
   workflow_dispatch:
 
 permissions:

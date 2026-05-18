@@ -1,6 +1,11 @@
 name: Deploy agent-worker
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "services/agent-worker/**"
+      - ".github/workflows/deploy-agent-worker.yml"
   workflow_dispatch:
 
 permissions:

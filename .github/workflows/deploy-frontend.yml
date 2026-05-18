@@ -1,6 +1,11 @@
 name: Deploy frontend
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/deploy-frontend.yml"
   workflow_dispatch:
 
 permissions:

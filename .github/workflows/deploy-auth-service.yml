@@ -1,6 +1,11 @@
 name: Deploy auth-service
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "services/auth-service/**"
+      - ".github/workflows/deploy-auth-service.yml"
   workflow_dispatch:
 
 permissions:

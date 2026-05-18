@@ -1,6 +1,11 @@
 name: Deploy task-service
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "services/task-service/**"
+      - ".github/workflows/deploy-task-service.yml"
   workflow_dispatch:
 
 permissions:

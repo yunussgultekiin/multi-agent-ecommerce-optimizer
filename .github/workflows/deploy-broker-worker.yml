@@ -1,6 +1,11 @@
 name: Deploy broker-worker
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "services/broker-worker/**"
+      - ".github/workflows/deploy-broker-worker.yml"
   workflow_dispatch:
 
 permissions:
