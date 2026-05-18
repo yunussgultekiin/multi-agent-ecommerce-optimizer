@@ -7,7 +7,6 @@ from rembg import new_session, remove
 
 logger = logging.getLogger(__name__)
 _PRODUCT_FILL_RATIO = 0.88
-_DEFAULT_SPEC = PLATFORM_SPECS["hepsiburada"]
 _session = None
 
 @dataclass(frozen=True)
@@ -33,6 +32,7 @@ PLATFORM_SPECS: dict[str, PlatformSpec] = {
         canvas_color=(255, 255, 255),
     ),
 }
+_DEFAULT_SPEC = PLATFORM_SPECS["hepsiburada"]
 
 def get_platform_spec(target_platform: str) -> PlatformSpec:
     return PLATFORM_SPECS.get((target_platform or "").lower().strip(), _DEFAULT_SPEC)
