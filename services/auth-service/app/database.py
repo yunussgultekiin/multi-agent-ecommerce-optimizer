@@ -1,5 +1,5 @@
 from app.config import settings
-from google.cloud.sql.connector import Connector, IPTypes
+from google.cloud.sql.connector import AsyncConnector, IPTypes
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
@@ -16,30 +16,7 @@ class Base(DeclarativeBase):
 _engine: AsyncEngine | None = None
 _session_maker: async_sessionmaker | None = None
 
-async def _build_engine() -> AsyncEngine:
-    if settings.cloud_sql_instance:
-        ip_type = IPTypes.PRIVATE if settings.db_ip_type == "PRIVATE" else IPTypes.PUBLIC
-
-        async def _getconn():
-            async with Connector() as connector:
-                return await connector.connect_async(
-                    settings.cloud_sql_instance,
-                    "asyncpg",
-                    user=settings.db_user,
-                    password=settings.db_pass,
-                    db=settings.db_name,
-                    ip_type=ip_type,
-                )
-
-        return create_async_engine(
-            "postgresql+asyncpg://",
-            async_creator=_getconn,
-            pool_pre_ping=True,
-            pool_size=5,
-            max_overflow=10,
-            pool_timeout=30,
-        )
-
+def _build_engine() -> AsyncEngine:
     return create_async_engine(
         settings.database_url,
         pool_pre_ping=True,
@@ -49,10 +26,32 @@ async def _build_engine() -> AsyncEngine:
         echo=False,
     )
 
-async def connect() -> None:
+async def build_engine_with_connector(connector: AsyncConnector) -> AsyncEngine:
+    ip_type = IPTypes.PRIVATE if settings.db_ip_type == "PRIVATE" else IPTypes.PUBLIC
+
+    async def _getconn():
+        return await connector.connect_async(
+            settings.cloud_sql_instance,
+            "asyncpg",
+            user=settings.db_user,
+            password=settings.db_pass,
+            db=settings.db_name,
+            ip_type=ip_type,
+        )
+
+    return create_async_engine(
+        "postgresql+asyncpg://",
+        async_creator=_getconn,
+        pool_pre_ping=True,
+        pool_size=5,
+        max_overflow=10,
+        pool_timeout=30,
+    )
+
+def init_engine(engine: AsyncEngine) -> None:
     global _engine, _session_maker
-    _engine = await _build_engine()
-    _session_maker = async_sessionmaker(_engine, expire_on_commit=False)
+    _engine = engine
+    _session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 def get_engine() -> AsyncEngine:
     if _engine is None:
