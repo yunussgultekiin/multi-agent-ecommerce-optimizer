@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "services/api-gateway/**"
+      - "services/shared/**"
       - ".github/workflows/deploy-api-gateway.yml"
   workflow_dispatch:
 
@@ -15,6 +16,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -29,7 +31,13 @@ jobs:
       - name: Build and push
         run: |
           IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/api-gateway"
-          docker build -f ./services/api-gateway/Dockerfile -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services
+
+          docker build \
+            -f ./services/api-gateway/Dockerfile \
+            -t "$IMAGE:${{ github.sha }}" \
+            -t "$IMAGE:latest" \
+            ./services
+
           docker push "$IMAGE:${{ github.sha }}"
           docker push "$IMAGE:latest"
 
@@ -37,18 +45,23 @@ jobs:
         id: deploy
         run: |
           IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/api-gateway"
-          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},GCS_BUCKET=${{ secrets.GCS_BUCKET }},GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }},AUTH_SERVICE_URL=${{ secrets.AUTH_SERVICE_URL }},TASK_SERVICE_URL=${{ secrets.TASK_SERVICE_URL }},QUOTA_SERVICE_URL=${{ secrets.QUOTA_SERVICE_URL }},FRONTEND_ORIGIN=${{ secrets.FRONTEND_URL }}"
+
+          ENV_VARS="^##^APP_ENV=${{ secrets.APP_ENV }}##LOG_LEVEL=${{ secrets.LOG_LEVEL }}##JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}##JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}##GCS_BUCKET=${{ secrets.GCS_BUCKET }}##GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }}##AUTH_SERVICE_URL=${{ secrets.AUTH_SERVICE_URL }}##TASK_SERVICE_URL=${{ secrets.TASK_SERVICE_URL }}##QUOTA_SERVICE_URL=${{ secrets.QUOTA_SERVICE_URL }}##FRONTEND_ORIGIN=${{ secrets.FRONTEND_URL }}"
+
           gcloud run deploy api-gateway \
             --image="$IMAGE:${{ github.sha }}" \
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --service-account="api-gateway-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
             --allow-unauthenticated \
+            --port=8080 \
             --set-env-vars="$ENV_VARS"
+
           URL=$(gcloud run services describe api-gateway \
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --format='value(status.url)')
+
           echo "url=$URL" >> $GITHUB_OUTPUT
 
       - name: Deployment Summary

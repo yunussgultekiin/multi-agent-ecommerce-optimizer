@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "services/agent-worker/**"
+      - "services/shared/**"
       - ".github/workflows/deploy-agent-worker.yml"
   workflow_dispatch:
 
@@ -15,6 +16,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -29,7 +31,13 @@ jobs:
       - name: Build and push
         run: |
           IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/agent-worker"
-          docker build -f ./services/agent-worker/Dockerfile -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services
+
+          docker build \
+            -f ./services/agent-worker/Dockerfile \
+            -t "$IMAGE:${{ github.sha }}" \
+            -t "$IMAGE:latest" \
+            ./services
+
           docker push "$IMAGE:${{ github.sha }}"
           docker push "$IMAGE:latest"
 
@@ -37,20 +45,25 @@ jobs:
         id: deploy
         run: |
           IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/agent-worker"
-          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }},GOOGLE_CLOUD_LOCATION=${{ secrets.GOOGLE_CLOUD_LOCATION }},GCS_BUCKET=${{ secrets.GCS_BUCKET }},REDIS_URL=${{ secrets.REDIS_URL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},RIVAL_DISCOVERY_MODEL=${{ secrets.RIVAL_DISCOVERY_MODEL }},RIVAL_RESEARCH_MODEL=${{ secrets.RIVAL_RESEARCH_MODEL }},RIVAL_SENTIMENT_MODEL=${{ secrets.RIVAL_SENTIMENT_MODEL }},RIVAL_TRENDS_MODEL=${{ secrets.RIVAL_TRENDS_MODEL }},RIVAL_MARKET_GAP_MODEL=${{ secrets.RIVAL_MARKET_GAP_MODEL }},RIVAL_PRICING_MODEL=${{ secrets.RIVAL_PRICING_MODEL }},SEO_OPTIMIZER_MODEL=${{ secrets.SEO_OPTIMIZER_MODEL }},GEMINI_IMAGE_MODEL=${{ secrets.GEMINI_IMAGE_MODEL }},CHROMA_COLLECTION_NAME=${{ secrets.CHROMA_COLLECTION_NAME }},CHROMA_TOP_K=${{ secrets.CHROMA_TOP_K }},TASK_SERVICE_URL=${{ secrets.TASK_SERVICE_URL }}"
+
+          ENV_VARS="^##^APP_ENV=${{ secrets.APP_ENV }}##LOG_LEVEL=${{ secrets.LOG_LEVEL }}##GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }}##GOOGLE_CLOUD_LOCATION=${{ secrets.GOOGLE_CLOUD_LOCATION }}##GCS_BUCKET=${{ secrets.GCS_BUCKET }}##REDIS_URL=${{ secrets.REDIS_URL }}##JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}##JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}##RIVAL_DISCOVERY_MODEL=${{ secrets.RIVAL_DISCOVERY_MODEL }}##RIVAL_RESEARCH_MODEL=${{ secrets.RIVAL_RESEARCH_MODEL }}##RIVAL_SENTIMENT_MODEL=${{ secrets.RIVAL_SENTIMENT_MODEL }}##RIVAL_TRENDS_MODEL=${{ secrets.RIVAL_TRENDS_MODEL }}##RIVAL_MARKET_GAP_MODEL=${{ secrets.RIVAL_MARKET_GAP_MODEL }}##RIVAL_PRICING_MODEL=${{ secrets.RIVAL_PRICING_MODEL }}##SEO_OPTIMIZER_MODEL=${{ secrets.SEO_OPTIMIZER_MODEL }}##GEMINI_IMAGE_MODEL=${{ secrets.GEMINI_IMAGE_MODEL }}##CHROMA_COLLECTION_NAME=${{ secrets.CHROMA_COLLECTION_NAME }}##CHROMA_TOP_K=${{ secrets.CHROMA_TOP_K }}##TASK_SERVICE_URL=${{ secrets.TASK_SERVICE_URL }}"
+
           gcloud run deploy agent-worker \
             --image="$IMAGE:${{ github.sha }}" \
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --service-account="agent-worker-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
             --allow-unauthenticated \
+            --port=8080 \
             --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
             --vpc-egress=private-ranges-only \
             --set-env-vars="$ENV_VARS"
+
           URL=$(gcloud run services describe agent-worker \
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --format='value(status.url)')
+
           echo "url=$URL" >> $GITHUB_OUTPUT
 
       - name: Deployment Summary

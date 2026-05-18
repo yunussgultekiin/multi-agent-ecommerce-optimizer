@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "services/quota-service/**"
+      - "services/shared/**"
       - ".github/workflows/deploy-quota-service.yml"
   workflow_dispatch:
 
@@ -15,6 +16,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -29,7 +31,12 @@ jobs:
       - name: Build and push
         run: |
           IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/quota-service"
-          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services/quota-service
+
+          docker build \
+            -t "$IMAGE:${{ github.sha }}" \
+            -t "$IMAGE:latest" \
+            ./services/quota-service
+
           docker push "$IMAGE:${{ github.sha }}"
           docker push "$IMAGE:latest"
 
@@ -37,20 +44,25 @@ jobs:
         id: deploy
         run: |
           IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/quota-service"
-          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},REDIS_URL=${{ secrets.REDIS_URL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},QUOTA_LIMIT=${{ secrets.QUOTA_LIMIT }},QUOTA_TTL_SECONDS=${{ secrets.QUOTA_TTL_SECONDS }}"
+
+          ENV_VARS="^##^APP_ENV=${{ secrets.APP_ENV }}##LOG_LEVEL=${{ secrets.LOG_LEVEL }}##REDIS_URL=${{ secrets.REDIS_URL }}##JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}##JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}##QUOTA_LIMIT=${{ secrets.QUOTA_LIMIT }}##QUOTA_TTL_SECONDS=${{ secrets.QUOTA_TTL_SECONDS }}"
+
           gcloud run deploy quota-service \
             --image="$IMAGE:${{ github.sha }}" \
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --service-account="quota-service-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
             --allow-unauthenticated \
+            --port=8080 \
             --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
             --vpc-egress=private-ranges-only \
             --set-env-vars="$ENV_VARS"
+
           URL=$(gcloud run services describe quota-service \
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --format='value(status.url)')
+
           echo "url=$URL" >> $GITHUB_OUTPUT
 
       - name: Deployment Summary

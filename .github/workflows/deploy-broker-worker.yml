@@ -57,7 +57,6 @@ jobs:
             --port=8080 \
             --min-instances=1 \
             --no-cpu-throttling \
-            --timeout=300 \
             --add-cloudsql-instances="${{ secrets.CLOUD_SQL_INSTANCE }}" \
             --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
             --vpc-egress=private-ranges-only \
