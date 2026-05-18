@@ -10,23 +10,18 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-_client: genai.Client | None = None
-
 def _get_client() -> genai.Client:
-    global _client
-    if _client is None:
-        logger.debug(
-            "Initializing Gemini client | project=%s location=%s",
-            settings.google_cloud_project,
-            settings.google_cloud_location,
-        )
-        _client = genai.Client(
-            vertexai=True,
-            project=settings.google_cloud_project,
-            location=settings.google_cloud_location,
-            http_options=HttpOptions(api_version="v1"),
-        )
-    return _client
+    logger.debug(
+        "Initializing Gemini client | project=%s location=%s",
+        settings.google_cloud_project,
+        settings.google_cloud_location,
+    )
+    return genai.Client(
+        vertexai=True,
+        project=settings.google_cloud_project,
+        location=settings.google_cloud_location,
+        http_options=HttpOptions(api_version="v1"),
+    )
 
 async def call_gemini(
     model: str,

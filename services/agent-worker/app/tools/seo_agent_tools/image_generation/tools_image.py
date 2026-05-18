@@ -32,18 +32,13 @@ _SHADOW_PROMPT = (
     "Do not change the product, its colors, or the background in any way."
 )
 
-_client: genai.Client | None = None
-
 def _get_client() -> genai.Client:
-    global _client
-    if _client is None:
-        _client = genai.Client(
-            vertexai=True,
-            project=settings.google_cloud_project,
-            location=settings.google_cloud_location,
-            http_options=HttpOptions(api_version="v1beta"),
-        )
-    return _client
+    return genai.Client(
+        vertexai=True,
+        project=settings.google_cloud_project,
+        location=settings.google_cloud_location,
+        http_options=HttpOptions(api_version="v1beta"),
+    )
 
 async def _enhance_with_gemini(image_bytes: bytes) -> bytes | None:
     loop = asyncio.get_running_loop()
