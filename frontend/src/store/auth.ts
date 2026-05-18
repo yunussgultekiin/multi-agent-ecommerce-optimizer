@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import api from '@/lib/api';
 import type { User, QuotaInfo } from '@/types';
 
-const QUOTA_LIMIT = 10;
+const QUOTA_LIMIT = 500;
 
 interface AuthState {
   user: User | null;

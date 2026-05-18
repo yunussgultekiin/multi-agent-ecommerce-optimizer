@@ -50,7 +50,7 @@ class Settings(BaseSettings):
         alias="GEMINI_IMAGE_MODEL",
     )
     gcs_bucket: str = Field(
-        default="ai-driven-seller-support-images", alias="GCS_BUCKET"
+        default="synapse-btk-hackathon-images", alias="GCS_BUCKET"
     )
     api_gateway_local_url: str = Field(
         default="http://localhost:8000", alias="API_GATEWAY_LOCAL_URL"

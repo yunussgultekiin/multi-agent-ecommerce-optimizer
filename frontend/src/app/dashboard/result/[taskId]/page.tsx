@@ -316,18 +316,26 @@ export default function ResultPage() {
                 </div>
 
                 <div className="shrink-0 self-start">
-                  {/* TODO: connect to generated_image_url */}
-                  <a href="#" aria-disabled="true" onClick={(e) => e.preventDefault()}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="gap-2 opacity-50 cursor-default pointer-events-none"
-                      tabIndex={-1}
-                    >
-                      <Download className="w-4 h-4" />
-                      Görseli İndir
-                    </Button>
-                  </a>
+                  {result.generated_image_url ? (
+                    <a href={result.generated_image_url} download target="_blank" rel="noreferrer">
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <Download className="w-4 h-4" />
+                        Görseli İndir
+                      </Button>
+                    </a>
+                  ) : (
+                    <a href="#" aria-disabled="true" onClick={(e) => e.preventDefault()}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-2 opacity-50 cursor-default pointer-events-none"
+                        tabIndex={-1}
+                      >
+                        <Download className="w-4 h-4" />
+                        Görseli İndir
+                      </Button>
+                    </a>
+                  )}
                 </div>
               </div>
 
