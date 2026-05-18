@@ -45,7 +45,7 @@ def _build_rival_graph():
     )
     graph.add_node(
         "pricing",
-        NodeRunner("smart_pricing", 72).wrap(_rival_agent.pricing),
+        NodeRunner("pricing_analysis", 72).wrap(_rival_agent.pricing),
     )
     graph.add_node(
         "finalize",

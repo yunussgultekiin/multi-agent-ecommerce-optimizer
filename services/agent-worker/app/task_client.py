@@ -13,19 +13,14 @@ class TaskServiceClient:
         )
 
     async def save_result(self, task_id: str, result: dict) -> None:
-        try:
-            response = await self._client.post(
-                f"/tasks/{task_id}/result",
-                json={"result": result},
+        response = await self._client.post(
+            f"/tasks/{task_id}/result",
+            json={"result": result},
+        )
+        if response.status_code not in (200, 201):
+            raise RuntimeError(
+                f"save_result failed: task_id={task_id} code={response.status_code}"
             )
-            if response.status_code not in (200, 201):
-                logger.warning(
-                    "Unexpected save_result response: task_id=%s code=%d",
-                    task_id,
-                    response.status_code,
-                )
-        except Exception as exc:
-            logger.error("Failed to save result: task_id=%s error=%s", task_id, exc)
 
     async def update_status(
         self, task_id: str, status: str, error_message: str | None = None

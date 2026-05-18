@@ -50,6 +50,15 @@ class SeoAgent:
             "generated_image_url": state.get("generated_image_url"),
         }
 
-        await _task_client.save_result(state["task_id"], final_result)
+        try:
+            await _task_client.save_result(state["task_id"], final_result)
+        except Exception as exc:
+            logger.error(
+                "save_result failed, marking task failed | task_id=%s error=%s",
+                state["task_id"],
+                exc,
+            )
+            await _task_client.update_status(state["task_id"], "failed", str(exc))
+            return {**state, "final_result": final_result, "status": "failed"}
 
         return {**state, "final_result": final_result, "status": "completed"}

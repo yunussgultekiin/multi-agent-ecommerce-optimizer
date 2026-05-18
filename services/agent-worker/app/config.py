@@ -52,6 +52,9 @@ class Settings(BaseSettings):
     gcs_bucket: str = Field(
         default="ai-driven-seller-support-images", alias="GCS_BUCKET"
     )
+    api_gateway_local_url: str = Field(
+        default="http://localhost:8000", alias="API_GATEWAY_LOCAL_URL"
+    )
     api_gateway_internal_url: str = Field(
         default="http://api-gateway:8080", alias="API_GATEWAY_INTERNAL_URL"
     )

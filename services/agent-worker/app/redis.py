@@ -19,10 +19,18 @@ async def close_redis() -> None:
         _redis_client = None
 
 async def report_progress(task_id: str, step: str, status: str, pct: int) -> None:
-    redis = await get_redis()
-    payload = {"step": step, "status": status, "pct": pct}
-    pipe = redis.pipeline()
-    pipe.hset(f"task_progress:{task_id}", mapping=payload)
-    pipe.publish(f"progress:{task_id}", json.dumps(payload))
-    await pipe.execute()
-    logger.debug("Progress reported: task_id=%s step=%s pct=%d", task_id, step, pct)
+    try:
+        redis = await get_redis()
+        payload = {"step": step, "status": status, "pct": pct}
+        pipe = redis.pipeline()
+        pipe.hset(f"task_progress:{task_id}", mapping=payload)
+        pipe.publish(f"progress:{task_id}", json.dumps(payload))
+        await pipe.execute()
+        logger.debug("Progress reported: task_id=%s step=%s pct=%d", task_id, step, pct)
+    except Exception as exc:
+        logger.warning(
+            "Failed to report progress (Redis unavailable): task_id=%s step=%s error=%s",
+            task_id,
+            step,
+            exc,
+        )

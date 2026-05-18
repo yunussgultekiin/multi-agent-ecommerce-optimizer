@@ -183,7 +183,7 @@ jobs:
         id: gateway
         run: |
           IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/api-gateway"
-          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},GCS_BUCKET=${{ secrets.GCS_BUCKET }},GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }},AUTH_SERVICE_URL=${{ steps.auth.outputs.url }},TASK_SERVICE_URL=${{ steps.task.outputs.url }},QUOTA_SERVICE_URL=${{ steps.quota.outputs.url }}"
+          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},GCS_BUCKET=${{ secrets.GCS_BUCKET }},GOOGLE_CLOUD_PROJECT=${{ secrets.GOOGLE_CLOUD_PROJECT }},AUTH_SERVICE_URL=${{ steps.auth.outputs.url }},TASK_SERVICE_URL=${{ steps.task.outputs.url }},QUOTA_SERVICE_URL=${{ steps.quota.outputs.url }},FRONTEND_ORIGIN=${{ secrets.FRONTEND_URL }}"
           gcloud run deploy api-gateway \
             --image="$IMAGE:${{ github.sha }}" \
             --region="${{ secrets.GCP_REGION }}" \

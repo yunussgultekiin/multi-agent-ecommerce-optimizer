@@ -9,7 +9,8 @@ class Settings(BaseSettings):
     jwt_secret_key: str = Field(alias="JWT_SECRET_KEY")
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
     frontend_origin: str = Field(
-        default="http://localhost:3000", alias="FRONTEND_ORIGIN"
+        default="https://frontend-611409148857.us-central1.run.app",
+        alias="FRONTEND_ORIGIN",
     )
     rate_limit: str = Field(default="60/minute", alias="RATE_LIMIT")
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
