@@ -575,12 +575,13 @@ export default function AnalyzePage() {
           </div>
           <div>
             {step < 2 ? (
-              <Button type="button" onClick={nextStep} className="gap-2 h-11 px-8">
+              <Button key="next-btn" type="button" onClick={nextStep} className="gap-2 h-11 px-8">
                 Devam Et
                 <ArrowRight className="w-4 h-4" />
               </Button>
             ) : (
               <Button
+                key="submit-btn"
                 type="submit"
                 size="lg"
                 disabled={isLoading}
