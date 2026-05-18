@@ -98,7 +98,7 @@ export default function DashboardPage() {
         const res = await api.get('/analyze');
         const tasks: AnalysisTask[] = res.data?.items ?? [];
         setAllTasks(tasks);
-        setRecentTasks(tasks.slice(0, 5));
+        setRecentTasks(tasks.slice(0, 3));
       } catch {
         toast({ variant: 'destructive', title: 'Hata', description: 'Analizler yüklenemedi.' });
       } finally {
@@ -113,7 +113,7 @@ export default function DashboardPage() {
   const quotaPct       = quota ? (quota.used / quota.limit) * 100 : 0;
 
   return (
-    <motion.div variants={page} initial="hidden" animate="visible" className="space-y-7">
+    <motion.div variants={page} initial="hidden" animate="visible" className="space-y-4">
 
       <motion.div variants={row} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -151,7 +151,7 @@ export default function DashboardPage() {
 
         <motion.div
           whileHover={{ y: -3, transition: { duration: 0.18 } }}
-          className="lg:col-span-2 relative overflow-hidden rounded-2xl border border-primary/20 bg-primary/[0.04] p-5 cursor-default group"
+          className="lg:col-span-2 relative overflow-hidden rounded-2xl border border-primary/20 bg-primary/[0.04] p-4 cursor-default group"
         >
           <div className="absolute top-0 right-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
@@ -217,7 +217,7 @@ export default function DashboardPage() {
           <motion.div
             whileHover={{ y: -3, scale: 1.005, transition: { duration: 0.18 } }}
             whileTap={{ scale: 0.99 }}
-            className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5 h-full transition-colors duration-200 group-hover:bg-white/[0.06] group-hover:border-white/[0.12]"
+            className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-4 h-full transition-colors duration-200 group-hover:bg-white/[0.06] group-hover:border-white/[0.12]"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/8 rounded-full blur-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="flex items-start gap-4">
@@ -243,7 +243,7 @@ export default function DashboardPage() {
           <motion.div
             whileHover={{ y: -3, scale: 1.005, transition: { duration: 0.18 } }}
             whileTap={{ scale: 0.99 }}
-            className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5 h-full transition-colors duration-200 group-hover:bg-white/[0.06] group-hover:border-white/[0.12]"
+            className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-4 h-full transition-colors duration-200 group-hover:bg-white/[0.06] group-hover:border-white/[0.12]"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/8 rounded-full blur-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="flex items-start gap-4">
@@ -306,7 +306,7 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
-            className="flex flex-col items-center justify-center py-14 text-center rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.02]"
+            className="flex flex-col items-center justify-center py-8 text-center rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.02]"
           >
             <div className="relative mb-5">
               <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center">

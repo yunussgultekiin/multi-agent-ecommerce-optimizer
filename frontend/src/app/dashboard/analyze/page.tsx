@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2, Plus, Trash2, Box, Store, Search, ArrowRight, ArrowLeft, Sparkles, Tag, Upload, X } from 'lucide-react';
+import { Loader2, Box, Store, Search, ArrowRight, ArrowLeft, Sparkles, Upload, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -20,7 +20,7 @@ import api from '@/lib/api';
 const STEPS = [
   { id: 0, title: 'Temel Bilgiler', icon: Box, subtitle: 'Ürün adı, açıklama ve platform' },
   { id: 1, title: 'Satış Bilgileri', icon: Store, subtitle: 'Fiyat ve kategori' },
-  { id: 2, title: 'Detaylar', icon: Search, subtitle: 'SEO tonu ve varyantlar' },
+  { id: 2, title: 'Detaylar', icon: Search, subtitle: 'SEO tonu ve anahtar kelimeler' },
 ];
 
 const slideVariants = {
@@ -62,11 +62,9 @@ export default function AnalyzePage() {
     defaultValues: {
       platform: 'trendyol',
       seo_tone: 'casual',
-      variants: [],
     },
   });
 
-  const { fields, append, remove } = useFieldArray({ control, name: 'variants' });
   const platformValue = watch('platform');
   const seoToneValue = watch('seo_tone');
 
@@ -157,7 +155,7 @@ export default function AnalyzePage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-5">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -480,81 +478,6 @@ export default function AnalyzePage() {
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      <Tag className="w-5 h-5 text-primary" />
-                      Varyantlar
-                    </CardTitle>
-                    <CardDescription>Renk veya beden seçenekleri ekleyin (opsiyonel)</CardDescription>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => append({ name: '', color: '', price_diff: '' })}
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Ekle
-                  </Button>
-                </CardHeader>
-                <CardContent>
-                  {fields.length === 0 ? (
-                    <div className="text-center py-8 text-muted-foreground border border-dashed border-white/10 rounded-lg bg-white/[0.01]">
-                      <Tag className="w-6 h-6 mx-auto mb-2 opacity-40" />
-                      <p className="text-sm">Eklenmiş varyant yok.</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      {fields.map((field, index) => (
-                        <motion.div
-                          key={field.id}
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="flex items-end gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5"
-                        >
-                          <div className="flex-1 space-y-1">
-                            <Label className="text-xs">Ad</Label>
-                            <Input
-                              {...register(`variants.${index}.name`)}
-                              placeholder="L Beden"
-                              className="h-9"
-                            />
-                          </div>
-                          <div className="flex-1 space-y-1">
-                            <Label className="text-xs">Renk</Label>
-                            <Input
-                              {...register(`variants.${index}.color`)}
-                              placeholder="Siyah"
-                              className="h-9"
-                            />
-                          </div>
-                          <div className="flex-1 space-y-1">
-                            <Label className="text-xs">Fiyat Farkı</Label>
-                            <Input
-                              type="number"
-                              {...register(`variants.${index}.price_diff`)}
-                              placeholder="0"
-                              className="h-9"
-                            />
-                          </div>
-                          <Button
-                            type="button"
-                            variant="destructive"
-                            size="icon"
-                            onClick={() => remove(index)}
-                            className="h-9 w-9 shrink-0"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </motion.div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
             </motion.div>
           )}
         </AnimatePresence>

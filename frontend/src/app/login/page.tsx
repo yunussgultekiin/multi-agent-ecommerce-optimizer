@@ -98,7 +98,7 @@ export default function LoginPage() {
       >
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <img src="/synapse-logo.png" alt="Synapse" className="h-9 w-auto" />
+            <span className="text-2xl font-extrabold tracking-tight gradient-text">Synapse</span>
           </Link>
           <Link href="/">
             <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-foreground">
@@ -171,7 +171,7 @@ export default function LoginPage() {
           className="w-full max-w-sm"
         >
           <div className="flex items-center gap-2 mb-8 lg:hidden">
-            <img src="/synapse-logo.png" alt="Synapse" className="h-8 w-auto" />
+            <span className="text-2xl font-extrabold tracking-tight gradient-text">Synapse</span>
           </div>
 
           <div className="mb-8">

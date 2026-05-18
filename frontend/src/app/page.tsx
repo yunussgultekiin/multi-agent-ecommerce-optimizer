@@ -132,8 +132,11 @@ export default function Home() {
 
       <nav className="relative z-50 border-b border-white/[0.06] bg-background/70 backdrop-blur-2xl sticky top-0">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center">
-            <img src="/synapse-logo.png" alt="Synapse" className="h-9 w-auto" />
+          <div className="flex flex-col leading-none">
+            <span className="text-xl font-extrabold tracking-tight gradient-text">Synapse</span>
+            <span className="text-[9px] text-muted-foreground/60 tracking-widest uppercase mt-0.5">
+              Akıllı Pazar Analitiği
+            </span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -166,7 +169,7 @@ export default function Home() {
           variants={stagger}
           initial="hidden"
           animate="visible"
-          className="container mx-auto px-6 py-20 text-center max-w-5xl flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]"
+          className="container mx-auto px-6 pt-14 pb-28 text-center max-w-5xl flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]"
         >
           <motion.div variants={fadeUp} custom={0} className="flex justify-center mb-8">
             <Badge
@@ -483,8 +486,8 @@ export default function Home() {
                   </div>
 
                   <div className="flex items-start gap-2 p-3 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/15">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-px" />
+                    <p className="text-xs text-muted-foreground leading-snug">
                       <span className="text-foreground font-medium">Fırsat: </span>
                       Rakipler ₺119–₺164 aralığında. Hediye paketi sunan rakip yok — kişiselleştirme fırsatı mevcut.
                     </p>
@@ -629,7 +632,7 @@ export default function Home() {
         <div className="container mx-auto px-6 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2.5">
-              <img src="/synapse-logo.png" alt="Synapse" className="h-6 w-auto" />
+              <span className="text-base font-extrabold tracking-tight gradient-text">Synapse</span>
               <span className="text-muted-foreground text-sm">© 2026</span>
             </div>
 

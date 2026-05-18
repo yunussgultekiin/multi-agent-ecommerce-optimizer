@@ -107,7 +107,6 @@ html {
   color: white;
 }
 
-/* Logo — PNG has a baked-in dark background; screen blend removes it on dark surfaces */
-img[src="/synapse-logo.png"] {
-  mix-blend-mode: screen;
-}
+/* Hide scrollbar while keeping scroll functionality */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
