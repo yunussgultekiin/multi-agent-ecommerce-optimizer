@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, PlusCircle, History, LogOut, Menu, X, Zap } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, History, LogOut, Menu, X, Zap, UserCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
@@ -15,6 +15,7 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Yeni Analiz', href: '/dashboard/analyze', icon: PlusCircle },
   { name: 'Geçmiş', href: '/dashboard/history', icon: History },
+  { name: 'Kullanıcı Profili Ayarları', href: '/dashboard/profile', icon: UserCircle },
 ];
 
 function SidebarContent({
@@ -189,25 +190,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
           )}
         </div>
-
-        <header className="hidden md:flex h-14 items-center justify-end px-8 border-b border-white/5 bg-background/50 backdrop-blur-xl sticky top-0 z-10">
-          {quota && (
-            <motion.div
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="flex flex-col items-end gap-0.5 glass px-4 py-2 rounded-xl text-sm"
-            >
-              <div className="flex items-center gap-2">
-                <Zap className="w-3.5 h-3.5 text-primary" />
-                <span className="text-muted-foreground text-xs">Günlük Limit:</span>
-                <span className="font-semibold text-primary">{quota.used}</span>
-                <span className="text-muted-foreground text-xs">/ {quota.limit}</span>
-              </div>
-              <p className="text-[10px] text-muted-foreground/60 text-right">24 saat içinde yenilenir</p>
-            </motion.div>
-          )}
-        </header>
 
         <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
           <div className="max-w-6xl mx-auto">

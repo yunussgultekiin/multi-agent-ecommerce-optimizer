@@ -106,3 +106,8 @@ html {
   background: hsl(245 58% 61% / 0.3);
   color: white;
 }
+
+/* Logo — PNG has a baked-in dark background; screen blend removes it on dark surfaces */
+img[src="/synapse-logo.png"] {
+  mix-blend-mode: screen;
+}

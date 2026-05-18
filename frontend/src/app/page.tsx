@@ -116,6 +116,7 @@ const highlights = [
   'Platforma özel SEO',
   'Görsel üretim & analiz',
   'Fiyat optimizasyonu',
+  'AI Destekli SEO & İçerik Analizi',
 ];
 
 export default function Home() {
@@ -165,7 +166,7 @@ export default function Home() {
           variants={stagger}
           initial="hidden"
           animate="visible"
-          className="container mx-auto px-6 pt-24 md:pt-36 pb-20 text-center max-w-5xl"
+          className="container mx-auto px-6 py-20 text-center max-w-5xl flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]"
         >
           <motion.div variants={fadeUp} custom={0} className="flex justify-center mb-8">
             <Badge
@@ -622,34 +623,6 @@ export default function Home() {
           </motion.div>
         </section>
 
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="container mx-auto px-6 max-w-4xl mb-24"
-        >
-          <div className="relative glass-card rounded-3xl p-10 text-center overflow-hidden border border-white/[0.07]">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.08] via-transparent to-violet-500/[0.08] pointer-events-none" />
-            <div className="absolute -top-px left-12 right-12 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-            <div className="relative">
-              <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">
-                Rakiplerinizin önüne geçin
-              </h2>
-              <p className="text-muted-foreground mb-7 max-w-md mx-auto">
-                Ücretsiz hesabınızla hemen başlayın. Kredi kartı gerekmez.
-              </p>
-              <Link href="/register">
-                <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} className="inline-block">
-                  <Button size="lg" className="px-10 shadow-xl shadow-indigo-500/20 gap-2">
-                    Ücretsiz Başla
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </motion.div>
-              </Link>
-            </div>
-          </div>
-        </motion.section>
       </main>
 
       <footer className="relative z-10 border-t border-white/[0.06] bg-background/60 backdrop-blur-xl">
@@ -660,9 +633,10 @@ export default function Home() {
               <span className="text-muted-foreground text-sm">© 2026</span>
             </div>
 
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <Link href="/login" className="hover:text-foreground transition-colors">Giriş Yap</Link>
-              <Link href="/register" className="hover:text-foreground transition-colors">Kayıt Ol</Link>
+            <div className="flex flex-col sm:flex-row items-center gap-1.5 sm:gap-5 text-sm text-center">
+              <span className="font-semibold text-foreground tracking-wide">BİRİNCİYİZ Team</span>
+              <span className="hidden sm:block text-white/20">·</span>
+              <span className="text-muted-foreground">2026 BTK Hackhaton İçin Tasarlanmıştır</span>
             </div>
 
             <Badge variant="outline" className="text-[10px] text-muted-foreground border-white/10 bg-white/[0.03] flex items-center gap-1.5">

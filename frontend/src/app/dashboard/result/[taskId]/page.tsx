@@ -287,9 +287,6 @@ export default function ResultPage() {
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5 mb-6">
                 <div className="space-y-2.5 flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge variant="success" className="px-3 py-1 text-xs">
-                      Analiz Tamamlandı
-                    </Badge>
                     <Badge
                       variant="outline"
                       className={`capitalize px-3 py-1 text-xs font-medium ${PLATFORM_COLORS[result.platform] ?? ''}`}
@@ -962,10 +959,10 @@ export default function ResultPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Lightbulb className="w-5 h-5 text-amber-500" />
-                    Ürün Geliştirme Fırsatları
+                    Stratejik İlerleme ve Gelişim Önerileri
                   </CardTitle>
                   <CardDescription>
-                    Pazarda aranan ancak ürününüzde bulunmayan özellikler ve geliştirme önerileri
+                    Ürününüzün rekabet avantajını artıracak stratejik fırsatlar ve gelişim alanları
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -987,7 +984,7 @@ export default function ResultPage() {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm text-muted-foreground py-4">Ürün geliştirme önerisi bulunamadı.</p>
+                    <p className="text-sm text-muted-foreground py-4">Stratejik gelişim önerisi bulunamadı.</p>
                   )}
                 </CardContent>
               </Card>

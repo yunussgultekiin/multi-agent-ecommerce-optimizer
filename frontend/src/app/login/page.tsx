@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,8 +22,37 @@ const panelFeatures = [
   'Akıllı fiyat stratejisi',
 ];
 
+const testimonials = [
+  {
+    text: 'Rakip analizini manuel yapmak saatler alıyordu. Synapse ile bunu dakikalar içinde yapıyorum.',
+    name: 'Ahmet Y.',
+    title: 'Trendyol Satıcısı',
+    initial: 'A',
+  },
+  {
+    text: 'SEO önerilerini uyguladıktan sonra ürünlerim arama sonuçlarında çok daha üst sıralara çıktı.',
+    name: 'Merve K.',
+    title: 'Amazon TR Satıcısı',
+    initial: 'M',
+  },
+  {
+    text: 'Fiyat stratejisi önerileri sayesinde kâr marjımı düşürmeden rakiplerimle rekabet edebiliyorum.',
+    name: 'Emre S.',
+    title: 'Hepsiburada Satıcısı',
+    initial: 'E',
+  },
+];
+
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [testimonialIdx, setTestimonialIdx] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTestimonialIdx((prev) => (prev + 1) % testimonials.length);
+    }, 20000);
+    return () => clearInterval(timer);
+  }, []);
   const router = useRouter();
   const { login } = useAuthStore();
   const { toast } = useToast();
@@ -108,17 +137,29 @@ export default function LoginPage() {
           </ul>
         </div>
 
-        <div className="glass-card rounded-2xl p-5 border border-white/[0.08]">
-          <p className="text-sm text-muted-foreground leading-relaxed italic">
-            &ldquo;Rakip analizini manuel yapmak saatler alıyordu. Synapse ile bunu dakikalar içinde yapıyorum.&rdquo;
-          </p>
-          <div className="flex items-center gap-2.5 mt-4">
-            <div className="w-7 h-7 rounded-full gradient-bg flex items-center justify-center text-xs font-bold text-white">A</div>
-            <div>
-              <p className="text-xs font-medium">Ahmet Y.</p>
-              <p className="text-[10px] text-muted-foreground">Trendyol Satıcısı</p>
-            </div>
-          </div>
+        <div className="glass-card rounded-2xl p-5 border border-white/[0.08] overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={testimonialIdx}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.4 }}
+            >
+              <p className="text-sm text-muted-foreground leading-relaxed italic">
+                &ldquo;{testimonials[testimonialIdx].text}&rdquo;
+              </p>
+              <div className="flex items-center gap-2.5 mt-4">
+                <div className="w-7 h-7 rounded-full gradient-bg flex items-center justify-center text-xs font-bold text-white">
+                  {testimonials[testimonialIdx].initial}
+                </div>
+                <div>
+                  <p className="text-xs font-medium">{testimonials[testimonialIdx].name}</p>
+                  <p className="text-[10px] text-muted-foreground">{testimonials[testimonialIdx].title}</p>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </motion.div>
 
