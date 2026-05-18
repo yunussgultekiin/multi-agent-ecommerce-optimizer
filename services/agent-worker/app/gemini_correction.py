@@ -16,14 +16,6 @@ T = TypeVar("T", bound=BaseModel)
 _MAX_RETRIES = 2
 _CALL_TIMEOUT_SECONDS = 30
 
-def _get_client() -> genai.Client:
-    return genai.Client(
-        vertexai=True,
-        project=settings.google_cloud_project,
-        location=settings.google_cloud_location,
-        http_options=HttpOptions(api_version="v1"),
-    )
-
 class GeminiCorrectionLoop:
     def __init__(self, model_name: str = "gemini-2.5-flash-lite") -> None:
         self._model_name = model_name
@@ -37,20 +29,22 @@ class GeminiCorrectionLoop:
     ) -> T:
 
         parser = response_parser or self._strip_and_parse_json
-        loop = asyncio.get_running_loop()
         last_error = ""
         for attempt in range(_MAX_RETRIES + 1):
             current_prompt = self._build_retry_prompt(prompt, last_error, attempt)
+            client = genai.Client(
+                vertexai=True,
+                project=settings.google_cloud_project,
+                location=settings.google_cloud_location,
+                http_options=HttpOptions(api_version="v1"),
+            )
             try:
                 response = await asyncio.wait_for(
-                    loop.run_in_executor(
-                        None,
-                        lambda p=current_prompt: _get_client().models.generate_content(
-                            model=self._model_name,
-                            contents=p,
-                            config=types.GenerateContentConfig(
-                                thinking_config=types.ThinkingConfig(thinking_budget=0),
-                            ),
+                    client.aio.models.generate_content(
+                        model=self._model_name,
+                        contents=current_prompt,
+                        config=types.GenerateContentConfig(
+                            thinking_config=types.ThinkingConfig(thinking_budget=0),
                         ),
                     ),
                     timeout=_CALL_TIMEOUT_SECONDS,
