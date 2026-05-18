@@ -1,5 +1,5 @@
 from app.database import get_session
-from app.redis import redis_client
+from app.redis import get_redis as _get_redis
 import redis.asyncio as aioredis
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -8,4 +8,4 @@ async def get_db() -> AsyncSession:
         yield session
 
 async def get_redis() -> aioredis.Redis:
-    return redis_client
+    return await _get_redis()

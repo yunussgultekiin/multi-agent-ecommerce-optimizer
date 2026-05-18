@@ -16,12 +16,18 @@ T = TypeVar("T", bound=BaseModel)
 _MAX_RETRIES = 2
 _CALL_TIMEOUT_SECONDS = 30
 
-_client = genai.Client(
-    vertexai=True,
-    project=settings.google_cloud_project,
-    location=settings.google_cloud_location,
-    http_options=HttpOptions(api_version="v1"),
-)
+_client: genai.Client | None = None
+
+def _get_client() -> genai.Client:
+    global _client
+    if _client is None:
+        _client = genai.Client(
+            vertexai=True,
+            project=settings.google_cloud_project,
+            location=settings.google_cloud_location,
+            http_options=HttpOptions(api_version="v1"),
+        )
+    return _client
 
 class GeminiCorrectionLoop:
     def __init__(self, model_name: str = "gemini-2.5-flash-lite") -> None:
@@ -44,7 +50,7 @@ class GeminiCorrectionLoop:
                 response = await asyncio.wait_for(
                     loop.run_in_executor(
                         None,
-                        lambda p=current_prompt: _client.models.generate_content(
+                        lambda p=current_prompt: _get_client().models.generate_content(
                             model=self._model_name,
                             contents=p,
                             config=types.GenerateContentConfig(
