@@ -9,6 +9,32 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+_client: genai.Client | None = None
+
+
+def _get_client() -> genai.Client:
+    global _client
+    if _client is None:
+        _client = genai.Client(
+            vertexai=True,
+            project=settings.google_cloud_project,
+            location=settings.google_cloud_location,
+            http_options=HttpOptions(api_version="v1"),
+        )
+    return _client
+
+
+def _reset_client() -> genai.Client:
+    global _client
+    _client = genai.Client(
+        vertexai=True,
+        project=settings.google_cloud_project,
+        location=settings.google_cloud_location,
+        http_options=HttpOptions(api_version="v1"),
+    )
+    return _client
+
+
 async def call_gemini(
     model: str,
     prompt: str,
@@ -20,11 +46,9 @@ async def call_gemini(
         settings.google_cloud_project,
         settings.google_cloud_location,
     )
-    client = genai.Client(
-        vertexai=True,
-        project=settings.google_cloud_project,
-        location=settings.google_cloud_location,
-        http_options=HttpOptions(api_version="v1"),
+    client = _get_client()
+    config.automatic_function_calling = types.AutomaticFunctionCallingConfig(
+        disable=True
     )
     try:
         response = await client.aio.models.generate_content(
@@ -32,6 +56,17 @@ async def call_gemini(
             contents=prompt,
             config=config,
         )
+    except RuntimeError as exc:
+        if "closed" in str(exc).lower():
+            logger.warning("Gemini client was closed, resetting | model=%s", model)
+            client = _reset_client()
+            response = await client.aio.models.generate_content(
+                model=model,
+                contents=prompt,
+                config=config,
+            )
+        else:
+            raise
     except google.auth.exceptions.DefaultCredentialsError as exc:
         raise RuntimeError(
             "Google Cloud credentials not configured. "
