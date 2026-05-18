@@ -1,5 +1,5 @@
 from app.config import settings
-from google.cloud.sql.connector import AsyncConnector, IPTypes
+from google.cloud.sql.connector import Connector, IPTypes
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
@@ -26,7 +26,7 @@ def _build_engine() -> AsyncEngine:
         echo=False,
     )
 
-async def build_engine_with_connector(connector: AsyncConnector) -> AsyncEngine:
+async def build_engine_with_connector(connector: Connector) -> AsyncEngine:
     ip_type = IPTypes.PRIVATE if settings.db_ip_type == "PRIVATE" else IPTypes.PUBLIC
 
     async def _getconn():
