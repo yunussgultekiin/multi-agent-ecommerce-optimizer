@@ -15,6 +15,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -29,7 +30,12 @@ jobs:
       - name: Build and push
         run: |
           IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/task-service"
-          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" ./services/task-service
+
+          docker build \
+            -t "$IMAGE:${{ github.sha }}" \
+            -t "$IMAGE:latest" \
+            ./services/task-service
+
           docker push "$IMAGE:${{ github.sha }}"
           docker push "$IMAGE:latest"
 
@@ -37,21 +43,26 @@ jobs:
         id: deploy
         run: |
           IMAGE="${{ secrets.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GAR_REPO }}/task-service"
-          ENV_VARS="APP_ENV=${{ secrets.APP_ENV }},LOG_LEVEL=${{ secrets.LOG_LEVEL }},DATABASE_URL=${{ secrets.DATABASE_URL }},REDIS_URL=${{ secrets.REDIS_URL }},JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }},JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }},TASK_QUEUE_NAME=${{ secrets.TASK_QUEUE_NAME }}"
+
+          ENV_VARS="^##^APP_ENV=${{ secrets.APP_ENV }}##LOG_LEVEL=${{ secrets.LOG_LEVEL }}##DATABASE_URL=${{ secrets.DATABASE_URL }}##REDIS_URL=${{ secrets.REDIS_URL }}##JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}##JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}##TASK_QUEUE_NAME=${{ secrets.TASK_QUEUE_NAME }}"
+
           gcloud run deploy task-service \
             --image="$IMAGE:${{ github.sha }}" \
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --service-account="task-service-sa@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com" \
             --allow-unauthenticated \
+            --port=8080 \
             --add-cloudsql-instances="${{ secrets.CLOUD_SQL_INSTANCE }}" \
             --vpc-connector="${{ secrets.VPC_CONNECTOR }}" \
             --vpc-egress=private-ranges-only \
             --set-env-vars="$ENV_VARS"
+
           URL=$(gcloud run services describe task-service \
             --region="${{ secrets.GCP_REGION }}" \
             --project="${{ secrets.GCP_PROJECT_ID }}" \
             --format='value(status.url)')
+
           echo "url=$URL" >> $GITHUB_OUTPUT
 
       - name: Deployment Summary
