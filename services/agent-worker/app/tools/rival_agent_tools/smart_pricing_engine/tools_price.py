@@ -4,6 +4,7 @@ from .prompts_price import (
     build_fallback_self_correction_prompt,
 )
 from .utils_price import (
+    apply_psychological_rounding,
     calculate_competitor_variant_overlap,
     calculate_confidence_score,
     calculate_market_power_gap,
@@ -12,6 +13,7 @@ from .utils_price import (
     calculate_variant_pricing,
     clean_json_response,
     determine_positioning,
+    ensure_price_consistency,
     extract_valid_prices,
     filter_valid_competitors,
     get_brand_multiplier,
@@ -170,6 +172,25 @@ def run_deterministic_analysis(
     competitor_variant_overlap = calculate_competitor_variant_overlap(
         user_variants, competitors
     )
+
+    if user_product.get("price"):
+        adjusted_predicted = ensure_price_consistency(
+            adjusted_predicted,
+            user_price,
+            positioning,
+            competitor_median=stats["median"],
+            price_q3=stats["q3"],
+            brand_multiplier=brand_multiplier,
+        )
+        adjusted_predicted = round(adjusted_predicted, 2)
+        adjusted_min = round(apply_psychological_rounding(adjusted_min), 2)
+        adjusted_max = round(apply_psychological_rounding(adjusted_max), 2)
+        if adjusted_min > adjusted_predicted:
+            adjusted_min = round(adjusted_predicted * 0.90, 2)
+        if adjusted_max < adjusted_predicted:
+            adjusted_max = round(adjusted_predicted * 1.10, 2)
+    else:
+        adjusted_predicted = round(apply_psychological_rounding(adjusted_predicted), 2)
 
     result = PricingResult(
         price_median=stats["median"],

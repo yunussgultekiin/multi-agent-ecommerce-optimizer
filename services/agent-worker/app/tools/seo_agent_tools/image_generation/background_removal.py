@@ -67,12 +67,16 @@ def _compose_clean_canvas_sync(
 
     max_w = int(canvas_size[0] * _PRODUCT_FILL_RATIO)
     max_h = int(canvas_size[1] * _PRODUCT_FILL_RATIO)
-    product.thumbnail((max_w, max_h), Image.LANCZOS)
 
     pw, ph = product.size
+    scale = min(max_w / pw, max_h / ph)
+    new_w = max(1, int(pw * scale))
+    new_h = max(1, int(ph * scale))
+    product = product.resize((new_w, new_h), Image.LANCZOS)
+
     cx, cy = canvas_size
-    x = (cx - pw) // 2
-    y = (cy - ph) // 2
+    x = (cx - new_w) // 2
+    y = (cy - new_h) // 2
 
     canvas = Image.new("RGBA", canvas_size, (*canvas_color, 255))
     canvas.paste(product, (x, y), mask=product)

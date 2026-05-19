@@ -11,6 +11,11 @@ from app.tools.rival_agent_tools import (
     run_smart_pricing_engine,
     run_trend_analyzer,
 )
+from app.tools.rival_agent_tools.competitor_discovery.models_discovery import (
+    PRIMARY_RELEVANCE_THRESHOLD,
+    RELEVANCE_THRESHOLD,
+    SECONDARY_RELEVANCE_THRESHOLD,
+)
 from app.workflow.error_handler import WorkflowErrorHandler
 from app.workflow.seo_graph import build_seo_state_from_rival, compiled_seo_graph
 import logging
@@ -26,6 +31,49 @@ def _to_tool_results(research_results: list[dict]) -> list[ToolResult]:
         )
         for r in research_results
     ]
+
+
+def _build_discovery_lookup(competitor_names: list[dict]) -> dict[str, dict]:
+    """competitor_name → discovery dict (similarity bilgisi için)."""
+    return {
+        c.get("competitor_name", "").lower().strip(): c
+        for c in competitor_names
+        if c.get("competitor_name")
+    }
+
+
+def _get_relevant_research(state: RivalAgentState) -> list[dict]:
+    lookup = _build_discovery_lookup(state.get("competitor_names", []))
+    all_results = state["competitor_research_results"]
+
+    def _score(r: dict) -> int:
+        name = (r.get("data") or {}).get("competitor_name", "").lower().strip()
+        return lookup.get(name, {}).get("similarity_score", 0)
+
+    primary = [r for r in all_results if _score(r) >= PRIMARY_RELEVANCE_THRESHOLD]
+    if len(primary) >= MIN_VALID_COMPETITORS:
+        logger.info(
+            "Relevant competitors selected (primary) | count=%d threshold=%d",
+            len(primary), PRIMARY_RELEVANCE_THRESHOLD,
+        )
+        return primary
+
+    secondary = [r for r in all_results if _score(r) >= SECONDARY_RELEVANCE_THRESHOLD]
+    if len(secondary) >= MIN_VALID_COMPETITORS:
+        logger.warning(
+            "Primary tier insufficient (%d), using secondary | count=%d threshold=%d",
+            len(primary), len(secondary), SECONDARY_RELEVANCE_THRESHOLD,
+        )
+        return secondary
+
+    sorted_all = sorted(all_results, key=_score, reverse=True)
+    n = max(MIN_VALID_COMPETITORS, len(all_results) // 2 + 1)
+    top_n = sorted_all[:n]
+    logger.warning(
+        "Insufficient relevant competitors (primary=%d secondary=%d) — using top-%d by score",
+        len(primary), len(secondary), len(top_n),
+    )
+    return top_n
 
 class RivalAgent:
     async def discover_competitors(self, state: RivalAgentState) -> RivalAgentState:
@@ -133,11 +181,10 @@ class RivalAgent:
         task_id = state["task_id"]
 
         try:
+            relevant_research = _get_relevant_research(state)
             result = await run_market_gap_analyzer(
                 user_product=state["user_product"],
-                competitor_tool_results=_to_tool_results(
-                    state["competitor_research_results"]
-                ),
+                competitor_tool_results=_to_tool_results(relevant_research),
                 sentiment_result=state.get("sentiment_result") or {},
                 trend_result=state.get("trend_result") or {},
             )
@@ -163,11 +210,10 @@ class RivalAgent:
         task_id = state["task_id"]
 
         try:
+            relevant_research = _get_relevant_research(state)
             result = await run_smart_pricing_engine(
                 user_product=state["user_product"],
-                competitor_tool_results=_to_tool_results(
-                    state["competitor_research_results"]
-                ),
+                competitor_tool_results=_to_tool_results(relevant_research),
                 gap_result=state.get("gap_result"),
                 sentiment_result=state.get("sentiment_result") or {},
                 trend_result=state.get("trend_result") or {},
@@ -185,11 +231,28 @@ class RivalAgent:
         return {"pricing_result": result.data}
 
     async def finalize(self, state: RivalAgentState) -> RivalAgentState:
+        lookup = _build_discovery_lookup(state.get("competitor_names", []))
+        enriched_research = []
+        for r in state["competitor_research_results"]:
+            comp_name = (r.get("data") or {}).get("competitor_name", "").lower().strip()
+            discovery = lookup.get(comp_name, {})
+            enriched = dict(r)
+            if discovery:
+                score = discovery.get("similarity_score", 50)
+                enriched["similarity_score"] = score
+                enriched["similarity_label"] = discovery.get("similarity_label", "Orta")
+                enriched["similarity_reason"] = discovery.get(
+                    "similarity_reason",
+                    discovery.get("reason", ""),
+                )
+                enriched["is_relevant"] = score >= RELEVANCE_THRESHOLD
+            enriched_research.append(enriched)
+
         rival_json = {
             "user_product": state["user_product"],
             "target_platform": state["target_platform"],
             "competitors": state["competitor_names"],
-            "competitor_research_results": state["competitor_research_results"],
+            "competitor_research_results": enriched_research,
             "sentiment_result": state.get("sentiment_result") or {},
             "trend_result": state.get("trend_result") or {},
             "gap_result": state.get("gap_result") or {},

@@ -120,7 +120,11 @@ class ImageGenerationTool:
         variant_name = chosen_variant.get("name") if chosen_variant else None
 
         spec = get_platform_spec(target_platform)
-        source_url = image_urls[0]
+        source_url = (
+            chosen_variant.get("image_url")
+            if chosen_variant and chosen_variant.get("image_url")
+            else image_urls[0]
+        )
 
         logger.info(
             "ImageGenerationTool started | platform=%s variant=%s canvas=%s source=%s",

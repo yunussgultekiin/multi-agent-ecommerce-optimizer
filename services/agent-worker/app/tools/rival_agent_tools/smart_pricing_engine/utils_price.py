@@ -194,7 +194,7 @@ _KNOWN_MID_BRANDS: frozenset[str] = frozenset({
 })
 _BRAND_MULTIPLIER_PREMIUM = 1.0
 _BRAND_MULTIPLIER_MID = 0.65
-_BRAND_MULTIPLIER_UNKNOWN = 0.45
+_BRAND_MULTIPLIER_UNKNOWN = 0.60
 
 
 def get_brand_multiplier(brand: str | None) -> float:
@@ -220,6 +220,45 @@ def normalize_user_product(user_product: dict) -> dict:
         "rating": user_product.get("rating"),
         "review_count": user_product.get("review_count"),
     }
+
+def apply_psychological_rounding(price: float) -> float:
+    """Fiyatı en yakın .90 psikolojik fiyat noktasına yuvarlar."""
+    if price <= 0:
+        return price
+    base = round(price / 10) * 10
+    if base <= 0:
+        base = 10
+    candidate = base - 0.10
+    if abs(candidate - price) > price * 0.15:
+        base2 = round(price / 5) * 5
+        if base2 <= 0:
+            base2 = 5
+        candidate = base2 - 0.10
+    return max(1.90, round(candidate, 2))
+
+
+def ensure_price_consistency(
+    predicted: float,
+    user_price: float,
+    positioning: "Positioning",
+    competitor_median: float | None = None,
+    price_q3: float | None = None,
+    brand_multiplier: float = 1.0,
+) -> float:
+    if positioning == Positioning.underpriced and predicted <= user_price:
+        floor = user_price * 1.15
+        if competitor_median is not None:
+            floor = max(floor, competitor_median * brand_multiplier)
+        predicted = floor
+    elif positioning == Positioning.overpriced and predicted >= user_price:
+        ceiling = user_price * 0.90
+        if price_q3 is not None:
+            market_ceiling = price_q3 * brand_multiplier
+            ceiling = min(ceiling, market_ceiling)
+            ceiling = max(ceiling, user_price * 0.70)
+        predicted = ceiling
+    return apply_psychological_rounding(predicted)
+
 
 def clean_json_response(raw_text: str) -> str:
     text = (raw_text or "").strip()
