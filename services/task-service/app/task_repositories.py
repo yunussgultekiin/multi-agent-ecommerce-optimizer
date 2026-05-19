@@ -62,6 +62,17 @@ class TaskRepository:
         await self.session.refresh(analysis_result)
         return analysis_result
 
+    async def delete_by_id(self, task_id: UUID) -> bool:
+        task = await self.get_by_id(task_id)
+        if not task:
+            return False
+        await self.session.execute(
+            delete(AnalysisResult).where(AnalysisResult.task_id == task_id)
+        )
+        await self.session.execute(delete(Task).where(Task.id == task_id))
+        await self.session.commit()
+        return True
+
     async def delete_all_by_user(self, user_id: str) -> None:
         task_ids_result = await self.session.execute(
             select(Task.id).where(Task.user_id == user_id)

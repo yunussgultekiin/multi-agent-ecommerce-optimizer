@@ -67,6 +67,10 @@ export interface Competitor {
   brand: string;
   source_url?: string;
   reason?: string;
+  similarity_score?: number;
+  similarity_label?: string;
+  similarity_reason?: string;
+  is_relevant?: boolean;
 }
 
 export interface MarketGapCluster {
@@ -74,6 +78,13 @@ export interface MarketGapCluster {
   keywords: string[];
   avg_price: number;
   saturation: number;
+}
+
+export interface BrandPosition {
+  position: string;
+  strength: string;
+  weakness: string;
+  recommendation: string;
 }
 
 export interface MarketGapResult {
@@ -89,6 +100,7 @@ export interface MarketGapResult {
     budget_brands: string[];
     user_brand_position: string;
   };
+  brand_position?: BrandPosition;
   positioning_score: number;
   variant_gap_opportunities: string[];
 }

@@ -25,11 +25,11 @@ def _build_seo_graph():
 
     graph.add_node(
         "generate_seo",
-        NodeRunner("seo_optimization", 60).wrap(_seo_agent.generate_seo),
+        NodeRunner("seo_optimization", 80).wrap(_seo_agent.generate_seo),
     )
     graph.add_node(
         "generate_image",
-        NodeRunner("image_generation", 75).wrap(_seo_agent.generate_image),
+        NodeRunner("image_generation", 90).wrap(_seo_agent.generate_image),
     )
     graph.add_node(
         "finalize",

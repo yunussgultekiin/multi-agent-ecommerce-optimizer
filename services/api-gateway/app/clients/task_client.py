@@ -43,5 +43,8 @@ class TaskClient:
     async def get_history(self, user_id: str):
         return await self._request("GET", "/tasks", params={"user_id": user_id})
 
+    async def delete_task(self, task_id: str):
+        return await self._request("DELETE", f"/tasks/{task_id}/purge")
+
     async def delete_all_tasks(self, user_id: str):
         return await self._request("DELETE", "/tasks", params={"user_id": user_id})

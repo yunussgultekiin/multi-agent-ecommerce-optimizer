@@ -129,6 +129,10 @@ export default function ResultPage() {
           brand: cr.data?.brand || '',
           source_url: '',
           reason: cr.data?.reason || '',
+          similarity_score: cr.similarity_score ?? undefined,
+          similarity_label: cr.similarity_label || '',
+          similarity_reason: cr.similarity_reason || '',
+          is_relevant: cr.is_relevant !== false,
         }));
 
         const market_gap = {
@@ -143,6 +147,12 @@ export default function ResultPage() {
             premium_brands: [],
             budget_brands: [],
             user_brand_position: '',
+          },
+          brand_position: gap_result?.brand_position || {
+            position: gap_result?.brand_landscape?.user_brand_position || gap_result?.user_product_cluster || '',
+            strength: '',
+            weakness: '',
+            recommendation: '',
           },
           positioning_score:             gap_result?.positioning_score ?? 0,
           variant_gap_opportunities:     gap_result?.variant_gap_opportunities || [],
@@ -740,10 +750,30 @@ export default function ResultPage() {
                             <td className="px-6 py-4 text-muted-foreground">
                               {comp.review_count > 0 ? comp.review_count.toLocaleString('tr-TR') : '—'}
                             </td>
-                            <td className="px-6 py-4 text-muted-foreground">
-                              {comp.reason
-                                ? comp.reason
-                                : <span className="italic text-muted-foreground/60">Benzerlik bilgisi yok</span>}
+                            <td className="px-6 py-4">
+                              {comp.similarity_label ? (
+                                <div className="space-y-1">
+                                  <span className={`inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
+                                    comp.similarity_label === 'Yüksek'
+                                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25'
+                                      : comp.similarity_label === 'Orta'
+                                      ? 'bg-amber-500/10 text-amber-400 border-amber-500/25'
+                                      : 'bg-red-500/10 text-red-400 border-red-500/25'
+                                  }`}>
+                                    {comp.similarity_label}
+                                    {comp.similarity_score !== undefined ? ` (${comp.similarity_score})` : ''}
+                                  </span>
+                                  {comp.similarity_reason && (
+                                    <p className="text-xs text-muted-foreground leading-relaxed max-w-[180px]">
+                                      {comp.similarity_reason}
+                                    </p>
+                                  )}
+                                </div>
+                              ) : comp.reason ? (
+                                <span className="text-xs text-muted-foreground">{comp.reason}</span>
+                              ) : (
+                                <span className="italic text-muted-foreground/60 text-xs">Benzerlik bilgisi yok</span>
+                              )}
                             </td>
                           </motion.tr>
                         ))}
@@ -936,28 +966,35 @@ export default function ResultPage() {
                         Konumunuz
                       </p>
                       <p className="text-sm font-semibold">
-                        {result.market_gap.user_product_cluster
-                          ? SEGMENT_LABELS[result.market_gap.user_product_cluster] ?? result.market_gap.user_product_cluster
-                          : '—'}
+                        {result.market_gap.brand_position?.position
+                          || (result.market_gap.user_product_cluster
+                            ? SEGMENT_LABELS[result.market_gap.user_product_cluster] ?? result.market_gap.user_product_cluster
+                            : '—')}
                       </p>
                     </div>
                     <div>
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1.5">
                         Güçlü Yan
                       </p>
-                      <p className="text-sm text-muted-foreground">—</p>
+                      <p className="text-sm text-muted-foreground">
+                        {result.market_gap.brand_position?.strength || '—'}
+                      </p>
                     </div>
                     <div>
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1.5">
                         Zayıf Yan
                       </p>
-                      <p className="text-sm text-muted-foreground">—</p>
+                      <p className="text-sm text-muted-foreground">
+                        {result.market_gap.brand_position?.weakness || '—'}
+                      </p>
                     </div>
-                    <div>
+                    <div className="col-span-2">
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1.5">
                         Öneri
                       </p>
-                      <p className="text-sm text-muted-foreground">—</p>
+                      <p className="text-sm text-muted-foreground">
+                        {result.market_gap.brand_position?.recommendation || '—'}
+                      </p>
                     </div>
                   </div>
                 </div>

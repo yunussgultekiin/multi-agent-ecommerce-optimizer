@@ -16,14 +16,16 @@ def query_chroma(target_platform: str, category: str) -> list[str]:
 
         collection = get_seo_collection()
         total_count = collection.count()
+        logger.info("[RAG] Collection count=%d", total_count)
         if total_count == 0:
-            logger.info("SEO ChromaDB collection is empty, skipping RAG")
+            logger.info("[RAG] Collection is empty, skipping retrieval")
             return []
 
         query = (
             f"{target_platform} {category} SEO başlık açıklama keyword optimizasyonu"
         )
         top_k = min(settings.chroma_top_k, total_count)
+        logger.info("[RAG] Retrieval started | platform=%s category=%s top_k=%d", target_platform, category, top_k)
 
         where_filter = (
             {
@@ -46,19 +48,14 @@ def query_chroma(target_platform: str, category: str) -> list[str]:
             results = collection.query(query_texts=[query], n_results=top_k)
 
         docs: list[str] = results.get("documents", [[]])[0]
-        logger.info(
-            "ChromaDB RAG query returned %d chunks | platform=%s category=%s",
-            len(docs),
-            target_platform,
-            category,
-        )
+        logger.info("[RAG] Retrieved documents count=%d | platform=%s category=%s", len(docs), target_platform, category)
         return docs
 
     except ImportError:
-        logger.warning("chromadb not available, skipping RAG")
+        logger.warning("[RAG] chromadb not available, skipping RAG")
         return []
     except Exception as exc:
-        logger.warning("ChromaDB query failed, proceeding without RAG | error=%s", exc)
+        logger.warning("[RAG] Query failed, proceeding without RAG | error=%s", exc)
         return []
 
 

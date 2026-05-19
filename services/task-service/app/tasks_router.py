@@ -105,8 +105,27 @@ async def cancel_task(task_id: UUID, service: TaskService = Depends(get_service)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
 
-_TERMINAL_STATUSES = {"completed", "failed", "cancelled"}
+@router.delete("/{task_id}/purge", status_code=204)
+async def purge_task(task_id: UUID, service: TaskService = Depends(get_service)):
+    deleted = await service.delete_task(task_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return Response(status_code=204)
+
 _KEEPALIVE_INTERVAL = 5.0
+_FATAL_STATUSES = {"failed", "cancelled"}
+
+
+def _is_stream_terminal(data: dict) -> bool:
+    status = data.get("status", "")
+    if status in _FATAL_STATUSES:
+        return True
+    try:
+        pct = int(data.get("pct", 0))
+    except (ValueError, TypeError):
+        pct = 0
+    return status == "completed" and pct >= 100
+
 
 @router.get("/{task_id}/status/stream")
 async def stream_status(task_id: UUID, redis: aioredis.Redis = Depends(get_redis)):
@@ -114,7 +133,7 @@ async def stream_status(task_id: UUID, redis: aioredis.Redis = Depends(get_redis
         current = await redis.hgetall(f"task_progress:{task_id}")
         if current:
             yield f"data: {json.dumps(current)}\n\n"
-            if current.get("status") in _TERMINAL_STATUSES:
+            if _is_stream_terminal(current):
                 return
 
         pubsub = redis.pubsub()
@@ -136,7 +155,7 @@ async def stream_status(task_id: UUID, redis: aioredis.Redis = Depends(get_redis
                     continue
 
                 yield f"data: {data_str}\n\n"
-                if json.loads(data_str).get("status") in _TERMINAL_STATUSES:
+                if _is_stream_terminal(json.loads(data_str)):
                     break
         finally:
             reader.cancel()

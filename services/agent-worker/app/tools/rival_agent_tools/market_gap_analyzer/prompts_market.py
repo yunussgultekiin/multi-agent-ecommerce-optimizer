@@ -20,6 +20,12 @@ _JSON_SCHEMA = """{
         "budget_brands": ["brand2"],
         "user_brand_position": "position description"
     },
+    "brand_position": {
+        "position": "Orta Segment",
+        "strength": "one concrete strength the user product has vs competitors",
+        "weakness": "one concrete weakness or gap vs competitors",
+        "recommendation": "one actionable recommendation to strengthen brand positioning"
+    },
     "positioning_score": 0.0,
     "positioning_rationale": "1-2 sentence explanation",
     "variant_gap_opportunities": []
@@ -31,7 +37,7 @@ Rules:
 - positioning_rationale: required, 1-2 sentences explaining the score.
 - clusters: at least 1 segment (budget / value_for_money / premium).
 - price_range_min and price_range_max: always a float, use 0.0 if unknown, never null.
-- gap_opportunities: what the market currently lacks — unmet needs, missing features, underserved segments, or positioning white space that no competitor currently owns. At least 1 item. Do NOT describe what the seller should do here.
+- gap_opportunities: what the market currently lacks — unmet needs, missing features, underserved segments, or positioning white space that no competitor currently owns. At least 1 item. Do NOT describe what the seller should do here. Stay within the product's segment — do not suggest features from a completely different product category.
 - strategic_actions: what the seller should concretely do to exploit the gaps identified above — pricing moves, listing changes, feature emphasis, bundle strategies. At least 1 item. Do NOT repeat gap descriptions here.
 - sentiment_based_opportunities: opportunities directly derived from customer pain_points; [] if no sentiment data.
 - trend_based_opportunities: opportunities derived from trending features; [] if no trend data.
@@ -41,6 +47,7 @@ Rules:
 - sentiment_based_opportunities: max 3 items.
 - trend_based_opportunities: max 3 items.
 - variant_gap_opportunities: max 3 items.
+- brand_position: required object with all 4 fields (position, strength, weakness, recommendation). All must be non-empty Turkish strings. position should be one of: "Bütçe Dostu", "Orta Segment", "Fiyat/Performans", "Premium", "Niş", "Yeni Marka". strength: one concrete product advantage from price/features/personalization/delivery/quality. weakness: one concrete gap from brand awareness/trust/reviews/differentiation. recommendation: one actionable suggestion to strengthen the brand/listing.
 - Keep JSON keys and enum labels in English, but write all natural-language values in Turkish.
 - Do not include markdown, comments, or trailing commas.
 {STRICT_JSON_SYNTAX_RULES}
@@ -150,6 +157,7 @@ Key rules:
 - strategic_actions must describe what the SELLER should DO — not repeat gap descriptions.
 - sentiment_based_opportunities, trend_based_opportunities, strategic_actions,
   variant_gap_opportunities may be empty lists but must be present.
+- brand_position must be present with all 4 non-empty Turkish string fields: position, strength, weakness, recommendation.
 - Keep JSON keys in English, but write all value texts in Turkish.
 {JSON_SELF_CORRECTION_SYNTAX}
 

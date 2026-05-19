@@ -129,12 +129,15 @@ function StatusBadge({ status }: { status: AnalysisTask['status'] }) {
 }
 
 export default function HistoryPage() {
-  const [tasks,           setTasks]           = useState<AnalysisTask[]>([]);
-  const [isLoading,       setIsLoading]       = useState(true);
-  const [searchQuery,     setSearchQuery]     = useState('');
-  const [filterStatus,    setFilterStatus]    = useState<AnalysisStatus | 'all'>('all');
-  const [deleteDialogOpen,setDeleteDialogOpen]= useState(false);
-  const [isDeleting,      setIsDeleting]      = useState(false);
+  const [tasks,              setTasks]              = useState<AnalysisTask[]>([]);
+  const [isLoading,          setIsLoading]          = useState(true);
+  const [searchQuery,        setSearchQuery]        = useState('');
+  const [filterStatus,       setFilterStatus]       = useState<AnalysisStatus | 'all'>('all');
+  const [deleteDialogOpen,   setDeleteDialogOpen]   = useState(false);
+  const [isDeleting,         setIsDeleting]         = useState(false);
+  const [deletingTaskId,     setDeletingTaskId]     = useState<string | null>(null);
+  const [singleDeleteId,     setSingleDeleteId]     = useState<string | null>(null);
+  const [singleDeleteDialog, setSingleDeleteDialog] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -162,6 +165,29 @@ export default function HistoryPage() {
       toast({ variant: 'destructive', title: 'Hata', description: 'Geçmiş silinemedi.' });
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const openSingleDelete = (e: React.MouseEvent, taskId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSingleDeleteId(taskId);
+    setSingleDeleteDialog(true);
+  };
+
+  const handleDeleteSingle = async () => {
+    if (!singleDeleteId) return;
+    setDeletingTaskId(singleDeleteId);
+    try {
+      await api.delete(`/analyze/${singleDeleteId}`);
+      setTasks((prev) => prev.filter((t) => t.id !== singleDeleteId));
+      setSingleDeleteDialog(false);
+      setSingleDeleteId(null);
+      toast({ title: 'Analiz Silindi', description: 'Analiz başarıyla silindi.' });
+    } catch {
+      toast({ variant: 'destructive', title: 'Hata', description: 'Analiz silinemedi.' });
+    } finally {
+      setDeletingTaskId(null);
     }
   };
 
@@ -367,15 +393,17 @@ export default function HistoryPage() {
                       </div>
                     </div>
 
-                    <div className="shrink-0 flex items-center gap-3">
-                      {/* TODO: connect to generated_image_url */}
-                      <span
-                        className="hidden sm:flex items-center gap-1 text-[11px] text-muted-foreground/40 cursor-default select-none"
-                        onClick={(e) => e.stopPropagation()}
+                    <div className="shrink-0 flex items-center gap-2">
+                      <button
+                        onClick={(e) => openSingleDelete(e, task.id)}
+                        disabled={deletingTaskId === task.id}
+                        className="flex items-center justify-center w-7 h-7 rounded-lg border border-destructive/20 bg-destructive/5 text-destructive/50 hover:bg-destructive/15 hover:text-destructive hover:border-destructive/40 transition-all duration-150 opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                        title="Bu analizi sil"
                       >
-                        <Download className="w-3.5 h-3.5" />
-                        İndir
-                      </span>
+                        {deletingTaskId === task.id
+                          ? <Loader2 className="w-3 h-3 animate-spin" />
+                          : <Trash2 className="w-3 h-3" />}
+                      </button>
                       <span className="flex items-center gap-1.5 text-primary text-xs font-medium opacity-0 group-hover:opacity-100 transition-all duration-200 -translate-x-2 group-hover:translate-x-0">
                         <span className="hidden sm:inline">Detaylar</span>
                         <ArrowRight className="w-4 h-4" />
@@ -413,6 +441,35 @@ export default function HistoryPage() {
             >
               <Trash2 className="w-4 h-4" />
               {isDeleting ? 'Siliniyor…' : 'Evet, Sil'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={singleDeleteDialog} onOpenChange={(open) => { setSingleDeleteDialog(open); if (!open) setSingleDeleteId(null); }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Analizi Sil</DialogTitle>
+            <DialogDescription>
+              Bu analiz kalıcı olarak silinecek. Bu işlem geri alınamaz.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 mt-2">
+            <Button
+              variant="outline"
+              onClick={() => { setSingleDeleteDialog(false); setSingleDeleteId(null); }}
+              disabled={!!deletingTaskId}
+            >
+              Vazgeç
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteSingle}
+              disabled={!!deletingTaskId}
+              className="gap-2"
+            >
+              <Trash2 className="w-4 h-4" />
+              {deletingTaskId ? 'Siliniyor…' : 'Evet, Sil'}
             </Button>
           </DialogFooter>
         </DialogContent>

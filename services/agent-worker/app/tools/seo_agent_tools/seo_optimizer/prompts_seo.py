@@ -1,5 +1,18 @@
 from app.tools.json_prompt_rules import STRICT_JSON_SYNTAX_RULES
 
+GENERIC_BRAND_NAMES: frozenset[str] = frozenset({
+    "kendi markam", "markasız", "markasiz", "demo marka", "test marka",
+    "bilinmeyen", "yok", "n/a", "none", "null", "özel marka", "ozel marka",
+    "marka yok", "markasız ürün", "generic", "noname", "no name",
+})
+
+
+def is_generic_brand(brand: str) -> bool:
+    if not brand or not brand.strip():
+        return True
+    return brand.strip().lower() in GENERIC_BRAND_NAMES
+
+
 PLATFORM_TITLE_LIMITS: dict[str, int] = {
     "trendyol": 100,
     "amazon": 200,
@@ -133,6 +146,14 @@ def build_seo_prompt(
         else f"max {title_limit} chars"
     )
 
+    if is_generic_brand(brand):
+        brand_title_rule = (
+            f"- Do NOT include any generic placeholder brand name ('{brand}' is not a real brand). "
+            f"Build the title from: product type + main feature + usage/segment keywords + category keyword '{category}'"
+        )
+    else:
+        brand_title_rule = f'- Must include brand "{brand}" and category keyword "{category}"'
+
     return f"""You are an expert e-commerce SEO specialist optimizing a product listing for {platform}.
 Output language: TURKISH — Every output field value must be written in Turkish.
 
@@ -171,7 +192,7 @@ Market positioning: {positioning or "not specified"}
 === TITLE RULES FOR {platform.upper()} ===
 - Character limit: STRICTLY {title_limit_note} — do not exceed
 - Format: Brand + Category/Product Type + Main Feature + Variant (if applicable)
-- Must include brand "{brand}" and category keyword "{category}"
+{brand_title_rule}
 - Title Case: capitalize first letter of each major word
 - No filler words: no "harika", "mükemmel", "en iyi", "süper", "kaliteli", "uygun"
 - First 40-50 characters must contain the highest-volume keywords

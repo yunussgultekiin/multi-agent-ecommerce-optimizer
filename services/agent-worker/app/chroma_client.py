@@ -12,7 +12,9 @@ _seo_collection = None
 def get_chroma_client() -> chromadb.ClientAPI:
     global _chroma_client
     if _chroma_client is None:
-        _chroma_client = chromadb.EphemeralClient()
+        _chroma_client = chromadb.EphemeralClient(
+            settings=chromadb.Settings(anonymized_telemetry=False)
+        )
     return _chroma_client
 
 def get_seo_collection():
@@ -28,18 +30,18 @@ def get_seo_collection():
 def seed_seo_chunks() -> None:
     try:
         if not _DATA_PATH.exists():
-            logger.info(
-                "seo_chunks.json not found at %s — RAG disabled", _DATA_PATH
-            )
+            logger.warning("[RAG] seo_chunks.json not found at %s — skipping seed", _DATA_PATH)
             return
 
         with open(_DATA_PATH, "r", encoding="utf-8") as f:
             chunks = json.load(f)
 
+        logger.info("[RAG] Seed started | chunks=%d path=%s", len(chunks), _DATA_PATH)
+
         collection = get_seo_collection()
         if collection.count() == len(chunks):
             logger.info(
-                "SEO ChromaDB already up-to-date | count=%d collection=%s",
+                "[RAG] Collection already up-to-date | count=%d collection=%s",
                 len(chunks),
                 settings.chroma_collection_name,
             )
@@ -50,13 +52,8 @@ def seed_seo_chunks() -> None:
         metadatas = [{"platform": c["platform"], "topic": c["topic"]} for c in chunks]
 
         collection.upsert(ids=ids, documents=documents, metadatas=metadatas)
-        logger.info(
-            "SEO ChromaDB seeded | chunk_count=%d collection=%s",
-            len(chunks),
-            settings.chroma_collection_name,
-        )
+        logger.info("[RAG] Seed completed | chunks=%d collection=%s", len(chunks), settings.chroma_collection_name)
+        logger.info("[RAG] Collection count=%d", collection.count())
 
     except Exception as exc:
-        logger.warning(
-            "SEO ChromaDB seed failed — proceeding without RAG | error=%s", exc
-        )
+        logger.warning("[RAG] Seed failed — proceeding without RAG | error=%s", exc)

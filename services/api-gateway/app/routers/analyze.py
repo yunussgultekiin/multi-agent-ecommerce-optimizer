@@ -117,6 +117,30 @@ async def delete_history(request: Request):
     if response.status_code not in {200, 204}:
         raise HTTPException(status_code=502, detail="Task service error")
 
+@router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit(settings.rate_limit)
+async def delete_single_task(request: Request, task_id: str):
+    user_id = request.state.user_id
+    try:
+        task_response = await _task_client.get_task(task_id, user_id)
+    except TaskServiceError:
+        raise HTTPException(status_code=503, detail="Task service unavailable")
+
+    if task_response.status_code == 404:
+        raise HTTPException(status_code=404, detail="Task not found")
+    if task_response.status_code == 403:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    if task_response.status_code != 200:
+        raise HTTPException(status_code=502, detail="Task service error")
+
+    try:
+        response = await _task_client.delete_task(task_id)
+    except TaskServiceError:
+        raise HTTPException(status_code=503, detail="Task service unavailable")
+
+    if response.status_code not in {200, 204}:
+        raise HTTPException(status_code=502, detail="Task service error")
+
 @router.get("/{task_id}/status/stream")
 async def stream_status(request: Request, task_id: str):
     user_id = request.state.user_id

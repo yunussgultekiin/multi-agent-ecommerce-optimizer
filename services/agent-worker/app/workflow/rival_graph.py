@@ -49,7 +49,7 @@ def _build_rival_graph():
     )
     graph.add_node(
         "finalize",
-        NodeRunner("finalize", 100).wrap(_rival_agent.finalize),
+        NodeRunner("finalize", 55).wrap(_rival_agent.finalize),
     )
 
     graph.add_edge(START, "discover_competitors")

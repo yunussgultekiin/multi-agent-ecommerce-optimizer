@@ -59,7 +59,16 @@ class TaskService:
         result = await self.repo.update_status(
             task_id, new_status, error_message=error_message
         )
-        if new_status in (TaskStatus.failed, TaskStatus.cancelled):
+        if new_status == TaskStatus.completed:
+            event = {
+                "step": "task",
+                "status": "completed",
+                "pct": 100,
+                "message": "",
+            }
+            await self.redis.hset(f"task_progress:{task_id}", mapping=event)
+            await self.redis.publish(f"progress:{task_id}", json.dumps(event))
+        elif new_status in (TaskStatus.failed, TaskStatus.cancelled):
             current = await self.redis.hgetall(f"task_progress:{task_id}")
             event = {
                 "step": current.get("step", ""),
@@ -86,6 +95,9 @@ class TaskService:
         if not task:
             return None, False
         return task.result, True
+
+    async def delete_task(self, task_id: UUID) -> bool:
+        return await self.repo.delete_by_id(task_id)
 
     async def delete_all_tasks(self, user_id: str) -> None:
         await self.repo.delete_all_by_user(user_id)
