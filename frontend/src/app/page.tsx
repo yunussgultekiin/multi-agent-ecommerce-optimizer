@@ -474,13 +474,13 @@ export default function Home() {
                     ))}
                   </div>
 
-                  <div className="flex items-start gap-2 p-3 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/15">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-px" />
-                    <p className="text-xs text-muted-foreground leading-snug">
-                      <span className="text-foreground font-medium">Fırsat: </span>
-                      Hediye paketi ve kişiselleştirme sunan rakip az.
-                    </p>
-                  </div>
+                <div className="inline-flex max-w-full items-center gap-2 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/15 px-3 py-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                  <p className="text-xs text-muted-foreground leading-snug">
+                    <span className="text-foreground font-medium">Fırsat: </span>
+                    Kişiselleştirme açığı var.
+                  </p>
+                </div>
                 </div>
               </motion.div>
 

@@ -40,7 +40,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     Cookies.remove('refresh_token');
     set({ user: null, quota: null, isAuthenticated: false });
     if (typeof window !== 'undefined') {
-      window.location.href = '/login';
+      window.location.href = '/';
     }
   },
 

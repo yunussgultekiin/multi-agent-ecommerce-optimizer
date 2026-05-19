@@ -38,8 +38,10 @@ export interface AnalysisTask {
 export type StepName =
   | 'competitor_discovery'
   | 'competitor_research'
-  | 'market_gap'
   | 'pricing_analysis'
+  | 'market_gap'
+  | 'sentiment_analysis'
+  | 'trend_analysis'
   | 'seo_context'
   | 'seo_optimization'
   | 'image_generation';

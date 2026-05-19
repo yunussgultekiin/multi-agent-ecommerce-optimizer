@@ -11,7 +11,9 @@ from app.core import ToolResult
 from .background_removal import (
     compose_clean_canvas,
     crop_to_subject,
+    enhance_image,
     get_platform_spec,
+    refine_alpha_mask,
     remove_background,
 )
 from .models_image import ImageGenerationInput
@@ -25,10 +27,15 @@ from .utils_image import (
 logger = logging.getLogger(__name__)
 _GEMINI_TIMEOUT_SECONDS = 60
 
-_SHADOW_PROMPT = (
-    "Add a soft, realistic drop shadow directly beneath the product. "
-    "The shadow should be subtle, naturally blurred, and grounded. "
-    "Do not change the product, its colors, or the background in any way."
+_STUDIO_PROMPT = (
+    "This is a product photo for a marketplace listing. "
+    "Keep the background clean and pure white. "
+    "Do not change, distort, or alter the product, its colors, shape, text, or logo in any way. "
+    "Clean up any remaining edge artifacts or semi-transparent fringe around the product. "
+    "Add natural, soft studio lighting that highlights the product realistically. "
+    "Add a very subtle, soft ground shadow directly beneath the product only — do not add shadow anywhere else. "
+    "Do not add any objects, decorations, text, watermarks, or branding of any kind. "
+    "The result must look like a professional marketplace studio photo."
 )
 
 @asynccontextmanager
@@ -61,7 +68,7 @@ async def _enhance_with_gemini(image_bytes: bytes) -> bytes | None:
                                         data=image_bytes,
                                     )
                                 ),
-                                types.Part(text=_SHADOW_PROMPT),
+                                types.Part(text=_STUDIO_PROMPT),
                             ],
                         )
                     ],
@@ -149,6 +156,11 @@ class ImageGenerationTool:
             return _failure_result("Background removal failed", chosen_variant)
 
         try:
+            rgba_bytes = await refine_alpha_mask(rgba_bytes)
+        except Exception as exc:
+            logger.warning("Alpha mask refinement failed | error=%s", exc)
+
+        try:
             rgba_bytes = await crop_to_subject(rgba_bytes)
         except Exception as exc:
             logger.warning("Bbox crop failed | error=%s", exc)
@@ -169,12 +181,18 @@ class ImageGenerationTool:
         enhanced_bytes = await _enhance_with_gemini(canvas_bytes)
         if enhanced_bytes is None:
             logger.warning(
-                "Gemini shadow enhancement failed — using Pillow canvas | platform=%s",
+                "Gemini studio enhancement failed — using Pillow canvas | platform=%s",
                 target_platform,
             )
 
         final_bytes = enhanced_bytes if enhanced_bytes is not None else canvas_bytes
         fallback_used = enhanced_bytes is None
+
+        if fallback_used:
+            try:
+                final_bytes = await enhance_image(final_bytes)
+            except Exception as exc:
+                logger.warning("Pillow image enhancement failed | error=%s", exc)
 
         public_url = await upload_to_gcs(
             image_bytes=final_bytes,
@@ -185,7 +203,7 @@ class ImageGenerationTool:
             log_image_tool_call(target_platform, variant_name, success=False)
             return _failure_result("GCS upload failed", chosen_variant)
 
-        log_image_tool_call(target_platform, variant_name, success=not fallback_used)
+        log_image_tool_call(target_platform, variant_name, success=True, fallback_used=fallback_used)
         return ToolResult(
             success=True,
             fallback_used=fallback_used,

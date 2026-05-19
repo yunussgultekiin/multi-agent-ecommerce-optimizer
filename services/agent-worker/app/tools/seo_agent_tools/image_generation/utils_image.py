@@ -70,10 +70,12 @@ def log_image_tool_call(
     selected_variant: str | None,
     *,
     success: bool,
+    fallback_used: bool = False,
 ) -> None:
     logger.info(
-        "ImageGenerationTool completed | platform=%s variant=%s success=%s",
+        "ImageGenerationTool completed | platform=%s variant=%s success=%s fallback_used=%s",
         target_platform,
         selected_variant,
         success,
+        fallback_used,
     )

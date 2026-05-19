@@ -16,8 +16,10 @@ import type { SSEProgressEvent, StepName, StepStatus } from '@/types';
 const STEP_LABELS: Record<StepName, string> = {
   competitor_discovery: 'Rakip Keşfi',
   competitor_research: 'Rakip Araştırması',
-  market_gap: 'Pazar Boşluğu',
   pricing_analysis: 'Fiyat Analizi',
+  market_gap: 'Pazar Boşluğu',
+  sentiment_analysis: 'Müşteri Sinyalleri',
+  trend_analysis: 'Trend Analizi',
   seo_context: 'SEO Bağlamı',
   seo_optimization: 'SEO Optimizasyonu',
   image_generation: 'Görsel Üretimi',
@@ -26,10 +28,23 @@ const STEP_LABELS: Record<StepName, string> = {
 const STEP_ORDER: StepName[] = [
   'competitor_discovery',
   'competitor_research',
-  'market_gap',
   'pricing_analysis',
+  'market_gap',
+  'sentiment_analysis',
+  'trend_analysis',
   'seo_optimization',
   'image_generation',
+];
+
+const DERIVE_THRESHOLDS: [StepName, number][] = [
+  ['competitor_discovery', 25],
+  ['competitor_research', 40],
+  ['pricing_analysis', 55],
+  ['market_gap', 65],
+  ['sentiment_analysis', 75],
+  ['trend_analysis', 82],
+  ['seo_optimization', 90],
+  ['image_generation', 100],
 ];
 
 function deriveStepsFromProgress(pct: number): Partial<Record<StepName, StepStatus>> {
@@ -38,14 +53,16 @@ function deriveStepsFromProgress(pct: number): Partial<Record<StepName, StepStat
     STEP_ORDER.forEach(s => { derived[s] = 'completed'; });
     return derived;
   }
-  if (pct >= 40) {
-    derived.competitor_discovery = 'completed';
-    derived.competitor_research = 'completed';
+  if (pct <= 0) return derived;
+  let foundRunning = false;
+  for (const [step, threshold] of DERIVE_THRESHOLDS) {
+    if (pct >= threshold) {
+      derived[step] = 'completed';
+    } else if (!foundRunning) {
+      derived[step] = 'running';
+      foundRunning = true;
+    }
   }
-  if (pct >= 60) derived.market_gap = 'completed';
-  if (pct >= 72) derived.pricing_analysis = 'completed';
-  if (pct >= 85) derived.seo_optimization = 'completed';
-  if (pct >= 90) derived.image_generation = 'running';
   return derived;
 }
 
@@ -88,7 +105,6 @@ export default function ProgressPage() {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [connectionLost, setConnectionLost] = useState(false);
   const [showSlowHint, setShowSlowHint] = useState(false);
-  const eventSourceRef = useRef<EventSource | null>(null);
   const lastSseEventRef = useRef<number>(Date.now());
 
   useEffect(() => {
