@@ -373,7 +373,7 @@ Google Cloud Storage Upload
 Task Result
 ```
 
-**Variant selection:** `select_variant()` uses `competitor_variant_overlap` data from the pricing step to pick the variant with the fewest competitor matches — prioritizing differentiated product angles for the visual.
+**Variant selection:** `select_variant()` is not yet active per current plans; the pipeline always continues with `valid[0]`. As Gemini image generation occasionally fails, the canvas output is delivered directly to the user in such cases.
 
 ---
 
