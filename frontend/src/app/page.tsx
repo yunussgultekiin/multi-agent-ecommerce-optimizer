@@ -169,9 +169,9 @@ export default function Home() {
           variants={stagger}
           initial="hidden"
           animate="visible"
-          className="container mx-auto px-6 pt-14 pb-28 text-center max-w-5xl flex flex-col items-center justify-center min-h-[100svh]"
+          className="container mx-auto px-6 pt-6 sm:pt-12 pb-10 sm:pb-20 text-center max-w-5xl flex flex-col items-center justify-center min-h-[100svh]"
         >
-          <motion.div variants={fadeUp} custom={0} className="flex justify-center mb-8">
+          <motion.div variants={fadeUp} custom={0} className="flex justify-center mb-4 sm:mb-6">
             <Badge
               variant="outline"
               className="px-4 py-1.5 gap-2 bg-white/[0.04] border-white/10 text-sm backdrop-blur"
@@ -186,7 +186,7 @@ export default function Home() {
           <motion.h1
             variants={fadeUp}
             custom={0.05}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-[82px] font-extrabold tracking-tight leading-[1.06] mb-6"
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-[82px] font-extrabold tracking-tight leading-[1.06] mb-4 sm:mb-6"
           >
             E-ticaretinizi{' '}
             <span className="relative inline-block">
@@ -226,7 +226,7 @@ export default function Home() {
           <motion.div
             variants={fadeUp}
             custom={0.15}
-            className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-6 text-sm text-muted-foreground"
+            className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-3 sm:mt-5 text-sm text-muted-foreground"
           >
             {highlights.map((h) => (
               <span key={h} className="flex items-center gap-1.5">
@@ -239,25 +239,25 @@ export default function Home() {
           <motion.div
             variants={fadeUp}
             custom={0.2}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10"
+            className="flex flex-col sm:flex-row sm:items-center justify-center gap-3 mt-5 sm:mt-8"
           >
-            <Link href="/register">
+            <Link href="/register" className="w-full sm:w-auto">
               <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
                 <Button
                   size="lg"
-                  className="h-14 px-8 text-base font-semibold shadow-2xl shadow-indigo-500/25 gap-2"
+                  className="w-full sm:w-auto h-14 px-8 text-base font-semibold shadow-2xl shadow-indigo-500/25 gap-2"
                 >
                   Analiz Başlat
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </motion.div>
             </Link>
-            <a href="#preview">
+            <a href="#preview" className="w-full sm:w-auto">
               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="h-14 px-8 text-base border-white/10 bg-white/[0.03] hover:bg-white/[0.07]"
+                  className="w-full sm:w-auto h-14 px-8 text-base border-white/10 bg-white/[0.03] hover:bg-white/[0.07]"
                 >
                   Örnek Sonucu Gör
                 </Button>
@@ -268,7 +268,7 @@ export default function Home() {
           <motion.div
             variants={fadeUp}
             custom={0.25}
-            className="flex items-center justify-center gap-2 mt-8"
+            className="flex items-center justify-center gap-2 mt-4 sm:mt-6"
           >
             <span className="text-xs text-muted-foreground/50 mr-1">Desteklenen platformlar:</span>
             {[
@@ -391,18 +391,23 @@ export default function Home() {
                 </span>
               </div>
 
-              <div className="flex-1 relative bg-gradient-to-br from-indigo-500/[0.08] via-violet-500/[0.06] to-purple-500/[0.08] flex flex-col items-center justify-center min-h-[300px]">
+              <div className="flex-1 relative bg-gradient-to-br from-indigo-500/[0.08] via-violet-500/[0.06] to-purple-500/[0.08] flex flex-col justify-center min-h-[300px]">
                 <div className="absolute inset-0 bg-grid-sm pointer-events-none" />
-                <div className="relative z-10 flex flex-col items-center gap-5 p-8">
-                  <div className="w-36 h-36 rounded-2xl overflow-hidden border border-white/[0.12] shadow-2xl shadow-indigo-500/10">
-                    <img src="/demo-kupa.jpg" alt="Keep Calm Kupa" className="w-full h-full object-cover" />
+                <div className="relative z-10 p-5 space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium text-center">Mevcut Görsel</p>
+                      <div className="rounded-xl overflow-hidden border border-white/[0.12] bg-white/[0.03]">
+                        <img src="/demo-kupa.jpg" alt="Mevcut görsel" className="w-full h-28 object-cover" />
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <p className="text-[10px] text-emerald-400 uppercase tracking-wider font-medium text-center">Optimize Görsel</p>
+                      <div className="rounded-xl overflow-hidden border border-emerald-500/25 bg-white/[0.03]">
+                        <img src="/demo-kupa.jpg" alt="Optimize görsel" className="w-full h-28 object-cover" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm font-semibold">Kırmızı Keep Calm Baskılı Seramik Kupa</p>
-                    <p className="text-xs text-muted-foreground mt-1">Keep Calm baskılı 330ml seramik kupa</p>
-                  </div>
-                </div>
-                <div className="absolute bottom-4 left-4 right-4">
                   <div className="glass-card rounded-xl p-3 backdrop-blur-xl border border-white/[0.09]">
                     <div className="flex items-center justify-between">
                       <div>
@@ -447,7 +452,7 @@ export default function Home() {
 
                 <div className="p-5 space-y-4">
                   <div className="space-y-0 divide-y divide-white/[0.05]">
-                    {mockRivals.map((r, i) => (
+                    {mockRivals.slice(0, 2).map((r, i) => (
                       <div key={i} className="flex items-center justify-between py-2.5">
                         <div className="flex items-center gap-2.5 min-w-0">
                           <div className="w-6 h-6 rounded-md bg-white/[0.05] border border-white/[0.08] flex items-center justify-center shrink-0">
@@ -469,27 +474,11 @@ export default function Home() {
                     ))}
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2 pt-1">
-                    {[
-                      { label: 'Min', val: '₺119,90', cls: '' },
-                      { label: 'Optimal', val: '₺154,90', cls: 'text-primary bg-primary/8 border-primary/20' },
-                      { label: 'Max', val: '₺164,90', cls: '' },
-                    ].map((p) => (
-                      <div
-                        key={p.label}
-                        className={`rounded-xl border border-white/[0.08] bg-white/[0.03] p-2.5 text-center ${p.cls}`}
-                      >
-                        <p className="text-[9px] text-muted-foreground mb-0.5 uppercase tracking-wider">{p.label}</p>
-                        <p className="text-sm font-bold">{p.val}</p>
-                      </div>
-                    ))}
-                  </div>
-
                   <div className="flex items-start gap-2 p-3 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/15">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-px" />
                     <p className="text-xs text-muted-foreground leading-snug">
                       <span className="text-foreground font-medium">Fırsat: </span>
-                      Rakipler ₺119–₺164 aralığında. Hediye paketi sunan rakip yok — kişiselleştirme fırsatı mevcut.
+                      Hediye paketi ve kişiselleştirme sunan rakip az.
                     </p>
                   </div>
                 </div>
@@ -525,18 +514,9 @@ export default function Home() {
                   </div>
 
                   <div>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium mb-1.5">Meta Açıklama</p>
-                    <div className="p-3 bg-white/[0.03] rounded-xl border border-white/[0.08]">
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        Keep Calm baskılı kırmızı seramik kupa. 330ml kapasiteli, bulaşık makinesinde yıkanabilir. Hediye ambalaj seçeneğiyle Trendyol&apos;da hızlı teslimat.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div>
                     <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium mb-1.5">Anahtar Kelimeler</p>
                     <div className="flex flex-wrap gap-1.5">
-                      {['seramik kupa hediye', 'slogan baskılı kupa', 'kırmızı ofis kupası', 'kupa 330ml', 'özel baskılı kupa'].map((kw) => (
+                      {['seramik kupa hediye', 'slogan baskılı kupa', 'kırmızı ofis kupası'].map((kw) => (
                         <Badge key={kw} variant="outline" className="text-[10px] bg-white/[0.03] border-white/[0.09]">
                           {kw}
                         </Badge>
@@ -547,6 +527,9 @@ export default function Home() {
               </motion.div>
             </motion.div>
           </div>
+          <p className="text-center text-sm text-muted-foreground mt-8 max-w-lg mx-auto">
+            Detaylı rakip analizi, SEO önerileri ve görsel optimizasyon için ücretsiz hesap oluşturun.
+          </p>
         </motion.section>
 
         <section className="container mx-auto px-6 max-w-6xl mb-28">

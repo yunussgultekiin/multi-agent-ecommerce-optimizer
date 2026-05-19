@@ -246,7 +246,7 @@ export default function AnalyzePage() {
                     <Label htmlFor="title">Ürün Başlığı *</Label>
                     <Input
                       id="title"
-                      placeholder="Örn: iPhone 15 Pro Max 256GB"
+                      placeholder="Örn: Kırmızı Baskılı Seramik Kupa 330ml"
                       {...register('title')}
                       className={errors.title ? 'border-destructive' : ''}
                     />
@@ -272,7 +272,7 @@ export default function AnalyzePage() {
                       <Label htmlFor="brand">Marka *</Label>
                       <Input
                         id="brand"
-                        placeholder="Örn: Apple"
+                        placeholder="Örn: MugCraft"
                         {...register('brand')}
                         className={errors.brand ? 'border-destructive' : ''}
                       />
@@ -345,7 +345,7 @@ export default function AnalyzePage() {
                     <Label htmlFor="category">Kategori *</Label>
                     <Input
                       id="category"
-                      placeholder="Elektronik > Cep Telefonu"
+                      placeholder="Ev & Yaşam > Mutfak Gereçleri > Kupa / Bardak"
                       {...register('category')}
                       className={errors.category ? 'border-destructive' : ''}
                     />
@@ -468,7 +468,7 @@ export default function AnalyzePage() {
                     <Label htmlFor="seo_keywords">SEO Anahtar Kelimeler</Label>
                     <Input
                       id="seo_keywords"
-                      placeholder="virgülle ayırın (örn: telefon, akıllı, 5g)"
+                      placeholder="virgülle ayırın (örn: seramik kupa, baskılı kupa, kahve kupası)"
                       {...register('seo_keywords')}
                     />
                     <p className="text-xs text-muted-foreground">

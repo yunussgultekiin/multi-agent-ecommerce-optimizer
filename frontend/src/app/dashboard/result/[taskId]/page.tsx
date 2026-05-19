@@ -70,6 +70,17 @@ const POSITIONING_LABELS: Record<string, string> = {
   budget: "Bütçe Dostu",
 };
 
+function formatMarketPowerGap(text: string): string {
+  if (!text.includes('User product is') && !text.includes('gap:')) {
+    return text;
+  }
+  const match = text.match(/gap:\s*([-\d.]+)/i);
+  if (!match) return 'Pazar konumu hesaplandı';
+  const gap = parseFloat(match[1]);
+  if (isNaN(gap)) return 'Pazar konumu hesaplandı';
+  return gap < 0 ? 'Rakiplere göre daha zayıf konumlanıyor' : 'Rakiplere göre daha güçlü konumlanıyor';
+}
+
 export default function ResultPage() {
   const { taskId } = useParams<{ taskId: string }>();
   const [result, setResult] = useState<AnalysisResult | null>(null);
@@ -867,7 +878,7 @@ export default function ResultPage() {
                           </div>
                         ))}
                       {result.pricing.market_power_gap && (
-                        <p className="text-xs text-muted-foreground pt-1">{result.pricing.market_power_gap}</p>
+                        <p className="text-xs text-muted-foreground pt-1">{formatMarketPowerGap(result.pricing.market_power_gap)}</p>
                       )}
                     </div>
                   ) : (

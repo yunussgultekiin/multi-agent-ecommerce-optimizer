@@ -32,6 +32,23 @@ const STEP_ORDER: StepName[] = [
   'image_generation',
 ];
 
+function deriveStepsFromProgress(pct: number): Partial<Record<StepName, StepStatus>> {
+  const derived: Partial<Record<StepName, StepStatus>> = {};
+  if (pct >= 100) {
+    STEP_ORDER.forEach(s => { derived[s] = 'completed'; });
+    return derived;
+  }
+  if (pct >= 40) {
+    derived.competitor_discovery = 'completed';
+    derived.competitor_research = 'completed';
+  }
+  if (pct >= 60) derived.market_gap = 'completed';
+  if (pct >= 72) derived.pricing_analysis = 'completed';
+  if (pct >= 85) derived.seo_optimization = 'completed';
+  if (pct >= 90) derived.image_generation = 'running';
+  return derived;
+}
+
 function StepIcon({ status }: { status: StepStatus }) {
   if (status === 'completed') {
     return (
@@ -70,7 +87,9 @@ export default function ProgressPage() {
   const [taskStatus, setTaskStatus] = useState<'pending' | 'running' | 'completed' | 'failed'>('pending');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [connectionLost, setConnectionLost] = useState(false);
+  const [showSlowHint, setShowSlowHint] = useState(false);
   const eventSourceRef = useRef<EventSource | null>(null);
+  const lastSseEventRef = useRef<number>(Date.now());
 
   useEffect(() => {
     const token = Cookies.get('access_token');
@@ -79,6 +98,35 @@ export default function ProgressPage() {
 
     const fetchStream = async () => {
       let terminated = false;
+      try {
+        const initRes = await fetch(`${baseUrl}/analyze/${taskId}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          signal: abortController.signal,
+        });
+        if (initRes.ok) {
+          const task = await initRes.json();
+          if (task.status === 'completed') {
+            setTaskStatus('completed');
+            fetchQuota();
+            window.location.href = `/dashboard/result/${taskId}`;
+            return;
+          }
+          if (task.status === 'failed' || task.status === 'cancelled') {
+            setTaskStatus('failed');
+            setErrorMessage(task.error_message || 'Analiz sırasında beklenmeyen bir hata oluştu.');
+            return;
+          }
+          const pct = typeof task.progress === 'number' ? task.progress : parseFloat(String(task.progress || 0)) || 0;
+          if (pct > 0) {
+            setProgress(prev => Math.max(prev, pct));
+            const derived = deriveStepsFromProgress(pct);
+            const backendSteps = (task.steps && typeof task.steps === 'object' && !Array.isArray(task.steps))
+              ? task.steps as Partial<Record<StepName, StepStatus>>
+              : {};
+            setSteps(prev => ({ ...prev, ...derived, ...backendSteps } as Record<StepName, StepStatus>));
+          }
+        }
+      } catch (_) {}
       try {
         const response = await fetch(`${baseUrl}/analyze/${taskId}/status/stream`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -115,6 +163,7 @@ export default function ProgressPage() {
             }
             try {
               const data: SSEProgressEvent = JSON.parse(dataStr);
+              lastSseEventRef.current = Date.now();
               const pct =
                 typeof data.pct === 'number' ? data.pct : parseFloat(String(data.pct)) || 0;
               setProgress(prev => Math.max(prev, pct));
@@ -206,6 +255,21 @@ export default function ProgressPage() {
     return () => abortController.abort();
   }, [taskId, router, toast, fetchQuota]);
 
+  useEffect(() => {
+    if (taskStatus !== 'running') {
+      setShowSlowHint(false);
+      return;
+    }
+    const id = setInterval(() => {
+      if (Date.now() - lastSseEventRef.current > 20000) {
+        setShowSlowHint(true);
+      } else {
+        setShowSlowHint(false);
+      }
+    }, 2000);
+    return () => clearInterval(id);
+  }, [taskStatus]);
+
   if (taskStatus === 'failed') {
     return (
       <div className="max-w-2xl mx-auto py-20">
@@ -272,7 +336,7 @@ export default function ProgressPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-12 py-12">
+    <div className="max-w-3xl mx-auto space-y-6 sm:space-y-10 py-6 sm:py-10">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -296,7 +360,7 @@ export default function ProgressPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.15 }}
       >
-        <Card className="p-8 border-white/[0.08] bg-white/[0.02]">
+        <Card className="p-5 sm:p-8 border-white/[0.08] bg-white/[0.02]">
           <div className="space-y-4">
             <div className="flex justify-between items-end mb-2">
               <span className="text-sm font-medium text-muted-foreground">Genel İlerleme</span>
@@ -381,6 +445,11 @@ export default function ProgressPage() {
                 >
                   {STEP_LABELS[stepKey]}
                 </span>
+                {stepStatus === 'running' && showSlowHint && (
+                  <p className="text-xs text-muted-foreground/50 mt-0.5">
+                    Analiz devam ediyor, bazı adımlar normalden uzun sürebilir.
+                  </p>
+                )}
               </div>
               <AnimatePresence mode="wait">
                 {stepStatus === 'running' && (
