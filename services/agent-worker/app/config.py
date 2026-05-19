@@ -48,7 +48,7 @@ class Settings(BaseSettings):
     removebg_api_key: str = Field(default="", alias="REMOVEBG_API_KEY")
     
     gemini_image_model: str = Field(
-        default="gemini-2.5-flash-preview-image-generation",
+        default="gemini-2.5-flash-image",
         alias="GEMINI_IMAGE_MODEL",
     )
     gcs_bucket: str = Field(
