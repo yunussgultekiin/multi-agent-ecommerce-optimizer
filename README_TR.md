@@ -361,8 +361,8 @@ RemoveBG API (background_removal.py)
     ▼
 Platform Canvas Kompozisyonu (utils_image.py)
     │  Trendyol:    1200 × 1800 px, ürün canvas yüksekliğinin %78'i
-    │  Amazon:      1600 × 1600 px, ürün canvas yüksekliğinin %76'sı
-    │  Hepsiburada: 1200 × 1200 px, ürün canvas yüksekliğinin %76'sı
+    │  Amazon:      1600 × 1600 px, ürün canvas yüksekliğinin %78'i
+    │  Hepsiburada: 1200 × 1200 px, ürün canvas yüksekliğinin %78'i
     │  - Şeffaf dolgu kırpılır (%4 kenar boşluğu korunur)
     │  - Ürün beyaz canvas'a ortalanır
     ▼
@@ -373,7 +373,7 @@ Google Cloud Storage Yükleme
 Görev Sonucu
 ```
 
-**Varyant seçimi:** `select_variant()`, pricing adımındaki `competitor_variant_overlap` verisini kullanarak en az rakip çakışması olan varyantı seçer — görsel için en farklılaşmış ürün açısını önceliklendirir.
+**Varyant seçimi:** `select_variant()` planlar doğrultusunda henüz kullanılmamaktadır; pipeline her zaman `valid[0]` ile devam eder. Gemini görsel üretimi zaman zaman başarısız olduğundan, bu durumda canvas çıktısı doğrudan kullanıcıya iletilir.
 
 ---
 
