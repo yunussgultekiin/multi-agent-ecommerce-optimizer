@@ -1,5 +1,7 @@
 import logging
+
 import httpx
+
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -10,7 +12,12 @@ async def remove_background(image_bytes: bytes) -> bytes:
         response = await client.post(
             _REMOVEBG_URL,
             headers={"X-Api-Key": settings.removebg_api_key},
-            params={"size": "auto", "format": "png"},
+            params={
+                "size": "auto",
+                "format": "png",
+                "crop": "true",
+                "crop_margin": "3%",
+            },
             files={
                 "image_file": (
                     "product.png",
