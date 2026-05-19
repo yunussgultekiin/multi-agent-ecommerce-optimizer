@@ -1,10 +1,7 @@
 import type { Metadata } from 'next';
-import { Inter, Geist } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import { cn } from "@/lib/utils";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr" className={cn("dark", "font-sans", geist.variable)}>
+    <html lang="tr" className="dark">
       <body className={`${inter.className} min-h-screen text-foreground antialiased selection:bg-primary/30`}>
         {children}
         <Toaster />
