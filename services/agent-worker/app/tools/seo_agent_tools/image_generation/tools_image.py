@@ -24,17 +24,15 @@ logger = logging.getLogger(__name__)
 _GEMINI_TIMEOUT_SECONDS = 60
 
 _STUDIO_PROMPT = (
-    "This is a product photo for a marketplace listing. "
-    "Use the provided product image as the exact source. "
-    "Do not change the product identity, design, logo, colors, text, pattern, shape, or proportions. "
-    "Keep the product centered and clearly visible. "
-    "Keep the background pure white. "
-    "Improve only the studio lighting, contrast, and natural product appearance. "
+    "This is a marketplace product image. "
+    "Use the provided image as the exact product source. "
+    "Do not change the product identity, logo, design, text, pattern, colors, proportions, or shape. "
     "Do not zoom out. "
     "Do not make the product smaller. "
-    "Do not add extra objects, decorations, labels, watermarks, hands, people, or branding. "
-    "Do not add a strong artificial shadow. "
-    "The result must remain a clean professional marketplace product photo."
+    "Keep the product centered on a pure white background. "
+    "Only improve subtle studio lighting and overall clarity. "
+    "Do not add strong shadows, extra objects, decorations, labels, hands, people, or branding. "
+    "Keep the image clean and professional."
 )
 
 @asynccontextmanager

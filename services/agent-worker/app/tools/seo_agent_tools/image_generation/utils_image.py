@@ -5,7 +5,6 @@ from io import BytesIO
 import httpx
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
 from app.config import settings
-
 logger = logging.getLogger(__name__)
 
 PLATFORM_CANVAS_PRESETS: dict[str, tuple[int, int]] = {
@@ -15,9 +14,9 @@ PLATFORM_CANVAS_PRESETS: dict[str, tuple[int, int]] = {
 }
 
 PLATFORM_PRODUCT_RATIOS: dict[str, float] = {
-    "amazon": 0.74,
-    "hepsiburada": 0.74,
-    "trendyol": 0.74,
+    "amazon": 0.78,
+    "hepsiburada": 0.78,
+    "trendyol": 0.78,
 }
 
 _MIN_SUBJECT_FILL_RATIO = 0.42
@@ -28,7 +27,8 @@ def get_platform_canvas_size(target_platform: str) -> tuple[int, int]:
 
 def get_platform_product_ratio(target_platform: str) -> float:
     platform = (target_platform or "").strip().lower()
-    return PLATFORM_PRODUCT_RATIOS.get(platform, 0.74)
+    return PLATFORM_PRODUCT_RATIOS.get(platform, 0.78)
+
 
 def _find_alpha_bbox(image: Image.Image) -> tuple[int, int, int, int] | None:
     rgba = image.convert("RGBA")
@@ -52,7 +52,7 @@ def _find_non_white_bbox(image: Image.Image) -> tuple[int, int, int, int] | None
 def _pad_bbox(
     bbox: tuple[int, int, int, int],
     image_size: tuple[int, int],
-    pad_ratio: float = 0.035,
+    pad_ratio: float = 0.03,
 ) -> tuple[int, int, int, int]:
     left, top, right, bottom = bbox
     width = right - left
@@ -105,6 +105,26 @@ def is_subject_too_small(image_bytes: bytes) -> bool:
     ratio = _subject_fill_ratio(image_bytes)
     return ratio < _MIN_SUBJECT_FILL_RATIO
 
+def _resize_to_fit(
+    image: Image.Image,
+    max_w: int,
+    max_h: int,
+) -> Image.Image:
+    width, height = image.size
+
+    if width <= 0 or height <= 0:
+        return image
+
+    scale = min(max_w / width, max_h / height)
+
+    new_w = max(1, int(width * scale))
+    new_h = max(1, int(height * scale))
+
+    if new_w == width and new_h == height:
+        return image
+
+    return image.resize((new_w, new_h), Image.Resampling.LANCZOS)
+
 def _add_ground_shadow(
     canvas: Image.Image,
     product: Image.Image,
@@ -113,11 +133,11 @@ def _add_ground_shadow(
 ) -> None:
     canvas_w, canvas_h = canvas.size
 
-    shadow_w = int(product.width * 0.78)
-    shadow_h = max(18, int(product.height * 0.105))
+    shadow_w = int(product.width * 0.72)
+    shadow_h = max(16, int(product.height * 0.09))
 
     shadow_x = x + (product.width - shadow_w) // 2
-    shadow_y = y + product.height - int(shadow_h * 0.35)
+    shadow_y = y + product.height - int(shadow_h * 0.25)
 
     shadow_layer = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
     draw = ImageDraw.Draw(shadow_layer)
@@ -129,11 +149,11 @@ def _add_ground_shadow(
             shadow_x + shadow_w,
             shadow_y + shadow_h,
         ),
-        fill=(0, 0, 0, 42),
+        fill=(0, 0, 0, 32),
     )
 
     shadow_layer = shadow_layer.filter(
-        ImageFilter.GaussianBlur(max(12, int(product.width * 0.035)))
+        ImageFilter.GaussianBlur(max(10, int(product.width * 0.028)))
     )
 
     canvas.alpha_composite(shadow_layer)
@@ -195,9 +215,7 @@ def build_marketplace_canvas(
 
     max_w = int(canvas_w * product_max_ratio)
     max_h = int(canvas_h * product_max_ratio)
-
-    product.thumbnail((max_w, max_h), Image.Resampling.LANCZOS)
-
+    product = _resize_to_fit(product, max_w, max_h)
     canvas = Image.new("RGBA", (canvas_w, canvas_h), (255, 255, 255, 255))
 
     x = (canvas_w - product.width) // 2
