@@ -12,7 +12,6 @@ import {
   Plus,
   Search,
   Trash2,
-  ImageOff,
   CheckCircle2,
   XCircle,
   Loader2,
@@ -353,18 +352,6 @@ export default function HistoryPage() {
               >
                 <Link href={getTaskLink(task)}>
                   <div className="group relative flex items-center gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 hover:bg-white/[0.06] hover:border-white/[0.11] hover:shadow-xl hover:shadow-black/20 transition-all duration-200 cursor-pointer">
-
-                    <div className="shrink-0 w-14 h-14 rounded-xl overflow-hidden border border-white/[0.09] bg-white/[0.04] flex items-center justify-center">
-                      {task.generated_image_url ? (
-                        <img
-                          src={task.generated_image_url}
-                          alt={task.payload.title}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <ImageOff className="w-5 h-5 text-muted-foreground/25" />
-                      )}
-                    </div>
 
                     <div className="flex-1 min-w-0 space-y-1.5">
                       <div className="flex items-center gap-2 flex-wrap">

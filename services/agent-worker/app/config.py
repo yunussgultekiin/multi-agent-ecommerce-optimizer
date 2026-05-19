@@ -45,6 +45,8 @@ class Settings(BaseSettings):
     )
     chroma_top_k: int = Field(default=6, alias="CHROMA_TOP_K")
 
+    removebg_api_key: str = Field(default="", alias="REMOVEBG_API_KEY")
+    
     gemini_image_model: str = Field(
         default="gemini-2.5-flash-preview-image-generation",
         alias="GEMINI_IMAGE_MODEL",

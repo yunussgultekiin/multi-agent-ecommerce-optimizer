@@ -8,14 +8,7 @@ from google.genai import types
 from google.genai.types import HttpOptions
 from app.config import settings
 from app.core import ToolResult
-from .background_removal import (
-    compose_clean_canvas,
-    crop_to_subject,
-    enhance_image,
-    get_platform_spec,
-    refine_alpha_mask,
-    remove_background,
-)
+from .background_removal import remove_background
 from .models_image import ImageGenerationInput
 from .utils_image import (
     fetch_image_bytes,
@@ -29,6 +22,7 @@ _GEMINI_TIMEOUT_SECONDS = 60
 
 _STUDIO_PROMPT = (
     "This is a product photo for a marketplace listing. "
+    "Use the provided cut-out product image as the exact source. "
     "Keep the background clean and pure white. "
     "Do not change, distort, or alter the product, its colors, shape, text, or logo in any way. "
     "Clean up any remaining edge artifacts or semi-transparent fringe around the product. "
@@ -125,8 +119,6 @@ class ImageGenerationTool:
         pricing_result = input_data.rival_json.get("pricing_result", {})
         chosen_variant = select_variant(user_product, pricing_result)
         variant_name = chosen_variant.get("name") if chosen_variant else None
-
-        spec = get_platform_spec(target_platform)
         source_url = (
             chosen_variant.get("image_url")
             if chosen_variant and chosen_variant.get("image_url")
@@ -134,10 +126,9 @@ class ImageGenerationTool:
         )
 
         logger.info(
-            "ImageGenerationTool started | platform=%s variant=%s canvas=%s source=%s",
+            "ImageGenerationTool started | platform=%s variant=%s source=%s pipeline=removebg_gemini",
             target_platform,
             variant_name,
-            spec.canvas_size,
             source_url,
         )
 
@@ -149,50 +140,23 @@ class ImageGenerationTool:
             return _failure_result("Image fetch failed", chosen_variant)
 
         try:
-            rgba_bytes = await remove_background(raw_bytes)
+            removed_bg_bytes = await remove_background(raw_bytes)
         except Exception as exc:
             logger.warning("Background removal failed | error=%s", exc)
             log_image_tool_call(target_platform, variant_name, success=False)
             return _failure_result("Background removal failed", chosen_variant)
 
-        try:
-            rgba_bytes = await refine_alpha_mask(rgba_bytes)
-        except Exception as exc:
-            logger.warning("Alpha mask refinement failed | error=%s", exc)
-
-        try:
-            rgba_bytes = await crop_to_subject(rgba_bytes)
-        except Exception as exc:
-            logger.warning("Bbox crop failed | error=%s", exc)
-            log_image_tool_call(target_platform, variant_name, success=False)
-            return _failure_result("Subject crop failed", chosen_variant)
-
-        try:
-            canvas_bytes = await compose_clean_canvas(
-                rgba_bytes=rgba_bytes,
-                canvas_size=spec.canvas_size,
-                canvas_color=spec.canvas_color,
-            )
-        except Exception as exc:
-            logger.warning("Canvas composition failed | error=%s", exc)
-            log_image_tool_call(target_platform, variant_name, success=False)
-            return _failure_result("Canvas composition failed", chosen_variant)
-
-        enhanced_bytes = await _enhance_with_gemini(canvas_bytes)
+        enhanced_bytes = await _enhance_with_gemini(removed_bg_bytes)
         if enhanced_bytes is None:
             logger.warning(
-                "Gemini studio enhancement failed — using Pillow canvas | platform=%s",
+                "Gemini studio enhancement failed | platform=%s action=upload_removebg_output",
                 target_platform,
             )
-
-        final_bytes = enhanced_bytes if enhanced_bytes is not None else canvas_bytes
-        fallback_used = enhanced_bytes is None
-
-        if fallback_used:
-            try:
-                final_bytes = await enhance_image(final_bytes)
-            except Exception as exc:
-                logger.warning("Pillow image enhancement failed | error=%s", exc)
+            final_bytes = removed_bg_bytes
+            fallback_used = True
+        else:
+            final_bytes = enhanced_bytes
+            fallback_used = False
 
         public_url = await upload_to_gcs(
             image_bytes=final_bytes,

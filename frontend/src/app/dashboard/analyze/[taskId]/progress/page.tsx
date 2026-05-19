@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -104,8 +104,6 @@ export default function ProgressPage() {
   const [taskStatus, setTaskStatus] = useState<'pending' | 'running' | 'completed' | 'failed'>('pending');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [connectionLost, setConnectionLost] = useState(false);
-  const [showSlowHint, setShowSlowHint] = useState(false);
-  const lastSseEventRef = useRef<number>(Date.now());
 
   useEffect(() => {
     const token = Cookies.get('access_token');
@@ -133,13 +131,15 @@ export default function ProgressPage() {
             return;
           }
           const pct = typeof task.progress === 'number' ? task.progress : parseFloat(String(task.progress || 0)) || 0;
+          const backendSteps = (task.steps && typeof task.steps === 'object' && !Array.isArray(task.steps))
+            ? task.steps as Partial<Record<StepName, StepStatus>>
+            : {};
           if (pct > 0) {
             setProgress(prev => Math.max(prev, pct));
             const derived = deriveStepsFromProgress(pct);
-            const backendSteps = (task.steps && typeof task.steps === 'object' && !Array.isArray(task.steps))
-              ? task.steps as Partial<Record<StepName, StepStatus>>
-              : {};
             setSteps(prev => ({ ...prev, ...derived, ...backendSteps } as Record<StepName, StepStatus>));
+          } else if (Object.keys(backendSteps).length > 0) {
+            setSteps(prev => ({ ...prev, ...backendSteps } as Record<StepName, StepStatus>));
           }
         }
       } catch (_) {}
@@ -179,7 +179,6 @@ export default function ProgressPage() {
             }
             try {
               const data: SSEProgressEvent = JSON.parse(dataStr);
-              lastSseEventRef.current = Date.now();
               const pct =
                 typeof data.pct === 'number' ? data.pct : parseFloat(String(data.pct)) || 0;
               setProgress(prev => Math.max(prev, pct));
@@ -270,21 +269,6 @@ export default function ProgressPage() {
     fetchStream();
     return () => abortController.abort();
   }, [taskId, router, toast, fetchQuota]);
-
-  useEffect(() => {
-    if (taskStatus !== 'running') {
-      setShowSlowHint(false);
-      return;
-    }
-    const id = setInterval(() => {
-      if (Date.now() - lastSseEventRef.current > 20000) {
-        setShowSlowHint(true);
-      } else {
-        setShowSlowHint(false);
-      }
-    }, 2000);
-    return () => clearInterval(id);
-  }, [taskStatus]);
 
   if (taskStatus === 'failed') {
     return (
@@ -461,7 +445,7 @@ export default function ProgressPage() {
                 >
                   {STEP_LABELS[stepKey]}
                 </span>
-                {stepStatus === 'running' && showSlowHint && (
+                {stepStatus === 'running' && (
                   <p className="text-xs text-muted-foreground/50 mt-0.5">
                     Analiz devam ediyor, bazı adımlar normalden uzun sürebilir.
                   </p>

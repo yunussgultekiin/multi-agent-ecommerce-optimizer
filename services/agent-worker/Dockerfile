@@ -1,21 +1,10 @@
 FROM python:3.12-slim
 
-ENV NUMBA_CACHE_DIR=/tmp/numba_cache
-ENV NUMBA_DISABLE_JIT=1
-ENV U2NET_HOME=/tmp/.u2net
-
 RUN adduser --disabled-password --no-create-home appuser
 
 WORKDIR /app
 COPY agent-worker/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
-RUN pip install --no-cache-dir "rembg[cpu]" onnxruntime pillow
-RUN mkdir -p /tmp/numba_cache /tmp/.u2net && chmod -R 777 /tmp/numba_cache /tmp/.u2net
-
-RUN python -c "from rembg import new_session; new_session('u2net')" \
-    && echo "u2net model baked successfully" \
-    && chmod -R 777 /tmp/.u2net
 
 COPY shared/ ./shared/
 COPY agent-worker/app/ ./app/
@@ -39,8 +28,8 @@ client = chromadb.EphemeralClient(settings=chromadb.Settings(anonymized_telemetr
 col = client.get_or_create_collection('warmup'); \
 col.add(ids=['w'], documents=['warmup']); \
 client.delete_collection('warmup'); \
-print('Chroma ONNX model cached')" \
-    || echo "Chroma ONNX model cache skipped — will download at runtime"
+print('Chroma cache warmed')" \
+    || echo "Chroma cache warm-up skipped"
 
 EXPOSE 8080
 CMD ["python", "-m", "app.main"]
