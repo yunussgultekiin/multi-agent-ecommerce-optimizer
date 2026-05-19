@@ -13,7 +13,6 @@ import logging
 from pydantic import ValidationError
 
 logger = logging.getLogger(__name__)
-
 _GROUNDING_TOOL = types.Tool(google_search=types.GoogleSearch())
 
 async def run_trend_analyzer(

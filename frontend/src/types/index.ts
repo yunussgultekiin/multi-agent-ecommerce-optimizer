@@ -1,7 +1,5 @@
 export type Platform = 'trendyol' | 'amazon' | 'hepsiburada';
-
 export type SeoTone = 'casual' | 'professional' | 'premium';
-
 export type AnalysisStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
 
 export interface Variant {
@@ -82,12 +80,24 @@ export interface MarketGapResult {
   gap_opportunities: string[];
   strategic_actions: string[];
   positioning_rationale: string;
+  user_product_cluster: string;
+  sentiment_based_opportunities: string[];
+  trend_based_opportunities: string[];
+  brand_landscape: {
+    premium_brands: string[];
+    budget_brands: string[];
+    user_brand_position: string;
+  };
+  positioning_score: number;
+  variant_gap_opportunities: string[];
 }
 
 export interface VariantPricing {
   variant_name: string;
   suggested_price: number;
   positioning: string;
+  base_price: number;
+  price_delta: number;
 }
 
 export interface PricingResult {
@@ -99,6 +109,10 @@ export interface PricingResult {
   fallback_used: boolean;
   variant_pricing: VariantPricing[];
   competitor_prices: { name: string; price: number }[];
+  price_median: number;
+  price_q1: number;
+  price_q3: number;
+  market_power_gap: string;
 }
 
 export interface VariantSeo {
@@ -115,6 +129,7 @@ export interface SeoResult {
   platform_tips: string[];
   variant_seo: VariantSeo[];
   product_development_ideas?: string[];
+  competitor_comparison_summary?: string;
 }
 
 export interface SentimentResult {
@@ -128,12 +143,7 @@ export interface TrendResult {
   category_trend_summary: string;
   demand_signals: string[];
   platform_trends: string[];
-}
-
-export interface VisionResult {
-  generation_prompt: string;
-  dominant_colors: string[];
-  improvement_suggestions: string[];
+  trending_features: string[];
 }
 
 export interface AnalysisResult {
@@ -153,7 +163,6 @@ export interface AnalysisResult {
   seo: SeoResult;
   sentiment: SentimentResult;
   trend: TrendResult;
-  vision: VisionResult;
   generated_image_url: string | null;
 }
 

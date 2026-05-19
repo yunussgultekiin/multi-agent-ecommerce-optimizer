@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
 import Cookies from 'js-cookie';
+import { useAuthStore } from '@/store/auth';
 import type { SSEProgressEvent, StepName, StepStatus } from '@/types';
 
 const STEP_LABELS: Record<StepName, string> = {
@@ -63,6 +64,7 @@ export default function ProgressPage() {
   const { taskId } = useParams<{ taskId: string }>();
   const router = useRouter();
   const { toast } = useToast();
+  const { fetchQuota } = useAuthStore();
   const [progress, setProgress] = useState<number>(0);
   const [steps, setSteps] = useState<Record<StepName, StepStatus>>({} as Record<StepName, StepStatus>);
   const [taskStatus, setTaskStatus] = useState<'pending' | 'running' | 'completed' | 'failed'>('pending');
@@ -133,6 +135,7 @@ export default function ProgressPage() {
 
               if (pct >= 100 && data.status === 'completed') {
                 setTaskStatus('completed');
+                fetchQuota();
                 const navigateWhenReady = async () => {
                   for (let i = 0; i < 20; i++) {
                     if (abortController.signal.aborted) return;
@@ -178,6 +181,7 @@ export default function ProgressPage() {
           }
           if (task.status === 'completed') {
             setTaskStatus('completed');
+            fetchQuota();
             window.location.href = `/dashboard/result/${taskId}`;
             return;
           }
@@ -200,7 +204,7 @@ export default function ProgressPage() {
 
     fetchStream();
     return () => abortController.abort();
-  }, [taskId, router, toast]);
+  }, [taskId, router, toast, fetchQuota]);
 
   if (taskStatus === 'failed') {
     return (

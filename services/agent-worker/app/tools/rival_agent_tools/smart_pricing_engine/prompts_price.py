@@ -1,6 +1,5 @@
 import json
 from typing import Optional
-
 from app.tools.json_prompt_rules import JSON_SELF_CORRECTION_SYNTAX, STRICT_JSON_SYNTAX_RULES
 
 def build_fallback_pricing_prompt(

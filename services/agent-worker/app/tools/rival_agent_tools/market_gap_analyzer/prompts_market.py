@@ -1,5 +1,4 @@
 import json
-
 from app.tools.json_prompt_rules import JSON_SELF_CORRECTION_SYNTAX, STRICT_JSON_SYNTAX_RULES
 
 _JSON_SCHEMA = """{
@@ -37,11 +36,15 @@ Rules:
 - sentiment_based_opportunities: opportunities directly derived from customer pain_points; [] if no sentiment data.
 - trend_based_opportunities: opportunities derived from trending features; [] if no trend data.
 - variant_gap_opportunities: [] if user product has no variants.
+- gap_opportunities: max 5 items.
+- strategic_actions: max 3 items.
+- sentiment_based_opportunities: max 3 items.
+- trend_based_opportunities: max 3 items.
+- variant_gap_opportunities: max 3 items.
 - Keep JSON keys and enum labels in English, but write all natural-language values in Turkish.
 - Do not include markdown, comments, or trailing commas.
 {STRICT_JSON_SYNTAX_RULES}
 """
-
 
 def build_market_gap_prompt(
     user_product: dict,

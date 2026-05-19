@@ -9,7 +9,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
 async def call_gemini(
     model: str,
     prompt: str,
