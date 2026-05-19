@@ -22,15 +22,35 @@ def get_platform_product_ratio(target_platform: str) -> float:
     platform = (target_platform or "").strip().lower()
 
     if platform == "trendyol":
-        return 0.72
+        return 0.78
 
     if platform == "amazon":
-        return 0.68
+        return 0.76
 
     if platform == "hepsiburada":
-        return 0.68
+        return 0.76
 
-    return 0.68
+    return 0.76
+
+def _crop_transparent_padding(product: Image.Image) -> Image.Image:
+    rgba = product.convert("RGBA")
+    alpha = rgba.getchannel("A")
+    bbox = alpha.getbbox()
+
+    if bbox is None:
+        logger.warning("Product alpha bbox missing | action=return_original")
+        return rgba
+
+    left, top, right, bottom = bbox
+    pad_x = max(8, int((right - left) * 0.04))
+    pad_y = max(8, int((bottom - top) * 0.04))
+
+    left = max(0, left - pad_x)
+    top = max(0, top - pad_y)
+    right = min(rgba.width, right + pad_x)
+    bottom = min(rgba.height, bottom + pad_y)
+
+    return rgba.crop((left, top, right, bottom))
 
 def select_variant(user_product: dict, pricing_result: dict) -> dict | None:
     variants = user_product.get("variants", [])
@@ -75,11 +95,11 @@ async def fetch_image_bytes(url: str) -> bytes:
 
 def build_marketplace_canvas(
     product_image_bytes: bytes,
-    *,
     target_platform: str = "default",
     product_max_ratio: float | None = None,
 ) -> bytes:
     product = Image.open(BytesIO(product_image_bytes)).convert("RGBA")
+    product = _crop_transparent_padding(product)
 
     canvas_w, canvas_h = get_platform_canvas_size(target_platform)
 
@@ -94,27 +114,26 @@ def build_marketplace_canvas(
     canvas = Image.new("RGBA", (canvas_w, canvas_h), (255, 255, 255, 255))
 
     x = (canvas_w - product.width) // 2
-    y = int((canvas_h - product.height) * 0.46)
+    y = (canvas_h - product.height) // 2
 
     alpha = product.getchannel("A")
-    alpha_bbox = alpha.getbbox()
-    alpha_min, alpha_max = alpha.getextrema()
-
-    has_transparency = alpha_bbox is not None and alpha_min < 255
+    alpha_min, _ = alpha.getextrema()
+    has_transparency = alpha_min < 255
 
     if has_transparency:
-        shadow_alpha = alpha.filter(ImageFilter.GaussianBlur(22))
+        shadow_alpha = alpha.filter(ImageFilter.GaussianBlur(18))
+        shadow_alpha = shadow_alpha.point(lambda value: int(value * 0.22))
 
-        shadow_layer = Image.new("RGBA", product.size, (0, 0, 0, 55))
+        shadow_layer = Image.new("RGBA", product.size, (0, 0, 0, 0))
         shadow_layer.putalpha(shadow_alpha)
 
-        shadow = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+        shadow_canvas = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
 
         shadow_x = x + int(product.width * 0.025)
         shadow_y = y + int(product.height * 0.055)
 
-        shadow.alpha_composite(shadow_layer, (shadow_x, shadow_y))
-        canvas.alpha_composite(shadow)
+        shadow_canvas.alpha_composite(shadow_layer, (shadow_x, shadow_y))
+        canvas.alpha_composite(shadow_canvas)
 
     canvas.alpha_composite(product, (x, y))
 

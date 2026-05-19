@@ -1,7 +1,6 @@
 import asyncio
 import logging
 from contextlib import asynccontextmanager
-
 import google.api_core.exceptions
 import google.auth.exceptions
 from google import genai
@@ -13,6 +12,7 @@ from app.core import ToolResult
 from .background_removal import remove_background
 from .models_image import ImageGenerationInput
 from .utils_image import (
+    build_marketplace_canvas,
     fetch_image_bytes,
     log_image_tool_call,
     select_variant,
@@ -24,10 +24,8 @@ _GEMINI_TIMEOUT_SECONDS = 60
 
 _STUDIO_PROMPT = (
     "This is a product photo for a marketplace listing. "
-    "Use the provided cut-out product image as the exact source. "
-    "The product must be centered and large in the frame. "
-    "Make the product occupy approximately 75% to 85% of the image height. "
-    "Minimize empty whitespace around the product. "
+    "Use the provided product image as the exact source. "
+    "Keep the product centered, large, and clearly visible. "
     "Keep the background pure white. "
     "Do not change, distort, redraw, replace, or alter the product. "
     "Preserve the exact product shape, proportions, colors, logo, pattern, text, and details. "
@@ -35,9 +33,9 @@ _STUDIO_PROMPT = (
     "Do not zoom out. "
     "Clean up any remaining edge artifacts or semi-transparent fringe around the product. "
     "Add natural, soft studio lighting that highlights the product realistically. "
-    "Add a very subtle, soft ground shadow directly beneath the product only. "
+    "Add only a very subtle, soft ground shadow directly beneath the product. "
     "Do not add any objects, decorations, text, watermarks, labels, hands, or branding. "
-    "The result must look like a professional marketplace studio photo with the product clearly visible and filling the frame."
+    "The result must look like a professional marketplace studio photo."
 )
 
 @asynccontextmanager
@@ -101,6 +99,18 @@ async def _enhance_with_gemini(image_bytes: bytes) -> bytes | None:
         logger.warning("Gemini image enhancement failed | error=%s", exc)
         return None
 
+async def _build_marketplace_canvas_async(
+    image_bytes: bytes,
+    target_platform: str,
+) -> bytes:
+    loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(
+        None,
+        build_marketplace_canvas,
+        image_bytes,
+        target_platform,
+    )
+
 def _failure_result(
     error_msg: str,
     chosen_variant: dict | None = None,
@@ -135,7 +145,7 @@ class ImageGenerationTool:
         )
 
         logger.info(
-            "ImageGenerationTool started | platform=%s variant=%s source=%s pipeline=removebg_gemini",
+            "ImageGenerationTool started | platform=%s variant=%s source=%s pipeline=removebg_canvas_gemini",
             target_platform,
             variant_name,
             source_url,
@@ -155,13 +165,24 @@ class ImageGenerationTool:
             log_image_tool_call(target_platform, variant_name, success=False)
             return _failure_result("Background removal failed", chosen_variant)
 
-        enhanced_bytes = await _enhance_with_gemini(removed_bg_bytes)
-        if enhanced_bytes is None:
-            logger.warning(
-                "Gemini studio enhancement failed | platform=%s action=upload_removebg_output",
+        try:
+            canvas_bytes = await _build_marketplace_canvas_async(
+                removed_bg_bytes,
                 target_platform,
             )
-            final_bytes = removed_bg_bytes
+        except Exception as exc:
+            logger.warning("Marketplace canvas build failed | error=%s", exc)
+            log_image_tool_call(target_platform, variant_name, success=False)
+            return _failure_result("Marketplace canvas build failed", chosen_variant)
+
+        enhanced_bytes = await _enhance_with_gemini(canvas_bytes)
+
+        if enhanced_bytes is None:
+            logger.warning(
+                "Gemini studio enhancement failed | platform=%s action=upload_canvas_output",
+                target_platform,
+            )
+            final_bytes = canvas_bytes
             fallback_used = True
         else:
             final_bytes = enhanced_bytes
