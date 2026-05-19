@@ -14,6 +14,7 @@ from .utils_price import (
     determine_positioning,
     extract_valid_prices,
     filter_valid_competitors,
+    get_brand_multiplier,
     log_tool_call,
     normalize_user_product,
 )
@@ -127,6 +128,32 @@ def run_deterministic_analysis(
     user_price = user_product.get("price") or stats["median"]
     user_variants = user_product.get("variants", [])
 
+    brand_multiplier = get_brand_multiplier(user_product.get("brand"))
+    raw_median = stats["median"]
+    adjusted_predicted = round(raw_median * brand_multiplier, 2)
+    adjusted_min = round(stats["price_range_min"] * brand_multiplier, 2)
+    adjusted_max = round(stats["price_range_max"] * brand_multiplier, 2)
+
+    if user_product.get("price"):
+        lo = user_product["price"] * 0.80
+        hi = user_product["price"] * 2.50
+        adjusted_predicted = round(max(lo, min(adjusted_predicted, hi)), 2)
+        adjusted_min = round(max(lo, min(adjusted_min, hi)), 2)
+        adjusted_max = round(max(lo, min(adjusted_max, hi)), 2)
+        if adjusted_min > adjusted_predicted:
+            adjusted_min = round(adjusted_predicted * 0.90, 2)
+        if adjusted_max < adjusted_predicted:
+            adjusted_max = round(adjusted_predicted * 1.10, 2)
+        adjusted_min = max(adjusted_min, 1.0)
+
+    logger.info(
+        "Brand multiplier applied | brand=%s multiplier=%.2f raw_median=%.2f adjusted=%.2f",
+        user_product.get("brand", "unknown"),
+        brand_multiplier,
+        raw_median,
+        adjusted_predicted,
+    )
+
     positioning = determine_positioning(user_price, stats["q1"], stats["q3"])
     positioning_score = calculate_positioning_score(
         user_price, stats["q1"], stats["q3"], stats["median"]
@@ -148,9 +175,9 @@ def run_deterministic_analysis(
         price_median=stats["median"],
         price_q1=stats["q1"],
         price_q3=stats["q3"],
-        predicted_price=stats["median"],
-        price_range_min=stats["price_range_min"],
-        price_range_max=stats["price_range_max"],
+        predicted_price=adjusted_predicted,
+        price_range_min=adjusted_min,
+        price_range_max=adjusted_max,
         positioning=positioning,
         positioning_score=positioning_score,
         market_power_gap=market_power_gap,
@@ -202,7 +229,7 @@ async def run_smart_pricing_engine(
 
     user_price = normalized_user_product.get("price")
     if user_price:
-        lo, hi = user_price * 0.1, user_price * 4.0
+        lo, hi = user_price * 0.50, user_price * 3.0
         sane_prices = [p for p in valid_prices if lo <= p <= hi]
         if len(sane_prices) < 2:
             logger.warning(

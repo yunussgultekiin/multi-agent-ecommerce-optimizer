@@ -16,6 +16,8 @@ def parse_json_response(raw_text: str) -> dict:
         if first != -1 and last != -1 and last > first:
             text = text[first : last + 1].strip()
 
+    text = re.sub(r",\s*([\]}])", r"\1", text)
+
     parsed = json.loads(text)
     if not isinstance(parsed, dict):
         raise ValueError("Gemini response must be a JSON object")

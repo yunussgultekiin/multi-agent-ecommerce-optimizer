@@ -54,8 +54,7 @@ async def upload_to_gcs(
         blob_name = f"generated-images/{uuid.uuid4()}.png"
         blob = bucket.blob(blob_name)
         blob.upload_from_string(image_bytes, content_type="image/png")
-        blob.make_public()
-        return blob.public_url
+        return f"https://storage.googleapis.com/{bucket_name}/{blob_name}"
 
     loop = asyncio.get_running_loop()
     try:

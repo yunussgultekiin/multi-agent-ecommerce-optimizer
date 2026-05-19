@@ -7,10 +7,8 @@ from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/upload", tags=["upload"])
-
 _ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp"}
 _MAX_BYTES = 10 * 1024 * 1024  # 10 MB
-
 _LOCAL_DIR = Path("/tmp/uploads")
 _LOCAL_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -27,7 +25,6 @@ async def upload_image(request: Request, file: UploadFile = File(...)):
 
     ext = file.filename.rsplit(".", 1)[-1].lower() if file.filename and "." in file.filename else "jpg"
 
-    # Try GCS first
     try:
         from google.cloud import storage
 
@@ -36,13 +33,11 @@ async def upload_image(request: Request, file: UploadFile = File(...)):
         bucket = gcs.bucket(settings.gcs_bucket)
         blob = bucket.blob(blob_name)
         blob.upload_from_string(content, content_type=file.content_type)
-        blob.make_public()
         logger.info("image_uploaded_gcs | blob=%s size=%d", blob_name, len(content))
-        return {"url": blob.public_url}
+        return {"url": f"https://storage.googleapis.com/{settings.gcs_bucket}/{blob_name}"}
     except Exception as exc:
         logger.warning("gcs_unavailable_using_local | error=%s", exc)
 
-    # Local fallback — works in development without GCS credentials
     try:
         filename = f"{uuid.uuid4()}.{ext}"
         (_LOCAL_DIR / filename).write_bytes(content)

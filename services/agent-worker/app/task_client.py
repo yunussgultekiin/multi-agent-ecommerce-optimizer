@@ -33,7 +33,12 @@ class TaskServiceClient:
                 f"/tasks/{task_id}/status",
                 json=body,
             )
-            if response.status_code not in (200, 204):
+            if response.status_code == 409 and status == "completed":
+                logger.info(
+                    "Task already in final state — ignoring 409 | task_id=%s",
+                    task_id,
+                )
+            elif response.status_code not in (200, 204):
                 logger.warning(
                     "Unexpected task status update response: task_id=%s status=%s code=%d",
                     task_id,

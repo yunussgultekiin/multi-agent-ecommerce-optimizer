@@ -81,6 +81,7 @@ def parse_json_response(raw_text: str) -> dict:
             text = text[first : last + 1].strip()
 
     text = _sanitize_control_chars(text)
+    text = re.sub(r",\s*([\]}])", r"\1", text)
 
     parsed = json.loads(text)
     if not isinstance(parsed, dict):

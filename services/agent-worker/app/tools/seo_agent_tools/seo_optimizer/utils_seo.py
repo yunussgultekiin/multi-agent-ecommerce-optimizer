@@ -17,7 +17,7 @@ def query_chroma(target_platform: str, category: str) -> list[str]:
         collection = get_seo_collection()
         total_count = collection.count()
         if total_count == 0:
-            logger.warning("SEO ChromaDB collection is empty, skipping RAG")
+            logger.info("SEO ChromaDB collection is empty, skipping RAG")
             return []
 
         query = (

@@ -12,10 +12,16 @@ def filter_valid_competitors(tool_results: list) -> list[dict]:
     for result in tool_results:
         if result.success and isinstance(result.data, dict) and result.data:
             data = result.data
+            estimated_price = data.get("estimated_price")
+            # H-11: fiyatsız rakipler fiyat analizine ve Gemini prompt'una girmesin
+            if estimated_price is None:
+                continue
+            if isinstance(estimated_price, (int, float)) and estimated_price <= 0:
+                continue
             valid.append(
                 {
                     "competitor_name": data.get("competitor_name", ""),
-                    "estimated_price": data.get("estimated_price"),
+                    "estimated_price": estimated_price,
                     "rating": data.get("rating"),
                     "review_count": data.get("review_count"),
                     "brand": data.get("brand"),
@@ -176,6 +182,32 @@ def calculate_competitor_variant_overlap(
         )
 
     return overlap_results
+
+_KNOWN_PREMIUM_BRANDS: frozenset[str] = frozenset({
+    "stanley", "thermos", "contigo", "hydro flask", "hydroflask",
+    "yeti", "nalgene", "sigg", "klean kanteen", "camelbak",
+    "tiger", "zojirushi", "emsa",
+})
+_KNOWN_MID_BRANDS: frozenset[str] = frozenset({
+    "laken", "quechua", "decathlon", "trudeau", "lock&lock", "lock lock",
+    "tefal", "arzum", "karaca", "hisar", "tombik",
+})
+_BRAND_MULTIPLIER_PREMIUM = 1.0
+_BRAND_MULTIPLIER_MID = 0.65
+_BRAND_MULTIPLIER_UNKNOWN = 0.45
+
+
+def get_brand_multiplier(brand: str | None) -> float:
+    """Kullanıcı markasının piyasa gücüne göre fiyat çarpanı döndürür."""
+    if not brand:
+        return _BRAND_MULTIPLIER_UNKNOWN
+    key = brand.strip().lower()
+    if key in _KNOWN_PREMIUM_BRANDS:
+        return _BRAND_MULTIPLIER_PREMIUM
+    if key in _KNOWN_MID_BRANDS:
+        return _BRAND_MULTIPLIER_MID
+    return _BRAND_MULTIPLIER_UNKNOWN
+
 
 def normalize_user_product(user_product: dict) -> dict:
     return {

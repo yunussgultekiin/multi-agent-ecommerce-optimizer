@@ -117,7 +117,7 @@ export default function ProgressPage() {
               const data: SSEProgressEvent = JSON.parse(dataStr);
               const pct =
                 typeof data.pct === 'number' ? data.pct : parseFloat(String(data.pct)) || 0;
-              setProgress(pct);
+              setProgress(prev => Math.max(prev, pct));
 
               if (data.step && data.status) {
                 setSteps((prev: Record<StepName, StepStatus>) => ({

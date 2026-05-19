@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from contextlib import asynccontextmanager
 import google.api_core.exceptions
 import google.auth.exceptions
 from google import genai
@@ -30,21 +31,25 @@ _SHADOW_PROMPT = (
     "Do not change the product, its colors, or the background in any way."
 )
 
-def _get_client() -> genai.Client:
-    return genai.Client(
+@asynccontextmanager
+async def _gemini_image_client():
+    client = genai.Client(
         vertexai=True,
         project=settings.google_cloud_project,
         location=settings.google_cloud_location,
         http_options=HttpOptions(api_version="v1beta"),
     )
+    try:
+        yield client
+    finally:
+        await client.aio.aclose()
+        client.close()
 
 async def _enhance_with_gemini(image_bytes: bytes) -> bytes | None:
-    loop = asyncio.get_running_loop()
     try:
-        response = await asyncio.wait_for(
-            loop.run_in_executor(
-                None,
-                lambda: _get_client().models.generate_content(
+        async with _gemini_image_client() as client:
+            response = await asyncio.wait_for(
+                client.aio.models.generate_content(
                     model=settings.gemini_image_model,
                     contents=[
                         types.Content(
@@ -64,13 +69,11 @@ async def _enhance_with_gemini(image_bytes: bytes) -> bytes | None:
                         response_modalities=["IMAGE"],
                     ),
                 ),
-            ),
-            timeout=_GEMINI_TIMEOUT_SECONDS,
-        )
-
-        for part in response.candidates[0].content.parts:
-            if hasattr(part, "inline_data") and part.inline_data:
-                return part.inline_data.data
+                timeout=_GEMINI_TIMEOUT_SECONDS,
+            )
+            for part in response.candidates[0].content.parts:
+                if hasattr(part, "inline_data") and part.inline_data:
+                    return part.inline_data.data
 
         logger.warning("Gemini returned no image part in response")
         return None
@@ -88,7 +91,6 @@ async def _enhance_with_gemini(image_bytes: bytes) -> bytes | None:
         logger.warning("Gemini image enhancement failed | error=%s", exc)
         return None
 
-
 def _failure_result(
     error_msg: str,
     chosen_variant: dict | None = None,
@@ -102,7 +104,6 @@ def _failure_result(
             "error": error_msg,
         },
     )
-
 
 class ImageGenerationTool:
     async def run(self, input_data: ImageGenerationInput) -> ToolResult:

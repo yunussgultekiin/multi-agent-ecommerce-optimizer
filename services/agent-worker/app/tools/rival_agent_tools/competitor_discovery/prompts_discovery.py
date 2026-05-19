@@ -41,6 +41,17 @@ Find products that directly compete with the user's product on {platform}.
 Prefer well-known brands with significant market presence on {platform}.
 Prefer diversity: avoid multiple products from the same brand when possible.
 
+Volume / size matching (CRITICAL):
+- If the user product title contains a measurable size or quantity
+  (volume, weight, capacity, count, length, etc.), extract that value.
+- Only include competitors whose size/quantity is within 30% of the
+  user product's value.
+  Example: if user product is "X units", acceptable range is 0.7X – 1.3X.
+- Competitors outside this range must NOT be included in price analysis.
+  If shown in the competitor table, mark them with low relevance score.
+- If no measurable size/quantity is found in the title,
+  focus on the same product subcategory and skip this filter.
+
 {brand_rule}
 Exclude products that are clearly in a different category than "{category}".
 
@@ -66,7 +77,6 @@ Rules:
 - Do not include markdown, comments, or trailing commas.
 {STRICT_JSON_SYNTAX_RULES}
 """
-
 
 def build_discovery_correction_context(last_error: str) -> str:
     return (

@@ -28,8 +28,8 @@ def get_seo_collection():
 def seed_seo_chunks() -> None:
     try:
         if not _DATA_PATH.exists():
-            logger.warning(
-                "seo_chunks.json not found at %s — skipping seed", _DATA_PATH
+            logger.info(
+                "seo_chunks.json not found at %s — RAG disabled", _DATA_PATH
             )
             return
 

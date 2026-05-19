@@ -19,6 +19,7 @@ RUN python -c "from rembg import new_session; new_session('u2net')" \
 
 COPY shared/ ./shared/
 COPY agent-worker/app/ ./app/
+COPY agent-worker/data/ ./data/
 
 USER appuser
 EXPOSE 8080

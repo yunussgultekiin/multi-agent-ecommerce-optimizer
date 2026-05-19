@@ -66,6 +66,7 @@ export interface Competitor {
   review_count: number;
   brand: string;
   source_url?: string;
+  reason?: string;
 }
 
 export interface MarketGapCluster {

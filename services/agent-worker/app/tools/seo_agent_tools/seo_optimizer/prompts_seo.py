@@ -185,6 +185,14 @@ Gap opportunities from market: {gap_opportunities[:6]}
 RULE: Only put features in title and meta_description that are ACTUALLY PRESENT in the user product description.
 Gap opportunities NOT mentioned in the description must go ONLY to product_development_ideas[], never in title or description.
 
+=== ABSOLUTE CLAIM PROHIBITION — CRITICAL ===
+NEVER write absolute factual claims that are NOT explicitly stated in the user product description above.
+Prohibited patterns (unless the description explicitly contains them):
+- Material / safety claims: "BPA içermez", "gıda güvenli", "sertifikalı", "ISO belgeli"
+- Performance claims: "X saat sıcak tutar", "Y dakikada şarj olur", "Z saate kadar soğuk"
+- Logistics claims: "hızlı kargo", "ücretsiz iade", "garantili teslimat", "aynı gün kargo"
+If you want to SUGGEST any such feature, put it in product_development_ideas[] with prefix "Öneri: ".
+
 === KEYWORD GAPS RULES ===
 Source from: competitor trending keywords {all_keywords[:10]}, gap opportunities, and RAG platform rules.
 - Find 5-10 missing keyword opportunities the user product is not currently targeting
@@ -215,5 +223,9 @@ Field rules:
 - competitor_comparison_summary: 2-3 Turkish sentences on competitive positioning
 - platform_specific_tips: 3-5 Turkish SEO tips for {platform}
 - variant_seo: one entry per variant OR empty []
-- product_development_ideas: Turkish ideas for features in gap_opportunities that user product does NOT have
+- product_development_ideas: Concrete ACTIONS the seller can take — each item must start with an
+  imperative Turkish verb (e.g. "Ekleyin", "Üretin", "Sertifika alın", "Sunun").
+  Do NOT repeat abstract market opportunities already visible in gap_opportunities[].
+  Do NOT duplicate items from content_recommendations[].
+  Unverified feature suggestions must start with "Öneri: " prefix.
 {STRICT_JSON_SYNTAX_RULES}"""

@@ -49,10 +49,25 @@ const PLATFORM_COLORS: Record<string, string> = {
   hepsiburada: 'text-red-400 border-red-400/30 bg-red-400/10',
 };
 
+const SEGMENT_LABELS: Record<string, string> = {
+  value_for_money: "Fiyat/Performans",
+  mid_segment: "Orta Segment",
+  premium: "Premium",
+  budget: "Bütçe Dostu",
+};
+
 const POSITIONING_LABELS: Record<string, string> = {
-  underpriced: 'Piyasanın Altında',
-  optimal: 'Optimal',
-  overpriced: 'Piyasanın Üstünde',
+  underpriced: "Piyasanın Altında",
+  optimal: "Optimal",
+  overpriced: "Piyasanın Üstünde",
+  below_market: "Piyasanın Altında",
+  above_market: "Piyasanın Üstünde",
+  competitive: "Rekabetçi",
+  premium_position: "Premium Konum",
+  value_for_money: "Fiyat/Performans",
+  mid_segment: "Orta Segment",
+  premium: "Premium",
+  budget: "Bütçe Dostu",
 };
 
 export default function ResultPage() {
@@ -113,6 +128,7 @@ export default function ResultPage() {
           review_count: cr.data?.review_count ?? 0,
           brand: cr.data?.brand || '',
           source_url: '',
+          reason: cr.data?.reason || '',
         }));
 
         const market_gap = {
@@ -196,7 +212,7 @@ export default function ResultPage() {
           product_price: user_product?.price ?? 0,
           platform: target_platform || 'trendyol',
           analyzed_at: created_at,
-          status: 'completed',
+          status: task?.status || 'completed',
           seo_tone: task?.seo_tone ?? undefined,
           competitors,
           market_gap,
@@ -283,7 +299,6 @@ export default function ResultPage() {
         animate="visible"
         className="space-y-8"
       >
-        {/* Back button */}
         <motion.div variants={itemVariants}>
           <Link href="/dashboard/history">
             <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground -ml-2">
@@ -293,7 +308,6 @@ export default function ResultPage() {
           </Link>
         </motion.div>
 
-        {/* ── Analiz Özeti ── */}
         <motion.div variants={itemVariants}>
           <div className="glass-card rounded-2xl overflow-hidden relative border border-white/[0.08]">
             <div className="absolute top-0 right-0 w-80 h-80 bg-primary/8 rounded-full blur-[120px] pointer-events-none" />
@@ -323,30 +337,13 @@ export default function ResultPage() {
                     </span>
                   </div>
                   <h1 className="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight leading-snug">
-                    {result.product_title || 'Ürün başlığı bulunamadı'}
+                    {result.seo?.title_suggestion || result.product_title || 'Ürün başlığı bulunamadı'}
                   </h1>
-                </div>
-
-                <div className="shrink-0 self-start">
-                  {result.generated_image_url ? (
-                    <a href={result.generated_image_url} download target="_blank" rel="noreferrer">
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <Download className="w-4 h-4" />
-                        Görseli İndir
-                      </Button>
-                    </a>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="gap-2 opacity-50 cursor-default pointer-events-none"
-                      tabIndex={-1}
-                    >
-                      <Download className="w-4 h-4" />
-                      Görseli İndir
-                    </Button>
+                  {result.seo?.title_suggestion && result.seo.title_suggestion !== result.product_title && (
+                    <p className="text-sm text-muted-foreground mt-1">{result.product_title}</p>
                   )}
                 </div>
+
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -446,17 +443,23 @@ export default function ResultPage() {
           </div>
         </motion.div>
 
-        {/* ── SEO Optimizasyonu ── */}
         <motion.div variants={itemVariants} className="space-y-4">
           <div>
-            <h2 className="text-xl font-bold tracking-tight">SEO Optimizasyonu</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-xl font-bold tracking-tight">SEO Optimizasyonu</h2>
+              <Badge
+                variant="outline"
+                className={!!result.seo?.title_suggestion ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' : 'bg-red-500/15 text-red-400 border-red-500/30'}
+              >
+                {!!result.seo?.title_suggestion ? 'Tamamlandı' : 'Tamamlanamadı'}
+              </Badge>
+            </div>
             <p className="text-sm text-muted-foreground mt-1">
               Platform için optimize edilmiş içerik ve görsel öneriler
             </p>
           </div>
 
           <div className="space-y-4">
-            {/* SEO Başlık Önerisi */}
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div className="flex-1 min-w-0">
@@ -476,11 +479,10 @@ export default function ResultPage() {
               </CardContent>
             </Card>
 
-            {/* Meta Açıklama */}
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div className="flex-1 min-w-0">
-                  <CardTitle className="text-base">Meta Açıklama</CardTitle>
+                  <CardTitle className="text-base">Optimize Ürün Açıklaması</CardTitle>
                   {result.seo_tone && (
                     <Badge variant="outline" className="mt-1.5 text-violet-400 border-violet-400/30 bg-violet-400/10">
                       {SEO_TONE_LABELS[result.seo_tone]}
@@ -496,7 +498,6 @@ export default function ResultPage() {
               </CardContent>
             </Card>
 
-            {/* SEO Anahtar Kelimeleri */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">SEO Anahtar Kelimeleri</CardTitle>
@@ -520,7 +521,6 @@ export default function ResultPage() {
               </CardContent>
             </Card>
 
-            {/* Collapsible SEO cards */}
             <Accordion type="multiple" className="space-y-3">
               <AccordionItem value="content-recs" className="border border-white/[0.08] rounded-xl overflow-hidden bg-card/50">
                 <AccordionTrigger className="px-6 py-4 text-sm font-semibold hover:no-underline">
@@ -599,67 +599,82 @@ export default function ResultPage() {
               </AccordionItem>
             </Accordion>
 
-            {/* Görsel Optimizasyonu */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Görsel Optimizasyonu</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col sm:flex-row gap-6">
-                  <div className="flex-1 space-y-3">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                      Mevcut Görsel
-                    </p>
-                    {originalImageUrl ? (
-                      <div className="rounded-xl overflow-hidden border border-white/[0.08] bg-white/[0.02] flex items-center justify-center min-h-[200px]">
-                        <img
-                          src={originalImageUrl}
-                          alt="Mevcut ürün görseli"
-                          className="object-contain max-h-[300px] w-full"
-                        />
-                      </div>
-                    ) : (
-                      <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] flex flex-col items-center justify-center gap-3 text-muted-foreground min-h-[200px]">
-                        <ImageIcon className="w-8 h-8 opacity-30" />
-                        <p className="text-sm">Görsel bulunamadı</p>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex-1 space-y-3">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                      Optimize Edilmiş Görsel
-                    </p>
-                    {result.generated_image_url ? (
-                      <div className="space-y-3">
-                        <div className="rounded-xl overflow-hidden border border-white/[0.08] bg-white/[0.02] flex items-center justify-center min-h-[200px]">
-                          <img
-                            src={result.generated_image_url}
-                            alt="Optimize edilmiş ürün görseli"
-                            className="object-contain max-h-[300px] w-full"
-                          />
-                        </div>
-                        <a href={result.generated_image_url} download target="_blank" rel="noreferrer" className="block">
-                          <Button variant="outline" size="sm" className="w-full gap-2">
-                            <Download className="w-4 h-4" />
-                            Görseli İndir
-                          </Button>
-                        </a>
-                      </div>
-                    ) : (
-                      <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] flex flex-col items-center justify-center gap-3 text-muted-foreground min-h-[200px]">
-                        <Loader2 className="w-8 h-8 opacity-30 animate-spin" />
-                        <p className="text-sm">Görsel oluşturuluyor...</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </motion.div>
 
-        {/* ── Pazar Araştırması ── */}
+        <motion.div variants={itemVariants} className="space-y-4">
+          <div>
+            <div className="flex items-center gap-3">
+              <h2 className="text-xl font-bold tracking-tight">Görsel Optimizasyonu</h2>
+              <Badge
+                variant="outline"
+                className={!!result.generated_image_url ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' : 'bg-red-500/15 text-red-400 border-red-500/30'}
+              >
+                {!!result.generated_image_url ? 'Tamamlandı' : 'Tamamlanamadı'}
+              </Badge>
+            </div>
+          </div>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex flex-col sm:flex-row gap-6">
+                <div className="flex-1 space-y-3">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Mevcut Görsel
+                  </p>
+                  {originalImageUrl ? (
+                    <div className="rounded-xl overflow-hidden border border-white/[0.08] bg-white/[0.02] flex items-center justify-center min-h-[200px]">
+                      <img
+                        src={originalImageUrl}
+                        alt="Mevcut ürün görseli"
+                        className="object-contain max-h-[300px] w-full"
+                      />
+                    </div>
+                  ) : (
+                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] flex flex-col items-center justify-center gap-3 text-muted-foreground min-h-[200px]">
+                      <ImageIcon className="w-8 h-8 opacity-30" />
+                      <p className="text-sm">Görsel bulunamadı</p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex-1 space-y-3">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Optimize Edilmiş Görsel
+                  </p>
+                  {result.generated_image_url ? (
+                    <div className="space-y-3">
+                      <div className="rounded-xl overflow-hidden border border-white/[0.08] bg-white/[0.02] flex items-center justify-center min-h-[200px]">
+                        <img
+                          src={result.generated_image_url}
+                          alt="Optimize edilmiş ürün görseli"
+                          className="object-contain max-h-[300px] w-full"
+                        />
+                      </div>
+                      <a href={result.generated_image_url} download target="_blank" rel="noreferrer" className="block">
+                        <Button variant="outline" size="sm" className="w-full gap-2">
+                          <Download className="w-4 h-4" />
+                          Görseli İndir
+                        </Button>
+                      </a>
+                    </div>
+                  ) : (result.status === 'running' || result.status === 'pending') ? (
+                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] flex flex-col items-center justify-center gap-3 text-muted-foreground min-h-[200px]">
+                      <Loader2 className="w-8 h-8 opacity-30 animate-spin" />
+                      <p className="text-sm">Görsel oluşturuluyor...</p>
+                    </div>
+                  ) : (
+                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] flex flex-col items-center justify-center gap-3 text-muted-foreground min-h-[200px]">
+                      <ImageIcon className="w-8 h-8 opacity-30" />
+                      <p className="text-sm">Optimize edilmiş görsel oluşturulamadı</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
         <motion.div variants={itemVariants} className="space-y-4">
           <div>
             <h2 className="text-xl font-bold tracking-tight">Pazar Araştırması</h2>
@@ -669,10 +684,17 @@ export default function ResultPage() {
           </div>
 
           <div className="space-y-6">
-            {/* Rakipler */}
             <Card>
               <CardHeader>
-                <CardTitle>Bulunan Rakipler</CardTitle>
+                <div className="flex items-center gap-3">
+                  <CardTitle>Bulunan Rakipler</CardTitle>
+                  <Badge
+                    variant="outline"
+                    className={(result.competitors?.length ?? 0) > 0 ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' : 'bg-red-500/15 text-red-400 border-red-500/30'}
+                  >
+                    {(result.competitors?.length ?? 0) > 0 ? 'Tamamlandı' : 'Tamamlanamadı'}
+                  </Badge>
+                </div>
                 <CardDescription>
                   Pazardaki ana rakiplerinizin güncel durumu ({result.competitors.length} rakip)
                 </CardDescription>
@@ -687,7 +709,8 @@ export default function ResultPage() {
                           <th className="px-6 py-4">Marka</th>
                           <th className="px-6 py-4">Tahmini Fiyat</th>
                           <th className="px-6 py-4">Puan</th>
-                          <th className="px-6 py-4 rounded-tr-lg">Yorum Sayısı</th>
+                          <th className="px-6 py-4">Yorum Sayısı</th>
+                          <th className="px-6 py-4 rounded-tr-lg">Uygunluk</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-white/5">
@@ -704,7 +727,9 @@ export default function ResultPage() {
                             </td>
                             <td className="px-6 py-4 text-muted-foreground">{comp.brand || '—'}</td>
                             <td className="px-6 py-4 font-semibold tabular-nums">
-                              {comp.price > 0 ? `₺${comp.price.toFixed(2)}` : '—'}
+                              {(!comp.price || comp.price <= 0)
+                                ? <span className="text-muted-foreground italic font-normal">Fiyat bilgisi yok</span>
+                                : `₺${comp.price.toFixed(2)}`}
                             </td>
                             <td className="px-6 py-4">
                               <div className="flex items-center gap-1.5">
@@ -714,6 +739,11 @@ export default function ResultPage() {
                             </td>
                             <td className="px-6 py-4 text-muted-foreground">
                               {comp.review_count > 0 ? comp.review_count.toLocaleString('tr-TR') : '—'}
+                            </td>
+                            <td className="px-6 py-4 text-muted-foreground">
+                              {comp.reason
+                                ? comp.reason
+                                : <span className="italic text-muted-foreground/60">Benzerlik bilgisi yok</span>}
                             </td>
                           </motion.tr>
                         ))}
@@ -725,8 +755,6 @@ export default function ResultPage() {
                 )}
               </CardContent>
             </Card>
-
-            {/* Fiyat Analizi */}
             <div className="space-y-4">
               {result.pricing.fallback_used && (
                 <div className="flex items-center gap-2.5 px-4 py-3 rounded-xl border border-amber-500/25 bg-amber-500/[0.06] text-sm text-amber-400">
@@ -737,7 +765,7 @@ export default function ResultPage() {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">Mevcut Fiyat</p>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">Mevcut Fiyatınız</p>
                   <p className="text-lg font-bold tabular-nums">
                     {result.product_price && result.product_price > 0
                       ? `₺${result.product_price.toFixed(2)}`
@@ -754,7 +782,7 @@ export default function ResultPage() {
                 </div>
 
                 <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">Fiyat Aralığı</p>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">Rakip Fiyat Aralığı</p>
                   <p className="text-sm font-semibold tabular-nums">
                     {result.pricing.suggested_min > 0 || result.pricing.suggested_max > 0
                       ? `₺${result.pricing.suggested_min > 0 ? result.pricing.suggested_min.toFixed(2) : '—'} – ₺${result.pricing.suggested_max > 0 ? result.pricing.suggested_max.toFixed(2) : '—'}`
@@ -763,44 +791,23 @@ export default function ResultPage() {
                 </div>
 
                 <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">Pazar Konumu</p>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">Pazar Konumunuz</p>
                   <p className="text-sm font-semibold">
-                    {POSITIONING_LABELS[result.pricing.current_position] ?? '—'}
-                  </p>
-                  {result.market_gap.user_product_cluster && (
-                    <Badge variant="outline" className="mt-1.5 text-[10px] text-muted-foreground capitalize">
-                      Segment: {result.market_gap.user_product_cluster}
-                    </Badge>
-                  )}
-                </div>
-              </div>
-
-              {/* Price stats Q1 / Median / Q3 */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] text-center">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1">Medyan Fiyat</p>
-                  <p className="text-sm font-semibold tabular-nums">
-                    {result.pricing.price_median > 0 ? `₺${result.pricing.price_median.toFixed(2)}` : '—'}
-                  </p>
-                </div>
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] text-center">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1">Alt Çeyrek (Q1)</p>
-                  <p className="text-sm font-semibold tabular-nums">
-                    {result.pricing.price_q1 > 0 ? `₺${result.pricing.price_q1.toFixed(2)}` : '—'}
-                  </p>
-                </div>
-                <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] text-center">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1">Üst Çeyrek (Q3)</p>
-                  <p className="text-sm font-semibold tabular-nums">
-                    {result.pricing.price_q3 > 0 ? `₺${result.pricing.price_q3.toFixed(2)}` : '—'}
+                    {POSITIONING_LABELS[result.pricing.current_position] ?? SEGMENT_LABELS[result.pricing.current_position] ?? result.pricing.current_position ?? '—'}
                   </p>
                 </div>
               </div>
-
-              {/* Competitor price bar chart */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Rakip Fiyat Dağılımı</CardTitle>
+                  <div className="flex items-center gap-3">
+                    <CardTitle>Rakip Fiyat Dağılımı</CardTitle>
+                    <Badge
+                      variant="outline"
+                      className={!!result.pricing?.optimal_price ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' : 'bg-red-500/15 text-red-400 border-red-500/30'}
+                    >
+                      {!!result.pricing?.optimal_price ? 'Tamamlandı' : 'Tamamlanamadı'}
+                    </Badge>
+                  </div>
                   <CardDescription>Pazardaki diğer ürünlerle fiyat karşılaştırmanız</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -873,11 +880,17 @@ export default function ResultPage() {
                 </Card>
               )}
             </div>
-
-            {/* Pazar Boşluğu */}
             <Card>
               <CardHeader>
-                <CardTitle>Pazar Boşluğu</CardTitle>
+                <div className="flex items-center gap-3">
+                  <CardTitle>Pazar Boşluğu</CardTitle>
+                  <Badge
+                    variant="outline"
+                    className={(result.market_gap?.gap_opportunities?.length ?? 0) > 0 ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' : 'bg-red-500/15 text-red-400 border-red-500/30'}
+                  >
+                    {(result.market_gap?.gap_opportunities?.length ?? 0) > 0 ? 'Tamamlandı' : 'Tamamlanamadı'}
+                  </Badge>
+                </div>
                 <CardDescription>Rakiplerin odaklanmadığı fırsat alanları</CardDescription>
               </CardHeader>
               <CardContent className="space-y-5">
@@ -913,51 +926,41 @@ export default function ResultPage() {
                   </div>
                 )}
 
-                {(result.market_gap.brand_landscape.premium_brands.length > 0 ||
-                  result.market_gap.brand_landscape.budget_brands.length > 0 ||
-                  result.market_gap.brand_landscape.user_brand_position) && (
-                  <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-3">
-                    <h4 className="font-semibold text-xs text-muted-foreground uppercase tracking-wider">
-                      Marka Konumu
-                    </h4>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1.5">
-                          Premium Markalar
-                        </p>
-                        {result.market_gap.brand_landscape.premium_brands.length > 0 ? (
-                          <ul className="space-y-1">
-                            {result.market_gap.brand_landscape.premium_brands.map((b, i) => (
-                              <li key={i} className="text-sm text-muted-foreground">{b}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p className="text-sm text-muted-foreground">—</p>
-                        )}
-                      </div>
-                      <div>
-                        <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1.5">
-                          Bütçe Dostu Markalar
-                        </p>
-                        {result.market_gap.brand_landscape.budget_brands.length > 0 ? (
-                          <ul className="space-y-1">
-                            {result.market_gap.brand_landscape.budget_brands.map((b, i) => (
-                              <li key={i} className="text-sm text-muted-foreground">{b}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p className="text-sm text-muted-foreground">—</p>
-                        )}
-                      </div>
-                    </div>
-                    {result.market_gap.brand_landscape.user_brand_position && (
-                      <p className="text-sm text-muted-foreground">
-                        <span className="font-medium text-foreground">Konumunuz: </span>
-                        {result.market_gap.brand_landscape.user_brand_position}
+                <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-3">
+                  <h4 className="font-semibold text-xs text-muted-foreground uppercase tracking-wider">
+                    Marka Konumu
+                  </h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1.5">
+                        Konumunuz
                       </p>
-                    )}
+                      <p className="text-sm font-semibold">
+                        {result.market_gap.user_product_cluster
+                          ? SEGMENT_LABELS[result.market_gap.user_product_cluster] ?? result.market_gap.user_product_cluster
+                          : '—'}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1.5">
+                        Güçlü Yan
+                      </p>
+                      <p className="text-sm text-muted-foreground">—</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1.5">
+                        Zayıf Yan
+                      </p>
+                      <p className="text-sm text-muted-foreground">—</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1.5">
+                        Öneri
+                      </p>
+                      <p className="text-sm text-muted-foreground">—</p>
+                    </div>
                   </div>
-                )}
+                </div>
 
                 <Accordion type="multiple" className="space-y-2">
                   {result.market_gap.strategic_actions.length > 0 && (
@@ -1023,8 +1026,6 @@ export default function ResultPage() {
                   )}
               </CardContent>
             </Card>
-
-            {/* Müşteri Sinyalleri */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -1115,8 +1116,6 @@ export default function ResultPage() {
                 )}
               </CardContent>
             </Card>
-
-            {/* Trend Analizi */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">

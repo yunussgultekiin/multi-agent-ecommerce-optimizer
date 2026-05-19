@@ -13,3 +13,19 @@ venv/
 .DS_Store
 *.swp
 *.swo
+# Build / cache
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+frontend/tsconfig.tsbuildinfo
+.next/
+frontend/.next/
+dist/
+build/
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

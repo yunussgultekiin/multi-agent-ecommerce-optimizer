@@ -31,7 +31,22 @@ class CompetitorResult(BaseModel):
     estimated_price: Optional[float] = Field(default=None, ge=0)
     currency: str = Field(default="TRY")
     features: list[str] = Field(default_factory=list)
-    rating: Optional[float] = Field(default=None, ge=0.0, le=5.0)
+    rating: Optional[float] = Field(default=None, ge=0.0, le=10.0)
+
+    @field_validator("rating", mode="before")
+    @classmethod
+    def normalize_rating(cls, value: object) -> Optional[float]:
+        if value is None:
+            return None
+        try:
+            v = float(value)
+        except (TypeError, ValueError):
+            return None
+        if v < 0:
+            return None
+        if v > 5.0:
+            v = v / 2.0
+        return round(min(v, 5.0), 2)
     review_count: Optional[int] = Field(default=None, ge=0)
     brand: Optional[str] = None
     variants: list[Variant] = Field(default_factory=list)
