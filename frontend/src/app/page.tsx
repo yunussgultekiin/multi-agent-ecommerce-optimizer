@@ -397,14 +397,14 @@ export default function Home() {
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1.5">
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium text-center">Mevcut Görsel</p>
-                      <div className="rounded-xl overflow-hidden border border-white/[0.12] bg-white/[0.03]">
-                        <img src="/demo-kupa.jpg" alt="Mevcut görsel" className="w-full h-28 object-cover" />
+                      <div className="rounded-xl overflow-hidden border border-white/[0.12] bg-white flex items-center justify-center h-36">
+                        <img src="/before.jpg" alt="Mevcut görsel" className="w-full h-full object-contain" />
                       </div>
                     </div>
                     <div className="space-y-1.5">
                       <p className="text-[10px] text-emerald-400 uppercase tracking-wider font-medium text-center">Optimize Görsel</p>
-                      <div className="rounded-xl overflow-hidden border border-emerald-500/25 bg-white/[0.03]">
-                        <img src="/demo-kupa.jpg" alt="Optimize görsel" className="w-full h-28 object-cover" />
+                      <div className="rounded-xl overflow-hidden border border-emerald-500/25 bg-white flex items-center justify-center h-36">
+                        <img src="/after.png" alt="Optimize görsel" className="w-full h-full object-contain" />
                       </div>
                     </div>
                   </div>
@@ -508,7 +508,7 @@ export default function Home() {
                     <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium mb-1.5">SEO Başlığı</p>
                     <div className="p-3 bg-white/[0.03] rounded-xl border border-white/[0.08]">
                       <p className="text-sm font-medium leading-snug">
-                        Keep Calm Seramik Kupa 330ml | Kırmızı Slogan Baskılı | Hediye Ambalaj Seçeneği
+                        Kırmızı Baskılı Seramik Kupa 330ml | Kahve & Çay Kupası | Hediye Seçeneği
                       </p>
                     </div>
                   </div>
@@ -516,7 +516,7 @@ export default function Home() {
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium mb-1.5">Anahtar Kelimeler</p>
                     <div className="flex flex-wrap gap-1.5">
-                      {['seramik kupa hediye', 'slogan baskılı kupa', 'kırmızı ofis kupası'].map((kw) => (
+                      {['seramik kupa', 'baskılı kupa', 'kahve kupası', 'hediyelik kupa'].map((kw) => (
                         <Badge key={kw} variant="outline" className="text-[10px] bg-white/[0.03] border-white/[0.09]">
                           {kw}
                         </Badge>

@@ -1,451 +1,660 @@
-# Multi-Agent E-Commerce Optimizer, Synapse
+# Synapse — Multi-Agent E-Commerce Optimizer
 
-> **BTK Hackathon 2026 · Google Gemini Track**  
-> AI destekli çok-ajanlı e-ticaret satıcı destek platformu
+> Developed as part of **BTK Hackathon 2026**, organized jointly by **BTK Akademi**, **Türkiye Girişimcilik Vakfı (TGVF)** and **Google Turkey**.  
+> Built on **Google Gemini 2.5** · Deployed on **Google Cloud Run**
 
 ---
 
-## İçindekiler
+## Table of Contents
 
-- [Proje Hakkında](#proje-hakkında)
-- [Mimari Genel Bakış](#mimari-genel-bakış)
-- [Servisler](#servisler)
-- [Yapay Zeka Katmanı — Agent Worker](#yapay-zeka-katmanı--agent-worker)
-- [Veri Akışı](#veri-akışı)
-- [Teknoloji Yığını](#teknoloji-yığını)
-- [Ortam Değişkenleri](#ortam-değişkenleri)
-- [Yerel Geliştirme](#yerel-geliştirme)
-- [Deployment — Google Cloud Run](#deployment--google-cloud-run)
+- [What It Does](#what-it-does)
+- [Architecture](#architecture)
+- [Services](#services)
+- [AI Layer — Agent Worker](#ai-layer--agent-worker)
+- [Data Flow](#data-flow)
+- [Infrastructure & Cloud](#infrastructure--cloud)
 - [CI/CD Pipeline](#cicd-pipeline)
-- [Katkı Sağlama](#katkı-sağlama)
+- [Security](#security)
+- [Technology Stack](#technology-stack)
+- [Environment Variables](#environment-variables)
+- [Local Development Notice](#local-development-notice)
+- [Team & Development Process](#team--development-process)
 
 ---
 
-## Proje Hakkında
+## What It Does
 
-E-ticaret satıcıları Trendyol, Amazon ve Hepsiburada gibi platformlarda rakipleri analiz etmek, fiyatlandırma stratejisi oluşturmak ve ürün listelemelerini optimize etmek için cidli zaman harcıyor. Bu platform bu süreci tamamen otomatize eder:
+E-commerce sellers on platforms like **Trendyol**, **Amazon**, and **Hepsiburada** spend enormous amounts of time manually researching competitors, crafting product titles and descriptions, and figuring out competitive pricing. Synapse automates all of this end-to-end using a multi-agent AI system.
 
-1. **Rakip Analizi** — Satıcının ürününe benzer rakipleri keşfeder, her birini derinlemesine araştırır, müşteri duygu analizini (sentiment) ve trend verilerini çıkarır, pazar boşluklarını tespit eder ve optimal fiyat aralığını hesaplar.
-2. **SEO & Görsel Optimizasyonu** — Rakip analizinin çıktısını kullanarak platforma özgü SEO metinleri (başlık, açıklama, bullet point, tag) üretir ve arka plan kaldırılmış, platforma göre boyutlandırılmış ürün görseli oluşturur.
+A seller submits their product information (title, category, brand, variants, target platform). The platform then runs two sequential AI workflows:
 
-Her şey asenkron bir görev kuyruğu üzerinde çalışır; kullanıcı sonuçları gerçek zamanlı ilerleme takibiyle bekler.
+### 1. Rival Analysis Workflow
+- **Competitor Discovery** — Finds real competitor products on the target platform matching the seller's product
+- **Competitor Research** — Deep-dives into each competitor: price, ratings, review count, key features, images
+- **Sentiment Analysis** — Extracts positive and negative customer sentiment from competitor reviews
+- **Trend Analysis** — Identifies market trends and seasonal demand patterns in the product category
+- **Market Gap Analysis** — Detects unmet customer needs that competitors fail to address
+- **Smart Pricing** — Calculates an optimal price range and recommends pricing strategy per variant based on competitor overlap
+
+### 2. SEO & Image Workflow (runs in parallel)
+- **SEO Optimizer** — Generates platform-specific listing content (title, description, bullet points, tags, meta keywords) in the selected tone (`casual`, `professional`, or `premium`), augmented by a ChromaDB RAG store of e-commerce SEO best practices
+- **Image Generation** — Generates a studio-quality white-background product image with Gemini, removes the background via RemoveBG API, composites it onto a platform-sized canvas, and uploads to Google Cloud Storage
+
+Everything runs asynchronously on a task queue. The seller watches real-time progress in the browser and receives a full analytics dashboard when the analysis completes.
 
 ---
 
-## Mimari Genel Bakış
+## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                      Frontend (Next.js)                  │
-│              Port 3000  —  SSR + Client Polling          │
-└─────────────────────────┬───────────────────────────────┘
-                          │ HTTP
-┌─────────────────────────▼───────────────────────────────┐
-│                    API Gateway (FastAPI)                  │
-│  Port 8000  —  JWT doğrulama · CORS · SlowAPI rate limit │
-│  Proxy:  /auth → Auth Svc · /analyze → Task+Quota Svc   │
-└────┬──────────┬──────────────────────────────┬──────────┘
-     │          │                              │
-     ▼          ▼                              ▼
-┌────────┐ ┌──────────┐                 ┌────────────┐
-│  Auth  │ │  Task    │                 │   Quota    │
-│  Svc   │ │  Svc     │                 │   Svc      │
-│  8001  │ │  8002    │                 │  8003      │
-│  PG+JWT│ │  PG+Redis│                 │  Redis Lua │
-└────────┘ └────┬─────┘                 └────────────┘
-                │ Redis Task Queue
-                ▼
-        ┌───────────────┐
-        │ Broker Worker │
-        │    Port 8004  │
-        │ Retry · Poll  │
-        └───────┬───────┘
-                │ HTTP POST
-                ▼
-        ┌───────────────────────────────────────────┐
-        │              Agent Worker                  │
-        │               Port 8005                    │
-        │                                            │
-        │  ┌─────────────┐     ┌──────────────────┐ │
-        │  │ Rival Graph │────▶│    SEO Graph     │ │
-        │  │  LangGraph  │     │    LangGraph     │ │
-        │  └─────────────┘     └──────────────────┘ │
-        │                                            │
-        │  Google Gemini 2.5 · ChromaDB · GCS       │
-        └───────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│                        Frontend (Next.js 14)                      │
+│              Port 3000 · SSR + Client-Side Polling               │
+└──────────────────────────────┬───────────────────────────────────┘
+                               │ HTTPS
+┌──────────────────────────────▼───────────────────────────────────┐
+│                       API Gateway (FastAPI)                       │
+│   Port 8000 · JWT validation · CORS · SlowAPI rate limiting      │
+│   Routes: /auth → Auth Svc  /analyze → Task+Quota  /upload → GCS│
+└──────┬────────────────┬──────────────────────────────┬───────────┘
+       │                │                              │
+       ▼                ▼                              ▼
+ ┌──────────┐    ┌─────────────┐               ┌────────────┐
+ │  Auth    │    │    Task     │               │   Quota    │
+ │ Service  │    │   Service   │               │  Service   │
+ │  :8001   │    │   :8002     │               │   :8003    │
+ │ Cloud SQL│    │ Cloud SQL + │               │ Memorystore│
+ │ + JWT    │    │ Memorystore │               │  Lua atomc │
+ └──────────┘    └──────┬──────┘               └────────────┘
+                        │ Push to Redis Task Queue
+                        ▼
+               ┌─────────────────┐
+               │  Broker Worker  │
+               │     :8004       │
+               │ BLPOP · Retry   │
+               │ Exp. Backoff    │
+               └────────┬────────┘
+                        │ HTTP POST /run
+                        ▼
+        ┌───────────────────────────────────────────────┐
+        │                 Agent Worker                   │
+        │                  :8005                         │
+        │                                               │
+        │  ┌──────────────────────────────────────────┐ │
+        │  │            Rival Graph (LangGraph)        │ │
+        │  │  discover → research → [sentiment|trends] │ │
+        │  │  → [market_gap|pricing] → finalize        │ │
+        │  └────────────────────┬─────────────────────┘ │
+        │                       │ rival_json             │
+        │  ┌────────────────────▼─────────────────────┐ │
+        │  │             SEO Graph (LangGraph)         │ │
+        │  │  [generate_seo ‖ generate_image] → final  │ │
+        │  └──────────────────────────────────────────┘ │
+        │                                               │
+        │  Gemini 2.5  ·  ChromaDB RAG  ·  GCS Upload  │
+        └───────────────────────────────────────────────┘
 ```
 
-Tüm servisler Docker Compose ile ayağa kalkar; production'da her biri ayrı bir Google Cloud Run servisidir.
+Every service is a separate **Google Cloud Run** instance connected via **VPC Connector** for private network communication.
 
 ---
 
-## Servisler
+## Services
 
-### API Gateway — `services/api-gateway` (Port 8000)
+### API Gateway — Port 8000
 
-Platforma açılan tek kapı. Dışarıdan gelen tüm HTTP isteklerini karşılar.
+The single public entry point for the entire platform. Every external HTTP request passes through here.
 
-**Sorumlulukları:**
-- JWT middleware ile her isteği doğrular (Auth Service'e çağrı)
-- CORS middleware — frontend origin'ine izin verir
-- SlowAPI rate limiting — kötüye kullanımı engeller
-- `/analyze` — Quota Service'e kotayı kontrol ettirir, Task Service'e görevi oluşturur, Redis kuyruğuna iter
-- `/auth` — Auth Service'e proxy
-- `/upload` — Google Cloud Storage presigned URL üretimi (multipart form desteği)
-- `/health` — tüm downstream servislerin sağlık kontrolü
+**Responsibilities:**
+- **JWT Middleware** — validates Bearer tokens on every protected route by calling Auth Service's internal `/validate` endpoint
+- **CORS Middleware** — allows the frontend origin; rejects all other cross-origin requests
+- **SlowAPI Rate Limiting** — Redis-backed token-bucket rate limiting to prevent API abuse
+- **`/analyze`** — checks quota (Quota Service), creates a task record (Task Service), pushes the task payload to Redis queue, returns `task_id` to caller
+- **`/analyze/{task_id}`** — proxies task status and result retrieval from Task Service
+- **`/auth`** — reverse proxy to Auth Service for login and registration
+- **`/upload`** — generates Google Cloud Storage presigned URLs for multipart file uploads; handles `aiofiles` streaming
+- **`/health`** — pings all downstream services and returns aggregated health status
 
-**Teknik seçimler:**
-- `httpx.AsyncClient` — downstream çağrılar için async HTTP; timeout ve retry ayarlı
-- `slowapi` — FastAPI uyumlu token-bucket rate limiting; Redis'e dayalı
-- Güvenlik ihlali olmaması için Auth Service'e her istek başına `Authorization` header'ı iletilmez; token yalnızca doğrulama amacıyla kullanılır
-
----
-
-### Auth Service — `services/auth-service` (Port 8001)
-
-Kullanıcı kimlik doğrulama ve JWT yönetimi.
-
-**Özellikler:**
-- Kayıt (e-posta + bcrypt şifre hash) — `REGISTRATION_ENABLED` flag'i ile kapatılabilir
-- Login → access token (30 dk) + refresh token (7 gün)
-- `/internal/validate` endpoint'i — API Gateway'in token doğrulaması için
-- Alembic ile veritabanı migration yönetimi
-
-**Teknik seçimler:**
-- `SQLAlchemy 2.x async` + `asyncpg` — non-blocking veritabanı IO
-- `PyJWT` — RS256 yerine HS256 tercih edildi; hackathon scope'u için yeterli güvenlik düzeyi
-- `python-bcrypt` — work factor 12, şifre hash'leme için
-- Production'da `cloud-sql-python-connector` ile Cloud SQL IAM auth
+**Technical choices:**
+- `httpx.AsyncClient` with configurable timeout and connection pooling for all downstream calls
+- `slowapi` chosen over a custom middleware for FastAPI-native integration with Redis backend
+- Token validation is a local call to Auth Service per request — no shared secret lookup; this keeps the gateway stateless
 
 ---
 
-### Task Service — `services/task-service` (Port 8002)
+### Auth Service — Port 8001
 
-Görev yaşam döngüsü yönetimi ve sonuç depolama.
+User identity and token management.
 
-**Görev durumları:**
+**Endpoints:**
+- `POST /register` — creates user with bcrypt-hashed password (controllable via `REGISTRATION_ENABLED`)
+- `POST /login` — validates credentials, returns access token (30 min) + refresh token (7 days)
+- `POST /refresh` — exchanges refresh token for new access token
+- `POST /internal/validate` — called by API Gateway; validates token, returns `user_id` claim
+
+**Technical choices:**
+- `SQLAlchemy 2.x` async ORM with `asyncpg` driver — fully non-blocking database I/O
+- `Alembic` for schema migrations; migrations run automatically on service startup
+- `PyJWT` with HS256 — RS256 was considered but the added operational complexity (key rotation, JWKS endpoint) was not justified for hackathon scope
+- `bcrypt` with work factor 12 for password hashing
+- In production, database connections go through `cloud-sql-python-connector` with IAM-based authentication — no password in the connection string
+
+---
+
+### Task Service — Port 8002
+
+Owns the full lifecycle of analysis tasks and stores their results.
+
+**Task state machine:**
 ```
-pending → running → completed
-                 └─ failed
-                 └─ cancelled
+pending ──▶ running ──▶ completed
+                   └──▶ failed
+                   └──▶ cancelled
 ```
 
-**Özellikler:**
-- UUID tabanlı görev ID'leri
-- Görev payload'ı (kullanıcı girişi) veritabanında JSON olarak saklanır
-- `seo_tone` alanı — SEO metninin tonu: `casual | professional | premium`
-- Sayfalı görev listeleme (kullanıcıya göre filtrelenmiş)
-- `TaskResult` tablosu — tamamlanan görevin JSON sonucu ayrı tabloda
-- Broker Worker'ın progress güncellemeleri için `/tasks/{id}/status` PATCH endpoint'i
-- Redis pub/sub üzerinden gerçek zamanlı progress event'leri (frontend polling ile tüketilir)
+**Key design decisions:**
+- Tasks are identified by UUIDs generated at creation time; the API Gateway returns this ID to the frontend immediately so it can begin polling
+- The task `payload` (all user input) is stored as JSONB in PostgreSQL — no separate input tables
+- `seo_tone` is a first-class field on the task (`casual | professional | premium`) because it influences downstream SEO generation and is needed at multiple steps
+- `TaskResult` is a separate table (one-to-one with Task) — this allows the main task table to be queried cheaply for status without loading large JSON result blobs
+- Progress is reported via two channels simultaneously: `HSET task_progress:{task_id}` in Redis (for polling) and `PUBLISH progress:{task_id}` (for future WebSocket support)
+- `PATCH /tasks/{id}/status` returns 409 if the task is already in a terminal state; Broker Worker handles this gracefully by logging and continuing
 
 ---
 
-### Quota Service — `services/quota-service` (Port 8003)
+### Quota Service — Port 8003
 
-Kullanıcı başına analiz kotası.
+Per-user daily analysis quota enforcement.
 
-**Nasıl çalışır:**
-- Redis'te `quota:{user_id}` anahtarı, Lua script ile atomik INCR + EXPIRE
-- `QUOTA_LIMIT` (varsayılan: 10) aşılırsa 429 döner
-- TTL: 86400 saniye (24 saat) — gün bazlı pencere
-- Lua script kullanımı: INCR ve EXPIRE arasında race condition'ı önlemek için
+**How it works:**
+- On every `POST /analyze`, API Gateway calls `POST /quota/check` before touching the task queue
+- Quota Service executes a **Lua script** on Redis that atomically: increments `quota:{user_id}`, sets 86400-second TTL if the key is new, and checks against `QUOTA_LIMIT`
+- If the limit is exceeded, returns 429; API Gateway surfaces this to the frontend with a human-readable message
+- Lua is mandatory here — a non-atomic INCR + EXPIRE sequence would create a race condition under concurrent requests from the same user
 
----
-
-### Broker Worker — `services/broker-worker` (Port 8004)
-
-Redis kuyruğunu dinleyip Agent Worker'a görev dağıtan orchestrator.
-
-**Akış:**
-1. `BLPOP` ile Redis kuyruğundan (varsayılan: `task_queue`) görev mesajı alır
-2. Task Service'e `status = running` günceller
-3. Agent Worker'a `POST /run` isteği atar (async, 202 Accepted beklenir)
-4. Hata durumunda exponential backoff ile retry: `base_delay * 2^attempt`
-5. `MAX_RETRY_COUNT` (3) aşılırsa Task Service'e `status = failed` yazar
-
-**Teknik seçimler:**
-- `threading` + asyncio event loop — BLPOP bloklamasını ana döngüden ayırmak için
-- Retry state veritabanında tutulur — servis yeniden başlatılsa bile retry sayısı korunur
-- Agent Worker'ın 202 dönmesi beklenir; 500 alınırsa retry sayılır
+**Configuration:**
+- `QUOTA_LIMIT` — default 10, easily bumped for demo purposes
+- `QUOTA_TTL_SECONDS` — default 86400 (rolling 24-hour window per user)
 
 ---
 
-### Agent Worker — `services/agent-worker` (Port 8005)
+### Broker Worker — Port 8004
 
-Tüm yapay zeka iş yükünü yürüten ana servis.
+The async task dispatcher. Bridges Redis queue to Agent Worker with retry logic.
 
-> Detaylı açıklama için: [Yapay Zeka Katmanı](#yapay-zeka-katmanı--agent-worker)
+**Consumer loop:**
+1. Runs a blocking `BLPOP` on `task_queue` in a **dedicated daemon thread** — this prevents the blocking call from interfering with the FastAPI event loop
+2. On receiving a message: deserializes JSON, calls `AgentClient.run(task_id, payload)` which fires `POST /run` to Agent Worker
+3. Agent Worker responds with 202 Accepted; the broker updates Task Service to `running`
+4. If Agent Worker returns 5xx or times out: spawns a separate retry thread with **exponential backoff** — `delay = base_delay * 2^attempt` (default: 2s, 4s, 8s)
+5. Retry state (attempt count, last error) is persisted in PostgreSQL — survives broker restarts
+6. After `MAX_RETRY_COUNT` (3) exhausted: calls Task Service to mark the task `failed`
 
----
-
-### Frontend — `frontend` (Port 3000)
-
-Next.js 14 ile yazılmış Türkçe arayüz.
-
-**Sayfalar:**
-
-| Rota | Açıklama |
-|------|----------|
-| `/` | Landing — özellikler, nasıl çalışır, CTA |
-| `/login` | Giriş formu |
-| `/register` | Kayıt formu |
-| `/dashboard` | Kullanıcının analizleri |
-| `/dashboard/analyze` | Yeni analiz oluştur |
-| `/dashboard/analyze/[taskId]/progress` | Gerçek zamanlı ilerleme |
-| `/dashboard/result/[taskId]` | Sonuç görselleştirme |
-| `/dashboard/history` | Geçmiş analizler |
-
-**Teknik seçimler:**
-- `Next.js 14 App Router` — SSR + client component mimarisi
-- `Zustand` — global auth state management; lightweight, Redux karmaşıklığı olmadan
-- `shadcn/ui` + `Radix UI` — erişilebilir, unstyled bileşen kütüphanesi; TailwindCSS ile özelleştirildi
-- `Framer Motion` — sayfa geçişleri ve animasyonlar
-- `react-hook-form` + `zod` — form validasyonu; şema-driven type-safe doğrulama
-- `axios` — HTTP client; interceptor ile token yenileme
-- Progress tracking: Task Service'e düzenli polling (WebSocket yerine; deployment karmaşıklığını azaltır)
+**Why a dedicated thread for BLPOP:**  
+`redis-py`'s blocking commands cannot be used inside an asyncio event loop without wrapping. Running BLPOP in a thread avoids `asyncio.run_in_executor` overhead and keeps the consumer code straightforward.
 
 ---
 
-## Yapay Zeka Katmanı — Agent Worker
+### Agent Worker — Port 8005
 
-### LangGraph Workflow'ları
+The AI execution engine. Runs LangGraph workflows and calls Google Gemini.
 
-Agent Worker iki ayrı LangGraph `StateGraph` içerir. Her node, `NodeRunner` middleware'i tarafından sarılır; bu middleware:
-- Her node başlamadan önce Redis'ten **iptal sinyali** kontrol eder (`cancelled:{task_id}` key'i)
-- Node başlarken Task Service'e progress rapor eder
-- Node tamamlanınca completion_pct'yi günceller
+> See [AI Layer](#ai-layer--agent-worker) for full detail.
 
-#### Rival Graph (Rakip Analizi)
+---
+
+### Frontend — Port 3000
+
+A Turkish-localized Next.js 14 application.
+
+**Page map:**
+
+| Route | Purpose |
+|-------|---------|
+| `/` | Landing page — animated feature showcase, CTA |
+| `/login` | JWT login form |
+| `/register` | User registration |
+| `/dashboard` | Overview of recent analyses |
+| `/dashboard/analyze` | New analysis form (product info, platform, tone) |
+| `/dashboard/analyze/[taskId]/progress` | Real-time progress tracking |
+| `/dashboard/result/[taskId]` | Full result dashboard with charts |
+| `/dashboard/history` | Paginated past analyses |
+
+**Technical choices:**
+- **Next.js 14 App Router** — server components for initial page load, client components for interactive parts; avoids full SPA overhead
+- **Zustand** — minimal global state (auth token, user info); chosen over Redux for its zero-boilerplate API
+- **shadcn/ui + Radix UI** — accessible, headless component primitives styled with TailwindCSS; much faster to customize than a pre-styled library
+- **Framer Motion** — page transitions and micro-animations on the landing page and progress screen
+- **react-hook-form + zod** — schema-driven form validation; the same zod schemas are reused for TypeScript types
+- **Polling vs WebSocket** — frontend polls `GET /tasks/{id}` every 2 seconds for progress updates. WebSocket was intentionally skipped: it would require a persistent connection layer in Cloud Run (which has request-based billing) and adds infrastructure complexity without a significant UX difference at this scale
+- **axios interceptor** — transparently refreshes the access token on 401 responses and retries the original request
+
+---
+
+## AI Layer — Agent Worker
+
+### LangGraph State Machines
+
+Both workflows are implemented as LangGraph `StateGraph` instances. The state is a Python `TypedDict` that accumulates data across nodes — no shared mutable state, no side-channel communication.
+
+Every node is wrapped by `NodeRunner`, a lightweight middleware that:
+1. Checks a Redis key `cancelled:{task_id}` before the node executes — if present, returns `{"cancelled": True}` immediately and the graph routes to END
+2. Reports `(step_name, "running", pct%)` to Redis before invoking the node function
+3. Reports `(step_name, "completed", pct%)` after the node function returns successfully
+
+Progress events are written to two Redis structures simultaneously:
+- `HSET task_progress:{task_id}` — durable hash for late-joining pollers
+- `PUBLISH progress:{task_id}` — pub/sub channel for future real-time clients
+
+---
+
+#### Rival Graph
 
 ```
 START
   │
-  ▼
-discover_competitors (10%)
-  │ — Gemini 2.5 Flash Lite ile rakip isimleri keşfeder
-  ▼
-research_competitors (25%)
-  │ — Her rakibi derinlemesine araştırır
-  ├─────────────────────────────────┐
-  ▼                                 ▼
-analyze_sentiment (40%)      analyze_trends (40%)
-  │ — Müşteri yorumları            │ — Pazar trendleri
-  ├──────────────┐        ┌────────┘
-  ▼              ▼        ▼
-market_gap (72%)    pricing (72%)
-  │ — Pazar boşluğu    │ — Optimal fiyat aralığı
-  └──────┬──────────────┘
-         ▼
-      finalize (55%)
-         │ — rival_json çıktısı oluşturulur
-         ▼
-        END
-```
-
-> `analyze_sentiment` ve `analyze_trends` paralel çalışır; `market_gap` ve `pricing` da paralel çalışır. LangGraph bu branching'i otomatik yönetir.
-
-#### SEO Graph (SEO & Görsel)
-
-```
-START
-  ├────────────────────────────────┐
-  ▼                                ▼
-generate_seo (80%)         generate_image (90%)
-  │ — RAG destekli SEO           │ — Gemini görsel üretimi
-  │   metinleri                  │   + RemoveBG arka plan kaldırma
-  └──────────┬───────────────────┘
-             ▼
-          finalize (100%)
-             │ — Sonuç Task Service'e yazılır
+  ▼  10%
+discover_competitors
+  │  Gemini 2.5 Flash Lite
+  │  Input:  platform, category, product title, brand
+  │  Output: list of competitor names with similarity scores
+  │
+  ▼  25%
+research_competitors
+  │  Gemini 2.5 Flash Lite (parallelized per competitor)
+  │  Input:  competitor_names list
+  │  Output: per-competitor {price, rating, review_count, features, images}
+  │  Filter: relevance tiers (PRIMARY ≥ threshold, SECONDARY fallback, top-N emergency)
+  │
+  ├─────────────────────────────────────┐
+  ▼  40%                               ▼  40%
+analyze_sentiment                 analyze_trends
+  │  Gemini 2.5 Flash              │  Gemini 2.5 Flash
+  │  Positive/negative themes      │  Category trend signals
+  │  from competitor reviews       │  Seasonality, demand patterns
+  │
+  ├──────────────┐         ┌────────────┘
+  ▼  72%         ▼  72%
+market_gap     pricing
+  │  Gemini 2.5 Flash      │  Gemini 2.5 Flash
+  │  Unmet customer needs  │  Optimal price range
+  │  Opportunity areas     │  Per-variant overlap scoring
+  │
+  └──────────┬──────────────┘
+             ▼  55%
+          finalize
+             │  Assembles complete rival_json
+             │  Hands off state to SEO Graph
              ▼
             END
 ```
 
-> `generate_seo` ve `generate_image` paralel çalışır.
+**Parallel execution:** `analyze_sentiment` and `analyze_trends` run as a parallel fan-out (LangGraph handles the join). Similarly, `market_gap` and `pricing` run in parallel. This halves latency for these two phases.
+
+**Relevance filtering in research:** After each competitor is researched, results are sorted by the `similarity_score` from the discovery step. The agent applies a primary threshold first, then a secondary threshold, and as a last resort takes the top N. This ensures low-relevance competitors do not dilute the analysis.
 
 ---
 
-### Agent Tool'ları
+#### SEO Graph
 
-#### Rival Agent Tools (`services/agent-worker/app/tools/rival_agent_tools/`)
+```
+START
+  ├────────────────────────────────────┐
+  ▼  80%                              ▼  90%
+generate_seo                   generate_image
+  │  Gemini 2.5 Flash            │  Gemini 2.5 Flash (image)
+  │  Input: rival_json           │  Input: product title + variant
+  │         seo_tone             │  Step 1: generate studio image
+  │         ChromaDB top-6 RAG   │  Step 2: remove background (RemoveBG)
+  │  Output: title, description  │  Step 3: composite on platform canvas
+  │          bullets, tags, meta │  Step 4: upload to GCS → signed URL
+  │
+  └──────────┬─────────────────────────┘
+             ▼  100%
+          finalize
+             │  Merges seo_output + generated_image_url
+             │  Saves complete result to Task Service
+             ▼
+            END
+```
 
-| Tool | Gemini Modeli | Görev |
-|------|---------------|-------|
-| `competitor_discovery` | `gemini-2.5-flash-lite` | Ürün adı ve platforma göre rakip isimleri keşfeder |
-| `competitor_research` | `gemini-2.5-flash-lite` | Her rakip için fiyat, özellik, puan, yorum sayısı araştırır |
-| `sentiment_analysis` | `gemini-2.5-flash` | Rakip yorumlarından pozitif/negatif duygu analizi |
-| `trend_analysis` | `gemini-2.5-flash` | Kategori trendleri ve mevsimsel değişimler |
-| `market_gap_analyzer` | `gemini-2.5-flash` | Rakiplerin karşılamadığı pazar boşluklarını tespit eder |
-| `smart_pricing_engine` | `gemini-2.5-flash` | Optimum fiyat aralığı ve varyant-bazlı öneri |
+---
 
-**Model seçim mantığı:**  
-Discovery ve Research aşamaları yüksek hacimli, nispeten basit extraction görevleri olduğundan `gemini-2.5-flash-lite` tercih edildi (hız + maliyet). Daha derin analiz gerektiren aşamalar (sentiment, trends, gap, pricing) `gemini-2.5-flash` kullanır.
+### Agent Tool Detail
 
-#### SEO Agent Tools (`services/agent-worker/app/tools/seo_agent_tools/`)
+#### Rival Agent Tools
+
+| Tool | Model | Purpose |
+|------|-------|---------|
+| `competitor_discovery` | `gemini-2.5-flash-lite` | Identifies real competitors on the target platform; returns names with similarity scores |
+| `competitor_research` | `gemini-2.5-flash-lite` | Structured deep-dive per competitor; run concurrently |
+| `sentiment_analysis` | `gemini-2.5-flash` | Classifies positive/negative themes from reviews; surfaces top pain points and praised features |
+| `trend_analysis` | `gemini-2.5-flash` | Extracts demand trends, seasonal patterns, and emerging opportunities in the category |
+| `market_gap_analyzer` | `gemini-2.5-flash` | Identifies gaps between what customers want and what competitors offer |
+| `smart_pricing_engine` | `gemini-2.5-flash` | Suggests optimal price band, discounting strategy, and variant-level pricing based on competitor overlap |
+
+**Model selection rationale:**  
+Discovery and Research are high-volume, structured extraction tasks with relatively straightforward prompts — `gemini-2.5-flash-lite` provides the best cost/speed tradeoff here. The analytical nodes (Sentiment, Trends, Gap, Pricing) require deeper reasoning and produce JSON that feeds subsequent nodes, so `gemini-2.5-flash` is used to maximize output quality.
+
+All Gemini calls set `response_mime_type: "application/json"` and include JSON schema constraints in the prompt — raw JSON parsing is used throughout; no LangChain output parsers.
+
+#### SEO Agent Tools
 
 **SEO Optimizer:**
-- `gemini-2.5-flash` + ChromaDB RAG
-- `CHROMA_COLLECTION_NAME=seo_chunks`, `CHROMA_TOP_K=6` — e-ticaret SEO kuralları chunk'ları vektör veritabanında
-- `json_prompt_rules.py` — platforma özgü JSON şema kuralları; başlık uzunluğu, karakter limiti, tag sayısı vb.
-- `seo_tone` parametresine göre metin tonu ayarlanır: `casual | professional | premium`
+- `gemini-2.5-flash` + `ChromaDB` RAG
+- A curated collection of e-commerce SEO rules is stored as chunks in ChromaDB (`CHROMA_COLLECTION_NAME=seo_chunks`)
+- At runtime, the top-K (`CHROMA_TOP_K=6`) most relevant chunks are retrieved based on the product category and platform, then injected into the system prompt
+- Platform-specific constraints (title character limits, bullet count, tag policies) are enforced through `json_prompt_rules.py` — each platform has its own JSON schema that the model must fill
+- Output tone is controlled by the `seo_tone` parameter passed in the task payload
 
 **Image Generation Pipeline:**
-1. `gemini-2.5-flash-preview-image-generation` ile ürün görseli üretilir (beyaz arka planlı stüdyo fotoğrafı)
-2. `background_removal.py` — RemoveBG API ile arka plan kaldırılır
-3. `utils_image.py` — Platform-spesifik canvas boyutuna göre görsel oluşturulur:
-
-| Platform | Canvas Boyutu | Ürün Oranı |
-|----------|--------------|------------|
-| Trendyol | 1200 × 1800 | %78 |
-| Amazon | 1600 × 1600 | %76 |
-| Hepsiburada | 1200 × 1200 | %76 |
-
-4. `select_variant()` — `competitor_variant_overlap` verisine bakarak kullanıcının hangi varyantına odaklanılacağına karar verir (en az rakip çakışması)
-5. Sonuç Google Cloud Storage'a yüklenir; imzalı URL göreve eklenir
-
----
-
-### Google Gemini Entegrasyonu
-
-- `google-genai` SDK kullanılır (LangChain'in Google entegrasyonu değil; daha az abstraction, daha fazla kontrol)
-- `GOOGLE_CLOUD_PROJECT` ve `GOOGLE_CLOUD_LOCATION` — Vertex AI endpoint konfigürasyonu
-- Her model kendi `GenerationConfig`'ini taşır (temperature, response_mime_type: `application/json`)
-- Tüm model yanıtları JSON parse edilir; parse hatası `WorkflowError` fırlatır
-
----
-
-### RAG (Retrieval-Augmented Generation)
-
-SEO optimizasyonunda `ChromaDB` kullanılır:
-
-- `chroma_collection_name=seo_chunks` — e-ticaret SEO en iyi pratiklerini barındıran chunk koleksiyonu
-- `TOP_K=6` — en alakalı 6 chunk context'e eklenir
-- Vektör embedding: ChromaDB'nin default embedding fonksiyonu
-- Agent Worker başlarken ChromaDB cache pre-warm edilir (Dockerfile'da `HF_HOME` env var ile Hugging Face model cache konumu ayarlı)
-
----
-
-### İptal Mekanizması
-
-Kullanıcı analizi iptal ettiğinde:
-1. API Gateway Redis'e `cancelled:{task_id}` key'ini yazar (TTL: 1 saat)
-2. `NodeRunner.wrap()` her node başlamadan önce bu key'i kontrol eder
-3. Key mevcutsa node çalıştırılmaz, `{"cancelled": True}` döner
-4. LangGraph `_cancel_or()` koşullu edge'i `END`'e yönlendirir
-5. `WorkflowErrorHandler` Task Service'e `status=cancelled` yazar
-
----
-
-### Servis İletişimi — `services/shared/`
-
-Servisler arası HTTP çağrıları `internal_client.py` tarafından yönetilir:
-
-- `iss="internal-service"` claim'li JWT token — dış kullanıcı token'larından ayırt etmek için
-- Token cache: 30 saniyelik yenileme buffer'ı ile 5 dakika TTL
-- `asyncio.Lock` ile thread-safe token yenileme
-- `InternalHttpClient` — tüm servisler bu sınıfı kullanır; her istek otomatik token ekler
-
----
-
-## Veri Akışı
-
-### Analiz Oluşturma (End-to-End)
 
 ```
-Kullanıcı formu gönderir
-    ↓
-API Gateway:
-  1. JWT doğrular (Auth Service)
-  2. Quota kontrol eder (Quota Service) — kota doluysa 429
-  3. Task oluşturur (Task Service) → task_id döner
-  4. Redis kuyruğuna {"task_id": ..., "payload": ...} iter
-  5. Frontend'e {task_id} döner
-
-Broker Worker (arka planda):
-  1. BLPOP ile mesajı alır
-  2. Task status → running
-  3. Agent Worker'a POST /run
-
-Agent Worker:
-  1. workflow_type'a göre Rival veya SEO graph seçer
-  2. LangGraph workflow'u asenkron çalıştırır
-  3. Her node: Redis'e progress event, Task Service'e status güncelleme
-  4. Tamamlanınca Task Service'e result kaydeder
-
-Frontend (polling):
-  1. /tasks/{id}/status'u her 2 sn'de bir polling
-  2. Progress bar güncellenir
-  3. status=completed → result sayfasına yönlendirir
+Gemini image generation
+    │  Prompt: "{product_title} product on white background, 
+    │           studio lighting, professional e-commerce photo"
+    │  Output: PIL Image (RGBA)
+    ▼
+RemoveBG API (background_removal.py)
+    │  Sends raw image bytes, receives mask-applied PNG
+    │  Falls back to Gemini-generated image if RemoveBG fails
+    ▼
+Platform Canvas Composition (utils_image.py)
+    │  Trendyol:    1200 × 1800 px, product at 78% of canvas height
+    │  Amazon:      1600 × 1600 px, product at 76% of canvas height
+    │  Hepsiburada: 1200 × 1200 px, product at 76% of canvas height
+    │  - Transparent padding cropped (4% margin preserved)
+    │  - Product centered on white canvas
+    ▼
+Google Cloud Storage Upload
+    │  Filename: UUID-based, stored in configured GCS_BUCKET
+    │  Returns: signed URL included in task result JSON
+    ▼
+Task Result
 ```
 
-### İki Aşamalı Analiz
-
-Bazı task'lar iki aşamalıdır: önce Rival Workflow, ardından (rival_json çıktısını input olarak alarak) SEO Workflow çalışır. Bu `run_rival_workflow` → `build_seo_state_from_rival` → `run_seo_workflow` zinciriyle sağlanır; aynı `task_id` korunur.
+**Variant selection:** `select_variant()` uses `competitor_variant_overlap` data from the pricing step to pick the variant with the fewest competitor matches — prioritizing differentiated product angles for the visual.
 
 ---
 
-## Teknoloji Yığını
+### Cancellation Mechanism
+
+When a user cancels a running analysis:
+1. API Gateway writes `SET cancelled:{task_id} 1 EX 3600` to Redis
+2. Before each node executes, `NodeRunner` checks `EXISTS cancelled:{task_id}`
+3. If the key exists: the node function is skipped; `{"cancelled": True, "status": "cancelled"}` is returned
+4. The `_cancel_or()` conditional edge sees `cancelled=True` and routes to `END`
+5. `WorkflowErrorHandler` calls Task Service with `status=cancelled`
+6. The frontend receives `status=cancelled` on the next poll and redirects to dashboard
+
+---
+
+### Inter-Service Authentication — `services/shared/`
+
+All service-to-service HTTP calls use the shared `InternalHttpClient`:
+
+- Issues JWTs with `iss="internal-service"` claim — distinguishable from user tokens at validation time
+- **Token caching** with 5-minute TTL and 30-second pre-expiry refresh buffer — minimizes JWT generation overhead on high-frequency inter-service calls
+- `asyncio.Lock` prevents concurrent refresh races in async contexts
+- A sync variant exists for the Broker Worker (which uses `threading` rather than asyncio)
+
+---
+
+## Data Flow
+
+### End-to-End: New Analysis Request
+
+```
+1. User submits form
+       │
+       ▼
+2. API Gateway
+   ├─ Validates JWT (Auth Service /internal/validate)
+   ├─ Checks quota (Quota Service → Redis Lua atomic increment)
+   ├─ Creates task record (Task Service → Cloud SQL)
+   ├─ Pushes {task_id, payload} to Redis task_queue (RPUSH)
+   └─ Returns {task_id} to frontend
+
+3. Frontend starts polling GET /tasks/{task_id} every 2 seconds
+
+4. Broker Worker (background thread)
+   ├─ BLPOP task_queue → receives message
+   ├─ PATCH /tasks/{id}/status → "running" (Task Service)
+   └─ POST /run to Agent Worker
+
+5. Agent Worker (async)
+   ├─ Runs Rival Graph (LangGraph)
+   │   Each node: check cancellation → report progress → execute Gemini call → update progress
+   │   Parallel: [sentiment ‖ trends] then [gap ‖ pricing]
+   ├─ Passes rival_json to SEO Graph
+   └─ SEO Graph: [generate_seo ‖ generate_image] in parallel
+       ├─ generate_seo: ChromaDB RAG + Gemini → structured listing content
+       └─ generate_image: Gemini → RemoveBG → Canvas → GCS upload
+
+6. Agent Worker finalizes
+   ├─ POST /tasks/{id}/result (Task Service → Cloud SQL)
+   └─ PATCH /tasks/{id}/status → "completed"
+
+7. Frontend receives status=completed on next poll
+   └─ Navigates to /dashboard/result/{taskId}
+```
+
+---
+
+## Infrastructure & Cloud
+
+### Google Cloud Services Used
+
+| Service | Purpose |
+|---------|---------|
+| **Cloud Run** | Serverless container hosting for all 7 services; scales to zero when idle |
+| **Cloud SQL (PostgreSQL 15)** | Managed relational database; used by Auth, Task, and Broker services |
+| **Memorystore (Redis 7)** | Fully managed Redis; task queue, quota counters, progress events, cancellation signals |
+| **Google Cloud Storage (GCS)** | Generated product image storage; returns signed URLs included in task results |
+| **Artifact Registry (GAR)** | Private Docker image registry; all service images tagged with commit SHA and `latest` |
+| **VPC Connector** | Private network bridge between Cloud Run services and Memorystore/Cloud SQL |
+| **Workload Identity Federation** | Keyless GitHub Actions → GCP authentication (no service account JSON files) |
+| **Vertex AI / Gemini API** | Gemini 2.5 Flash and Flash-Lite model inference |
+
+### Google Cloud SQL
+
+- PostgreSQL 15 managed instance
+- Auth and Task services connect via `cloud-sql-python-connector` with IAM authentication — no plaintext passwords in connection strings
+- Broker Worker uses `psycopg2` (synchronous) with the same Cloud SQL connector
+- Alembic migrations run automatically at service startup using the `DATABASE_URL` environment variable injected at deploy time
+
+### Google Cloud Memorystore (Redis)
+
+- Fully managed Redis 7 instance within the VPC
+- Replaces self-hosted Redis entirely in production — no Redis container in Cloud Run
+- Used for: task queue (RPUSH/BLPOP), quota counters (Lua atomic), progress reporting (HSET + PUBLISH), cancellation signals (SET with TTL)
+- Accessible from Cloud Run only through the VPC Connector — not publicly reachable
+
+### Google Cloud Storage
+
+- Bucket configured via `GCS_BUCKET` environment variable
+- Agent Worker authenticates via the Cloud Run service account's IAM role — no API key in code
+- Generated images are uploaded with `google-cloud-storage` SDK; object name is a UUID to avoid collisions
+- Presigned URLs (time-limited) are returned to the frontend for direct image loading
+
+### Google Artifact Registry
+
+- Repository hosts Docker images for all 7 services
+- Images tagged with both `github.sha` (immutable, used in Cloud Run deployments) and `latest` (human-friendly reference)
+- GAR is in the same region as Cloud Run to minimize image pull latency
+- Access controlled via IAM: the GitHub deploy service account has `roles/artifactregistry.writer`; Cloud Run runtime SA has `roles/artifactregistry.reader`
+
+### Google IAM — Service Account Architecture
+
+Each Cloud Run service runs under a **dedicated service account** with only the permissions it needs:
+
+| Service | Service Account | Key Permissions |
+|---------|----------------|-----------------|
+| API Gateway | `api-gateway-sa` | `run.invoker` on downstream services |
+| Auth Service | `auth-service-sa` | `cloudsql.client` |
+| Task Service | `task-service-sa` | `cloudsql.client` |
+| Broker Worker | `broker-worker-sa` | `cloudsql.client`, `run.invoker` on Agent Worker |
+| Agent Worker | `agent-worker-sa` | `storage.objectAdmin` on GCS bucket, `aiplatform.user` (Gemini) |
+| Quota Service | `quota-service-sa` | Memorystore access via VPC |
+| Frontend | `frontend-sa` | `run.invoker` on API Gateway |
+
+This principle-of-least-privilege setup means a compromise of one service cannot escalate to control other GCP resources.
+
+---
+
+## CI/CD Pipeline
+
+The platform has a **fully automated, end-to-end CI/CD pipeline** on GitHub Actions. Every push to the `main` branch triggers service-specific deploy workflows. No manual deployment steps are required.
+
+### Workflow Triggers
+
+Each service has its own workflow file that triggers on:
+- Push to `main` branch **with changes in the service's directory** (path filtering)
+- Manual `workflow_dispatch` for on-demand redeployment
+
+This means pushing a change to `services/agent-worker/` only redeploys the agent worker — other services are untouched.
+
+### Deployment Steps (per service)
+
+```
+1. actions/checkout@v4
+       │
+       ▼
+2. google-github-actions/auth@v2
+   └─ Workload Identity Federation (OIDC token — no JSON key file)
+       │
+       ▼
+3. gcloud auth configure-docker {GAR_LOCATION}-docker.pkg.dev
+       │
+       ▼
+4. docker build (multi-stage)
+   └─ Tags: IMAGE:${{ github.sha }}  +  IMAGE:latest
+       │
+       ▼
+5. docker push both tags to Artifact Registry
+       │
+       ▼
+6. gcloud run deploy
+   ├─ --image IMAGE:${{ github.sha }}  (immutable pinned tag)
+   ├─ --region, --project, --service-account
+   ├─ --vpc-connector (private Memorystore/SQL access)
+   ├─ --set-env-vars (all secrets injected from GitHub Secrets)
+   └─ Traffic immediately shifts to new revision
+       │
+       ▼
+7. Deployment Summary written to GitHub Actions job summary
+   └─ Includes live Cloud Run service URL
+```
+
+### Workload Identity Federation — Zero Secret Files
+
+GitHub Actions authenticates to GCP without any JSON service account key files. Instead:
+- A **Workload Identity Pool** is configured in GCP with a GitHub OIDC provider
+- The pool is bound to the deploy service account via a condition on `repository` claim
+- `google-github-actions/auth@v2` exchanges the GitHub OIDC token for a short-lived GCP access token at runtime
+- No long-lived credentials are stored anywhere — rotation is automatic
+
+### Bootstrap Deploy
+
+`deploy-all.yml` is a manually triggered workflow that builds and deploys all 7 services sequentially. Used for first-time setup or full platform resets.
+
+---
+
+## Security
+
+### Secrets Management — GitHub Secrets
+
+**No sensitive values exist anywhere in the codebase.** All secrets are stored in **GitHub Actions Secrets** and injected as environment variables at deploy time via `--set-env-vars` in `gcloud run deploy`.
+
+Secrets stored in GitHub include:
+- `JWT_SECRET_KEY` — HMAC signing key for user tokens
+- `REMOVEBG_API_KEY` — RemoveBG background removal API
+- `GCP_PROJECT_ID`, `GCP_REGION`, `GAR_LOCATION`, `GAR_REPO` — GCP targeting
+- `GCP_WORKLOAD_IDENTITY_PROVIDER`, `GCP_SERVICE_ACCOUNT` — CI auth
+- `REDIS_URL`, `DATABASE_URL` — infrastructure connection strings
+- All Gemini model names, ChromaDB config, GCS bucket name
+- Cloud SQL connection parameters
+
+In-flight secrets never touch the filesystem — they live only as Cloud Run environment variables accessible to the running container.
+
+### Additional Security Measures
+
+- **Non-root Docker containers** — all Python service Dockerfiles create and switch to a non-root `appuser`
+- **Private networking** — Memorystore and Cloud SQL are not publicly accessible; reachable only via VPC Connector from within Cloud Run
+- **Service isolation** — each Cloud Run service has its own SA with minimal IAM roles; no service can impersonate another
+- **Internal JWT claims** — inter-service calls use `iss="internal-service"` tokens; user tokens are never forwarded between services
+- **SlowAPI rate limiting** — API Gateway blocks brute-force and scraping attempts
+- **Atomic quota operations** — Lua scripts in Quota Service prevent race conditions in concurrent quota checks
+
+---
+
+## Technology Stack
 
 ### Backend
 
-| Kategori | Teknoloji | Versiyon |
-|----------|-----------|----------|
-| Dil | Python | 3.12 |
-| Web Framework | FastAPI | ≥0.110 |
-| ASGI Server | Uvicorn | ≥0.29 |
-| Agent Worker HTTP | aiohttp | ≥3.9 |
-| AI Orchestration | LangGraph | latest |
-| AI Models | Google Gemini 2.5 | Flash / Flash-Lite / Image |
-| Vector DB | ChromaDB | latest |
-| ORM | SQLAlchemy 2.x (async) | ≥2.0 |
-| DB Driver | asyncpg | ≥0.29 |
-| Migrations | Alembic | ≥1.13 |
-| Cache / Queue | Redis | 7.x |
-| Storage | Google Cloud Storage | — |
-| Image Processing | Pillow | ≥10 |
-| HTTP Client | httpx | ≥0.27 |
-| Auth | PyJWT + bcrypt | — |
-| Rate Limiting | SlowAPI | ≥0.0.7 |
-| Validation | Pydantic v2 | ≥2.0 |
-| Logging | python-json-logger | — |
+| Category | Technology | Notes |
+|----------|-----------|-------|
+| Language | Python 3.12 | All backend services |
+| Web framework | FastAPI | API Gateway, Auth, Task, Quota, Broker |
+| ASGI server | Uvicorn | Production-grade, async |
+| Agent HTTP server | aiohttp | Agent Worker (avoids FastAPI overhead for long-running tasks) |
+| AI orchestration | LangGraph | StateGraph-based workflow management |
+| AI models | Google Gemini 2.5 Flash / Flash-Lite / Image | All inference via Vertex AI |
+| Gemini SDK | `google-genai` | Direct SDK, not LangChain's wrapper |
+| Vector database | ChromaDB | Local persistent store pre-warmed in Docker build |
+| ORM | SQLAlchemy 2.x (async) | Fully async, type-safe queries |
+| DB driver | asyncpg | PostgreSQL async adapter |
+| Sync DB driver | psycopg2 | Broker Worker (threading-based) |
+| DB migrations | Alembic | Auto-runs on service startup |
+| Cache / Queue | Redis 7 (Memorystore) | Task queue, quotas, progress, cancellation |
+| Object storage | Google Cloud Storage | Signed-URL image delivery |
+| Image processing | Pillow | Canvas composition, alpha channel handling |
+| HTTP client | httpx (async) | All inter-service calls |
+| Auth | PyJWT + bcrypt | HS256 tokens, bcrypt work factor 12 |
+| Rate limiting | SlowAPI | FastAPI-native Redis-backed limiter |
+| Validation | Pydantic v2 | Request/response schemas, settings |
+| Logging | python-json-logger | Structured JSON logs for Cloud Logging |
+| Cloud DB auth | cloud-sql-python-connector | IAM-based Cloud SQL access |
 
 ### Frontend
 
-| Kategori | Teknoloji | Versiyon |
-|----------|-----------|----------|
-| Framework | Next.js | 14.2 |
-| UI Library | React | 18 |
-| Dil | TypeScript | 5.x |
-| Stil | TailwindCSS | 3.x |
-| Bileşenler | shadcn/ui + Radix UI | — |
-| Animasyon | Framer Motion | ≥10 |
-| State | Zustand | ≥4 |
-| Formlar | react-hook-form + zod | — |
-| HTTP | axios | ≥1.6 |
-| Grafikler | recharts | ≥2 |
-| Tarih | date-fns | ≥3 |
+| Category | Technology | Notes |
+|----------|-----------|-------|
+| Framework | Next.js 14 | App Router, SSR + client components |
+| Language | TypeScript 5 | Strict mode |
+| UI layer | React 18 | |
+| Styling | TailwindCSS 3 | Utility-first |
+| Components | shadcn/ui + Radix UI | Accessible headless primitives |
+| Animations | Framer Motion | Page transitions, micro-animations |
+| State | Zustand | Auth state, lightweight |
+| Forms | react-hook-form + zod | Schema-driven validation |
+| HTTP | axios | Interceptor-based token refresh |
+| Charts | recharts | Results dashboard visualizations |
+| Icons | lucide-react | |
+| Dates | date-fns | |
 
-### Altyapı
+### Infrastructure
 
-| Kategori | Teknoloji |
+| Category | Technology |
 |----------|-----------|
-| Container | Docker (multi-stage build) |
-| Orchestration (local) | Docker Compose |
-| Orchestration (prod) | Google Cloud Run |
-| Veritabanı | PostgreSQL 15 (Cloud SQL) |
-| Cache/Queue | Redis 7 (Memorystore) |
-| Image Registry | Google Artifact Registry |
-| Auth (CI/CD) | Workload Identity Federation |
-| Proxy (local) | Nginx |
+| Containerization | Docker (multi-stage builds) |
+| Local orchestration | Docker Compose |
+| Production hosting | Google Cloud Run (serverless) |
+| Database | Google Cloud SQL — PostgreSQL 15 |
+| Cache / Queue | Google Cloud Memorystore — Redis 7 |
+| Image registry | Google Artifact Registry |
+| Object storage | Google Cloud Storage |
+| CI/CD | GitHub Actions |
+| Auth (CI→GCP) | Workload Identity Federation (OIDC) |
+| Private networking | VPC Connector |
 
 ---
 
-## Ortam Değişkenleri
+## Environment Variables
 
-Tüm değişkenler `.env.example`'dan kopyalanarak `.env` oluşturulur.
+All variables are defined in `.env.example`. Copy it to `.env` for reference; actual values in production come from GitHub Secrets injected at deploy time.
 
-### Altyapı
+### Infrastructure
 
 ```env
 POSTGRES_USER=postgres
@@ -453,10 +662,10 @@ POSTGRES_PASSWORD=...
 POSTGRES_DB=platform
 DATABASE_URL=postgresql+asyncpg://...
 BROKER_DATABASE_URL=postgresql+psycopg2://...
-REDIS_URL=redis://redis:6379/0
+REDIS_URL=redis://...
 ```
 
-### Servis URL'leri
+### Service URLs
 
 ```env
 AUTH_SERVICE_URL=http://auth-service:8080
@@ -466,21 +675,21 @@ AGENT_WORKER_URL=http://agent-worker:8080
 NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
-### Kimlik Doğrulama
+### Authentication
 
 ```env
-JWT_SECRET_KEY=<güçlü-rastgele-değer>
+JWT_SECRET_KEY=<strong-random-value>
 JWT_ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 REFRESH_TOKEN_EXPIRE_DAYS=7
 REGISTRATION_ENABLED=true
 ```
 
-### Kota
+### Quota
 
 ```env
-QUOTA_LIMIT=10          # günlük maksimum analiz sayısı
-QUOTA_TTL_SECONDS=86400 # pencere süresi (24 saat)
+QUOTA_LIMIT=10
+QUOTA_TTL_SECONDS=86400
 ```
 
 ### Broker / Retry
@@ -488,13 +697,13 @@ QUOTA_TTL_SECONDS=86400 # pencere süresi (24 saat)
 ```env
 TASK_QUEUE_NAME=task_queue
 MAX_RETRY_COUNT=3
-RETRY_BASE_DELAY=2.0    # saniye; her retry'da 2 katına çıkar
+RETRY_BASE_DELAY=2.0
 ```
 
-### AI Modelleri
+### AI Models
 
 ```env
-GOOGLE_CLOUD_PROJECT=<proje-id>
+GOOGLE_CLOUD_PROJECT=<project-id>
 GOOGLE_CLOUD_LOCATION=us-central1
 
 RIVAL_DISCOVERY_MODEL=gemini-2.5-flash-lite
@@ -506,8 +715,8 @@ RIVAL_PRICING_MODEL=gemini-2.5-flash
 SEO_OPTIMIZER_MODEL=gemini-2.5-flash
 
 GEMINI_IMAGE_MODEL=gemini-2.5-flash-image
-REMOVEBG_API_KEY=<removebg-api-anahtarı>
-GCS_BUCKET=<bucket-adı>
+REMOVEBG_API_KEY=<removebg-api-key>
+GCS_BUCKET=<bucket-name>
 ```
 
 ### RAG
@@ -517,279 +726,53 @@ CHROMA_COLLECTION_NAME=seo_chunks
 CHROMA_TOP_K=6
 ```
 
-### Google Cloud (Production)
+### Google Cloud (Production Deploy)
 
 ```env
 GCP_PROJECT_ID=...
 GCP_REGION=us-central1
 GAR_LOCATION=us-central1
 GAR_REPO=...
-CLOUD_SQL_INSTANCE=<proje>:<bölge>:<instance>
+CLOUD_SQL_INSTANCE=<project>:<region>:<instance>
 VPC_CONNECTOR=...
-GCP_WORKLOAD_IDENTITY_PROVIDER=...
-GCP_SERVICE_ACCOUNT=...
+GCP_WORKLOAD_IDENTITY_PROVIDER=projects/.../workloadIdentityPools/.../providers/...
+GCP_SERVICE_ACCOUNT=github-deploy-sa@...iam.gserviceaccount.com
 ```
 
 ---
 
-## Yerel Geliştirme
+## Local Development Notice
 
-### Gereksinimler
+> **The codebase is currently configured for Google Cloud deployment and cannot be run fully locally without additional setup.**
 
-- Docker Desktop (veya Docker Engine + Compose plugin)
-- Google Cloud kredansiyeli (Application Default Credentials) — Gemini API için
-- RemoveBG API anahtarı (görsel pipeline için)
+Specifically, the following components are cloud-bound:
 
-### Başlatma
+- **Google Gemini / Vertex AI** — Agent Worker calls Gemini via `GOOGLE_CLOUD_PROJECT` and Application Default Credentials. Running locally requires `gcloud auth application-default login` and valid Vertex AI quota in the configured project.
+- **Google Cloud Storage** — Image generation uploads to GCS using the service account's IAM role. Local execution would require a service account key file (`GOOGLE_APPLICATION_CREDENTIALS`) and write access to the configured bucket.
+- **RemoveBG API** — Requires a valid `REMOVEBG_API_KEY`; no local substitute.
+- **Cloud SQL** — In production, connections use `cloud-sql-python-connector`. For local Docker Compose, `DATABASE_URL` must point to the local PostgreSQL container, not the Cloud SQL instance.
+- **Memorystore** — The VPC-private Redis instance is unreachable outside GCP. For local development, use the Redis container in Docker Compose and set `REDIS_URL=redis://redis:6379/0`.
 
-```bash
-# Repo'yu klonla
-git clone https://github.com/<org>/multi-agent-ecommerce-optimizer.git
-cd multi-agent-ecommerce-optimizer
+To run locally you would need to:
+1. Replace all GCS upload calls with local filesystem writes
+2. Set up Application Default Credentials for Gemini
+3. Use a local Redis and PostgreSQL via Docker Compose
+4. Provide a valid `REMOVEBG_API_KEY`
 
-# Ortam değişkenlerini yapılandır
-cp .env.example .env
-# .env dosyasını düzenle: JWT_SECRET_KEY, API anahtarları vb.
-
-# Tüm servisleri ayağa kaldır
-docker compose up --build
-
-# Logları takip et (belirli servis)
-docker compose logs -f agent-worker
-```
-
-Servisler hazır olduğunda:
-- Frontend: http://localhost:3000
-- API Gateway: http://localhost:8000
-- API Docs (Swagger): http://localhost:8000/docs
-
-### Veritabanı Migration
-
-```bash
-# Auth Service migration
-docker compose exec auth-service alembic upgrade head
-
-# Task Service migration
-docker compose exec task-service alembic upgrade head
-```
-
-### Geliştirme İpuçları
-
-```bash
-# Sadece altyapıyı ayağa kaldır (DB + Redis), servisleri local çalıştır
-docker compose up postgres redis
-
-# Agent Worker'ı hot-reload ile çalıştır
-cd services/agent-worker
-pip install -r requirements.txt
-python -m app.main
-```
+The platform is fully functional end-to-end in the deployed Google Cloud environment.
 
 ---
 
-## Deployment — Google Cloud Run
+## Team & Development Process
 
-Her servis bağımsız bir Cloud Run servisidir. Deployment sırasında:
+The team maintained a **balanced task distribution** throughout the hackathon, with each member owning complete vertical slices (a service + its frontend integration) rather than horizontal layers. This avoided bottlenecks and allowed parallel progress across the stack.
 
-1. Docker image multi-stage build ile oluşturulur
-2. Google Artifact Registry'e push edilir (commit SHA + `latest` tag)
-3. Cloud Run servisi güncellenir; traffic anında yeni revision'a yönlendirilir
-4. PostgreSQL bağlantısı `cloud-sql-python-connector` ile Cloud SQL IAM auth üzerinden kurulur
-5. Servisler arası iletişim Cloud Run internal URL'leri üzerinden (VPC Connector)
+Development followed a **two-environment model**:
+- **`main` branch** — the production environment; always reflects what is live on Google Cloud Run. Any push here triggers an automatic CI/CD deployment.
+- **`dev` branch** — the shared integration environment connected to the same Cloud SQL and Memorystore infrastructure. Developers push daily work here; it serves as a staging layer that mirrors production data flows before promotion to `main`.
 
-### Dockerfile Stratejisi
-
-Tüm Python servisleri iki aşamalı build kullanır:
-
-```dockerfile
-# Aşama 1: Builder
-FROM python:3.12-slim AS builder
-RUN pip install --user -r requirements.txt
-
-# Aşama 2: Runtime
-FROM python:3.12-slim
-COPY --from=builder /root/.local /root/.local
-# Non-root user — güvenlik için
-USER appuser
-```
-
-Frontend standalone Next.js modunda build edilir:
-
-```dockerfile
-FROM node:20-alpine AS builder
-RUN npm ci && npm run build
-
-FROM node:20-alpine AS runner
-COPY --from=builder /app/.next/standalone ./
-```
-
-Agent Worker'da ChromaDB Hugging Face model cache pre-warm'u Dockerfile'da yapılır:
-```dockerfile
-ENV HF_HOME=/app/.cache/huggingface
-RUN python -c "import chromadb; ..."
-```
+This setup meant the team could test real AI workflow runs, actual database writes, and live quota enforcement on `dev` without risk to the demo environment on `main`.
 
 ---
 
-## CI/CD Pipeline
-
-`.github/workflows/` altında her servis için ayrı workflow dosyası bulunur.
-
-### Workflow Adımları
-
-```yaml
-1. Checkout kodu
-2. Google Cloud auth (Workload Identity Federation — OIDC, secret yok)
-3. Docker Buildx ile multi-platform image build
-4. GAR'a push: <sha> ve latest tag
-5. Cloud Run'a deploy: --image <sha-tag> --region us-central1
-```
-
-### Workload Identity Federation
-
-GitHub Actions'tan GCP'ye güvenli erişim için service account key'i kullanılmaz. Bunun yerine:
-- GCP'de Workload Identity Pool + GitHub Provider tanımlı
-- GitHub repo'nun `subject` claim'i SA'ya bind edilmiş
-- Her deploy OIDC token ile doğrulanır
-
-### deploy-all.yml
-
-Tüm servisleri sıralı olarak deploy eden manuel tetikleyicili workflow. İlk kurulum veya tam sıfırlama için kullanılır.
-
----
-
-## Katkı Sağlama
-
-### Branch Stratejisi
-
-```
-main  →  Demo/production. Her zaman çalışır durumda olmalı.
-dev   →  Günlük geliştirme. Herkes buraya push eder.
-```
-
-- `main`'e doğrudan push yapılmaz
-- Demo/milestone öncesi `dev → main` merge yapılır
-
-### Commit Formatı (Conventional Commits)
-
-```
-<type>(<scope>): <ne yaptın>
-```
-
-**Type:**
-
-| Type | Kullanım |
-|------|----------|
-| `feat` | Yeni özellik |
-| `fix` | Bug düzeltme |
-| `refactor` | Davranış değişikliği olmadan yeniden yazım |
-| `test` | Test ekleme/güncelleme |
-| `docs` | Dokümantasyon |
-| `chore` | Bağımlılık, config vb. |
-| `ci` | GitHub Actions |
-| `perf` | Performans iyileştirme |
-
-**Scope örnekleri:** `gateway`, `auth`, `quota`, `task`, `broker`, `agent`, `llm`, `frontend`, `db`, `cache`, `infra`
-
-**Örnekler:**
-```
-feat(agent): add competitor variant overlap detection
-fix(broker): handle redis connection timeout on startup
-refactor(llm): switch discovery model to flash-lite for cost reduction
-perf(image): cache removebg responses by image hash
-```
-
-### Gizlilik Kuralı
-
-- API anahtarları, şifreler, JWT secret'ları asla commit'lenmez
-- `.env` dosyası `.gitignore`'da
-- CI/CD secret'ları GitHub Actions Secrets veya GCP Secret Manager'da
-
----
-
-## Proje Yapısı
-
-```
-multi-agent-ecommerce-optimizer/
-├── .github/
-│   └── workflows/
-│       ├── deploy-all.yml
-│       ├── deploy-agent.yml
-│       ├── deploy-api.yml
-│       ├── deploy-auth.yml
-│       ├── deploy-broker.yml
-│       ├── deploy-frontend.yml
-│       ├── deploy-quota.yml
-│       └── deploy-task.yml
-├── frontend/
-│   ├── src/
-│   │   ├── app/                    # Next.js App Router sayfaları
-│   │   ├── components/             # UI bileşenleri
-│   │   └── lib/                    # Yardımcı fonksiyonlar, hooks
-│   ├── package.json
-│   └── Dockerfile
-├── infra/
-│   └── nginx.conf
-├── services/
-│   ├── shared/
-│   │   └── internal_client.py      # Servisler arası JWT auth
-│   ├── api-gateway/
-│   │   └── app/
-│   │       ├── main.py
-│   │       ├── middleware/
-│   │       └── routers/
-│   ├── auth-service/
-│   │   └── app/
-│   │       ├── main.py
-│   │       ├── models.py
-│   │       ├── services.py
-│   │       └── alembic/
-│   ├── task-service/
-│   │   └── app/
-│   │       ├── main.py
-│   │       ├── models.py
-│   │       └── task_service.py
-│   ├── quota-service/
-│   │   └── app/
-│   │       └── main.py
-│   ├── broker-worker/
-│   │   └── app/
-│   │       ├── main.py
-│   │       └── consumer.py
-│   └── agent-worker/
-│       └── app/
-│           ├── main.py
-│           ├── agents/
-│           │   ├── rival_agent.py
-│           │   ├── seo_agent.py
-│           │   └── state.py
-│           ├── workflow/
-│           │   ├── rival_graph.py
-│           │   ├── seo_graph.py
-│           │   ├── node_runner.py
-│           │   └── error_handler.py
-│           ├── tools/
-│           │   ├── rival_agent_tools/
-│           │   │   ├── competitor_discovery/
-│           │   │   ├── competitor_research/
-│           │   │   ├── sentiment_analysis/
-│           │   │   ├── trend_analysis/
-│           │   │   ├── market_gap_analyzer/
-│           │   │   └── smart_pricing_engine/
-│           │   └── seo_agent_tools/
-│           │       ├── seo_optimizer/
-│           │       └── image_generation/
-│           │           ├── tools_image.py
-│           │           ├── models_image.py
-│           │           ├── utils_image.py
-│           │           └── background_removal.py
-│           ├── task_client.py
-│           └── redis.py
-├── docker-compose.yml
-├── .env.example
-└── CONTRIBUTING.md
-```
-
----
-
-*BTK Hackathon 2026 — BİRİNCİYİZ ekibi*
+*BTK Hackathon 2026 — organized by BTK Akademi, Türkiye Girişimcilik Vakfı and Google Turkey*

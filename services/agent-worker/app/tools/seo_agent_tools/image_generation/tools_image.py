@@ -183,7 +183,7 @@ class ImageGenerationTool:
             log_image_tool_call(target_platform, variant_name, success=False)
             return _failure_result("Marketplace canvas build failed", chosen_variant)
 
-        enhanced_bytes = await _enhance_with_gemini(canvas_bytes)
+        enhanced_bytes = await _enhance_with_gemini(removed_bg_bytes)
 
         if enhanced_bytes is None:
             logger.warning(
