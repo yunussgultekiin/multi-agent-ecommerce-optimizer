@@ -373,8 +373,7 @@ Google Cloud Storage Yükleme
 Görev Sonucu
 ```
 
-**Varyant seçimi:** `select_variant()`, pricing adımındaki `competitor_variant_overlap` verisini kullanarak en az rakip çakışması olan varyantı seçer — görsel için en farklılaşmış ürün açısını önceliklendirir.
-
+**Varyant seçimi:** `select_variant()` planlar doğrultusunda henüz kullanılmamaktadır; pipeline her zaman `valid[0]` ile devam eder. Gemini görsel üretimi zaman zaman başarısız olduğundan, bu durumda canvas çıktısı doğrudan kullanıcıya iletilir.
 ---
 
 ### İptal Mekanizması
