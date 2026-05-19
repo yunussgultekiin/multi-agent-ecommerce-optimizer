@@ -1,12 +1,10 @@
 import asyncio
 import logging
-
 import google.api_core.exceptions
 import google.auth.exceptions
 from google import genai
 from google.genai import types
 from google.genai.types import HttpOptions
-
 from app.config import settings
 from app.core import ToolResult
 from .background_removal import (

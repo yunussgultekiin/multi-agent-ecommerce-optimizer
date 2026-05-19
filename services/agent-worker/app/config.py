@@ -12,7 +12,7 @@ class Settings(BaseSettings):
         default="http://task-service:8080", alias="TASK_SERVICE_URL"
     )
     google_cloud_project: str = Field(
-        default="ai-driven-seller-support", alias="GOOGLE_CLOUD_PROJECT"
+        default="synapse-btk-hackathon-2026", alias="GOOGLE_CLOUD_PROJECT"
     )
     google_cloud_location: str = Field(
         default="us-central1", alias="GOOGLE_CLOUD_LOCATION"

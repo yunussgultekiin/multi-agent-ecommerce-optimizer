@@ -1,10 +1,8 @@
 from app.config import settings
 import httpx
 
-
 class AuthServiceError(Exception):
     pass
-
 
 class AuthClient:
     def __init__(self) -> None:

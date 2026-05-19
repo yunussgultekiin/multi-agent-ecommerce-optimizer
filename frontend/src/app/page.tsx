@@ -169,7 +169,7 @@ export default function Home() {
           variants={stagger}
           initial="hidden"
           animate="visible"
-          className="container mx-auto px-6 pt-14 pb-28 text-center max-w-5xl flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]"
+          className="container mx-auto px-6 pt-14 pb-28 text-center max-w-5xl flex flex-col items-center justify-center min-h-[100svh]"
         >
           <motion.div variants={fadeUp} custom={0} className="flex justify-center mb-8">
             <Badge

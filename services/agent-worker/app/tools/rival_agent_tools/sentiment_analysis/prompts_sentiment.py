@@ -1,5 +1,4 @@
 import json
-
 from app.tools.json_prompt_rules import JSON_SELF_CORRECTION_SYNTAX, STRICT_JSON_SYNTAX_RULES
 
 _JSON_SCHEMA = """{
@@ -28,8 +27,8 @@ Rules:
   Each angle must be a concrete phrase the seller can use in listings or ads. [] if neither source yields usable material.
 - risk_warnings: specific pitfalls to avoid, derived from competitor failures; [] if none.
 - Limit lists to keep JSON compact:
-  pain_points max 5, praised_features max 5, competitor_sentiments max 6,
-  marketing_angles max 7, risk_warnings max 7.
+  pain_points max 5, praised_features max 5, competitor_sentiments max 3,
+  marketing_angles max 4, risk_warnings max 4.
 - Write short single-sentence strings only. Do not use semicolons, markdown bullets, or embedded line breaks.
 - Do not put quoted phrases inside Turkish text. Write rakiplerde "gecikme" var as rakiplerde "gecikme" var.
 - Do not invent data. If a competitor has no findable reviews, omit it from competitor_sentiments.

@@ -8,7 +8,6 @@ from typing import Optional
 _REFRESH_BUFFER = 30
 _TOKEN_TTL = 300
 
-
 class SyncInternalTokenProvider:
     def __init__(self, secret: str, algorithm: str = "HS256") -> None:
         self._secret = secret
@@ -33,7 +32,6 @@ class SyncInternalTokenProvider:
 
     def attach_to_headers(self, headers: dict) -> dict:
         return {**headers, "Authorization": f"Bearer {self.get_token()}"}
-
 
 class InternalTokenProvider:
     def __init__(self, secret: str, algorithm: str = "HS256") -> None:
@@ -60,7 +58,6 @@ class InternalTokenProvider:
     async def attach_header(self, headers: dict) -> dict:
         token = await self.get_token()
         return {**headers, "Authorization": f"Bearer {token}"}
-
 
 class InternalHttpClient:
     def __init__(self, base_url: str, secret: str, algorithm: str = "HS256") -> None:
