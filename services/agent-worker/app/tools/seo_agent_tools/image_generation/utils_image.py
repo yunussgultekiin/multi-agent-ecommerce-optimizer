@@ -3,7 +3,7 @@ import logging
 import uuid
 from io import BytesIO
 import httpx
-from PIL import Image, ImageFilter
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -14,43 +14,129 @@ PLATFORM_CANVAS_PRESETS: dict[str, tuple[int, int]] = {
     "trendyol": (1200, 1800),
 }
 
+PLATFORM_PRODUCT_RATIOS: dict[str, float] = {
+    "amazon": 0.74,
+    "hepsiburada": 0.74,
+    "trendyol": 0.74,
+}
+
+_MIN_SUBJECT_FILL_RATIO = 0.42
+
 def get_platform_canvas_size(target_platform: str) -> tuple[int, int]:
     platform = (target_platform or "").strip().lower()
     return PLATFORM_CANVAS_PRESETS.get(platform, (1200, 1200))
 
 def get_platform_product_ratio(target_platform: str) -> float:
     platform = (target_platform or "").strip().lower()
+    return PLATFORM_PRODUCT_RATIOS.get(platform, 0.74)
 
-    if platform == "trendyol":
-        return 0.78
-
-    if platform == "amazon":
-        return 0.76
-
-    if platform == "hepsiburada":
-        return 0.76
-
-    return 0.76
-
-def _crop_transparent_padding(product: Image.Image) -> Image.Image:
-    rgba = product.convert("RGBA")
+def _find_alpha_bbox(image: Image.Image) -> tuple[int, int, int, int] | None:
+    rgba = image.convert("RGBA")
     alpha = rgba.getchannel("A")
-    bbox = alpha.getbbox()
+    alpha_min, _ = alpha.getextrema()
+
+    if alpha_min >= 255:
+        return None
+
+    return alpha.getbbox()
+
+def _find_non_white_bbox(image: Image.Image) -> tuple[int, int, int, int] | None:
+    rgb = image.convert("RGB")
+    white_bg = Image.new("RGB", rgb.size, (255, 255, 255))
+    diff = ImageChops.difference(rgb, white_bg).convert("L")
+    mask = diff.point(lambda value: 255 if value > 18 else 0)
+    mask = mask.filter(ImageFilter.MinFilter(3))
+    mask = mask.filter(ImageFilter.MaxFilter(5))
+    return mask.getbbox()
+
+def _pad_bbox(
+    bbox: tuple[int, int, int, int],
+    image_size: tuple[int, int],
+    pad_ratio: float = 0.035,
+) -> tuple[int, int, int, int]:
+    left, top, right, bottom = bbox
+    width = right - left
+    height = bottom - top
+
+    pad_x = max(6, int(width * pad_ratio))
+    pad_y = max(6, int(height * pad_ratio))
+
+    image_w, image_h = image_size
+
+    return (
+        max(0, left - pad_x),
+        max(0, top - pad_y),
+        min(image_w, right + pad_x),
+        min(image_h, bottom + pad_y),
+    )
+
+def _crop_product_area(image: Image.Image) -> Image.Image:
+    rgba = image.convert("RGBA")
+
+    bbox = _find_alpha_bbox(rgba)
+    if bbox is None:
+        bbox = _find_non_white_bbox(rgba)
 
     if bbox is None:
-        logger.warning("Product alpha bbox missing | action=return_original")
+        logger.warning("Product bbox missing | action=return_original")
         return rgba
 
+    bbox = _pad_bbox(bbox, rgba.size)
+    return rgba.crop(bbox)
+
+def _subject_fill_ratio(image_bytes: bytes) -> float:
+    image = Image.open(BytesIO(image_bytes)).convert("RGBA")
+    bbox = _find_alpha_bbox(image)
+
+    if bbox is None:
+        bbox = _find_non_white_bbox(image)
+
+    if bbox is None:
+        return 0.0
+
     left, top, right, bottom = bbox
-    pad_x = max(8, int((right - left) * 0.04))
-    pad_y = max(8, int((bottom - top) * 0.04))
+    subject_w = max(1, right - left)
+    subject_h = max(1, bottom - top)
+    image_w, image_h = image.size
 
-    left = max(0, left - pad_x)
-    top = max(0, top - pad_y)
-    right = min(rgba.width, right + pad_x)
-    bottom = min(rgba.height, bottom + pad_y)
+    return max(subject_w / image_w, subject_h / image_h)
 
-    return rgba.crop((left, top, right, bottom))
+def is_subject_too_small(image_bytes: bytes) -> bool:
+    ratio = _subject_fill_ratio(image_bytes)
+    return ratio < _MIN_SUBJECT_FILL_RATIO
+
+def _add_ground_shadow(
+    canvas: Image.Image,
+    product: Image.Image,
+    x: int,
+    y: int,
+) -> None:
+    canvas_w, canvas_h = canvas.size
+
+    shadow_w = int(product.width * 0.78)
+    shadow_h = max(18, int(product.height * 0.105))
+
+    shadow_x = x + (product.width - shadow_w) // 2
+    shadow_y = y + product.height - int(shadow_h * 0.35)
+
+    shadow_layer = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(shadow_layer)
+
+    draw.ellipse(
+        (
+            shadow_x,
+            shadow_y,
+            shadow_x + shadow_w,
+            shadow_y + shadow_h,
+        ),
+        fill=(0, 0, 0, 42),
+    )
+
+    shadow_layer = shadow_layer.filter(
+        ImageFilter.GaussianBlur(max(12, int(product.width * 0.035)))
+    )
+
+    canvas.alpha_composite(shadow_layer)
 
 def select_variant(user_product: dict, pricing_result: dict) -> dict | None:
     variants = user_product.get("variants", [])
@@ -97,9 +183,10 @@ def build_marketplace_canvas(
     product_image_bytes: bytes,
     target_platform: str = "default",
     product_max_ratio: float | None = None,
+    add_shadow: bool = True,
 ) -> bytes:
     product = Image.open(BytesIO(product_image_bytes)).convert("RGBA")
-    product = _crop_transparent_padding(product)
+    product = _crop_product_area(product)
 
     canvas_w, canvas_h = get_platform_canvas_size(target_platform)
 
@@ -116,24 +203,8 @@ def build_marketplace_canvas(
     x = (canvas_w - product.width) // 2
     y = (canvas_h - product.height) // 2
 
-    alpha = product.getchannel("A")
-    alpha_min, _ = alpha.getextrema()
-    has_transparency = alpha_min < 255
-
-    if has_transparency:
-        shadow_alpha = alpha.filter(ImageFilter.GaussianBlur(18))
-        shadow_alpha = shadow_alpha.point(lambda value: int(value * 0.22))
-
-        shadow_layer = Image.new("RGBA", product.size, (0, 0, 0, 0))
-        shadow_layer.putalpha(shadow_alpha)
-
-        shadow_canvas = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
-
-        shadow_x = x + int(product.width * 0.025)
-        shadow_y = y + int(product.height * 0.055)
-
-        shadow_canvas.alpha_composite(shadow_layer, (shadow_x, shadow_y))
-        canvas.alpha_composite(shadow_canvas)
+    if add_shadow:
+        _add_ground_shadow(canvas, product, x, y)
 
     canvas.alpha_composite(product, (x, y))
 

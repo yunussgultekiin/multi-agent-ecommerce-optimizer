@@ -1,12 +1,12 @@
 import asyncio
 import logging
 from contextlib import asynccontextmanager
+from functools import partial
 import google.api_core.exceptions
 import google.auth.exceptions
 from google import genai
 from google.genai import types
 from google.genai.types import HttpOptions
-
 from app.config import settings
 from app.core import ToolResult
 from .background_removal import remove_background
@@ -14,6 +14,7 @@ from .models_image import ImageGenerationInput
 from .utils_image import (
     build_marketplace_canvas,
     fetch_image_bytes,
+    is_subject_too_small,
     log_image_tool_call,
     select_variant,
     upload_to_gcs,
@@ -25,17 +26,15 @@ _GEMINI_TIMEOUT_SECONDS = 60
 _STUDIO_PROMPT = (
     "This is a product photo for a marketplace listing. "
     "Use the provided product image as the exact source. "
-    "Keep the product centered, large, and clearly visible. "
+    "Do not change the product identity, design, logo, colors, text, pattern, shape, or proportions. "
+    "Keep the product centered and clearly visible. "
     "Keep the background pure white. "
-    "Do not change, distort, redraw, replace, or alter the product. "
-    "Preserve the exact product shape, proportions, colors, logo, pattern, text, and details. "
-    "Do not make the product smaller. "
+    "Improve only the studio lighting, contrast, and natural product appearance. "
     "Do not zoom out. "
-    "Clean up any remaining edge artifacts or semi-transparent fringe around the product. "
-    "Add natural, soft studio lighting that highlights the product realistically. "
-    "Add only a very subtle, soft ground shadow directly beneath the product. "
-    "Do not add any objects, decorations, text, watermarks, labels, hands, or branding. "
-    "The result must look like a professional marketplace studio photo."
+    "Do not make the product smaller. "
+    "Do not add extra objects, decorations, labels, watermarks, hands, people, or branding. "
+    "Do not add a strong artificial shadow. "
+    "The result must remain a clean professional marketplace product photo."
 )
 
 @asynccontextmanager
@@ -102,14 +101,23 @@ async def _enhance_with_gemini(image_bytes: bytes) -> bytes | None:
 async def _build_marketplace_canvas_async(
     image_bytes: bytes,
     target_platform: str,
+    *,
+    add_shadow: bool = True,
 ) -> bytes:
     loop = asyncio.get_running_loop()
     return await loop.run_in_executor(
         None,
-        build_marketplace_canvas,
-        image_bytes,
-        target_platform,
+        partial(
+            build_marketplace_canvas,
+            image_bytes,
+            target_platform=target_platform,
+            add_shadow=add_shadow,
+        ),
     )
+
+async def _is_subject_too_small_async(image_bytes: bytes) -> bool:
+    loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(None, is_subject_too_small, image_bytes)
 
 def _failure_result(
     error_msg: str,
@@ -138,6 +146,7 @@ class ImageGenerationTool:
         pricing_result = input_data.rival_json.get("pricing_result", {})
         chosen_variant = select_variant(user_product, pricing_result)
         variant_name = chosen_variant.get("name") if chosen_variant else None
+
         source_url = (
             chosen_variant.get("image_url")
             if chosen_variant and chosen_variant.get("image_url")
@@ -145,7 +154,7 @@ class ImageGenerationTool:
         )
 
         logger.info(
-            "ImageGenerationTool started | platform=%s variant=%s source=%s pipeline=removebg_canvas_gemini",
+            "ImageGenerationTool started | platform=%s variant=%s source=%s pipeline=removebg_canvas_gemini_validate",
             target_platform,
             variant_name,
             source_url,
@@ -169,6 +178,7 @@ class ImageGenerationTool:
             canvas_bytes = await _build_marketplace_canvas_async(
                 removed_bg_bytes,
                 target_platform,
+                add_shadow=True,
             )
         except Exception as exc:
             logger.warning("Marketplace canvas build failed | error=%s", exc)
@@ -185,14 +195,39 @@ class ImageGenerationTool:
             final_bytes = canvas_bytes
             fallback_used = True
         else:
-            final_bytes = enhanced_bytes
-            fallback_used = False
+            try:
+                normalized_enhanced_bytes = await _build_marketplace_canvas_async(
+                    enhanced_bytes,
+                    target_platform,
+                    add_shadow=True,
+                )
+
+                if await _is_subject_too_small_async(normalized_enhanced_bytes):
+                    logger.warning(
+                        "Gemini output rejected | platform=%s reason=subject_too_small action=upload_canvas_output",
+                        target_platform,
+                    )
+                    final_bytes = canvas_bytes
+                    fallback_used = True
+                else:
+                    final_bytes = normalized_enhanced_bytes
+                    fallback_used = False
+
+            except Exception as exc:
+                logger.warning(
+                    "Post-Gemini canvas rebuild failed | platform=%s error=%s action=upload_canvas_output",
+                    target_platform,
+                    exc,
+                )
+                final_bytes = canvas_bytes
+                fallback_used = True
 
         public_url = await upload_to_gcs(
             image_bytes=final_bytes,
             project=settings.google_cloud_project,
             bucket_name=settings.gcs_bucket,
         )
+
         if public_url is None:
             log_image_tool_call(target_platform, variant_name, success=False)
             return _failure_result("GCS upload failed", chosen_variant)
@@ -203,6 +238,7 @@ class ImageGenerationTool:
             success=True,
             fallback_used=fallback_used,
         )
+
         return ToolResult(
             success=True,
             fallback_used=fallback_used,
