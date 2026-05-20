@@ -26,7 +26,7 @@
 
 Trendyol, Amazon ve Hepsiburada gibi platformlarda satış yapan e-ticaret satıcıları; rakip araştırması, fiyatlandırma stratejisi oluşturma ve ürün listeleme optimizasyonu için ciddi zaman harcamaktadır. Synapse bu sürecin tamamını uçtan uca otomatize eden bir çok ajanlı yapay zeka platformudur.
 
-Satıcı, ürün bilgilerini (başlık, kategori, marka, varyantlar, hedef platform) girer. Platform iki ardışık yapay zeka iş akışı çalıştırır:
+Satıcı, ürün bilgilerini (başlık, kategori, marka, hedef platform) girer. Platform iki ardışık yapay zeka iş akışı çalıştırır:
 
 ### 1. Rakip Analizi İş Akışı
 - **Rakip Keşfi** — Hedef platformda satıcının ürününe benzer gerçek rakip ürünleri tespit eder
@@ -34,7 +34,7 @@ Satıcı, ürün bilgilerini (başlık, kategori, marka, varyantlar, hedef platf
 - **Duygu Analizi** — Rakip ürünlerin müşteri yorumlarından olumlu/olumsuz duygu temalarını çıkarır
 - **Trend Analizi** — Ürün kategorisindeki pazar trendlerini ve mevsimsel talep değişimlerini belirler
 - **Pazar Boşluğu Analizi** — Rakiplerin karşılamadığı müşteri ihtiyaçlarını ve fırsatları saptar
-- **Akıllı Fiyatlandırma** — Rakip çakışmasına göre optimal fiyat aralığı ve varyant bazlı strateji önerir
+- **Akıllı Fiyatlandırma** — Rakip çakışmasına göre optimal fiyat aralığı ve fiyatlandırma stratejisi önerir
 
 ### 2. SEO & Görsel İş Akışı (paralel çalışır)
 - **SEO Optimizer** — Platforma özgü listeleme içeriği üretir (başlık, açıklama, bullet point, etiket, meta anahtar kelimeler); seçilen tona göre (`casual`, `professional`, `premium`) ChromaDB RAG deposuyla zenginleştirilmiş
@@ -278,7 +278,7 @@ analyze_sentiment                  analyze_trends
 market_gap      pricing
   │  Gemini 2.5 Flash      │  Gemini 2.5 Flash
   │  Karşılanmayan müşteri │  Optimal fiyat bandı
-  │  ihtiyaçları           │  Varyant çakışma skoru
+  │  ihtiyaçları           │  Rakip çakışma skoru
   │
   └──────────┬──────────────┘
              ▼  %55
@@ -303,7 +303,7 @@ START
   ▼  %80                              ▼  %90
 generate_seo                    generate_image
   │  Gemini 2.5 Flash             │  Gemini 2.5 Flash (görsel)
-  │  Giriş: rival_json            │  Giriş: ürün başlığı + varyant
+  │  Giriş: rival_json            │  Giriş: ürün başlığı
   │         seo_tone              │  Ad. 1: stüdyo görseli üret
   │         ChromaDB top-6 RAG    │  Ad. 2: arka plan kaldır (RemoveBG)
   │  Çıkış: başlık, açıklama,     │  Ad. 3: platform canvas'ına yerleştir
@@ -331,7 +331,7 @@ generate_seo                    generate_image
 | `sentiment_analysis` | `gemini-2.5-flash` | Yorumlardan olumlu/olumsuz temaları sınıflandırır; öne çıkan pain point'leri ve övülen özellikleri ortaya çıkarır |
 | `trend_analysis` | `gemini-2.5-flash` | Talep trendlerini, mevsimsel kalıpları ve yükselen fırsatları çıkarır |
 | `market_gap_analyzer` | `gemini-2.5-flash` | Müşterilerin isteyip rakiplerin sunamadığı boşlukları belirler |
-| `smart_pricing_engine` | `gemini-2.5-flash` | Optimal fiyat bandı, indirim stratejisi ve rakip çakışmasına göre varyant fiyatlandırması önerir |
+| `smart_pricing_engine` | `gemini-2.5-flash` | Optimal fiyat bandı, indirim stratejisi ve rakip çakışmasına göre fiyatlandırma önerisi sunar |
 
 **Model seçim gerekçesi:**  
 Discovery ve Research yüksek hacimli, yapılandırılmış extraction görevleridir — `gemini-2.5-flash-lite` maliyet/hız açısından en iyi dengeyi sağlar. Analitik node'lar (Sentiment, Trends, Gap, Pricing) daha derin akıl yürütme gerektirir ve çıktıları sonraki node'lara beslenir; bu yüzden `gemini-2.5-flash` kullanılır.
@@ -373,7 +373,8 @@ Google Cloud Storage Yükleme
 Görev Sonucu
 ```
 
-**Varyant seçimi:** `select_variant()` planlar doğrultusunda henüz kullanılmamaktadır; pipeline her zaman `valid[0]` ile devam eder. Gemini görsel üretimi zaman zaman başarısız olduğundan, bu durumda canvas çıktısı doğrudan kullanıcıya iletilir.
+**Görsel üretim notu:** Varyant bazlı görsel seçimi (`select_variant()`) şu an aktif değildir. `gemini-2.5-flash-image` modeli bu özelliğin gerektirdiği yapılandırılmış üretim kısıtlamalarını tam desteklemediğinden görsel pipeline'ı varyant seçimini bypass eder ve görsel doğrudan temel ürün başlığından üretilir. `select_variant()` mantığı aynı zamanda geliştirme sürecinde kaldırılan varyant bazlı araçlara bağımlı olan pricing adımındaki `competitor_variant_overlap` verisini kullanıyordu. Fonksiyon, varyant desteğinin ileride ele alınması durumunda kullanılmak üzere kod tabanında korunmuştur.
+
 ---
 
 ### İptal Mekanizması
