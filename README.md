@@ -26,7 +26,7 @@
 
 E-commerce sellers on platforms like **Trendyol**, **Amazon**, and **Hepsiburada** spend enormous amounts of time manually researching competitors, crafting product titles and descriptions, and figuring out competitive pricing. Synapse automates all of this end-to-end using a multi-agent AI system.
 
-A seller submits their product information (title, category, brand, variants, target platform). The platform then runs two sequential AI workflows:
+A seller submits their product information (title, category, brand, target platform). The platform then runs two sequential AI workflows:
 
 ### 1. Rival Analysis Workflow
 - **Competitor Discovery** — Finds real competitor products on the target platform matching the seller's product
@@ -34,7 +34,7 @@ A seller submits their product information (title, category, brand, variants, ta
 - **Sentiment Analysis** — Extracts positive and negative customer sentiment from competitor reviews
 - **Trend Analysis** — Identifies market trends and seasonal demand patterns in the product category
 - **Market Gap Analysis** — Detects unmet customer needs that competitors fail to address
-- **Smart Pricing** — Calculates an optimal price range and recommends pricing strategy per variant based on competitor overlap
+- **Smart Pricing** — Calculates an optimal price range and recommends pricing strategy based on competitor overlap
 
 ### 2. SEO & Image Workflow (runs in parallel)
 - **SEO Optimizer** — Generates platform-specific listing content (title, description, bullet points, tags, meta keywords) in the selected tone (`casual`, `professional`, or `premium`), augmented by a ChromaDB RAG store of e-commerce SEO best practices
@@ -276,9 +276,9 @@ analyze_sentiment                 analyze_trends
   ├──────────────┐         ┌────────────┘
   ▼  72%         ▼  72%
 market_gap     pricing
-  │  Gemini 2.5 Flash      │  Gemini 2.5 Flash
+  │  Gemini 2.5 Flash
   │  Unmet customer needs  │  Optimal price range
-  │  Opportunity areas     │  Per-variant overlap scoring
+  │  Opportunity areas     │  Competitor overlap scoring
   │
   └──────────┬──────────────┘
              ▼  55%
@@ -303,7 +303,7 @@ START
   ▼  80%                              ▼  90%
 generate_seo                   generate_image
   │  Gemini 2.5 Flash            │  Gemini 2.5 Flash (image)
-  │  Input: rival_json           │  Input: product title + variant
+  │  Input: rival_json           │  Input: product title
   │         seo_tone             │  Step 1: generate studio image
   │         ChromaDB top-6 RAG   │  Step 2: remove background (RemoveBG)
   │  Output: title, description  │  Step 3: composite on platform canvas
@@ -331,7 +331,7 @@ generate_seo                   generate_image
 | `sentiment_analysis` | `gemini-2.5-flash` | Classifies positive/negative themes from reviews; surfaces top pain points and praised features |
 | `trend_analysis` | `gemini-2.5-flash` | Extracts demand trends, seasonal patterns, and emerging opportunities in the category |
 | `market_gap_analyzer` | `gemini-2.5-flash` | Identifies gaps between what customers want and what competitors offer |
-| `smart_pricing_engine` | `gemini-2.5-flash` | Suggests optimal price band, discounting strategy, and variant-level pricing based on competitor overlap |
+| `smart_pricing_engine` | `gemini-2.5-flash` | Suggests optimal price band, discounting strategy, and pricing recommendations based on competitor overlap |
 
 **Model selection rationale:**  
 Discovery and Research are high-volume, structured extraction tasks with relatively straightforward prompts — `gemini-2.5-flash-lite` provides the best cost/speed tradeoff here. The analytical nodes (Sentiment, Trends, Gap, Pricing) require deeper reasoning and produce JSON that feeds subsequent nodes, so `gemini-2.5-flash` is used to maximize output quality.
@@ -373,7 +373,7 @@ Google Cloud Storage Upload
 Task Result
 ```
 
-**Variant selection:** `select_variant()` is not yet active per current plans; the pipeline always continues with `valid[0]`. As Gemini image generation occasionally fails, the canvas output is delivered directly to the user in such cases.
+**Image generation note:** Variant-based image selection (`select_variant()`) is currently inactive. `gemini-2.5-flash-image` does not fully support the structured generation constraints required by this feature, so the image pipeline bypasses variant selection and generates from the base product title. The `select_variant()` logic was also coupled to `competitor_variant_overlap` data from the pricing step, which depended on variant-aware tooling that was removed during development. The function has been retained in the codebase for future development if variant support is revisited.
 
 ---
 
